@@ -50,7 +50,7 @@ class OrderShipController extends RestController
         $clauses = [WhereClause::queryDiff('order_status', Order::$LEN_DON), WhereClause::queryDiff('order_status', Order::$XAC_NHAN)];
         $with = ['details.product','shipping.unit'];
         $withCount = [];
-        $orderBy = $request->input('orderBy', 'date_created:asc');
+        $orderBy = $request->input('orderBy', 'updated_at:desc');
 
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::queryLike('customer_name', $request->search));

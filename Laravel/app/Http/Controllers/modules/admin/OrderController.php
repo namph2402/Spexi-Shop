@@ -12,6 +12,7 @@ use App\Repository\ProductRepositoryInterface;
 use App\Repository\VoucherRepositoryInterface;
 use App\Repository\UserProfileRepositoryInterface;
 use App\Repository\WarehouseRepositoryInterface;
+use App\Utils\GiaoHangUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -178,9 +179,13 @@ class OrderController extends RestController
 
     public function update(Request $request, $id)
     {
-        $order = $this->repository->findById($id, ['details']);
+        $order = $this->repository->findById($id, ['details','shipping']);
         if (empty($order)) {
-            return $this->error('Đơn hàng không tồn tại');
+            return $this->errorClient('Đơn hàng không tồn tại');
+        }
+
+        if ($order->shipping) {
+            return $this->errorClient('Không thể sửa đơn hàng');
         }
 
         $validator = Validator::make($request->all(), [
@@ -303,21 +308,20 @@ class OrderController extends RestController
         }
     }
 
-    // Xoá
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
         if (empty($model)) {
-            return $this->error('Đối tượng không tồn tại');
+            return $this->errorClient('Đối tượng không tồn tại');
         }
         if ($model->status == Order::$LEN_DON) {
             $model->delete();
             return $this->success($model);
+        } else {
+            return $this->errorClient('Đơn hàng này không thể xóa');
         }
-        return $this->error('Đơn hàng này không thể xóa');
     }
 
-    // Xác nhận
     public function confirm($id, Request $request)
     {
         $model = $this->repository->findById($id);
@@ -339,36 +343,9 @@ class OrderController extends RestController
         }
     }
 
-    // Hủy đơn hàng
     public function cancel($id, Request $request)
     {
-        // $model = $this->repository->findById($id);
-        // if (empty($model)) {
-        //     return $this->errorNotFound();
-        // }
-        // try {
-        //     DB::beginTransaction();
-        //     // SaleOrder::setCanceled($model);
-        //     // if ($model->shipping) {
-        //     //     $ghUtil = new GiaoHangUtil($model);
-        //     //     $response = $ghUtil->cancelOrder($model->shipping);
-        //     //     if ($response) {
-        //     //         $model->shipping->save();
-        //     //     } else {
-        //     //         throw new \Exception('Không thể hủy đơn hàng');
-        //     //     }
-        //     // }
-        //     $model->status = "Hủy đơn";
-        //     $model->note = $request->input('note');
-        //     $model->save();
-        //     DB::commit();
-        //     return $this->success($model);
-        // } catch (\Exception $e) {
-        //     Log::error($e);
-        //     DB::rollBack();
-        //     return $this->error($e->getMessage());
-        // }
-        $model = $this->repository->findById($id);
+        $model = $this->repository->findById($id,['shipping']);
         if (empty($model)) {
             return $this->errorNotFound();
         }
@@ -377,6 +354,15 @@ class OrderController extends RestController
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
+            if ($model->shipping) {
+                $ghUtil = new GiaoHangUtil($model);
+                $response = $ghUtil->cancelOrder($model->shipping);
+                if ($response) {
+                    $model->shipping->save();
+                } else {
+                    return $this->errorClient('Không thể hủy đơn hàng');
+                }
+            }
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -386,7 +372,6 @@ class OrderController extends RestController
         }
     }
 
-    //Hoàn thành
     public function complete($id)
     {
         $model = $this->repository->findById($id);
@@ -406,36 +391,4 @@ class OrderController extends RestController
         }
     }
 
-    // public function refundAmount($id, Request $request)
-    // {
-    //     $model = SaleOrder::find($id);
-    //     if (empty($model)) {
-    //         return $this->error('Đối tượng không tồn tại');
-    //     }
-    //     $model->status = SaleOrder::$TRANG_THAI_HOAN_TIEN;
-    //     $model->note = $request->input('note');
-    //     try {
-    //         $model->save();
-    //         return $this->success($model);
-    //     } catch (\Exception $e) {
-    //         Log::error($e);
-    //         return $this->error($e->getMessage());
-    //     }
-    // }
-
-    // public function changeStatus($id, Request $request)
-    // {
-    //     $model = SaleOrder::find($id);
-    //     if (empty($model)) {
-    //         return $this->error('Đối tượng không tồn tại');
-    //     }
-    //     $model->status = SaleOrder::$TRANG_THAI_CHUAN_BI_HANG;
-    //     try {
-    //         $model->save();
-    //         return $this->success($model);
-    //     } catch (\Exception $e) {
-    //         Log::error($e);
-    //         return $this->error($e->getMessage());
-    //     }
-    // }
 }

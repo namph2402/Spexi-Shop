@@ -75,13 +75,7 @@ abstract class GiaoHangAbstractUtil
 
     abstract public function createOrder(Order $order, ShippingStore $store, ShippingService $service = null);
 
-    abstract public function updateOrder(string $code, Order $order, ShippingService $service = null);
-
     abstract public function cancelOrder(OrderShip $order);
-
-    abstract public function returnOrder(OrderShip $order);
-
-    abstract public function storingOrder(OrderShip $order);
 
     public function printOrders($orders)
     {

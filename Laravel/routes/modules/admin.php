@@ -80,6 +80,10 @@ Route::group(['middleware' => ['auth.admin']], function () {
 
     // Product tag
     Route::resource('product_tags', 'ProductTagController');
+    Route::group(['prefix' => 'product_tags/{id}'], function () {
+        Route::post('up', 'ProductTagController@up');
+        Route::post('down', 'ProductTagController@down');
+    });
     Route::resource('product_tag_mappings', 'ProductTagMappingController');
 
     // Product variant
