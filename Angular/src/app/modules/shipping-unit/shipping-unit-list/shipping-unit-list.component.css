@@ -1,0 +1,11 @@
+.list-config {
+  display: flex;
+}
+
+.btn-config {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}

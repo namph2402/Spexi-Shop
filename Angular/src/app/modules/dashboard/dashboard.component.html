@@ -1,0 +1,67 @@
+<div class="row">
+  <div *ngFor="let box of boxes;let i=index" class="col-md-4 col-sm-6 col-xs-12">
+    <div class="info-box">
+      <span class="info-box-icon {{box['bg']}}"><i class="fa {{box['icon']}}"></i></span>
+      <div class="info-box-content">
+        <span class="info-box-text">{{box['text']}}</span>
+        <span class="info-box-number">{{box['value']}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 col-sm-12">
+    <div class="box box-solid box-warning">
+      <div class="box-header with-border">
+        <h3 class="box-title">Sản phẩm sắp hết hàng</h3>
+        <div class="box-tools pull-right">
+          <a class="label label-default" href="sfdghfdsa">Tất cả</a>
+        </div>
+      </div>
+      <div class="box-body no-padding">
+        <table class="table-responsive table table-bordered table-hover">
+          <thead>
+          <tr>
+            <th style="width: 30%;">Mã</th>
+            <th style="width: 55%;">Tên</th>
+            <th style="width: 15%;">Số lượng</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="odd">
+            <td *ngFor="let data of row" class="{{data['align']}}">{{data['value']}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-sm-12">
+    <div class="box box-solid box-warning">
+      <div class="box-header with-border">
+        <h3 class="box-title">Thống kê đơn hàng</h3>
+        <div class="box-tools pull-right">
+          <a class="label label-default" href="sfdghfdsa">Tất cả</a>
+        </div>
+      </div>
+      <div class="box-body no-padding">
+        <table class="table-responsive table table-bordered table-hover">
+          <thead>
+          <tr>
+            <th style="width: 30%;">Mã</th>
+            <th style="width: 55%;">Tên</th>
+            <th style="width: 15%;">Số lượng</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="odd">
+            <td *ngFor="let data of row" class="{{data['align']}}">{{data['value']}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="login-box">
+  <div class="login-logo">
+    <img alt="User Image" class="img-circle" src="assets/logo.png">
+  </div>
+  <div class="login-box-body">
+    <p class="login-box-msg">Điền thông tin để đăng nhập</p>
+    <form (ngSubmit)="login()" [formGroup]="formGroup" novalidate>
+      <div class="form-group has-feedback">
+        <input class="form-control" formControlName="username" placeholder="Tài khoản" type="text">
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input class="form-control" formControlName="password" placeholder="Mật khẩu" type="password">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="checkbox icheck">
+            <a href="#">Quên mật khẩu?</a><br>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <button class="btn btn-primary btn-block btn-flat" type="submit">Đăng nhập</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
