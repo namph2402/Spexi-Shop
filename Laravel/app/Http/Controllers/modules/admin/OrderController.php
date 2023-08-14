@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-
 class OrderController extends RestController
 {
     protected $productRepository;

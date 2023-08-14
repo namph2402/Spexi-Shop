@@ -145,7 +145,7 @@ class OrderShipController extends RestController
                 $attributes['total_fee'] = $dataResponse->total_fee;
                 $attributes['expected_delivery_time'] = $dataResponse->expected_delivery_time;
                 if ($unit->name == UnitName::TU_GIAO) {
-                    $attributes['status'] = 'Đã điều phối giao hàng';
+                    $attributes['status'] = 'Điều phối giao hàng';
                 } else {
                     $attributes['status'] = 'Đã tiếp nhận';
                 }
@@ -178,6 +178,66 @@ class OrderShipController extends RestController
         $ghu = new GiaoHangUtil($model);
         $info = $ghu->getOrder($model);
         return $this->success($info);
+    }
+
+    public function shipping($id)
+    {
+        $model = $this->repository->findById($id ,['order']);
+        if (empty($model)) {
+            return $this->errorNotFound();
+        }
+
+        try {
+            DB::beginTransaction();
+            $model = $this->repository->update($id, [
+                'status' => 'Đang giao',
+                'status_id' => 4,
+            ]);
+
+            if($model) {
+                $this->orderRepository->update($model->order->id,
+                [
+                    'order_status' => 'Đang giao'
+                ]);
+            }
+
+            DB::commit();
+            return $this->success($model);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function complete($id)
+    {
+        $model = $this->repository->findById($id ,['order']);
+        if (empty($model)) {
+            return $this->errorNotFound();
+        }
+
+        try {
+            DB::beginTransaction();
+            $model = $this->repository->update($id, [
+                'status' => 'Hoàn thành',
+                'status_id' => 7,
+            ]);
+
+            if($model) {
+                $this->orderRepository->update($model->order->id,
+                [
+                    'order_status' => 'Hoàn thành'
+                ]);
+            }
+
+            DB::commit();
+            return $this->success($model);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return $this->error($e->getMessage());
+        }
     }
 
     public function PrintBills(Request $request)

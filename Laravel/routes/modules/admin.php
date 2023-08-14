@@ -191,6 +191,8 @@ Route::group(['middleware' => ['auth.admin']], function () {
     Route::get('order_ships/printBills', 'OrderShipController@PrintBills');
     Route::resource('order_ships', 'OrderShipController');
     Route::group(['prefix' => 'order_ships/{id}'], function () {
+        Route::get('shipping', 'OrderShipController@shipping');
+        Route::get('complete', 'OrderShipController@complete');
         Route::get('printBill', 'OrderShipController@printBill');
     });
 
