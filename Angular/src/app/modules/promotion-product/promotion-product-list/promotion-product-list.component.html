@@ -58,7 +58,7 @@
       </thead>
       <tbody *ngFor="let item of list;let i = index">
       <tr class="odd">
-        <td style="text-align: center;">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
+        <td class="text-center">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
         <td style="display: flex">
           <img [alt]="item.name" [src]="item.image" class="img-thumb" width="100px"/>
           <label style="margin-left:20px">{{item.name}}</label>
@@ -67,13 +67,13 @@
         <td style="text-align: right;">{{item.sale_price|number:'1.0-0'}}</td>
         <td style="text-align: right;">
           <p>{{100 - (item.sale_price / item.price * 100)|number:'1.0-0'}} %</p></td>
-        <td style="text-align: center;">
-          <button (click)="editPromotionProduct(item)" *ngIf="promotion == 1" class="btn btn-default btn-sm" type="button">
+        <td class="text-center">
+          <button (click)="editPromotionProduct(item)" *ngIf="promotion == 1" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
             <i class="fa fa-pencil-square-o"></i>
           </button>
           <button (confirm)="removeProduct(item)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
                   mwlConfirmationPopover placement="top"
-                  popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa sản phẩm" type="button">
+                  popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa sản phẩm" type="button" style="width: 30px; height: 30px; padding: 0;">
             <i aria-hidden="true" class="fa fa-remove"></i>
           </button>
         </td>

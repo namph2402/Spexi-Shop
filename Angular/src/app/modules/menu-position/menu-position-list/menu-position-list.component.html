@@ -85,10 +85,10 @@
                   <button (confirm)="remove(item,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm pull-right" style="margin-left: 5px;"
                           confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover placement="top"
                           popoverMessage="Bạn thực sự muốn xóa?"
-                          popoverTitle="Xóa" type="button">
+                          popoverTitle="Xóa" type="button" style="margin-left: 5px; width: 30px; height: 30px; padding: 0;">
                     <i class="fa fa-remove"></i>
                   </button>
-                  <button (click)="editGroup(item,i)" class="btn btn-default btn-sm pull-right" type="button">
+                  <button (click)="editGroup(item,i)" class="btn btn-default btn-sm pull-right" type="button" style="width: 30px; height: 30px; padding: 0;">
                     <i class="fa fa-pencil-square-o"></i>
                   </button>
                 </div>
@@ -113,35 +113,35 @@
                   </thead>
                   <tbody>
                   <tr *ngFor="let item of item.menus; let j = index" class="odd">
-                    <td style="text-align: center;">{{j + 1}}</td>
+                    <td class="text-center">{{j + 1}}</td>
                     <td>
                       {{item.name}}
                     </td>
                     <td>
                       {{item.url}}
                     </td>
-                    <td style="text-align: center;">
+                    <td class="text-center">
                       {{item.parent ? item.parent.name : "Không có"}}
-                    <td style="text-align: center;">
+                    <td class="text-center">
                       <button (confirm)="upOrder(item ,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-default btn-sm"
                               confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
                               placement="top" popoverMessage="Bạn thực sự muốn tăng thứ tự?"
-                              popoverTitle="Thay đổi thứ tự" type="button">
+                              popoverTitle="Thay đổi thứ tự" type="button" style="width: 30px; height: 30px; padding: 0;">
                         <i class="fa fa-arrow-up"></i>
                       </button>
                       <button (confirm)="downOrder(item,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-default btn-sm"
                               confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
                               placement="top" popoverMessage="Bạn thực sự muốn giảm thứ tự?"
-                              popoverTitle="Thay đổi thứ tự" type="button">
+                              popoverTitle="Thay đổi thứ tự" type="button" style="width: 30px; height: 30px; padding: 0;">
                         <i class="fa fa-arrow-down"></i>
                       </button>
-                      <button (click)="editMenu(item,i,j)" class="btn btn-default" type="button">
+                      <button (click)="editMenu(item,i,j)" class="btn btn-default" type="button" style="width: 30px; height: 30px; padding: 0;">
                         <i class="fa fa-pencil-square-o"></i>
                       </button>
                       <button (confirm)="removeMenu(item,i,j)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
                               mwlConfirmationPopover placement="top"
                               popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
-                              type="button">
+                              type="button" style="width: 30px; height: 30px; padding: 0;">
                         <i class="fa fa-remove"></i>
                       </button>
                   </tr>

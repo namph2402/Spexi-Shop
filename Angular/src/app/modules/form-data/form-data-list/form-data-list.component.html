@@ -64,15 +64,23 @@
     <table class="table-responsive table table-bordered table-hover">
       <thead>
         <tr>
-          <th style="width: 20%">#</th>
+          <th style="width: 10%">#</th>
           <th style="width: 80%">Email đăng ký</th>
+          <th style="width: 10%">Thao tác</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of list; let i = index" class="odd">
-            <td style="text-align: center;">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
+          <td class="text-center">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
           <td>
             {{item.value}}
+          </td>
+          <td class="text-center">
+            <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm"
+              confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover placement="top"
+              popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa" style="width: 30px; height: 30px; padding: 0;" type="button">
+              <i aria-hidden="true" class="fa fa-remove"></i>
+            </button>
           </td>
         </tr>
       </tbody>

@@ -86,7 +86,7 @@
         <tr *ngFor="let item of list; let i = index" class="odd">
           <td><input (change)="selectItem(item, i)" [checked]="selectors[i]" class="checkbox"
               style="margin: 10px auto; width: 15px; height: 15px" type="checkbox" /></td>
-          <td style="text-align: center">
+          <td class="text-center">
             <label style="display: block">{{ item.code }}</label>
             <label *ngIf="item.order_status == 'Lên đơn'" class="label label-primary" style="padding: 5px 10px">
               {{ item.order_status }}</label>

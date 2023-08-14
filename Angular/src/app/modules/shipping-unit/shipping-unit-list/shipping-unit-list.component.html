@@ -79,7 +79,7 @@
       </thead>
       <tbody>
         <tr class="odd" *ngFor="let item of list; let i = index">
-          <td style="text-align: center">{{ i + 1 }}</td>
+          <td class="text-center">{{ i + 1 }}</td>
           <td>{{ item.name }}</td>
           <td>{{ item.username }}</td>
           <td>
@@ -108,25 +108,25 @@
               </div>
             </div>
           </td>
-          <td style="text-align: center">
-            <button *ngIf="item.name != 'Tự giao'" type="button" style="width: 37px" class="btn btn-info"
+          <td class="text-center">
+            <button *ngIf="item.name != 'Tự giao'" type="button" style="width: 30px; height: 30px; padding: 0;" class="btn btn-info"
               (click)="sync(item)">
               <i class="fa fa-refresh" aria-hidden="true"></i>
             </button>
-            <button *ngIf="item.name == 'Tự giao'" type="button" style="width: 37px" class="btn btn-info"
+            <button *ngIf="item.name == 'Tự giao'" type="button" style="width: 30px; height: 30px; padding: 0;" class="btn btn-info"
               (click)="addUnitPartner()">
               <i class="fa fa-plus-circle" aria-hidden="true"></i>
             </button>
             <button *ngIf="
                 item.shipping_services == '' ||
                 item.shipping_strores == '' ||
-                item.name == 'Tự giao'
-              " (click)="editShippingUnit(item)" class="btn btn-default btn-sm" type="button">
+                item.name == 'Tự giao'"
+                (click)="editShippingUnit(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
               <i class="fa fa-pencil-square-o"></i>
             </button>
             <button type="button" class="btn btn-danger" mwlConfirmationPopover popoverTitle="Xóa"
               popoverMessage="Bạn thực sự muốn xóa?" placement="top" confirmText="Yes <i class='fa fa-check'></i>"
-              cancelText="No <i class='fa fa-remove'></i>" (confirm)="remove(item, i)">
+              cancelText="No <i class='fa fa-remove'></i>" (confirm)="remove(item, i)" style="width: 30px; height: 30px; padding: 0;">
               <i class="fa fa-remove"></i>
             </button>
           </td>

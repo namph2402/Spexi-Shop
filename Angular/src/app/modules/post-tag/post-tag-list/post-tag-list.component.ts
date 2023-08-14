@@ -93,18 +93,4 @@ export class PostTagListComponent extends AbstractCRUDComponent<PostTagMeta> {
       }
     });
   }
-
-  upOrder(item: PostTagMeta) {
-    (<PostTagService>this.service).up(item.id).subscribe(res => {
-      this.service.toastSuccessfully('Tăng thứ tự');
-      this.load();
-    }, () => this.service.toastFailed('Tăng thứ tự'));
-  }
-
-  downOrder(item: PostTagMeta) {
-    (<PostTagService>this.service).down(item.id).subscribe(res => {
-      this.service.toastSuccessfully('Giảm thứ tự');
-      this.load();
-    }, () => this.service.toastFailed('Giảm thứ tự'));
-  }
 }

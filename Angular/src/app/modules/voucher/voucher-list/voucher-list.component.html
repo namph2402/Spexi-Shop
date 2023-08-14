@@ -79,7 +79,7 @@
     </thead>
     <tbody>
     <tr *ngFor="let item of list;let i = index" class="odd">
-      <td style="text-align: center;">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
+      <td class="text-center">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
       <td style="font-size: 15px;">{{item.name}}</td>
       <td>
         <label style="font-size: 15px;">{{item.code}}</label>
@@ -95,26 +95,26 @@
           <span>Chiết khấu:<p>{{item.discount_percent}} %</p></span>
         </div>
       </td>
-      <td style="text-align: center;">
+      <td class="text-center">
         <p *ngIf="item.type == 1" class="label-warning text-center">Giảm hàng</p>
         <p *ngIf="item.type == 2" class="label-success text-center">Free ship</p>
       </td>
-      <td style="text-align: center;">
+      <td class="text-center">
         <div style="margin-right: 5px">
           <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 0"></ui-switch>
           <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 1"
                      [checked]="item.status"></ui-switch>
         </div>
       </td>
-      <td style="text-align: center;">
+      <td class="text-center">
         <p>{{item.expired_date}}</p>
       </td>
-      <td style="text-align: center;">
-        <button (click)="editVoucher(item,i)" class="btn btn-default btn-sm" type="button">
+      <td class="text-center">
+        <button (click)="editVoucher(item,i)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
           <i class="fa fa-pencil-square-o"></i>
         </button>
         <button (confirm)="remove(item,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
-                mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?" type="button">
+                mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?" type="button" style="width: 30px; height: 30px; padding: 0;">
           <i class="fa fa-remove"></i>
         </button>
       </td>

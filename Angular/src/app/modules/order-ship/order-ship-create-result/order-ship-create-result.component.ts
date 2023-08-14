@@ -86,7 +86,7 @@ export class OrderShipCreateResultComponent extends AbstractCRUDModalComponent<a
 
   printShipBill() {
     let ids: number[] = this.list.filter((val, index) => this.selectors[index]).map(val => val.id);
-    (<OrderShipService>this.shipService).printShipBill(ids).subscribe(res => {
+    (<OrderShipService>this.shipService).printBills(ids).subscribe(res => {
       this.service.toastSuccessfully('In vận đơn');
       if (res['link']) {
         window.open(res['link']);

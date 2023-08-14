@@ -75,15 +75,15 @@
         </thead>
         <tbody>
         <tr *ngFor="let item of listColor; let i = index" class="odd">
-          <td style="text-align: center">{{ i + 1 }}</td>
+          <td class="text-center">{{ i + 1 }}</td>
           <td>{{ item.name }}</td>
-          <td style="text-align: center">
-            <button (click)="editVariantColor(item)" class="btn btn-default btn-sm" type="button">
+          <td class="text-center">
+            <button (click)="editVariantColor(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
               <i class="fa fa-pencil-square-o"></i>
             </button>
             <button (confirm)="removeVariantColor(item)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
                     mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
-                    style="width: 34px" type="button">
+                    style="width: 30px; height: 30px; padding: 0;" type="button">
               <i aria-hidden="true" class="fa fa-remove"></i>
             </button>
           </td>
@@ -102,15 +102,15 @@
         </thead>
         <tbody>
         <tr *ngFor="let item of listSize; let i = index" class="odd">
-          <td style="text-align: center">{{ i + 1 }}</td>
+          <td class="text-center">{{ i + 1 }}</td>
           <td>{{ item.name }}</td>
-          <td style="text-align: center">
-            <button (click)="editVariantSize(item)" class="btn btn-default btn-sm" type="button">
+          <td class="text-center">
+            <button (click)="editVariantSize(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
               <i class="fa fa-pencil-square-o"></i>
             </button>
             <button (confirm)="removeVariantSize(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
                     mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
-                    style="width: 34px" type="button">
+                    style="width: 30px; height: 30px; padding: 0;" type="button" style="width: 30px; height: 30px; padding: 0;">
               <i aria-hidden="true" class="fa fa-remove"></i>
             </button>
           </td>

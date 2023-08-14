@@ -39,10 +39,4 @@ export class OrderShipInfoComponent extends AbstractModalComponent<OrderShipMeta
       () => this.info = 'Không tìm thấy'
     );
   }
-
-  remove() {
-    this.service.destroy(this.model.id).subscribe(val => {
-      this.close({});
-    });
-  }
 }

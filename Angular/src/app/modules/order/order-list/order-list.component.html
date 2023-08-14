@@ -76,20 +76,18 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of list; let i = index" class="odd">
-          <td style="text-align: center">
+          <td class="text-center">
             <label style="display: block">{{ item.code }}</label>
-            <label *ngIf="item.order_status == 'Lên đơn'" class="label label-primary" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Xác nhận'" class="label label-info" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Chuẩn bị hàng' || item.order_status == 'Đã chuẩn bị hàng'" class="label label-warning" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Đang giao'" class="label label-warning" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Hoàn thành'" class="label label-success" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Hủy đơn'" class="label label-danger" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
+            <label class="label" style="padding: 5px 10px"
+            [ngClass]="{
+              'label-primary':item.order_status == 'Lên đơn',
+              'label-info':item.order_status == 'Xác nhận',
+              'label-default':item.order_status == 'Chuẩn bị hàng',
+              'label-secondary':item.order_status == 'Đã chuẩn bị hàng',
+              'label-warning':item.order_status == 'Đang giao',
+              'label-success':item.order_status == 'Hoàn thành',
+              'label-danger':item.order_status == 'Hủy đơn'
+            }">{{ item.order_status }}</label>
             <p style="margin: 10px 0 0">
               {{ item.created_at | date : "yyyy-MM-dd" }}
             </p>
@@ -117,7 +115,7 @@
               <tbody>
                 <tr *ngFor="let d of item.details">
                   <td>
-                    <p>{{ d.product.name }}</p>
+                    <p><label>{{ d.product_code }}</label> - {{ d.product.name }}</p>
                   </td>
                   <td>
                     <span style="display: block">{{ d.color }} - {{ d.size }}</span>
@@ -156,7 +154,7 @@
               </tbody>
             </table>
           </td>
-          <td style="text-align: center">
+          <td class="text-center">
             <label *ngIf="item.payment_type == 'manual'" class="label label-warning" style="padding: 5px 10px">Khi nhận
               hàng</label>
             <label *ngIf="item.payment_status == 0" class="label label-default"
@@ -168,23 +166,26 @@
                 style="min-width: 100px; max-width: 100px"></textarea>
             </label>
           </td>
-          <td style="text-align: center">
+          <td class="text-center">
             <button *ngIf="item.order_status == 'Lên đơn'" style="width: 65px; margin-bottom: 5px"
               (click)="confirm(item)" class="btn btn-success btn-sm" type="button">
               <i aria-hidden="true" class="fa fa-check"></i>
             </button>
-            <div style="display: block" *ngIf="
-                item.order_status == 'Lên đơn' ||
-                item.order_status == 'Xác nhận' ||
-                item.order_status == 'Chuẩn bị hàng'
-              ">
-              <!-- Sửa + hủy -->
-              <button (click)="editOrder(item)" class="btn btn-default btn-sm" type="button">
+            <!-- Sửa + hủy -->
+            <div style="display: block"
+            *ngIf="item.order_status == 'Lên đơn' || item.order_status == 'Xác nhận' || item.order_status == 'Chuẩn bị hàng' ||  item.order_status == 'Đã chuẩn bị hàng'">
+              <button (click)="editOrder(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px;">
                 <i class="fa fa-pencil-square-o"></i>
               </button>
-              <button (click)="cancel(item)" class="btn btn-danger btn-sm" type="button">
+              <button *ngIf="item.order_status != 'Lên đơn'" (click)="cancel(item)" class="btn btn-danger btn-sm" type="button" style="width: 30px; height: 30px;">
                 <i class="fa fa-remove"></i>
               </button>
+              <button *ngIf="item.order_status == 'Lên đơn'" class="btn btn-danger text-center btn-config" type="button" mwlConfirmationPopover
+                  popoverTitle="Xóa" popoverMessage="Bạn thực sự muốn xóa?" placement="top"
+                  confirmText="Yes <i class='fa fa-check'></i>" cancelText="No <i class='fa fa-remove'></i>"
+                  (confirm)="remove(item, i)" style="width: 30px; height: 30px; padding: 0;">
+                  <i class="fa fa-remove" style="margin: auto"></i>
+                </button>
             </div>
           </td>
         </tr>

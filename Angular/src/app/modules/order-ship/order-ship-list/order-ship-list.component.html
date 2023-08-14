@@ -76,43 +76,51 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of list; let i = index" class="odd">
-          <td style="text-align: center">
+          <td class="text-center">
             <label style="display: block">{{ item.code }}</label>
-            <label *ngIf="item.order_status == 'Lên đơn'" class="label label-primary" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Xác nhận'" class="label label-info" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Chuẩn bị hàng'" class="label label-warning" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Đang giao'" class="label label-warning" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Hoàn thành'" class="label label-success" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Hủy đơn'" class="label label-danger" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
+              <label class="label" style="padding: 5px 10px"
+              [ngClass]="{
+                'label-primary':item.order_status == 'Chuẩn bị hàng',
+                'label-info':item.order_status == 'Đã chuẩn bị hàng',
+                'label-warning':item.order_status == 'Đang giao',
+                'label-success':item.order_status == 'Hoàn thành',
+                'label-danger':item.order_status == 'Hủy đơn'
+              }">{{ item.order_status }}</label>
             <p style="margin: 10px 0 0">
               {{ item.created_at | date : "yyyy-MM-dd" }}
             </p>
             <p>{{ item.created_at | date : "HH:mm:ss" }}</p>
           </td>
-          <td style="text-align: center">
+          <td class="text-center">
             <div *ngIf="item.shipping">
               <p>
-                <label class="label label-warning">{{item.shipping.status}}</label>
-              </p>
-              <p>
-                <label class="label label-default">{{item.shipping.unit ? item.shipping.unit.name : ''}}</label>
-              </p>
-              <p>
-                <label class="label label-default">
-                  <a href="javascript:void(0)" (click)="infoShipping(item.shipping,i)">Mã
+                <label class="label" style="padding: 5px 10px">
+                  <a href="javascript:void(0)" style="font-size: 14px;" (click)="infoShip(item.shipping,i)">Mã
                     {{item.shipping.code}}</a>
                 </label>
-                <button class="btn btn-warning btn-xs" (click)="recreate(item.shipping,item,i)"
-                  title="Tạo lại mã vận đơn" *ngIf="item.shipping.status_id<=2">
-                  <i class="fa fa-refresh"></i>
-                </button>
               </p>
+              <p>
+                <label class="label label-default" style="padding: 5px 10px">{{item.shipping.unit ? item.shipping.unit.name : ''}}</label>
+              </p>
+              <p>
+                <label class="label" style="padding: 5px 10px"
+                [ngClass]="{
+                  'label-primary':item.shipping.status == 'Điều phối giao hàng',
+                  'label-info':item.shipping.status == 'Đang giao',
+                  'label-success':item.shipping.status == 'Hoàn thành',
+                  'label-danger':item.shipping.status == 'Hủy đơn'
+                }">{{item.shipping.status}}</label>
+              </p>
+              <div style="margin-top: 20px;">
+                <button *ngIf="item.shipping.status == 'Điều phối giao hàng'" type="button" class="btn btn-success margin-r-5" style="width: 30px; height: 30px; padding: 0;"
+                  (click)="shipping(item.shipping)">
+                  <i class="fa fa-truck"></i>
+                </button>
+                <button *ngIf="item.shipping.status == 'Đang giao'" type="button" class="btn btn-success margin-r-5" style="width: 30px; height: 30px; padding: 0;"
+                  (click)="complete(item.shipping)">
+                  <i class="fa fa-check"></i>
+                </button>
+              </div>
             </div>
           </td>
           <td>
@@ -140,7 +148,7 @@
               <tbody>
                 <tr *ngFor="let d of item.details">
                   <td>
-                    <p>{{ d.product.name }}</p>
+                    <p><label>{{ d.product_code }}</label> - {{ d.product.name }}</p>
                   </td>
                   <td>
                     <span style="display: block">{{ d.color }} - {{ d.size }}</span>
@@ -178,6 +186,15 @@
                 </tr>
               </tbody>
             </table>
+          </td>
+          <td class="text-center">
+            <div style="margin-top: 20px;" *ngIf="item.shipping">
+              <button type="button" class="btn btn-sm margin-r-5" style="width: 30px; height: 30px; padding: 0;"
+                [ngClass]="{'btn-success':!item.shipping.is_printed,'btn-danger':item.shipping.is_printed}"
+                (click)="printShippingBill(item)">
+                <i class="fa fa-print"></i>
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>

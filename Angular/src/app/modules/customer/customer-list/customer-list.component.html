@@ -74,7 +74,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of list;let i = index" class="odd">
-        <td style="text-align: center;">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
+        <td class="text-center">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
         <td class="text-center">
           <img [alt]="item.fullname" [src]="item.avatar" class="img-thumb" width="100px" />
         </td>
@@ -86,15 +86,15 @@
           <span *ngIf="item.gender == 0">Nữ</span>
         </td>
         <td class="text-center">{{item.dob}}</td>
-        <td style="text-align: center;">
+        <td class="text-center">
           <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.account.status == 0"></ui-switch>
           <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.account.status == 1"
             [checked]="item.account.status"></ui-switch>
         </td>
-        <td>
+        <td class="text-center">
           <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm"
             confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover placement="top"
-            popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa" style="width: 34px;" type="button">
+            popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa" style="width: 30px; height: 30px; padding: 0;" type="button">
             <i aria-hidden="true" class="fa fa-remove"></i>
           </button>
         </td>

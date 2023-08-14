@@ -92,11 +92,39 @@ export class OrderShipListComponent extends AbstractCRUDComponent<OrderShipMeta>
     modal.setModel(ship);
     let sub = modal.onHidden.subscribe((result: ModalResult<OrderShipMeta>) => {
       if (result.success) {
-        // this.list[i] = null;
+        this.list[i] = null;
         this.list[i].status = 'Chuẩn bị hàng';
       }
       sub.unsubscribe();
     });
+  }
+
+  printShippingBill(item: OrderMeta) {
+    (<OrderShipService>this.service).printBill(item.shipping.id).subscribe(res => {
+      this.service.toastSuccessfully('In vận đơn');
+      if (res['link']) {
+        window.open(res['link']);
+      }
+      if (res['src']) {
+        var win = window.open('', 'In đơn hàng', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=780,height=200,top=' + (screen.height - 400) + ',left=' + (screen.width - 840));
+        win.document.body.innerHTML = res['src'];
+      }
+      this.load();
+    }, () => this.service.toastFailed('In vận đơn'));
+  }
+
+  shipping(item: OrderShipMeta) {
+    (<OrderShipService>this.service).shipping(item.id).subscribe(res => {
+      this.service.toastSuccessfully('Giao hàng');
+      this.load();
+    }, () => this.service.toastFailedEdited());
+  }
+
+  complete(item: OrderShipMeta) {
+    (<OrderShipService>this.service).complete(item.id).subscribe(res => {
+      this.service.toastSuccessfully('Giao hàng');
+      this.load();
+    }, () => this.service.toastFailedEdited());
   }
 
 }
