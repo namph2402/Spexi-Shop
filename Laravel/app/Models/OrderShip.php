@@ -10,7 +10,7 @@ class OrderShip extends Model
 
     public function order()
     {
-        return $this->hasOne(Order::class, 'order_id');
+        return $this->hasOne(Order::class, 'id', 'order_id');
     }
 
     public function unit()
