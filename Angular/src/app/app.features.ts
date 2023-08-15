@@ -56,7 +56,7 @@ export const APP_FEATURES = [
   },
   {
     name: 'Quản trị website',
-    icon: 'fa fa-bar-chart',
+    icon: 'fa fa-chrome',
     children: [
       {
         name: 'Quản lý bài đăng',
@@ -139,7 +139,7 @@ export const APP_FEATURES = [
       },
       {
         name: 'Đối tác vận chuyển',
-        icon: 'fa fa-cogs',
+        icon: 'fa fa-handshake-o',
         link: '/ship-units'
       },
       {

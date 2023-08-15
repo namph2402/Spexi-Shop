@@ -18,4 +18,14 @@ class PostTagRepository extends EloquentRepository implements PostTagRepositoryI
         return PostTag::class;
     }
 
+    public function attach(PostTag $tag, $postId)
+    {
+        $tag->posts()->attach($postId);
+    }
+
+    public function detach(PostTag $tag, $postId)
+    {
+        $tag->posts()->detach($postId);
+    }
+
 }

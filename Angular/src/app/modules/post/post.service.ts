@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {AbstractCRUDService} from '../../core/crud';
 import {ToasterService} from 'angular2-toaster';
 import {TitleService} from '../../core/services';
@@ -13,6 +13,13 @@ export class PostService extends AbstractCRUDService<PostMeta> {
 
   constructor(http: HttpClient, toaster: ToasterService, title: TitleService) {
     super(http, title, toaster, 'bài đăng', 'posts');
+  }
+
+  loadTag(params) {
+    let parameters: HttpParams = new HttpParams({
+      fromObject: params
+    });
+    return this.toPipe(this.http.get<DataResponse<PostMeta>>(`${this.urlRestAPI}/loadTag`, {params: parameters}));
   }
 
   attachTags(id: number, tag_ids: number[]): Observable<PostMeta> {

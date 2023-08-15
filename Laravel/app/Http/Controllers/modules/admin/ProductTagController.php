@@ -12,9 +12,12 @@ use Illuminate\Support\Str;
 
 class ProductTagController extends RestController
 {
+    protected $repository;
+
     public function __construct(ProductTagRepositoryInterface $repository)
     {
         parent::__construct($repository);
+        $this->repository = $repository;
     }
 
     public function index(Request $request)
@@ -217,6 +220,46 @@ class ProductTagController extends RestController
             Log::error($e);
             DB::rollBack();
             return $this->error($e->getMessage());
+        }
+    }
+
+
+    public function attachTags($id, Request $request)
+    {
+        $model = $this->repository->findById($id);
+        if (empty($model)) {
+            return $this->errorNotFound();
+        }
+        try {
+            DB::beginTransaction();
+            foreach ($request->post_ids as $postId) {
+                $this->repository->attach($model, $postId);
+            };
+            DB::commit();
+            return $this->success($model);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return $this->errorClient($e->getMessage());
+        }
+    }
+
+    public function detachTags($id, Request $request)
+    {
+        $model = $this->repository->findById($id);
+        if (empty($model)) {
+            return $this->errorNotFound();
+        }
+        $postId = $request->post_ids;
+        try {
+            DB::beginTransaction();
+            $this->repository->detach($model, $postId);
+            DB::commit();
+            return $this->success($model);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return $this->errorClient($e->getMessage());
         }
     }
 

@@ -83,9 +83,7 @@
             <p>{{ item.created_at | date : "yyyy-MM-dd HH:mm:ss" }}</p>
           </td>
           <td  class="text-center">
-            <button (click)="editProductTag(item)" class="btn btn-default btn-sm" type="button">
-              Xem
-            </button>
+            <button (click)="showProduct(item)" class="btn btn-default btn-sm" type="button">Xem</button>
           </td>
           <td style="text-align: center">
             <button (confirm)="upOrder(item)" cancelText="No <i class='fa fa-remove'></i>"

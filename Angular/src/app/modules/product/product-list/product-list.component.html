@@ -81,7 +81,7 @@
       <tr *ngFor="let item of list; let i = index" class="odd">
         <td class="text-center">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
         <td>
-          <p style="font-size: 15px;"> {{ item.name }}</p>
+          <p style="font-size: 15px;"><label>{{item.code}}</label> - {{ item.name }}</p>
           <p>{{item.created_at | date: 'yyyy-MM-dd HH:mm:ss'}}</p>
           <a [href]="item.full_path" target="_blank" title="Xem sản phẩm">
             <button class="btn btn-default btn-xs" type="button">

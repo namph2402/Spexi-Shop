@@ -28,5 +28,4 @@ class PostRepository extends EloquentRepository implements PostRepositoryInterfa
         $post->tags()->detach($tagId);
     }
 
-
 }

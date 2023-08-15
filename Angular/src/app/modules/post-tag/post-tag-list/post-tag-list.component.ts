@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {AbstractCRUDComponent, AbstractModalComponent,} from '../../../core/crud';
+import {AbstractCRUDComponent, AbstractCRUDModalComponent, AbstractModalComponent,} from '../../../core/crud';
 import {BsModalService, ModalOptions} from 'ngx-bootstrap';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {PostTagMeta} from '../post-tag.meta';
@@ -8,6 +8,7 @@ import {PostTagCreateComponent} from '../post-tag-create/post-tag-create.compone
 import {PostTagEditComponent} from '../post-tag-edit/post-tag-edit.component';
 import {FieldForm, ModalResult} from '../../../core/common';
 import {ObjectUtil} from '../../../core';
+import {PostTagItemListComponent} from '../post-tag-item-list/post-tag-item-list.component';
 
 @Component({
   selector: 'app-post-tag',
@@ -93,4 +94,17 @@ export class PostTagListComponent extends AbstractCRUDComponent<PostTagMeta> {
       }
     });
   }
+
+  showPost(item: PostTagMeta) {
+    let modalRef = this.modalService.show(PostTagItemListComponent, {ignoreBackdropClick: true, class: 'modal-lg'});
+    let modal: AbstractCRUDModalComponent<PostTagMeta> = <AbstractCRUDModalComponent<PostTagMeta>>modalRef.content;
+    modal.setRelatedModel(item);
+    let sub = modal.onHidden.subscribe((result: ModalResult<PostTagMeta[]>) => {
+      if (result.success) {
+        this.load();
+      }
+      sub.unsubscribe();
+    });
+  }
+
 }

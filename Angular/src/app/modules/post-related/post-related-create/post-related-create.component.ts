@@ -42,7 +42,7 @@ export class PostRelatedCreateComponent extends AbstractModalComponent<PostRelat
 
   buildForm(): FormGroup {
     return this.formBuilder.group({
-      search: new FormControl(null, Validators.maxLength(255)),
+      search: new FormControl(null),
       category_id: new FormControl(null),
       post_id: new FormControl(null),
       related_id: new FormControl(null),

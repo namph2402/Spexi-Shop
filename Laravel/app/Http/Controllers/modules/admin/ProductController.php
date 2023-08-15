@@ -21,6 +21,7 @@ use Illuminate\Support\Str;
 
 class ProductController extends RestController
 {
+    protected $repository;
     protected $tagRepository;
     protected $categoryRepository;
     protected $promotionRepository;
@@ -39,6 +40,7 @@ class ProductController extends RestController
     )
     {
         parent::__construct($repository);
+        $this->repository = $repository;
         $this->tagRepository = $tagRepository;
         $this->categoryRepository = $categoryRepository;
         $this->promotionRepository = $promotionRepository;
@@ -56,7 +58,7 @@ class ProductController extends RestController
         $orderBy = $request->input('orderBy', 'order:asc');
 
         if ($request->has('search') && Str::length($request->search) > 0) {
-            array_push($clauses, WhereClause::queryLike('name', $request->search));
+            array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('code', $request->search), WhereClause::queryLike('name', $request->search)]));
         }
 
         if ($request->has('search') && Str::length($request->search) == 0) {
@@ -317,6 +319,57 @@ class ProductController extends RestController
             DB::rollBack();
             return $this->error($e->getMessage());
         }
+    }
+
+    public function loadTag(Request $request) {
+        $limit = $request->input('limit', null);
+        $clauses = [];
+        $with = [];
+        $withCount = [];
+        $postClauses = [];
+        $orderBy = $request->input('orderBy', 'order:asc');
+
+        if ($request->has('search') && Str::length($request->search) > 0) {
+            array_push($clauses, WhereClause::queryLike('name', $request->search));
+        }
+
+        if ($request->has('search') && Str::length($request->search) == 0) {
+            $data = '';
+            return $this->success($data);
+        }
+
+        if ($request->has('category_id')) {
+            array_push($clauses, WhereClause::query('category_id', $request->category_id));
+        }
+
+        if ($request->has('tag_id')) {
+            $tag_id = $request->tag_id;
+            array_push($clauses, WhereClause::queryRelationHas('tags', function ($q) use ($tag_id) {
+                $q->where('id', $tag_id);
+            }));
+        }
+
+        if ($request->has('tag_id_add')) {
+
+            $tagId = $request->tag_id_add;
+            $posts = $this->repository->get([WhereClause::queryRelationHas('tags', function ($q) use ($tagId) {
+                $q->where('id', $tagId);
+            })]);
+            if (count($posts) > 0) {
+                foreach ($posts as $post) {
+                    array_push($postClauses, $post->id);
+                }
+                Log::info($postClauses);
+                array_push($clauses, WhereClause::queryNotIn('id', $postClauses));
+            }
+        }
+
+        if ($limit) {
+            $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
+        } else {
+            $data = $this->repository->get($clauses, $orderBy, $with, $withCount);
+        }
+        return $this->success($data);
     }
 
     public function attachTags($id, Request $request)

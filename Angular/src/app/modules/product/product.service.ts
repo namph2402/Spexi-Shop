@@ -15,6 +15,13 @@ export class ProductService extends AbstractCRUDService<ProductMeta> {
     super(http, title, toaster, 'sản phẩm', 'products');
   }
 
+  loadTag(params) {
+    let parameters: HttpParams = new HttpParams({
+      fromObject: params
+    });
+    return this.toPipe(this.http.get<DataResponse<ProductMeta>>(`${this.urlRestAPI}/loadTag`, {params: parameters}));
+  }
+
   attachTags(id: number, tag_ids: number[]): Observable<ProductMeta> {
     return this.http.post<DataResponse<ProductMeta>>(`${this.urlRestAPI}/${id}/attach_tags`, {tag_ids})
       .pipe(catchError(this.handleErrorRequest.bind(this)), map(res => res['data']));

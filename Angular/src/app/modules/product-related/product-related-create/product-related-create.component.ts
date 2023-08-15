@@ -20,7 +20,7 @@ export class ProductRelatedCreateComponent extends AbstractModalComponent<Produc
   list = [];
 
   formSearchProduct: FormGroup = new FormGroup({
-    search: new FormControl(null, Validators.maxLength(255)),
+    search: new FormControl(null),
     category_id: new FormControl(null),
   });
 

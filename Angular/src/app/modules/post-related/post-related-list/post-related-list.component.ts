@@ -56,7 +56,7 @@ export class PostRelatedListComponent extends AbstractCRUDModalComponent<PostRel
 
   buildSearchForm(): FormGroup {
     return this.formBuilder.group({
-      search: new FormControl(null, Validators.maxLength(255)),
+      search: new FormControl(null),
       category_id: new FormControl(null)
     });
   }

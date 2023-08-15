@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth.admin']], function () {
     });
 
     // Product
+    Route::get('products/loadTag', 'ProductController@loadTag');
     Route::post('products/import', 'ProductController@import');
     Route::resource('products', 'ProductController')->except(['update']);
     Route::group(['prefix' => 'products/{id}'], function () {
@@ -83,6 +84,8 @@ Route::group(['middleware' => ['auth.admin']], function () {
     Route::group(['prefix' => 'product_tags/{id}'], function () {
         Route::post('up', 'ProductTagController@up');
         Route::post('down', 'ProductTagController@down');
+        Route::post('attach_tags', 'ProductTagController@attachTags');
+        Route::post('detach_tags', 'ProductTagController@detachTags');
     });
     Route::resource('product_tag_mappings', 'ProductTagMappingController');
 
@@ -143,6 +146,7 @@ Route::group(['middleware' => ['auth.admin']], function () {
     });
 
     //Post
+    Route::get('posts/loadTag', 'PostController@loadTag');
     Route::resource('posts', 'PostController')->except(['update']);
     Route::group(['prefix' => 'posts/{id}'], function () {
         Route::post('', 'PostController@update');
@@ -159,6 +163,8 @@ Route::group(['middleware' => ['auth.admin']], function () {
     Route::group(['prefix' => 'post_tags/{id}'], function () {
         Route::post('up', 'PostTagController@up');
         Route::post('down', 'PostTagController@down');
+        Route::post('attach_tags', 'PostTagController@attachTags');
+        Route::post('detach_tags', 'PostTagController@detachTags');
     });
     Route::resource('post_tag_mappings', 'PostTagMappingController');
 
