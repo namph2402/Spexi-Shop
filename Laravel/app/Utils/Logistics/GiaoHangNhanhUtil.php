@@ -2,15 +2,13 @@
 
 namespace App\Utils\Logistics;
 
-use App\Models\ProductVariant;
 use App\Models\Order;
 use App\Models\OrderShip;
 use App\Models\ShippingService;
 use App\Models\ShippingStore;
-use App\Models\ShippingWard;
 use App\Models\ShippingWardByUnit;
+use App\Models\Warehouse;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Ixudra\Curl\Facades\Curl;
 
 class GiaoHangNhanhUtil extends GiaoHangAbstractUtil
@@ -160,7 +158,7 @@ class GiaoHangNhanhUtil extends GiaoHangAbstractUtil
 
         $total_weight = 0;
         foreach ($order->details as $d) {
-            $variant = ProductVariant::whereProductId($d->product_id)->whereId($d->variant_id)->first();
+            $variant = Warehouse::whereProductId($d->product_id)->whereId($d->variant_id)->first();
             $total_weight += $variant->weight * $d->quantity * 1000;
             array_push($data['items'], [
                 'name' => $d->product->name,
@@ -196,99 +194,6 @@ class GiaoHangNhanhUtil extends GiaoHangAbstractUtil
         }
     }
 
-    public function updateOrder(string $code, Order $order, ShippingService $service = null)
-    {
-        $toWard = ShippingWard::where('name', 'like', $order->ward)
-            ->whereHas('district', function (Builder $q) use ($order) {
-                $q->where('name', 'like', $order->district)
-                    ->whereHas('province', function (Builder $q2) use ($order) {
-                        $q2->where('name', 'like', $order->province);
-                    });
-            })->first();
-        if (empty($toWard)) {
-            throw new \Exception(sprintf('Địa chỉ %s không đúng', $order->customer_address));
-        }
-        $data = [
-            'to_name' => $order->customer_name,
-            'to_phone' => $order->customer_phone,
-            'to_address' => $order->customer_address,
-            'to_ward_code' => $toWard->code,
-            'to_district_id' => $toWard->district_id,
-            'client_order_code' => $order->code,
-            'cod_amount' => $order->cod_fee,
-            'content' => $order->customer_request,
-            'weight' => $order->details->map(function ($d, $key) {
-                return $d->product->weight * $d->quantity * 1000;
-            })->sum(),
-            'length' => $service->data['default_length'] ?? 10,
-            'width' => $service->data['default_width'] ?? 10,
-            'height' => $service->data['default_height'] ?? 10,
-            'service_type_id' => $service->data['service_type_id'] ?? 2,
-            'payment_type_id' => $service->data['payment_type_id'] ?? 1,
-            'note' => $order->customer_request,
-            'required_note' => $service->data['default_note'] ?? '',
-            'items' => []
-        ];
-
-        foreach ($order->details as $d) {
-            array_push($data['items'], [
-                'name' => $d->product->name,
-                'code' => $d->detail_code,
-                'quantity' => $d->quantity,
-            ]);
-        }
-
-        $curl = Curl::to($this->endpoint . '/v2/shipping-order/update')
-            ->withHeaders([
-                'Content-Type' => 'application/json',
-                'Token' => $this->token,
-                'ShopId' => $this->config['SHOP_ID']
-            ])
-            ->withData(
-                array_merge(['order_code' => $code], $data)
-            )
-            ->asJson()
-            ->returnResponseObject()
-            ->post();
-        if ($curl->status == 200) {
-            if ($curl->content->code == 200) {
-                return $curl->content->data;
-            } else {
-                throw new \Exception($curl->content->message);
-            }
-        } else {
-            throw new \Exception('Lỗi kết nối đến Giao hàng nhanh');
-        }
-    }
-
-    public function updateCoD(string $code, int $cod_fee)
-    {
-        $curl = Curl::to($this->endpoint . '/v2/shipping-order/updateCOD')
-            ->withHeaders([
-                'Content-Type' => 'application/json',
-                'Token' => $this->token,
-                'ShopId' => $this->config['SHOP_ID']
-            ])
-            ->withData(
-                [
-                    'order_code' => $code,
-                    'cod_amount' => $cod_fee
-                ]
-            )
-            ->asJson()
-            ->returnResponseObject()
-            ->post();
-        if ($curl->status == 200) {
-            if ($curl->content->code == 200) {
-                return $curl->content->data;
-            } else {
-                throw new \Exception($curl->content->message);
-            }
-        } else {
-            throw new \Exception('Lỗi kết nối đến Giao hàng nhanh');
-        }
-    }
-
     public function cancelOrder(OrderShip $order)
     {
         $curl = Curl::to($this->endpoint . '/v2/switch-status/cancel')
@@ -315,66 +220,6 @@ class GiaoHangNhanhUtil extends GiaoHangAbstractUtil
             throw new \Exception('Lỗi kết nối đến Giao hàng nhanh');
         }
     }
-
-    public function returnOrder(OrderShip $order)
-    {
-        $curl = Curl::to($this->endpoint . '/v2/switch-status/return')
-            ->withHeaders([
-                'Content-Type' => 'application/json',
-                'Token' => $this->token,
-                'ShopId' => $order->store->partner_id
-            ])
-            ->withData(
-                [
-                    'order_codes' => [$order->code],
-                ]
-            )
-            ->asJson()
-            ->returnResponseObject()
-            ->post();
-        if ($curl->status == 200) {
-            if ($curl->content->code == 200) {
-                return $curl->content->data[0]->result;
-            } else {
-                throw new \Exception($curl->content->message);
-            }
-        } else {
-            throw new \Exception('Lỗi kết nối đến Giao hàng nhanh');
-        }
-    }
-
-    public function storingOrder(OrderShip $order)
-    {
-        $curl = Curl::to($this->endpoint . '/v2/switch-status/storing')
-            ->withHeaders([
-                'Content-Type' => 'application/json',
-                'Token' => $this->token,
-                'ShopId' => $order->store->partner_id
-            ])
-            ->withData(
-                [
-                    'order_codes' => [$order->code],
-                ]
-            )
-            ->asJson()
-            ->returnResponseObject()
-            ->post();
-        if ($curl->status == 200) {
-            if ($curl->content->code == 200) {
-                return $curl->content->data[0]->result;
-            }
-        }
-        if ($curl->status == 200) {
-            if ($curl->content->code == 200) {
-                return $curl->content->data;
-            } else {
-                throw new \Exception($curl->content->message);
-            }
-        } else {
-            throw new \Exception('Lỗi kết nối đến Giao hàng nhanh');
-        }
-    }
-
 
     public function authenticate($account)
     {

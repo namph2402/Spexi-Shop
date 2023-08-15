@@ -37,8 +37,8 @@ export class StoreEditComponent extends AbstractModalComponent<StoreMeta> {
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tên', 'name', 'Nhập ký tự'),
-      FieldForm.createTextArea('Giá trị', 'value', 'Nhập ký tự'),
+      FieldForm.createTextInput('Tên', 'name', 'Nhập tên'),
+      FieldForm.createTextArea('Giá trị', 'value', 'Nhập giá trị'),
     ];
   }
 

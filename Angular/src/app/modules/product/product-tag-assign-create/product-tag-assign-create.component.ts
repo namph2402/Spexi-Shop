@@ -5,9 +5,8 @@ import {BsModalRef} from 'ngx-bootstrap';
 import {FieldForm} from '../../../core/common';
 import {ProductService} from '../../product/product.service';
 import {ProductMeta} from '../../product/product.meta';
-import {ProductTagService} from '../product-tag.service';
 import {ObjectUtil} from '../../../core';
-import {ProductTagMeta} from '../product-tag.meta';
+import { ProductTagService } from '../../product-tag/product-tag.service';
 
 @Component({
   selector: 'app-product-tag-assign-create',
@@ -15,13 +14,13 @@ import {ProductTagMeta} from '../product-tag.meta';
   styleUrls: ['./product-tag-assign-create.component.css'],
   providers: [ProductService, ProductTagService]
 })
-export class ProductTagAssignCreateComponent extends AbstractModalComponent<ProductTagMeta> {
+export class ProductTagAssignCreateComponent extends AbstractModalComponent<ProductMeta> {
 
   constructor(
-    service: ProductTagService,
+    service: ProductService,
     modal: BsModalRef,
     builder: FormBuilder,
-    private productService: ProductService
+    private tagService: ProductTagService
   ) {
     super(service, modal, builder);
   }
@@ -33,7 +32,7 @@ export class ProductTagAssignCreateComponent extends AbstractModalComponent<Prod
   }
 
   loadAllTags() {
-    return this.service.loadByParams({product_id_add: this.model.id});
+    return this.tagService.loadByParams({product_id_add: this.model.id});
   }
 
   buildForm(): FormGroup {
@@ -67,7 +66,7 @@ export class ProductTagAssignCreateComponent extends AbstractModalComponent<Prod
 
   assign() {
     let ids: number[] = this.formGroup.controls['ids'].value;
-    (<ProductService>this.productService).attachTags(this.model.id, ids).subscribe((res: ProductMeta) => {
+    (<ProductService>this.service).attachTags(this.model.id, ids).subscribe((res: ProductMeta) => {
       this.service.toastSuccessfully('Thêm tag');
       this.close(ObjectUtil.mergeValue(this.model, res));
     }, () => this.service.toastFailed('Thêm tag'));

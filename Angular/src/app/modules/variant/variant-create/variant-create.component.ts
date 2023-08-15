@@ -56,7 +56,7 @@ export class VariantCreateComponent extends AbstractModalComponent<VariantMeta> 
           name: 'Color',
         },
       ]),
-      FieldForm.createTextInput('Tên', 'name', 'Nhập ký tự'),
+      FieldForm.createTextInput('Tên', 'name', 'Nhập tên'),
     ];
   }
 

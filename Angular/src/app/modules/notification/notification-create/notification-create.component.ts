@@ -37,8 +37,8 @@ export class NotificationCreateComponent extends AbstractModalComponent<Notifica
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tên', 'name', 'Nhập ký tự'),
-      FieldForm.createHtmlInput('Giá trị', 'content', {height: '300px'}),
+      FieldForm.createTextInput('Tên', 'name', 'Nhập tên'),
+      FieldForm.createHtmlInput('Nội dung', 'content', {height: '300px'}),
     ];
   }
 

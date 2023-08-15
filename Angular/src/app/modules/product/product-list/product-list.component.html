@@ -50,9 +50,7 @@
           </div>
           <div class="col-md-12">
             <button class="btn btn-default" type="submit">Tìm kiếm</button>
-            <button (click)="removeFilter()" class="btn btn-default" type="button">
-              Xóa lọc
-            </button>
+            <button (click)="removeFilter()" class="btn btn-default" type="button">Xóa lọc</button>
           </div>
         </form>
       </div>
@@ -81,7 +79,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let item of list; let i = index" class="odd">
-        <td style="text-align: center;">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
+        <td class="text-center">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
         <td>
           <p style="font-size: 15px;"> {{ item.name }}</p>
           <p>{{item.created_at | date: 'yyyy-MM-dd HH:mm:ss'}}</p>
@@ -99,7 +97,7 @@
           <button (click)="showImage(item)" class="btn btn-default btn-xs" title="Album Ảnh">
             <i class="fa fa-picture-o"></i>
           </button>
-          <button (click)="showVariant(item)" class="btn btn-default btn-xs" title="Thuộc tính">
+          <button (click)="showWarehouse(item)" class="btn btn-default btn-xs" title="Kho hàng">
             <i aria-hidden="true" class="fa fa-archive"></i>
           </button>
           <button (click)="showRelated(item)" class="btn btn-default btn-xs" title="Sản phẩm liên quan">
@@ -120,28 +118,28 @@
         <td>
           {{ item.category ? item.category.name : "Chưa có danh mục" }}
         </td>
-        <td style="text-align: center;">
+        <td class="text-center">
           <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 0"></ui-switch>
           <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 1"
                      [checked]="item.status"></ui-switch>
         </td>
-        <td style="text-align: center;">
+        <td class="text-center">
           <button (confirm)="upOrder(item ,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-default btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
                   mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn tăng thứ tự?"
-                  popoverTitle="Thay đổi thứ tự" type="button">
+                  popoverTitle="Thay đổi thứ tự" type="button" style="width: 30px; height: 30px; padding: 0;">
             <i class="fa fa-arrow-up"></i>
           </button>
           <button (confirm)="downOrder(item,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-default btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
                   mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn giảm thứ tự?"
-                  popoverTitle="Thay đổi thứ tự" type="button">
+                  popoverTitle="Thay đổi thứ tự" type="button" style="width: 30px; height: 30px; padding: 0;">
             <i class="fa fa-arrow-down"></i>
           </button>
-          <button (click)="editProduct(item)" class="btn btn-default btn-sm" type="button">
+          <button (click)="editProduct(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
             <i class="fa fa-pencil-square-o"></i>
           </button>
           <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
                   mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
-                  style="width: 34px;" type="button">
+                  style="width: 30px; height: 30px; padding: 0;" type="button">
             <i aria-hidden="true" class="fa fa-remove"></i>
           </button>
         </td>

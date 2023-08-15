@@ -80,6 +80,10 @@ Route::group(['middleware' => ['auth.admin']], function () {
 
     // Product tag
     Route::resource('product_tags', 'ProductTagController');
+    Route::group(['prefix' => 'product_tags/{id}'], function () {
+        Route::post('up', 'ProductTagController@up');
+        Route::post('down', 'ProductTagController@down');
+    });
     Route::resource('product_tag_mappings', 'ProductTagMappingController');
 
     // Product variant
@@ -184,8 +188,11 @@ Route::group(['middleware' => ['auth.admin']], function () {
     Route::resource('order_details', 'OrderDetailController');
 
     //Order ship
+    Route::get('order_ships/printBills', 'OrderShipController@PrintBills');
     Route::resource('order_ships', 'OrderShipController');
     Route::group(['prefix' => 'order_ships/{id}'], function () {
+        Route::get('shipping', 'OrderShipController@shipping');
+        Route::get('complete', 'OrderShipController@complete');
         Route::get('printBill', 'OrderShipController@printBill');
     });
 

@@ -3,20 +3,19 @@ import {AbstractModalComponent} from '../../../core/crud';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {BsModalRef} from 'ngx-bootstrap';
 import {FieldForm} from '../../../core/common';
-import {ProductVariantService} from '../product-variant.service';
-import {ProductVariantMeta} from '../product-variant.meta';
-
+import {ProductWarehouseService} from '../product-warehouse.service';
+import {ProductWarehouseMeta} from '../product-warehouse.meta';
 
 @Component({
-  selector: 'app-product-variant-edit',
-  templateUrl: './product-variant-edit.component.html',
-  styleUrls: ['./product-variant-edit.component.css'],
-  providers: [ProductVariantService]
+  selector: 'app-product-warehouse-edit',
+  templateUrl: './product-warehouse-edit.component.html',
+  styleUrls: ['./product-warehouse-edit.component.css'],
+  providers: [ProductWarehouseService]
 })
-export class ProductVariantEditComponent extends AbstractModalComponent<ProductVariantMeta> {
+export class ProductWarehouseEditComponent extends AbstractModalComponent<ProductWarehouseMeta> {
 
   constructor(
-    service: ProductVariantService,
+    service: ProductWarehouseService,
     modal: BsModalRef,
     builder: FormBuilder
   ) {

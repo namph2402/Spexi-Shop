@@ -1,5 +1,5 @@
 <div class="modal-header bg-primary">
-  <h4 class="modal-title pull-left">Bài viết liên quan</h4>
+  <h4 class="modal-title pull-left">Bài đăng liên quan</h4>
   <button (click)="dismiss()" aria-label="Close" class="close pull-right" type="button">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -30,9 +30,7 @@
         </div>
         <div class="col-md-12">
           <button class="btn btn-default" type="submit">Tìm kiếm</button>
-          <button (click)="removeFilter()" class="btn btn-default" type="button">
-            Xóa lọc
-          </button>
+          <button (click)="removeFilter()" class="btn btn-default" type="button">Xóa lọc</button>
         </div>
       </form>
     </div>
@@ -53,25 +51,25 @@
         </thead>
         <tbody>
         <tr *ngFor="let item of list;let i = index" class="odd">
-          <td style="text-align: center;">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
-          <td style="text-align: center;">
+          <td class="text-center">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
+          <td class="text-center">
             <img [src]="item.post.image" height="70px">
           </td>
           <td>
             {{item.post.name}}
           </td>
-          <td style="text-align: center;">
+          <td class="text-center">
             <button (confirm)="upOrder(item ,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-default btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
                     mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn tăng thứ tự?"
-                    popoverTitle="Thay đổi thứ tự" type="button">
+                    popoverTitle="Thay đổi thứ tự" type="button" style="width: 30px; height: 30px; padding: 0;">
               <i class="fa fa-arrow-up"></i>
             </button>
             <button (confirm)="downOrder(item,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-default btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
                     mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn giảm thứ tự?"
-                    popoverTitle="Thay đổi thứ tự" type="button">
+                    popoverTitle="Thay đổi thứ tự" type="button" style="width: 30px; height: 30px; padding: 0;">
               <i class="fa fa-arrow-down"></i>
             </button>
-            <button (confirm)="remove(item,i)" cancelText="No <i class='fa fa-remove'></i>"  style="margin-left: 5px" confirmText="Yes <i class='fa fa-check'></i>"
+            <button (confirm)="remove(item,i)" cancelText="No <i class='fa fa-remove'></i>" style="width: 30px; height: 30px; padding: 0;margin-left: 5px" confirmText="Yes <i class='fa fa-check'></i>"
                     mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?"
                     popoverTitle="Xóa" type="button">
               <i class="fa fa-remove"></i>

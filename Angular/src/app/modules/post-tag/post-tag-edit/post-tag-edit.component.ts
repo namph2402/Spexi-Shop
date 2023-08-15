@@ -36,7 +36,7 @@ export class PostTagEditComponent extends AbstractModalComponent<PostTagMeta> {
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tên tag', 'name', 'Nhập ký tự'),
+      FieldForm.createTextInput('Tên tag', 'name', 'Nhập tên'),
     ];
   }
 

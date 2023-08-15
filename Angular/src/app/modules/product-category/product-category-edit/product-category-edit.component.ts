@@ -37,7 +37,7 @@ export class ProductCategoryEditComponent extends AbstractModalComponent<Product
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tên danh mục', 'name', 'Nhập ký tự'),
+      FieldForm.createTextInput('Tên danh mục', 'name', 'Nhập tên'),
       FieldForm.createFileInput('Ảnh đại diện', 'image', 'Chọn ảnh', this.onFileUploadChange, 'image/*'),
     ];
   }

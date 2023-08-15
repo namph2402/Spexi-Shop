@@ -86,7 +86,11 @@ class GiaoHangTuGiaoUtil extends GiaoHangAbstractUtil
 
     public function cancelOrder(OrderShip $order)
     {
-        throw new \Exception('Method chưa hỗ trợ');
+        $model = OrderShip::where('id', $order->id)->update(
+            ['status' =>'Hủy đơn'],
+            ['status_id' => 0]
+        );
+        return $model;
     }
 
     public function returnOrder(OrderShip $order)

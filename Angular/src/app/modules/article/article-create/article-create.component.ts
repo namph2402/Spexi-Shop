@@ -38,7 +38,7 @@ export class ArticleCreateComponent extends AbstractModalComponent<ArticleMeta> 
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createHtmlInput('Nội dung', 'content', 'Nhập ký tự'),
+      FieldForm.createHtmlInput('Nội dung', 'content', 'Nhập nội dung'),
     ];
   }
 

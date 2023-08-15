@@ -93,4 +93,18 @@ export class ProductTagListComponent extends AbstractCRUDComponent<ProductTagMet
       }
     });
   }
+
+  upOrder(item: ProductTagMeta) {
+    (<ProductTagService>this.service).up(item.id).subscribe(res => {
+      this.service.toastSuccessfully('Tăng thứ tự');
+      this.load();
+    }, () => this.service.toastFailed('Tăng thứ tự'));
+  }
+
+  downOrder(item: ProductTagMeta) {
+    (<ProductTagService>this.service).down(item.id).subscribe(res => {
+      this.service.toastSuccessfully('Giảm thứ tự');
+      this.load();
+    }, () => this.service.toastFailed('Giảm thứ tự'));
+  }
 }

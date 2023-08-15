@@ -44,7 +44,7 @@ export class ProductCategoryCreateComponent extends AbstractModalComponent<Produ
   initFieldForm(): FieldForm[] {
     return [
       FieldForm.createSingleSelect2('Danh mục cha', 'parent', 'Chọn một', 'loadAllCategories'),
-      FieldForm.createTextInput('Tên danh mục', 'name', 'Nhập ký tự'),
+      FieldForm.createTextInput('Tên danh mục', 'name', 'Nhập tên'),
       FieldForm.createFileInput('Ảnh đại diện', 'image', 'Chọn ảnh', this.onFileUploadChange, 'image/*'),
     ];
   }

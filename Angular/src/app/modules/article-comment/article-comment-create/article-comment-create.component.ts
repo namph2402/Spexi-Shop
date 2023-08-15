@@ -62,7 +62,7 @@ export class ArticleCommentCreateComponent extends AbstractModalComponent<Articl
           value: 5
         }
       ]),
-      FieldForm.createTextArea('Bình luận', 'content', 'Nhập kí tự', 5),
+      FieldForm.createTextArea('Bình luận', 'content', 'Nhập nội dung', 5),
     ];
   }
 

@@ -37,7 +37,7 @@ export class NotificationEditComponent extends AbstractModalComponent<Notificati
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tên', 'name', 'Nhập ký tự'),
+      FieldForm.createTextInput('Tên', 'name', 'Nhập tên'),
       FieldForm.createHtmlInput('Nội dung', 'content', {height: '300px'}),
     ];
   }

@@ -17,12 +17,12 @@ import {ArticleCommentListComponent} from '../../article-comment/article-comment
 import {ArticleCommentMeta} from '../../article-comment/article-comment.meta';
 import {ProductCategoryService} from '../../product-category/product-category.service';
 import {ProductTagService} from '../../product-tag/product-tag.service';
-import {ProductTagAssignListComponent} from '../../product-tag/product-tag-assign-list/product-tag-assign-list.component';
-import {ProductVariantListComponent} from '../../product-variant/product-variant-list/product-variant-list.component';
-import {ProductVariantMeta} from '../../product-variant/product-variant.meta';
+import {ProductWarehouseListComponent} from '../../product-warehouse/product-warehouse-list/product-warehouse-list.component';
+import {ProductWarehouseMeta} from '../../product-warehouse/product-warehouse.meta';
 import {ProductImportComponent} from '../product-import/product-import.component';
 import {ProductRelatedListComponent} from '../../product-related/product-related-list/product-related-list.component';
 import {ProductRelatedMeta} from '../../product-related/product-related.meta';
+import { ProductTagAssignListComponent } from '../product-tag-assign-list/product-tag-assign-list.component';
 
 @Component({
   selector: 'app-product',
@@ -237,11 +237,11 @@ export class ProductListComponent extends AbstractCRUDComponent<ProductMeta> {
     });
   }
 
-  showVariant(item: ProductMeta) {
-    let modalRef = this.modalService.show(ProductVariantListComponent, {ignoreBackdropClick: true, class: 'modal-lg'});
-    let modal: AbstractCRUDModalComponent<ProductVariantMeta> = <AbstractCRUDModalComponent<ProductVariantMeta>>modalRef.content;
+  showWarehouse(item: ProductMeta) {
+    let modalRef = this.modalService.show(ProductWarehouseListComponent, {ignoreBackdropClick: true, class: 'modal-lg'});
+    let modal: AbstractCRUDModalComponent<ProductWarehouseMeta> = <AbstractCRUDModalComponent<ProductWarehouseMeta>>modalRef.content;
     modal.setRelatedModel(item);
-    let sub = modal.onHidden.subscribe((result: ModalResult<ProductVariantMeta[]>) => {
+    let sub = modal.onHidden.subscribe((result: ModalResult<ProductWarehouseMeta[]>) => {
       if (result.success) {
         this.load();
       }

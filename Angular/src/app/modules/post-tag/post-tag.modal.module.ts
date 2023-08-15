@@ -9,8 +9,6 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown';
 import {CKEditorModule} from 'ng2-ckeditor';
 import {UiSwitchModule} from 'ngx-toggle-switch';
-import { PostTagAssignListComponent } from './post-tag-assign-list/post-tag-assign-list.component';
-import { PostTagAssignCreateComponent } from './post-tag-assign-create/post-tag-assign-create.component';
 
 @NgModule({
   imports: [
@@ -29,20 +27,14 @@ import { PostTagAssignCreateComponent } from './post-tag-assign-create/post-tag-
   declarations: [
     PostTagCreateComponent,
     PostTagEditComponent,
-    PostTagAssignListComponent,
-    PostTagAssignCreateComponent
   ],
   entryComponents: [
     PostTagCreateComponent,
     PostTagEditComponent,
-    PostTagAssignListComponent,
-    PostTagAssignCreateComponent
   ],
   exports: [
     PostTagCreateComponent,
     PostTagEditComponent,
-    PostTagAssignListComponent,
-    PostTagAssignCreateComponent
   ]
 })
 export class PostTagModalModule {

@@ -6,7 +6,7 @@ import {StorePostMeta} from '../store-post.meta';
 import {StorePostService} from '../store-post.service';
 import {StorePostCreateComponent} from '../store-post-create/store-post-create.component';
 import {StorePostEditComponent} from '../store-post-edit/store-post-edit.component';
-import {ModalResult, ObjectUtil} from '../../../core';
+import {FieldForm, ModalResult, ObjectUtil} from '../../../core';
 
 @Component({
   selector: 'app-store-post',
@@ -55,6 +55,12 @@ export class StorePostListComponent extends AbstractCRUDComponent<StorePostMeta>
     return this.formBuilder.group({
       search: new FormControl(null),
     });
+  }
+
+  initSearchForm(): FieldForm[] {
+    return [
+      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa', 'col-md-6'),
+    ];
   }
 
   initNewModel(): StorePostMeta {

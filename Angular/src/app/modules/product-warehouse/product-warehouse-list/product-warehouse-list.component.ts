@@ -3,22 +3,22 @@ import {AbstractCRUDModalComponent, AbstractModalComponent} from '../../../core/
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {BsModalRef, BsModalService, ModalOptions} from 'ngx-bootstrap';
 import {AppPagination, ModalResult} from '../../../core/common';
-import {ProductVariantMeta} from '../product-variant.meta';
-import {ProductVariantCreateComponent} from '../product-variant-create/product-variant-create.component';
+import {ProductWarehouseMeta} from '../product-warehouse.meta';
+import {ProductWarehouseCreateComponent} from '../product-warehouse-create/product-warehouse-create.component';
 import {ObjectUtil} from '../../../core/utils';
-import {ProductVariantService} from '../product-variant.service';
-import {ProductVariantEditComponent} from '../product-variant-edit/product-variant-edit.component';
+import {ProductWarehouseService} from '../product-warehouse.service';
+import {ProductWarehouseEditComponent} from '../product-warehouse-edit/product-warehouse-edit.component';
 
 @Component({
-  selector: 'app-product-variant-list',
-  templateUrl: './product-variant-list.component.html',
-  styleUrls: ['./product-variant-list.component.css'],
-  providers: [ProductVariantService]
+  selector: 'app-product-warehouse-list',
+  templateUrl: './product-warehouse-list.component.html',
+  styleUrls: ['./product-warehouse-list.component.css'],
+  providers: [ProductWarehouseService]
 })
-export class ProductVariantListComponent extends AbstractCRUDModalComponent<ProductVariantMeta> {
+export class ProductWarehouseListComponent extends AbstractCRUDModalComponent<ProductWarehouseMeta> {
 
   constructor(
-    service: ProductVariantService,
+    service: ProductWarehouseService,
     modalRef: BsModalRef,
     modal: BsModalService,
     builder: FormBuilder,
@@ -37,11 +37,11 @@ export class ProductVariantListComponent extends AbstractCRUDModalComponent<Prod
   }
 
   getCreateModalComponent(): any {
-    return ProductVariantCreateComponent;
+    return ProductWarehouseCreateComponent;
   }
 
   getEditModalComponent(): any {
-    return ProductVariantEditComponent;
+    return ProductWarehouseEditComponent;
   }
 
   getCreateModalComponentOptions(): ModalOptions {
@@ -56,8 +56,8 @@ export class ProductVariantListComponent extends AbstractCRUDModalComponent<Prod
     return this.formBuilder.group({});
   }
 
-  initNewModel(): ProductVariantMeta {
-    const model = new ProductVariantMeta();
+  initNewModel(): ProductWarehouseMeta {
+    const model = new ProductWarehouseMeta();
     model.product_id = this.relatedModel.id;
     return model;
   }
@@ -82,7 +82,7 @@ export class ProductVariantListComponent extends AbstractCRUDModalComponent<Prod
     });
   }
 
-  onStatusChange(item: ProductVariantMeta, index: number, enable: boolean) {
+  onStatusChange(item: ProductWarehouseMeta, index: number, enable: boolean) {
     let methodAsync = null;
     let titleMsg: string = 'Phát hành';
     if (enable) {
@@ -91,17 +91,17 @@ export class ProductVariantListComponent extends AbstractCRUDModalComponent<Prod
       methodAsync = this.service.disable(item.id);
       titleMsg = 'Lưu kho';
     }
-    methodAsync.subscribe((res: ProductVariantMeta) => {
+    methodAsync.subscribe((res: ProductWarehouseMeta) => {
       this.service.toastSuccessfully(titleMsg);
     }, () => this.service.toastFailed(titleMsg));
     this.load();
   }
 
-  createVariant() {
+  createWarehouse() {
     let modalRef = this.modalService.show(this.getCreateModalComponent(), this.getCreateModalComponentOptions());
-    let modal: AbstractModalComponent<ProductVariantMeta> = <AbstractModalComponent<ProductVariantMeta>>modalRef.content;
+    let modal: AbstractModalComponent<ProductWarehouseMeta> = <AbstractModalComponent<ProductWarehouseMeta>>modalRef.content;
     modal.setModel(this.initNewModel());
-    let sub = modal.onHidden.subscribe((result: ModalResult<ProductVariantMeta>) => {
+    let sub = modal.onHidden.subscribe((result: ModalResult<ProductWarehouseMeta>) => {
       if (result.success) {
         this.load();
       }
@@ -109,13 +109,13 @@ export class ProductVariantListComponent extends AbstractCRUDModalComponent<Prod
     });
   }
 
-  editVariant(item) {
+  editWarehouse(item) {
     let modalOptions = Object.assign(this.defaultModalOptions(), this.getEditModalComponentOptions());
     const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, modalOptions);
     const modalRef = this.modalService.show(this.getEditModalComponent(), config);
-    let modal: AbstractModalComponent<ProductVariantMeta> = <AbstractModalComponent<ProductVariantMeta>>modalRef.content;
+    let modal: AbstractModalComponent<ProductWarehouseMeta> = <AbstractModalComponent<ProductWarehouseMeta>>modalRef.content;
     modal.setModel(item);
-    modal.onHidden.subscribe((result: ModalResult<ProductVariantMeta>) => {
+    modal.onHidden.subscribe((result: ModalResult<ProductWarehouseMeta>) => {
       if (result.success) {
         this.load();
       }

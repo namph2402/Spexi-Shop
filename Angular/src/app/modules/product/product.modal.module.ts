@@ -13,9 +13,11 @@ import {ArticleModule} from '../article/article.module';
 import {ProductImageModule} from '../product-image/product-image.module';
 import {ProductTagModalModule} from '../product-tag/product-tag.modal.module';
 import {ArticleCommentModule} from '../article-comment/article-comment.module';
-import {ProductVariantModule} from '../product-variant/product-variant.module';
+import {ProductWarehouseModule} from '../product-warehouse/product-warehouse.module';
 import {ProductImportComponent} from './product-import/product-import.component';
 import {ProductRelatedModule} from '../product-related/product-related.module';
+import { ProductTagAssignListComponent } from './product-tag-assign-list/product-tag-assign-list.component';
+import { ProductTagAssignCreateComponent } from './product-tag-assign-create/product-tag-assign-create.component';
 
 @NgModule({
   imports: [
@@ -35,17 +37,17 @@ import {ProductRelatedModule} from '../product-related/product-related.module';
     ArticleCommentModule,
     ProductImageModule,
     ProductTagModalModule,
-    ProductVariantModule,
+    ProductWarehouseModule,
     ProductRelatedModule,
   ],
   declarations: [
-    ProductCreateComponent, ProductEditComponent, ProductImportComponent
+    ProductCreateComponent, ProductEditComponent, ProductImportComponent, ProductTagAssignListComponent, ProductTagAssignCreateComponent
   ],
   entryComponents: [
-    ProductCreateComponent, ProductEditComponent, ProductImportComponent
+    ProductCreateComponent, ProductEditComponent, ProductImportComponent, ProductTagAssignListComponent, ProductTagAssignCreateComponent
   ],
   exports: [
-    ProductCreateComponent, ProductEditComponent, ProductImportComponent
+    ProductCreateComponent, ProductEditComponent, ProductImportComponent, ProductTagAssignListComponent, ProductTagAssignCreateComponent
   ]
 })
 export class ProductModalModule {

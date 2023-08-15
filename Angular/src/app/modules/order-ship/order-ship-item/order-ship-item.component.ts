@@ -6,7 +6,7 @@ import { OrderShipMeta } from '../order-ship.meta';
 import { OrderShipCreateComponent } from '../order-ship-create/order-ship-create.component';
 import { OrderShipService } from '../order-ship.service';
 import { OrderShipCreateResultComponent } from '../order-ship-create-result/order-ship-create-result.component';
-import { AbstractCRUDComponent, AbstractCRUDModalComponent, AbstractModalComponent, AppPagination, FieldForm, ModalResult, ObjectUtil} from '../../../core';
+import { AbstractCRUDModalComponent, AbstractModalComponent, AppPagination, FieldForm, ModalResult, ObjectUtil} from '../../../core';
 
 @Component({
   selector: 'app-order-ship-item',
@@ -114,7 +114,7 @@ export class OrderShipItemComponent extends AbstractCRUDModalComponent<OrderShip
           sub2.unsubscribe();
         });
       }
-      this.load();
+      this.loaded();
       sub.unsubscribe();
     });
   }
@@ -133,6 +133,11 @@ export class OrderShipItemComponent extends AbstractCRUDModalComponent<OrderShip
       }
     });
     this.statusSelectAll = status;
+  }
+
+  dismiss() {
+    this.modal.hide();
+    this.onHidden.emit(new ModalResult<any>('success'));
   }
 
 }

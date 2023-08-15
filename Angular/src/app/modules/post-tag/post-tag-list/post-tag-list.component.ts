@@ -33,7 +33,7 @@ export class PostTagListComponent extends AbstractCRUDComponent<PostTagMeta> {
   }
 
   getTitle(): string {
-    return 'Quản lý tag bài viết';
+    return 'Quản lý tag bài đăng';
   }
 
   getCreateModalComponent(): any {
@@ -92,19 +92,5 @@ export class PostTagListComponent extends AbstractCRUDComponent<PostTagMeta> {
         this.load();
       }
     });
-  }
-
-  upOrder(item: PostTagMeta) {
-    (<PostTagService>this.service).up(item.id).subscribe(res => {
-      this.service.toastSuccessfully('Tăng thứ tự');
-      this.load();
-    }, () => this.service.toastFailed('Tăng thứ tự'));
-  }
-
-  downOrder(item: PostTagMeta) {
-    (<PostTagService>this.service).down(item.id).subscribe(res => {
-      this.service.toastSuccessfully('Giảm thứ tự');
-      this.load();
-    }, () => this.service.toastFailed('Giảm thứ tự'));
   }
 }

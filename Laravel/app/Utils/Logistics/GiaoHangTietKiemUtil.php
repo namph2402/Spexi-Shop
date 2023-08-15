@@ -6,7 +6,6 @@ use App\Models\Order;
 use App\Models\OrderShip;
 use App\Models\ShippingService;
 use App\Models\ShippingStore;
-use App\Models\StoreInformation;
 use App\Models\Warehouse;
 use Illuminate\Support\Str;
 use Ixudra\Curl\Facades\Curl;
@@ -334,32 +333,5 @@ class GiaoHangTietKiemUtil extends GiaoHangAbstractUtil
         } else {
             throw new \Exception($curl->content->message);
         }
-    }
-
-    public function updateOrder(string $code, Order $order, ShippingService $service = null)
-    {
-        // TODO: Implement updateOrder() method.
-    }
-
-    public function returnOrder(OrderShip $order)
-    {
-        // TODO: Implement returnOrder() method.
-    }
-
-    public function storingOrder(OrderShip $order)
-    {
-        // TODO: Implement storingOrder() method.
-    }
-
-    public function printOrders($orders)
-    {
-        $dataStoreOrder = [
-            'logo' => StoreInformation::whereName('Logo')->first()->value,
-            'name' => StoreInformation::whereName('Name')->first()->value,
-            'address' => StoreInformation::whereName('Address')->first()->value,
-            'phone' => StoreInformation::whereName('Phone')->first()->value,
-            'barcodeType' => 'CODE128',
-        ];
-        return view('giaohang.default', compact('orders', 'dataStoreOrder'))->render();
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\modules\admin;
 
-use App\Common\Enum\OrderStatus;
 use App\Common\Enum\UnitName;
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
@@ -51,7 +50,7 @@ class OrderShipController extends RestController
         $clauses = [WhereClause::queryDiff('order_status', Order::$LEN_DON), WhereClause::queryDiff('order_status', Order::$XAC_NHAN)];
         $with = ['details.product','shipping.unit'];
         $withCount = [];
-        $orderBy = $request->input('orderBy', 'date_created:asc');
+        $orderBy = $request->input('orderBy', 'updated_at:desc');
 
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::queryLike('customer_name', $request->search));
@@ -103,8 +102,8 @@ class OrderShipController extends RestController
         $orderIds = preg_split('/,/', $request->order_ids);
 
         $orders = $this->orderRepository->get([WhereClause::queryIn('id', $orderIds)], 'date_created:desc', ['details.warehouse', 'shipping.unit']);
-
         $unit = $this->unitRepository->findById($request->unit_id);
+
         if (empty($unit)) {
             return $this->errorClient('Không hỗ trợ đơn vị này');
         }
@@ -131,9 +130,9 @@ class OrderShipController extends RestController
             if (!($order instanceof Order)) {
                 continue;
             }
-            // if ($order->shipping) {
-            //     continue;
-            // }
+            if ($order->shipping) {
+                continue;
+            }
             try {
                 DB::beginTransaction();
                 $giaoHangUtil = new GiaoHangUtil($unit);
@@ -145,23 +144,21 @@ class OrderShipController extends RestController
                 $attributes['code'] = $dataResponse->order_code;
                 $attributes['total_fee'] = $dataResponse->total_fee;
                 $attributes['expected_delivery_time'] = $dataResponse->expected_delivery_time;
-
                 if ($unit->name == UnitName::TU_GIAO) {
-                    $attributes['status'] = 'Đã điều phối giao hàng/Đang giao hàng';
+                    $attributes['status'] = 'Điều phối giao hàng';
                 } else {
                     $attributes['status'] = 'Đã tiếp nhận';
                 }
                 $attributes['status_id'] = 2;
                 $attributes['note'] = null;
                 $shipping = $this->repository->create($attributes);
-
-                // if($shipping) {
-                //     $this->orderRepository->update($order->id, [
-                //         'order_status' => Order::$DA_CHUAN_BI_HANG
-                //     ]);
-                // }
-
+                if($shipping) {
+                    $this->orderRepository->update($order->id, [
+                        'order_status' => Order::$DA_CHUAN_BI_HANG
+                    ]);
+                }
                 DB::commit();
+                $order->load(['shipping.unit']);
                 array_push($successOrders, $order);
             } catch (\Exception $e) {
                 Log::error($e);
@@ -176,74 +173,106 @@ class OrderShipController extends RestController
     {
         $model = $this->repository->findById($id);
         if (empty($model)) {
-            return $this->errorClient('Đối tượng không tồn tại');
+            return $this->errorClient('Đơn hàng không tồn tạ 21i');
         }
         $ghu = new GiaoHangUtil($model);
         $info = $ghu->getOrder($model);
         return $this->success($info);
     }
 
-    // public function destroy($id)
-    // {
-    //     $model = SaleOrderShipping::with('order')->find($id);
-    //     if (empty($model)) {
-    //         return $this->error('Đối tượng không tồn tại');
-    //     }
-    //     try {
-    //         DB::beginTransaction();
-    //         $ghu = new GiaoHangUtil($model);
-    //         $ghu->cancelOrder($model);
-    //         $model->delete();
-    //         $model->order->status = 'Chuẩn bị hàng';
-    //         $model->order->save();
-    //         DB::commit();
-    //         return $this->success($model);
-    //     } catch (\Exception $e) {
-    //         Log::error($e);
-    //         DB::rollBack();
-    //         return $this->error($e->getMessage());
-    //     }
-    // }
+    public function shipping($id)
+    {
+        $model = $this->repository->findById($id ,['order']);
+        if (empty($model)) {
+            return $this->errorNotFound();
+        }
 
-    // public function recreate($id)
-    // {
-    //     $model = SaleOrderShipping::with(['order', 'store', 'unit', 'service'])->find($id);
-    //     if (empty($model)) {
-    //         return $this->error('Đối tượng không tồn tại');
-    //     }
-    //     try {
-    //         DB::beginTransaction();
-    //         $ghu = new GiaoHangUtil($model);
-    //         $ghu->cancelOrder($model);
-    //         $giaoHangUtil = new GiaoHangUtil($model->unit);
-    //         $dataResponse = $giaoHangUtil->createOrder($model->order, $model->store, $model->service);
-    //         $model->status = 'Đã tiếp nhận';
-    //         $model->status_id = 2;
-    //         $model->note = null;
-    //         $model->code = $dataResponse->order_code;
-    //         $model->total_fee = $dataResponse->total_fee;
-    //         $model->expected_delivery_time = $dataResponse->expected_delivery_time;
-    //         $model->save();
-    //         $model->order->status = SaleOrder::$TRANG_THAI_DANG_GIAO;
-    //         $model->order->save();
-    //         DB::commit();
-    //         $model->load(['unit']);
-    //         return $this->success($model);
-    //     } catch (\Exception $e) {
-    //         Log::error($e);
-    //         DB::rollBack();
-    //         return $this->error($e->getMessage());
-    //     }
-    // }
+        try {
+            DB::beginTransaction();
+            $model = $this->repository->update($id, [
+                'status' => 'Đang giao',
+                'status_id' => 4,
+            ]);
+
+            if($model) {
+                $this->orderRepository->update($model->order->id,
+                [
+                    'order_status' => 'Đang giao'
+                ]);
+            }
+
+            DB::commit();
+            return $this->success($model);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function complete($id)
+    {
+        $model = $this->repository->findById($id ,['order']);
+        if (empty($model)) {
+            return $this->errorNotFound();
+        }
+
+        try {
+            DB::beginTransaction();
+            $model = $this->repository->update($id, [
+                'status' => 'Hoàn thành',
+                'status_id' => 7,
+            ]);
+
+            if($model) {
+                $this->orderRepository->update($model->order->id,
+                [
+                    'order_status' => 'Hoàn thành'
+                ]);
+            }
+
+            DB::commit();
+            return $this->success($model);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function PrintBills(Request $request)
+    {
+        $orderIdsStr = $request->order_ids;
+        if (empty($orderIdsStr)) {
+            return $this->error('Không có đơn hàng nào');
+        }
+        $orderIds = preg_split('/,/', $orderIdsStr);
+        $models = $this->orderRepository->get([WhereClause::queryIn('id',$orderIds)], null, ['shipping']);
+        if (empty($models)) {
+            return $this->error('Đối tượng không tồn tại');
+        }
+        try {
+            DB::beginTransaction();
+            $ghu = new GiaoHangUtil($models[0]);
+            $link = $ghu->printOrders($models);
+            $this->repository->bulkUpdate([WhereClause::queryIn('id',$orderIds)],['is_printed' => 1]);
+            DB::commit();
+            return $this->success(compact('link'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->error($e->getMessage(), $models);
+        }
+    }
 
     public function printBill($id)
     {
         $model = $this->repository->findById($id, ['order']);
         if (empty($model)) {
-            return $this->error('Đối tượng không tồn tại');
+            return $this->error('Đơn hàng không tồn tại');
         }
         try {
             $ghu = new GiaoHangUtil($model);
+            $this->repository->update($id,['is_printed' => 1]);
             return $this->success(['link' => $ghu->printOrders([$model->order])]);
         } catch (\Exception $e) {
             return $this->error($e->getMessage());

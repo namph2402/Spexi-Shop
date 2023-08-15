@@ -56,15 +56,15 @@ export class OrderListComponent extends AbstractCRUDComponent<OrderMeta> {
     return this.formBuilder.group({
       search: new FormControl(null),
       status: new FormControl(null),
-      customer_phone: new FormControl(null),
+      code: new FormControl(null),
       created_date: new FormControl(null),
     });
   }
 
   initSearchForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tìm kiếm theo tên khách hàng', 'search', 'Nhập từ khóa', 'col-md-6'),
-      FieldForm.createNumberInput('Tìm kiếm theo số điện thoại', 'customer_phone', 'Nhập từ khóa', 'col-md-6'),
+      FieldForm.createTextInput('Tìm kiếm mã đơn', 'code', 'Nhập từ khóa', 'col-md-6'),
+      FieldForm.createTextInput('Tìm kiếm khách hàng', 'search', 'Nhập từ khóa', 'col-md-6'),
       FieldForm.createSelect('Trạng thái', 'status', 'Chọn một', [], 'col-md-6', 'name', 'value'),
       FieldForm.createDateInput('Ngày tạo', 'created_date', 'Chọn ngày', 'col-md-6'),
     ];

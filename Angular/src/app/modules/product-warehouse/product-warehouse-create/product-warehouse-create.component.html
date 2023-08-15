@@ -1,5 +1,5 @@
 <div class="modal-header bg-primary">
-  <h4 class="modal-title pull-left">Chỉnh sửa</h4>
+  <h4 class="modal-title pull-left">Thêm mới kho hàng</h4>
   <button (click)="dismiss()" aria-label="Close" class="close pull-right" type="button">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -58,13 +58,10 @@
               {{f.label}}
             </label>
             <div class="form-group">
-              <div class="row ">
-                <angular2-multiselect [data]="f.data" [formControlName]="f.formControl"
-                                      [id]="f.formControl" [settings]="f.config">
-                </angular2-multiselect>
-              </div>
+              <angular2-multiselect [data]="f.data" [formControlName]="f.formControl"
+                                    [id]="f.formControl" [settings]="f.config" style="height: auto !important;">
+              </angular2-multiselect>
             </div>
-
           </ng-template>
           <ng-template [ngIf]="f.type=='html'">
             <label [for]="f.formControl">
@@ -80,6 +77,6 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button (click)="edit()" [disabled]="formGroup.invalid" class="btn btn-primary" type="button">Thay đổi</button>
+  <button (click)="create()" [disabled]="formGroup.invalid" class="btn btn-primary" type="button">Thêm mới</button>
   <button (click)="dismiss()" class="btn btn-default" type="button">Hủy bỏ</button>
 </div>

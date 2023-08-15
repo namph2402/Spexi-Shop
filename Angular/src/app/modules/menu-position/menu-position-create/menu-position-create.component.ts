@@ -36,7 +36,7 @@ export class MenuPositionCreateComponent extends AbstractModalComponent<MenuPosi
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tên', 'name', 'Nhập tên'),
+      FieldForm.createTextInput('Tên nhóm', 'name', 'Nhập tên'),
     ];
   }
 

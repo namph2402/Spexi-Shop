@@ -101,16 +101,6 @@ class GiaoHangUtil
         return $this->util->cancelOrder($order);
     }
 
-    public function returnOrder(OrderShip $order)
-    {
-        return $this->util->returnOrder($order);
-    }
-
-    public function storingOrder(OrderShip $order)
-    {
-        return $this->util->storingOrder($order);
-    }
-
     public function printOrders($orders)
     {
         $src = $this->util->printOrders($orders);

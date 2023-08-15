@@ -57,7 +57,7 @@ export class VoucherCreateComponent extends AbstractModalComponent<VoucherMeta> 
           name: 'Free ship',
         }
       ]),
-      FieldForm.createNumberInput('Số lượng', 'quantity', 'Nhập giá trị'),
+      FieldForm.createNumberInput('Số lượng', 'quantity', 'Nhập số lượng'),
       FieldForm.createNumberInput('Giá trị đơn hàng tối thiểu', 'min_order_value', 'Nhập giá trị',),
       FieldForm.createDateInput('Ngày hết hạn', 'expired_date', 'Nhập Ngày hết hạn'),
       FieldForm.createCheckbox('Trạng thái', 'status', 'Trạng thái'),

@@ -12,7 +12,7 @@ import {catchError, map} from 'rxjs/operators';
 export class PostService extends AbstractCRUDService<PostMeta> {
 
   constructor(http: HttpClient, toaster: ToasterService, title: TitleService) {
-    super(http, title, toaster, 'bài viết', 'posts');
+    super(http, title, toaster, 'bài đăng', 'posts');
   }
 
   attachTags(id: number, tag_ids: number[]): Observable<PostMeta> {

@@ -13,7 +13,7 @@ import {catchError, map} from 'rxjs/operators';
 export class PromotionProductService extends AbstractCRUDService<PromotionProductMeta> {
 
   constructor(http: HttpClient, toaster: ToasterService, title: TitleService) {
-    super(http, title, toaster, 'chương trình khuyến mại', 'promotions');
+    super(http, title, toaster, 'khuyến mại', 'promotions');
   }
 
   loadProduct(id: number, params) {

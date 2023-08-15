@@ -50,9 +50,7 @@
           </div>
           <div class="col-md-12">
             <button class="btn btn-default" type="submit">Tìm kiếm</button>
-            <button (click)="removeFilter()" class="btn btn-default" type="button">
-              Xóa lọc
-            </button>
+            <button (click)="removeFilter()" class="btn btn-default" type="button">Xóa lọc</button>
           </div>
         </form>
       </div>
@@ -76,15 +74,15 @@
     </thead>
     <tbody>
     <tr *ngFor="let item of list; let i = index" class="odd">
-      <td style="text-align: center">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
+      <td class="text-center">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
       <td>{{ item.province.name }}</td>
       <td>{{ item.district.name }}</td>
       <td>{{ item.ward.name }}</td>
       <td>
         <p style="float: right">{{ item.fee | number : "1.0-2" }}</p>
       </td>
-      <td style="text-align: center">
-        <button (click)="edit(item, i)" class="btn btn-default btn-sm" type="button">
+      <td class="text-center">
+        <button (click)="edit(item, i)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
           <i class="fa fa-pencil-square-o"></i>
         </button>
       </td>

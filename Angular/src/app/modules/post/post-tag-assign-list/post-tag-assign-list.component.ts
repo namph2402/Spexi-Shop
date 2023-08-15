@@ -2,27 +2,27 @@ import {Component} from '@angular/core';
 import {AbstractCRUDModalComponent, AbstractModalComponent} from '../../../core/crud';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {BsModalRef, BsModalService, ModalOptions} from 'ngx-bootstrap';
-import {PostTagService} from '../post-tag.service';
-import {PostService} from '../../post/post.service';
+import {PostTagService} from '../../post-tag/post-tag.service';
+import {PostService} from '../post.service';
 import {AppPagination, FieldForm, ModalResult} from '../../../core/common';
 import {PostTagAssignCreateComponent} from '../post-tag-assign-create/post-tag-assign-create.component';
-import {PostTagMeta} from '../post-tag.meta';
-import {PostMeta} from '../../post/post.meta';
+import {PostTagMeta} from '../../post-tag/post-tag.meta';
+import {PostMeta} from '../post.meta';
 
 @Component({
   selector: 'app-post-tag-assign-list',
   templateUrl: './post-tag-assign-list.component.html',
   styleUrls: ['./post-tag-assign-list.component.css'],
-  providers: [PostTagService, PostService]
+  providers: [PostService, PostTagService]
 })
-export class PostTagAssignListComponent extends AbstractCRUDModalComponent<PostTagMeta> {
+export class PostTagAssignListComponent extends AbstractCRUDModalComponent<PostMeta> {
 
   constructor(
-    service: PostTagService,
+    service: PostService,
     modalRef: BsModalRef,
     modal: BsModalService,
     builder: FormBuilder,
-    private postService: PostService
+    private tagService: PostTagService
   ) {
     super(service, modalRef, modal, builder);
   }
@@ -61,10 +61,9 @@ export class PostTagAssignListComponent extends AbstractCRUDModalComponent<PostT
     return [];
   }
 
-  initNewModel(): PostTagMeta {
-    const model = new PostTagMeta();
+  initNewModel(): PostMeta {
+    const model = new PostMeta();
     model.id = this.relatedModel.id;
-    model.existsTags = this.list;
     return model;
   }
 
@@ -77,7 +76,7 @@ export class PostTagAssignListComponent extends AbstractCRUDModalComponent<PostT
       limit: this.pagination.itemsPerPage,
       page: this.pagination.currentPage,
     };
-    this.service.loadByPage(param).subscribe((res: any) => {
+    this.tagService.loadByPage(param).subscribe((res: any) => {
       this.nextPage = this.pagination.currentPage;
       this.list = res.data;
       this.pagination.set(res);
@@ -101,7 +100,7 @@ export class PostTagAssignListComponent extends AbstractCRUDModalComponent<PostT
   }
 
   detach(item) {
-    (<PostService>this.postService).detachTags(this.relatedModel.id, item).subscribe((res: PostMeta) => {
+    (<PostService>this.service).detachTags(this.relatedModel.id, item).subscribe((res: PostMeta) => {
       this.service.toastSuccessfully('Xóa tag');
       this.load();
     }, () => this.service.toastFailed('Xóa tag'));

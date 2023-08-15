@@ -28,20 +28,14 @@
           </ng-template>
         </div>
         <div class="col-xs-12">
-          <button [disabled]="!formGroup.valid" class="btn btn-default" type="submit">
-            Tìm kiếm
-          </button>
-          <button (click)="removeFilter()" class="btn btn-default">
-            Xóa lọc
-          </button>
+          <button [disabled]="!formGroup.valid" class="btn btn-default" type="submit">Tìm kiếm</button>
+          <button (click)="removeFilter()" class="btn btn-default">Xóa lọc</button>
         </div>
       </form>
     </div>
     <div class="col-xs-12 margin-bottom">
-      <button (click)="assign(listAvailableProducts, 1)" [disabled]="listAvailableProducts == ''"
-        class="btn btn-primary pull-right" type="button">
-        Thêm tất cả
-      </button>
+      <button (click)="assign(listAvailableProducts, 1)" class="btn btn-primary pull-right"
+      [disabled]="listAvailableProducts == ''" type="button">Thêm tất cả</button>
     </div>
   </div>
   <div class="row">
@@ -76,7 +70,7 @@
               cancelText="No <i class='fa fa-remove'></i>" class="btn btn-primary btn-sm"
               confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover placement="top"
               popoverMessage="Sản phẩm đã có trong chương trình khuyến mai khác, bạn có muốn gắn?"
-              popoverTitle="Gắn sản phẩm" type="button">
+              popoverTitle="Gắn sản phẩm" type="button" style="width: 30px; height: 30px; padding: 0;">
               <i aria-hidden="true" class="fa fa-plus">Thêm</i>
             </button>
             <button (click)="assign(item, 2)" *ngIf="item.promotions[0] == null" class="btn btn-primary btn-sm" type="button">

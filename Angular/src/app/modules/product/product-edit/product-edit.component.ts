@@ -51,10 +51,10 @@ export class ProductEditComponent extends AbstractModalComponent<ProductMeta> {
   initFieldForm(): FieldForm[] {
     return [
       FieldForm.createSingleSelect3('Danh mục', 'category', 'Chọn danh mục', 'loadAllCategories'),
-      FieldForm.createTextInput('Tên sản phẩm', 'name', 'Nhập tên sản phẩm'),
-      FieldForm.createTextInput('Code', 'code', 'Nhập mã sản phẩm'),
+      FieldForm.createTextInput('Tên sản phẩm', 'name', 'Nhập tên'),
+      FieldForm.createTextInput('Code', 'code', 'Nhập mã'),
       FieldForm.createFileInput('Ảnh đại diện', 'image', 'Chọn ảnh', this.onFileUploadChange, 'image/*'),
-      FieldForm.createNumberInput('Giá sản phẩm', 'price', 'Nhập giá sản phẩm'),
+      FieldForm.createNumberInput('Giá sản phẩm', 'price', 'Nhập giá'),
       FieldForm.createHtmlInput('Tóm tắt', 'summary', {height: '300px'}),
     ];
   }
