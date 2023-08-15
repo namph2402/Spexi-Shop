@@ -6,8 +6,8 @@ import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
 import {UiSwitchModule} from 'ngx-toggle-switch';
 import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown';
 import {CKEditorModule} from 'ng2-ckeditor';
-import {ProductVariantListComponent} from './product-variant-list/product-variant-list.component';
-import {ProductVariantModalModule} from './product-variant.modal.module';
+import {ProductWarehouseListComponent} from './product-warehouse-list/product-warehouse-list.component';
+import {ProductWarehouseModalModule} from './product-warehouse.modal.module';
 
 @NgModule({
   imports: [
@@ -21,11 +21,11 @@ import {ProductVariantModalModule} from './product-variant.modal.module';
     UiSwitchModule,
     AngularMultiSelectModule,
     CKEditorModule,
-    ProductVariantModalModule
+    ProductWarehouseModalModule
   ],
-  declarations: [ProductVariantListComponent],
-  entryComponents: [ProductVariantListComponent],
-  exports: [ProductVariantListComponent]
+  declarations: [ProductWarehouseListComponent],
+  entryComponents: [ProductWarehouseListComponent],
+  exports: [ProductWarehouseListComponent]
 })
-export class ProductVariantModule {
+export class ProductWarehouseModule {
 }

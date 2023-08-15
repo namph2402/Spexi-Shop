@@ -52,23 +52,25 @@ class OrderController extends RestController
         $withCount = [];
 
         if ($request->has('search') && Str::length($request->search) > 0) {
-            array_push($clauses, WhereClause::queryLike('customer_name', $request->search));
+            array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('customer_name', $request->search), WhereClause::queryLike('customer_phone', $request->search)]));
         }
 
         if ($request->has('search') && Str::length($request->search) == 0) {
             $data = '';
             return $this->success($data);
         }
-        if ($request->has('customer_phone')) {
-            array_push($clauses, WhereClause::queryLike('customer_phone', $request->customer_phone));
+
+        if ($request->has('code') && Str::length($request->code) > 0) {
+            array_push($clauses, WhereClause::query('code', $request->code));
+        }
+
+        if ($request->has('code') && Str::length($request->code) == 0) {
+            $data = '';
+            return $this->success($data);
         }
 
         if ($request->has('created_date')) {
             array_push($clauses, WhereClause::queryDate('created_at', $request->created_date));
-        }
-
-        if ($request->has('code')) {
-            array_push($clauses, WhereClause::query('code', $request->code));
         }
 
         if ($request->has('status')) {

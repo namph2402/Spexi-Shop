@@ -36,7 +36,7 @@ export class BannerGroupEditComponent extends AbstractModalComponent<BannerGroup
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tên', 'name', 'Nhập giá trị'),
+      FieldForm.createTextInput('Tên nhóm', 'name', 'Nhập tên'),
     ];
   }
 

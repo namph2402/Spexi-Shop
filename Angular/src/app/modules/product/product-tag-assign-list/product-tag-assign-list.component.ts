@@ -2,27 +2,27 @@ import {Component} from '@angular/core';
 import {AbstractCRUDModalComponent, AbstractModalComponent} from '../../../core/crud';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {BsModalRef, BsModalService, ModalOptions} from 'ngx-bootstrap';
-import {ProductTagService} from '../product-tag.service';
 import {ProductService} from '../../product/product.service';
 import {AppPagination, FieldForm, ModalResult} from '../../../core/common';
 import {ProductTagAssignCreateComponent} from '../product-tag-assign-create/product-tag-assign-create.component';
-import {ProductTagMeta} from '../product-tag.meta';
 import {ProductMeta} from '../../product/product.meta';
+import { ProductTagService } from '../../product-tag/product-tag.service';
+import { ProductTagMeta } from '../../product-tag/product-tag.meta';
 
 @Component({
   selector: 'app-product-tag-assign-list',
   templateUrl: './product-tag-assign-list.component.html',
   styleUrls: ['./product-tag-assign-list.component.css'],
-  providers: [ProductTagService, ProductService]
+  providers: [ProductService, ProductTagService]
 })
-export class ProductTagAssignListComponent extends AbstractCRUDModalComponent<ProductTagMeta> {
+export class ProductTagAssignListComponent extends AbstractCRUDModalComponent<ProductMeta> {
 
   constructor(
-    service: ProductTagService,
+    service: ProductService,
     modalRef: BsModalRef,
     modal: BsModalService,
     builder: FormBuilder,
-    private productService: ProductService
+    private tagService: ProductTagService
   ) {
     super(service, modalRef, modal, builder);
   }
@@ -61,10 +61,9 @@ export class ProductTagAssignListComponent extends AbstractCRUDModalComponent<Pr
     return [];
   }
 
-  initNewModel(): ProductTagMeta {
-    const model = new ProductTagMeta();
+  initNewModel(): ProductMeta {
+    const model = new ProductMeta();
     model.id = this.relatedModel.id;
-    model.existsTags = this.list;
     return model;
   }
 
@@ -77,7 +76,7 @@ export class ProductTagAssignListComponent extends AbstractCRUDModalComponent<Pr
       limit: this.pagination.itemsPerPage,
       page: this.pagination.currentPage,
     };
-    this.service.loadByPage(param).subscribe((res: any) => {
+    this.tagService.loadByPage(param).subscribe((res: any) => {
       this.nextPage = this.pagination.currentPage;
       this.list = res.data;
       this.pagination.set(res);
@@ -101,7 +100,7 @@ export class ProductTagAssignListComponent extends AbstractCRUDModalComponent<Pr
   }
 
   detach(item) {
-    (<ProductService>this.productService).detachTags(this.relatedModel.id, item).subscribe((res: ProductMeta) => {
+    (<ProductService>this.service).detachTags(this.relatedModel.id, item).subscribe((res: ProductMeta) => {
       this.service.toastSuccessfully('Xóa tag');
       this.load();
     }, () => this.service.toastFailed('Xóa tag'));

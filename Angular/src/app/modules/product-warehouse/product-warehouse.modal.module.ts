@@ -5,8 +5,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
 import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown';
 import {CKEditorModule} from 'ng2-ckeditor';
-import {ProductVariantCreateComponent} from './product-variant-create/product-variant-create.component';
-import {ProductVariantEditComponent} from './product-variant-edit/product-variant-edit.component';
+import {ProductWarehouseCreateComponent} from './product-warehouse-create/product-warehouse-create.component';
+import {ProductWarehouseEditComponent} from './product-warehouse-edit/product-warehouse-edit.component';
 
 
 @NgModule({
@@ -22,14 +22,14 @@ import {ProductVariantEditComponent} from './product-variant-edit/product-varian
     CKEditorModule
   ],
   declarations: [
-    ProductVariantCreateComponent, ProductVariantEditComponent
+    ProductWarehouseCreateComponent, ProductWarehouseEditComponent
   ],
   entryComponents: [
-    ProductVariantCreateComponent, ProductVariantEditComponent
+    ProductWarehouseCreateComponent, ProductWarehouseEditComponent
   ],
   exports: [
-    ProductVariantCreateComponent, ProductVariantEditComponent
+    ProductWarehouseCreateComponent, ProductWarehouseEditComponent
   ]
 })
-export class ProductVariantModalModule {
+export class ProductWarehouseModalModule {
 }

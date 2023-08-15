@@ -6,5 +6,4 @@ export class ProductTagMeta {
   image: string;
   order: number;
   status: boolean;
-  existsTags: ProductTagMeta[];
 }

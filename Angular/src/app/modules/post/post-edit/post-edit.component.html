@@ -1,5 +1,5 @@
 <div class="modal-header bg-primary">
-  <h4 class="modal-title pull-left">Chỉnh sửa</h4>
+  <h4 class="modal-title pull-left">Chỉnh sửa bài đăng</h4>
   <button (click)="dismiss()" aria-label="Close" class="close pull-right" type="button">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -75,10 +75,6 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button (click)="editWithImage()" [disabled]="formGroup.invalid" class="btn btn-primary" type="button">
-    Chỉnh sửa
-  </button>
-  <button (click)="dismiss()" class="btn btn-default" type="button">
-    Hủy bỏ
-  </button>
+  <button (click)="editWithImage()" [disabled]="formGroup.invalid" class="btn btn-primary" type="button">Chỉnh sửa</button>
+  <button (click)="dismiss()" class="btn btn-default" type="button">Hủy bỏ</button>
 </div>

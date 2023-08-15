@@ -5,9 +5,8 @@ import {BsModalRef} from 'ngx-bootstrap';
 import {FieldForm} from '../../../core/common';
 import {PostService} from '../../post/post.service';
 import {PostMeta} from '../../post/post.meta';
-import {PostTagService} from '../post-tag.service';
 import {ObjectUtil} from '../../../core';
-import {PostTagMeta} from '../post-tag.meta';
+import { PostTagService } from '../../post-tag/post-tag.service';
 
 @Component({
   selector: 'app-post-tag-assign-create',
@@ -15,13 +14,13 @@ import {PostTagMeta} from '../post-tag.meta';
   styleUrls: ['./post-tag-assign-create.component.css'],
   providers: [PostService, PostTagService]
 })
-export class PostTagAssignCreateComponent extends AbstractModalComponent<PostTagMeta> {
+export class PostTagAssignCreateComponent extends AbstractModalComponent<PostMeta> {
 
   constructor(
-    service: PostTagService,
+    service: PostService,
     modal: BsModalRef,
     builder: FormBuilder,
-    private PostService: PostService
+    private tagService: PostTagService
   ) {
     super(service, modal, builder);
   }
@@ -33,7 +32,7 @@ export class PostTagAssignCreateComponent extends AbstractModalComponent<PostTag
   }
 
   loadAllTags() {
-    return this.service.loadByParams({post_id_add: this.model.id});
+    return this.tagService.loadByParams({post_id_add: this.model.id});
   }
 
   buildForm(): FormGroup {
@@ -67,7 +66,7 @@ export class PostTagAssignCreateComponent extends AbstractModalComponent<PostTag
 
   assign() {
     let ids: number[] = this.formGroup.controls['ids'].value;
-    (<PostService>this.PostService).attachTags(this.model.id, ids).subscribe((res: PostMeta) => {
+    (<PostService>this.service).attachTags(this.model.id, ids).subscribe((res: PostMeta) => {
       this.service.toastSuccessfully('Thêm tag');
       this.close(ObjectUtil.mergeValue(this.model, res));
     }, () => this.service.toastFailed('Thêm tag'));

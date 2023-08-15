@@ -3,5 +3,4 @@ export class PostTagMeta {
   name: string;
   slug: string;
   full_path: string;
-  existsTags: PostTagMeta[];
 }

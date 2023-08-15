@@ -39,7 +39,7 @@ export class ShippingFeeEditComponent extends AbstractModalComponent<ShippingFee
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createNumberInput('Tiền ship', 'fee', 'Nhập Tiền ship'),
+      FieldForm.createNumberInput('Tiền ship', 'fee', 'Nhập tiền ship'),
     ];
   }
 }

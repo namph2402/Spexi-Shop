@@ -41,7 +41,7 @@ export class VariantEditComponent extends AbstractModalComponent<VariantMeta> {
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tên', 'name', 'Nhập ký tự')
+      FieldForm.createTextInput('Tên', 'name', 'Nhập tên')
     ];
   }
 

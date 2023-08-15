@@ -42,9 +42,7 @@
           </div>
           <div class="col-md-12">
             <button class="btn btn-default" type="submit">Tìm kiếm</button>
-            <button (click)="removeFilter()" class="btn btn-default" type="button">
-              Xóa lọc
-            </button>
+            <button (click)="removeFilter()" class="btn btn-default" type="button">Xóa lọc</button>
           </div>
         </form>
       </div>
@@ -75,9 +73,7 @@
             <p>{{ item.created_at | date : "yyyy-MM-dd HH:mm:ss" }}</p>
           </td>
           <td style="text-align: center;">
-            <button (click)="editProductTag(item)" class="btn btn-default btn-sm" type="button">
-              Xem
-            </button>
+            <button (click)="editProductTag(item)" class="btn btn-default btn-sm" type="button">Xem</button>
           </td>
           <td class="text-center">
             <button (confirm)="upOrder(item)" cancelText="No <i class='fa fa-remove'></i>"

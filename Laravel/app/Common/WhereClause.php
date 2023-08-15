@@ -73,7 +73,7 @@ class WhereClause
 
     public static function orQuery(array $clauses)
     {
-        return new WhereClause(null, $clauses, 'or');
+        return new WhereClause('id', $clauses, 'or');
     }
 
     public static function queryNull($column)

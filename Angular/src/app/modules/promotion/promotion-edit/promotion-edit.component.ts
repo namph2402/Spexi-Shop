@@ -40,8 +40,8 @@ export class PromotionEditComponent extends AbstractModalComponent<PromotionMeta
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tên', 'name', 'Nhập tên mã giảm'),
-      FieldForm.createSelect('Loại chương trình', 'type', 'Nhập tên mã giảm', [
+      FieldForm.createTextInput('Tên', 'name', 'Nhập tên'),
+      FieldForm.createSelect('Loại chương trình', 'type', '', [
         {
           id: 1,
           name: 'Giảm giá sản phẩm',
@@ -56,7 +56,7 @@ export class PromotionEditComponent extends AbstractModalComponent<PromotionMeta
           name: 'Giảm giá đơn hàng',
         }
       ]),
-      FieldForm.createDateTimeInput('Thời gian hết hạn', 'expired_date', 'Nhập ngày hết hạn'),
+      FieldForm.createDateTimeInput('Thời gian hết hạn', 'expired_date', 'Chọn ngày hết hạn'),
       FieldForm.createFileInput('Ảnh banner', 'image', 'Chọn ảnh', this.onFileUploadChange, 'image/*'),
       FieldForm.createCheckbox('Kích hoạt', 'status', 'Chọn'),
     ];

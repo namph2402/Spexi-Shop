@@ -1,5 +1,5 @@
 <div class="modal-header bg-primary">
-  <h4 class="modal-title pull-left">Biến thể</h4>
+  <h4 class="modal-title pull-left">Danh sách kho hàng</h4>
   <button (click)="dismiss()" aria-label="Close" class="close pull-right" type="button">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -7,9 +7,7 @@
 <div class="modal-body">
   <div class="row">
     <div class="col-xs-12 margin-bottom">
-      <button (click)="createVariant()" class="btn btn-primary pull-right" type="button">
-        Thêm mới
-      </button>
+      <button (click)="createWarehouse()" class="btn btn-primary pull-right" type="button">Thêm mới</button>
     </div>
     <div class="col-xs-12">
       <table class="table table-bordered table-hover">
@@ -41,7 +39,7 @@
                 [checked]="item.status"></ui-switch>
             </td>
             <td class="text-center">
-              <button (click)="editVariant(item)" class="btn btn-default btn-sm" type="button"
+              <button (click)="editWarehouse(item)" class="btn btn-default btn-sm" type="button"
                 style="width: 30px; height: 30px; padding: 0;">
                 <i class="fa fa-pencil-square-o"></i>
               </button>

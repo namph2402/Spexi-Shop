@@ -33,7 +33,7 @@ export class PostTagListComponent extends AbstractCRUDComponent<PostTagMeta> {
   }
 
   getTitle(): string {
-    return 'Quản lý tag bài viết';
+    return 'Quản lý tag bài đăng';
   }
 
   getCreateModalComponent(): any {

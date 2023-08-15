@@ -9,8 +9,6 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {UiSwitchModule} from 'ngx-toggle-switch';
 import {ProductTagCreateComponent} from './product-tag-create/product-tag-create.component';
 import {ProductTagEditComponent} from './product-tag-edit/product-tag-edit.component';
-import {ProductTagAssignListComponent} from './product-tag-assign-list/product-tag-assign-list.component';
-import {ProductTagAssignCreateComponent} from './product-tag-assign-create/product-tag-assign-create.component';
 
 @NgModule({
   imports: [
@@ -28,13 +26,13 @@ import {ProductTagAssignCreateComponent} from './product-tag-assign-create/produ
     TabsModule.forRoot(),
   ],
   declarations: [
-    ProductTagCreateComponent, ProductTagEditComponent, ProductTagAssignListComponent, ProductTagAssignCreateComponent
+    ProductTagCreateComponent, ProductTagEditComponent
   ],
   entryComponents: [
-    ProductTagCreateComponent, ProductTagEditComponent, ProductTagAssignListComponent, ProductTagAssignCreateComponent
+    ProductTagCreateComponent, ProductTagEditComponent
   ],
   exports: [
-    ProductTagCreateComponent, ProductTagEditComponent, ProductTagAssignListComponent, ProductTagAssignCreateComponent
+    ProductTagCreateComponent, ProductTagEditComponent
   ]
 })
 export class ProductTagModalModule {

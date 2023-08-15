@@ -49,8 +49,8 @@ export class PostCreateComponent extends AbstractModalComponent<PostMeta> {
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createSingleSelect2('Danh mục ', 'category', 'Chọn danh mục', 'loadAllCategories'),
-      FieldForm.createTextInput('Tiêu đề bài viết ', 'name', 'Nhập tiêu đề bài viết'),
+      FieldForm.createSingleSelect2('Danh mục', 'category', 'Chọn danh mục', 'loadAllCategories'),
+      FieldForm.createTextInput('Tiêu đề bài đăng', 'name', 'Nhập tiêu đề'),
       FieldForm.createFileInput('Ảnh đại diện', 'image', 'Chọn ảnh', this.onFileUploadChange, 'image/*'),
       FieldForm.createHtmlInput('Tóm tắt ', 'summary', {height: '300px'}),
       FieldForm.createHtmlInput('Nội dung ', 'content', {height: '500px'}),

@@ -9,6 +9,6 @@ import {PostCategoryMeta} from './post-category.meta';
 export class PostCategoryService extends AbstractCRUDService<PostCategoryMeta> {
 
   constructor(http: HttpClient, toaster: ToasterService, title: TitleService) {
-    super(http, title, toaster, 'danh mục bài viết', 'post_categories');
+    super(http, title, toaster, 'danh mục bài đăng', 'post_categories');
   }
 }

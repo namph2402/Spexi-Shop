@@ -12,7 +12,7 @@ import {catchError, map} from 'rxjs/operators';
 export class PostRelatedService extends AbstractCRUDService<PostRelatedMeta> {
 
   constructor(http: HttpClient, toaster: ToasterService, title: TitleService) {
-    super(http, title, toaster, 'bài viết liên quan', 'related_posts');
+    super(http, title, toaster, 'bài đăng liên quan', 'related_posts');
   }
 
   addRelated(data: any): Observable<PostRelatedMeta> {

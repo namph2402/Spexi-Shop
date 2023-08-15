@@ -10,8 +10,9 @@ import {PostEditComponent} from './post-edit/post-edit.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {UiSwitchModule} from 'ngx-toggle-switch';
 import { ArticleCommentModule } from '../article-comment/article-comment.module';
-import { PostTagModalModule } from '../post-tag/post-tag.modal.module';
 import { PostRelatedModule } from '../post-related/post-related.module';
+import { PostTagAssignListComponent } from './post-tag-assign-list/post-tag-assign-list.component';
+import { PostTagAssignCreateComponent } from './post-tag-assign-create/post-tag-assign-create.component';
 
 @NgModule({
   imports: [
@@ -28,17 +29,16 @@ import { PostRelatedModule } from '../post-related/post-related.module';
     TabsModule.forRoot(),
     AngularMultiSelectModule,
     ArticleCommentModule,
-    PostTagModalModule,
     PostRelatedModule,
   ],
   declarations: [
-    PostCreateComponent, PostEditComponent
+    PostCreateComponent, PostEditComponent, PostTagAssignListComponent, PostTagAssignCreateComponent
   ],
   entryComponents: [
-    PostCreateComponent, PostEditComponent
+    PostCreateComponent, PostEditComponent, PostTagAssignListComponent, PostTagAssignCreateComponent
   ],
   exports: [
-    PostCreateComponent, PostEditComponent
+    PostCreateComponent, PostEditComponent, PostTagAssignListComponent, PostTagAssignCreateComponent
   ]
 })
 export class PostModalModule {

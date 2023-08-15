@@ -1,5 +1,5 @@
 <div class="modal-header bg-primary">
-  <h4 class="modal-title pull-left">Thêm sản phẩm liên quan</h4>
+  <h4 class="modal-title pull-left">Thêm mới sản phẩm liên quan</h4>
   <button (click)="dismiss()" aria-label="Close" class="close pull-right" type="button">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -28,12 +28,8 @@
           </ng-template>
         </div>
         <div class="col-xs-12">
-          <button [disabled]="!formGroup.valid" class="btn btn-default" type="submit">
-            Tìm kiếm
-          </button>
-          <button (click)="removeFilter()" class="btn btn-default">
-            Xóa lọc
-          </button>
+          <button [disabled]="!formGroup.valid" class="btn btn-default" type="submit">Tìm kiếm</button>
+          <button (click)="removeFilter()" class="btn btn-default">Xóa lọc</button>
         </div>
       </form>
     </div>
@@ -62,9 +58,7 @@
             {{item.category.name}}
           </td>
           <td class="text-center">
-            <button (click)="addRelated(item)" class="btn btn-success" type="button">
-              Thêm
-            </button>
+            <button (click)="addRelated(item)" class="btn btn-success" type="button">Thêm</button>
           </td>
         </tr>
       </tbody>

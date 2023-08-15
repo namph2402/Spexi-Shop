@@ -36,7 +36,7 @@ export class PostCategoryCreateComponent extends AbstractModalComponent<PostCate
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tên', 'name', 'Nhập tên'),
+      FieldForm.createTextInput('Tên danh mục', 'name', 'Nhập tên'),
     ];
   }
 

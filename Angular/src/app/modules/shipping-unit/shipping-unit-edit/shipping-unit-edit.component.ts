@@ -6,7 +6,6 @@ import {ShippingUnitMeta} from '../shipping-unit.meta';
 import { AbstractModalComponent } from '../../../core/crud';
 import { FieldForm } from '../../../core/common';
 
-
 @Component({
   selector: 'app-shipping-unit-edit',
   templateUrl: './shipping-unit-edit.component.html',
@@ -17,7 +16,6 @@ export class ShippingUnitEditComponent extends AbstractModalComponent<ShippingUn
 
   onInit(): void {
   }
-
 
   onDestroy(): void {
   }
@@ -36,7 +34,7 @@ export class ShippingUnitEditComponent extends AbstractModalComponent<ShippingUn
     return [
       FieldForm.createTextInput('Tên đối tác vận chuyển', 'name', 'Nhập tên đối tác'),
       FieldForm.createTextInput('User name đăng nhập', 'username', 'Nhập tên đăng nhập'),
-      FieldForm.createTextInput('Password', 'password', 'Nhập mật khẩu'),
+      FieldForm.createTextInput('Password', 'password', 'Nhập mật khẩu đăng nhập'),
       FieldForm.createTextInput('Token', 'token', 'Nhập ký tự'),
       FieldForm.createTextInput('Endpoint', 'endpoint', 'Nhập ký tự'),
     ];

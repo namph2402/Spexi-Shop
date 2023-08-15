@@ -45,8 +45,8 @@ export class MenuEditComponent extends AbstractModalComponent<MenuMeta> {
   initFieldForm(): FieldForm[] {
     return [
       FieldForm.createSingleSelect2('Menu cha', 'parent', 'Chọn menu cha', 'loadAllMenu'),
-      FieldForm.createTextInput('Tên', 'name', 'Nhập giá trị'),
-      FieldForm.createTextInput('Đường dẫn', 'url', 'Nhập giá trị'),
+      FieldForm.createTextInput('Tên', 'name', 'Nhập tên'),
+      FieldForm.createTextInput('Đường dẫn', 'url', 'Nhập đường dẫn'),
     ];
   }
 

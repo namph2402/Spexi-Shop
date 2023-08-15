@@ -49,17 +49,13 @@
             </ng-template>
           </div>
           <div class="col-md-12">
-            <button class="btn btn-default" type="submit" [disabled]="!searchForm.valid">
-              Tìm kiếm
-            </button>
-            <button class="btn btn-default" type="button" (click)="removeFilter()">
-              Xóa lọc
-            </button>
+            <button class="btn btn-default" type="submit">Tìm kiếm</button>
+            <button class="btn btn-default" type="button" (click)="removeFilter()">Xóa lọc</button>
           </div>
         </form>
       </div>
       <div class="col-xs-12">
-        <button type="button" title="Tạo mới" class="btn btn-primary pull-right" (click)="createShippingUnit()">
+        <button type="button" class="btn btn-primary pull-right" (click)="createShippingUnit()">
           Thêm mới
         </button>
       </div>

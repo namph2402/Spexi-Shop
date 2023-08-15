@@ -1,6 +1,6 @@
 import {ArticleMeta} from '../article/article.meta';
 import {ProductCategoryMeta} from '../product-category/product-category.meta';
-import { ProductVariantMeta } from '../product-variant/product-variant.meta';
+import { ProductWarehouseMeta } from '../product-warehouse/product-warehouse.meta';
 import {PromotionMeta} from '../promotion/promotion.meta';
 
 export class ProductMeta {
@@ -15,8 +15,9 @@ export class ProductMeta {
   price: number;
   order: number;
   status: boolean;
+  full_path: string;
   category: ProductCategoryMeta;
   article: ArticleMeta;
   promotions: PromotionMeta;
-  warehouses: ProductVariantMeta
+  warehouses: ProductWarehouseMeta
 }

@@ -13,7 +13,7 @@ import {FieldForm} from '../../../core/common';
   providers: [ShippingUnitService]
 })
 export class ShippingUnitCreateComponent extends AbstractModalComponent<ShippingUnitMeta> {
-  
+
   onInit(): void {
   }
 
@@ -34,7 +34,7 @@ export class ShippingUnitCreateComponent extends AbstractModalComponent<Shipping
     return [
       FieldForm.createTextInput('Tên đối tác vận chuyển', 'name', 'Nhập tên đối tác'),
       FieldForm.createTextInput('User name đăng nhập', 'username', 'Nhập tên đăng nhập'),
-      FieldForm.createTextInput('Password', 'password', 'Nhập tên đăng nhập'),
+      FieldForm.createTextInput('Password', 'password', 'Nhập mật khẩu đăng nhập'),
       FieldForm.createTextInput('Token', 'token', 'Nhập ký tự'),
       FieldForm.createTextInput('Endpoint', 'endpoint', 'Nhập ký tự'),
     ];

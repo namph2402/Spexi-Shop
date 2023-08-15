@@ -36,7 +36,7 @@ export class ProductTagEditComponent extends AbstractModalComponent<ProductTagMe
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tên tag *', 'name', 'Nhập ký tự'),
+      FieldForm.createTextInput('Tên', 'name', 'Nhập tên'),
     ];
   }
 

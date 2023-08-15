@@ -3,21 +3,21 @@ import {AbstractModalComponent} from '../../../core/crud';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {BsModalRef} from 'ngx-bootstrap';
 import {FieldForm} from '../../../core/common';
-import {ProductVariantMeta} from '../product-variant.meta';
-import {ProductVariantService} from '../product-variant.service';
+import {ProductWarehouseMeta} from '../product-warehouse.meta';
+import {ProductWarehouseService} from '../product-warehouse.service';
 import {ProductSizeService} from '../../product-size/product-size.service';
 import {ProductColorService} from '../../product-color/product-color.service';
 
 @Component({
-  selector: 'app-product-variant-create',
-  templateUrl: './product-variant-create.component.html',
-  styleUrls: ['./product-variant-create.component.css'],
-  providers: [ProductVariantService, ProductSizeService, ProductColorService]
+  selector: 'app-product-warehouse-create',
+  templateUrl: './product-warehouse-create.component.html',
+  styleUrls: ['./product-warehouse-create.component.css'],
+  providers: [ProductWarehouseService, ProductSizeService, ProductColorService]
 })
-export class ProductVariantCreateComponent extends AbstractModalComponent<ProductVariantMeta> {
+export class ProductWarehouseCreateComponent extends AbstractModalComponent<ProductWarehouseMeta> {
 
   constructor(
-    service: ProductVariantService,
+    service: ProductWarehouseService,
     modal: BsModalRef,
     builder: FormBuilder,
     protected sizeService: ProductSizeService,

@@ -12,7 +12,7 @@ import {PostTagService} from '../../post-tag/post-tag.service';
 import {ObjectUtil} from '../../../core';
 import {ArticleCommentMeta} from '../../article-comment/article-comment.meta';
 import {ArticleCommentListComponent} from '../../article-comment/article-comment-list/article-comment-list.component';
-import { PostTagAssignListComponent } from '../../post-tag/post-tag-assign-list/post-tag-assign-list.component';
+import { PostTagAssignListComponent } from '../post-tag-assign-list/post-tag-assign-list.component';
 import { PostRelatedListComponent } from '../../post-related/post-related-list/post-related-list.component';
 import { PostRelatedMeta } from '../../post-related/post-related.meta';
 
@@ -42,7 +42,7 @@ export class PostListComponent extends AbstractCRUDComponent<PostMeta> {
   }
 
   getTitle(): string {
-    return 'Quản lý bài viết';
+    return 'Quản lý bài đăng';
   }
 
   getCreateModalComponent(): any {
