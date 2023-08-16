@@ -34,7 +34,7 @@
               </label>
               <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
                 class="form-control">
-                <option *ngFor="let option of f.data" [value]="option['id']">
+                <option *ngFor="let option of f.data" [value]="option['value']">
                   {{ option["name"] }}
                 </option>
               </select>
@@ -116,7 +116,7 @@
                     <p><label>{{ d.product_code }}</label> - {{ d.product.name }}</p>
                   </td>
                   <td>
-                    <span style="display: block">{{ d.color }} - {{ d.size }}</span>
+                    <span style="display: block">{{ d.size }} - {{ d.color }}</span>
                   </td>
                   <td class="text-right">
                     {{ d.quantity | number : "1.0-0" }}

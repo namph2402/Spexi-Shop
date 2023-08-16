@@ -13,7 +13,8 @@ import {DashboardService} from './dashboard.service';
 export class DashboardComponent extends AbstractCRUDComponent<any> {
 
   boxes: any[];
-  tables: any[];
+  products: any[];
+  orders: any[];
 
   constructor(
     service: DashboardService,
@@ -32,9 +33,9 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
 
   ngOnInit(): void {
     this.service.loadAll().subscribe(val => {
-      console.log(val);
       this.boxes = val['boxes'];
-      this.tables = val['tables'];
+      this.products = val['products'];
+      this.orders = val['orders'];
     });
   }
 

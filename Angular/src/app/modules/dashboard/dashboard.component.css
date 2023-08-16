@@ -1,0 +1,63 @@
+.quantity {
+  font-size: 15px;
+}
+
+.info-box-number {
+  font-size: 20px;
+  margin-top: 5px;
+}
+
+.info-box-note {
+  margin: 5px 0 0;
+}
+
+.increase {
+  color: #31c014;
+}
+
+.decrease {
+  color: #c01414;
+}
+
+.text-danger {
+  color: red;
+}
+
+.text-warning {
+  color: rgb(255, 153, 0);
+}
+
+.text-success {
+  color:  rgb(36, 206, 36);
+}
+
+/* Chart layout */
+.chart-layout {
+  margin: 36px auto 0 auto;
+  padding: 32px 0;
+  height: 320px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-around;
+}
+
+.chart-layout__item {
+  align-self: flex-end;
+  width: 60px;
+  color: #fff;
+  text-align: center;
+  height: var(--percent);
+  background-color: #EF5122;
+  animation: growth ease-in 0.5s;
+}
+
+@keyframes growth {
+  from {
+      opacity: 0;
+      height: calc(var(--percent) - 50%);
+  }
+  to {
+      opacity: 1;
+      height: var(--percent);
+  }
+}

@@ -73,8 +73,8 @@ class OrderController extends RestController
             array_push($clauses, WhereClause::queryDate('created_at', $request->created_date));
         }
 
-        if ($request->has('status')) {
-            array_push($clauses, WhereClause::query('status', $request->status));
+        if ($request->has('order_status')) {
+            array_push($clauses, WhereClause::query('order_status', $request->order_status));
         }
 
         if ($limit) {
@@ -155,6 +155,7 @@ class OrderController extends RestController
                 $warehouse = $this->warehouseRepository->findById($p['warehouse_id'], ['sizes', 'colors']);
                 $attributeDetails['order_id'] = $order->id;
                 $attributeDetails['product_id'] = $p['product']['id'];
+                $attributeDetails['product_code'] = $p['product']['code'];
                 $attributeDetails['product_name'] = $p['product']['name'];
                 $attributeDetails['warehouse_id'] = $p['warehouse_id'];
                 $attributeDetails['size'] = $warehouse->sizes->name;

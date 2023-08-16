@@ -5,7 +5,7 @@ export const APP_FEATURES = [
     link: '/dashboard'
   },
   {
-    name: 'Nội dung',
+    name: 'Quản lý chung',
     icon: 'fa fa-list',
     children:
       [

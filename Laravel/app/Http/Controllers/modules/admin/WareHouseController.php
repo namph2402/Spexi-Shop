@@ -66,7 +66,7 @@ class WarehouseController extends RestController
             $size = $this->sizeRepository->findById($s);
             foreach ($request->colorArr as $c) {
                 $color = $this->colorRepository->findById($c);
-                $attributes['code'] = $product->code . '-' . $color->name . '-' . $size->name;
+                $attributes['code'] = $product->code . '-' . $size->name . '-' . $color->name;
                 $attributes['size_id'] = $s;
                 $attributes['color_id'] = $c;
                 $attributes['weight'] = "0.2";
