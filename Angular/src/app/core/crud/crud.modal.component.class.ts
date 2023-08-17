@@ -1,11 +1,12 @@
 import {AbstractCRUDService} from './crud.service.class';
-import {EventEmitter, OnDestroy, OnInit} from '@angular/core';
+import {EventEmitter, Injectable, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {copyToClipboard, ObjectUtil} from '../utils';
 import {BsModalRef, BsModalService, ModalOptions} from 'ngx-bootstrap';
 import {AbstractModalComponent} from './modal.component.class';
 import {AppPagination, FieldForm, ModalResult} from '../common';
 
+@Injectable()
 export abstract class AbstractCRUDModalComponent<T> implements OnInit, OnDestroy {
 
   pagination: AppPagination;

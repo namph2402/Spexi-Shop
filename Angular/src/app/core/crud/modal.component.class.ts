@@ -1,11 +1,12 @@
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {EventEmitter, OnDestroy, OnInit} from '@angular/core';
+import {EventEmitter, Injectable, OnDestroy, OnInit} from '@angular/core';
 import {AbstractCRUDService} from './crud.service.class';
 import {ObjectUtil} from '../utils';
 import {BsModalRef} from 'ngx-bootstrap';
 import {FieldForm, ModalResult} from '../common';
 import {ArrayUtil} from '../utils/array';
 
+@Injectable()
 export abstract class AbstractModalComponent<T> implements OnInit, OnDestroy {
 
   public model: T;

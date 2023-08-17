@@ -35,15 +35,19 @@
 .chart-layout {
   margin: 36px auto 0 auto;
   padding: 32px 0;
-  height: 320px;
+  height: 300px;
   background-color: #fff;
   display: flex;
   justify-content: space-around;
 }
 
+.chart-layout__unit {
+  display: flex;
+}
+
 .chart-layout__item {
-  align-self: flex-end;
   width: 60px;
+  align-self: flex-end;
   color: #fff;
   text-align: center;
   height: var(--percent);

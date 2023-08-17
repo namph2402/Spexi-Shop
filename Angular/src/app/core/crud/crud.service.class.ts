@@ -7,7 +7,6 @@ import {catchError, map} from 'rxjs/operators';
 import {DataResponse, PaginationOutput} from '../common';
 import {getBaseHref, pathJoin, StorageUtil} from '../utils';
 
-
 export class AbstractCRUDService<T> {
 
   constructor(public http: HttpClient, public title: TitleService, public toast: ToasterService, public titlePopup: string, public urlRestAPI: string) {

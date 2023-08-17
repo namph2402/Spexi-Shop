@@ -1,12 +1,18 @@
 <div class="row">
-  <div class="col-md-4 col-sm-6 col-xs-12" *ngFor="let box of boxes;let i=index">
+  <div class="col-md-4 col-sm-6 col-xs-12" *ngFor="let box of boxes; let i = index">
     <div class="info-box">
-      <span class="info-box-icon {{box['bg']}}"><i class="fa {{box['icon']}}"></i></span>
+      <span class="info-box-icon {{ box['bg'] }}"
+        ><i class="fa {{ box['icon'] }}"></i
+      ></span>
       <div class="info-box-content">
-        <span class="info-box-text">{{box['text']}}</span>
-        <span class="info-box-number">{{box['value']}}</span>
-        <p class="info-box-note increase" *ngIf="box['note'] > 0">+{{box['note']}}% so với tháng trước</p>
-        <p class="info-box-note decrease" *ngIf="box['note'] < 0">{{box['note']}}% so với tháng trước</p>
+        <span class="info-box-text">{{ box["text"] }}</span>
+        <span class="info-box-number">{{ box["value"] }}</span>
+        <p class="info-box-note increase" *ngIf="box['note'] > 0">
+          +{{ box["note"] }}% so với tháng trước
+        </p>
+        <p class="info-box-note decrease" *ngIf="box['note'] < 0">
+          {{ box["note"] }}% so với tháng trước
+        </p>
       </div>
     </div>
   </div>
@@ -25,21 +31,31 @@
         <table class="table-responsive table table-bordered table-hover">
           <thead>
             <tr>
-              <th style="width: 28%;">Mã</th>
-              <th style="width: 47%;">Tên</th>
-              <th style="width: 15%;">Loại</th>
-              <th style="width: 10%;padding-right: 0;padding-left: 0;">Còn lại</th>
+              <th style="width: 28%">Mã</th>
+              <th style="width: 45%">Tên</th>
+              <th style="width: 15%">Loại</th>
+              <th style="width: 12%">Còn lại</th>
             </tr>
           </thead>
           <tbody>
             <tr class="odd" *ngFor="let p of products">
-              <td>{{p.code}}</td>
-              <td>{{p.products.name}}</td>
-              <td>{{p.sizes.name}}, {{p.colors.name}}</td>
+              <td>{{ p.code }}</td>
+              <td>{{ p.products.name }}</td>
+              <td>{{ p.sizes.name }}, {{ p.colors.name }}</td>
               <td class="text-right quantity">
-                <label class="text-danger" *ngIf="p.quantity <= 10">{{p.quantity}}</label>
-                <label class="text-warning" *ngIf="10 < p.quantity && p.quantity <= 30">{{p.quantity}}</label>
-                <label class="text-success" *ngIf="30 < p.quantity && p.quantity <= 50">{{p.quantity}}</label>
+                <label class="text-danger" *ngIf="p.quantity <= 10">{{
+                  p.quantity
+                }}</label>
+                <label
+                  class="text-warning"
+                  *ngIf="10 < p.quantity && p.quantity <= 30"
+                  >{{ p.quantity }}</label
+                >
+                <label
+                  class="text-success"
+                  *ngIf="30 < p.quantity && p.quantity <= 50"
+                  >{{ p.quantity }}</label
+                >
               </td>
             </tr>
           </tbody>
@@ -59,11 +75,13 @@
         <table class="table-responsive table table-bordered table-hover">
           <thead>
             <tr>
-              <th style="width: 25%;">Mã</th>
-              <th style="width: 20%;">Ngày tạo</th>
-              <th style="width: 25%;">Khách hàng</th>
-              <th style="width: 20%;">Tổng tiền</th>
-              <th style="width: 10%;padding-right: 0;padding-left: 0;">Trạng thái</th>
+              <th style="width: 25%">Mã</th>
+              <th style="width: 20%">Ngày tạo</th>
+              <th style="width: 25%">Khách hàng</th>
+              <th style="width: 20%">Tổng tiền</th>
+              <th style="width: 10%; padding-right: 0; padding-left: 0">
+                Trạng thái
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -78,9 +96,11 @@
                 </p>
               </td>
               <td>{{ o.customer_name }}</td>
-              <td class="text-right">{{ o.total_amount | number : "1.0-0" }}0</td>
               <td class="text-right">
-                <label class="label label-success">{{o.order_status}}</label>
+                {{ o.total_amount | number : "1.0-0" }}0
+              </td>
+              <td class="text-right">
+                <label class="label label-success">{{ o.order_status }}</label>
               </td>
             </tr>
           </tbody>
@@ -89,21 +109,15 @@
     </div>
   </div>
 </div>
+
 <div class="row">
   <div class="col-md-12">
     <div class="chart-layout">
-      <div class="chart-layout__item" style="--percent: 10%">10%</div>
-      <div class="chart-layout__item" style="--percent: 20%">20%</div>
-      <div class="chart-layout__item" style="--percent: 40%">40%</div>
-      <div class="chart-layout__item" style="--percent: 90%">90%</div>
-      <div class="chart-layout__item" style="--percent: 80%">80%</div>
-      <div class="chart-layout__item" style="--percent: 40%">40%</div>
-      <div class="chart-layout__item" style="--percent: 10%">10%</div>
-      <div class="chart-layout__item" style="--percent: 20%">20%</div>
-      <div class="chart-layout__item" style="--percent: 69%">69%</div>
-      <div class="chart-layout__item" style="--percent: 96%">96%</div>
-      <div class="chart-layout__item" style="--percent: 60%">60%</div>
-      <div class="chart-layout__item" style="--percent: 88%">88%</div>
+      <div class="chart-layout__unit" *ngFor="let c of charts">
+        <div class="chart-layout__item {{ c['percent'] }}" style="width:10%">
+          {{ c.percent }}%
+        </div>
+      </div>
     </div>
   </div>
 </div>

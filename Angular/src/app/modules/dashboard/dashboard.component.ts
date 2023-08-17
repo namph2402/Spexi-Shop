@@ -15,6 +15,7 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
   boxes: any[];
   products: any[];
   orders: any[];
+  charts: any[];
 
   constructor(
     service: DashboardService,
@@ -36,6 +37,7 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
       this.boxes = val['boxes'];
       this.products = val['products'];
       this.orders = val['orders'];
+      this.charts = val['charts'];
     });
   }
 
