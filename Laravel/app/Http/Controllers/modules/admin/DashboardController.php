@@ -116,10 +116,7 @@ class DashboardController extends RestController
                     $percent = 0;
                 }
 
-                array_push($tableChart,[
-                    'mount' => 'Tháng '.$i,
-                    'percent' => $percent
-                ]);
+                array_push($tableChart,$percent);
             }
         }
 
