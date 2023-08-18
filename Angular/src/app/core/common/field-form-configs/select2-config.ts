@@ -1,16 +1,15 @@
 export class Select2Config extends Object {
-  singleSelection: boolean;//true: single, false:multi
-  text: string;//placeHolder
-  enableCheckAll: boolean;//
-  selectAllText: string;//'Chọn tất cả'
-  unSelectAllText: string;//'Bỏ chọn tất cả'
+  singleSelection: boolean;
+  text: string;
+  enableCheckAll: boolean;
+  selectAllText: string;
+  unSelectAllText: string;
   enableSearchFilter: boolean;
   enableFilterSelectAll: boolean;
-  searchPlaceholderText: string;//'Tìm kiếm'
-  labelKey: string;//name
-  primaryKey: string;//'id-system'
-  searchBy: string[];//['name_with_machine']
-
+  searchPlaceholderText: string;
+  labelKey: string;
+  primaryKey: string;
+  searchBy: string[];
 
   static createSingle(): Select2Config {
     return {
