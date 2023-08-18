@@ -33,7 +33,7 @@
                         <p>Theo dõi để được cập nhật tin tức</p>
                         <form action="/form-data" id="formEmail" method="POST">
                             <div class="input-group">
-                                <input type="email" class="form-control" name="email" placeholder="Email của bạn">
+                                <input type="email" style="border-radius: 0;" class="form-control" name="email" placeholder="Email của bạn">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="submit">Đăng ký</button>
                                 </div>
