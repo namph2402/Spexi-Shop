@@ -54,6 +54,16 @@
 
 <div class="row">
   <div class="col-md-6">
+    <div class="box box-solid box-success">
+      <div class="box-header with-border">
+        <h3 class="box-title">Sản phẩm bán chạy trong tháng</h3>
+      </div>
+      <div class="box-body no-padding" style="height: 324px;">
+        <div class="chartProduct">
+          <div class="bg-light" id="productDiv"></div>
+        </div>
+      </div>
+    </div>
     <div class="box box-solid box-warning">
       <div class="box-header with-border">
         <h3 class="box-title">Đơn hàng mới</h3>
@@ -61,7 +71,7 @@
           <a class="label label-primary" [routerLink]="['/orders']">Tất cả</a>
         </div>
       </div>
-      <div class="box-body no-padding" style="max-height: 324px; overflow: auto;">
+      <div class="box-body no-padding" style="height: 324px; overflow: auto;">
         <table class="table-responsive table table-bordered table-hover">
           <thead>
             <tr>
@@ -87,12 +97,39 @@
               </td>
               <td>{{ o.customer_name }}</td>
               <td class="text-right">
-                {{ o.total_amount | number : "1.0-0" }}0
+                {{ o.total_amount | number : "1.0-0" }}
               </td>
               <td class="text-right">
                 <label class="label label-success">{{ o.order_status }}</label>
               </td>
             </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="box box-solid box-info">
+      <div class="box-header with-border">
+        <h3 class="box-title">Khách hàng tiềm năng</h3>
+      </div>
+      <div class="box-body no-padding" style="height: 324px; overflow: auto;">
+        <table class="table-responsive table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th style="width: 50%">Tên khách hàng</th>
+              <th style="width: 30%">Số điện thoại</th>
+              <th style="width: 20%">Tổng tiền</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let u of userMains; let i = index">
+              <tr class="odd">
+                <td>{{ u.customer_name }}</td>
+                <td>{{ u.customer_phone }}</td>
+                <td class="text-right">{{ u.total_amount | number : "1.0-0" }}</td>
+              </tr>
+            </ng-container>
           </tbody>
         </table>
       </div>
@@ -140,64 +177,4 @@
       </div>
     </div>
   </div>
-  <div class="col-md-6">
-    <div class="box box-solid box-success">
-      <div class="box-header with-border">
-        <h3 class="box-title">Sản phẩm bán chạy trong tháng</h3>
-      </div>
-      <div class="box-body no-padding" style="height: 324px;">
-        <div class="chartProduct">
-          <div class="bg-light" id="productDiv"></div>
-        </div>
-      </div>
-    </div>
-    <div class="box box-solid box-info">
-      <div class="box-header with-border">
-        <h3 class="box-title">Sản phẩm sắp hết hàng ()</h3>
-        <div class="box-tools pull-right">
-          <a class="label label-warning" href="sfdghfdsa">Tất cả</a>
-        </div>
-      </div>
-      <div class="box-body no-padding" style="max-height: 324px; overflow: auto;">
-        <table class="table-responsive table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th style="width: 28%">Mã</th>
-              <th style="width: 45%">Tên</th>
-              <th style="width: 15%">Loại</th>
-              <th style="width: 12%">Còn lại</th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container *ngFor="let p of products; let i = index">
-              <tr class="odd" *ngIf="i < 5">
-                <td>{{ p.code }}</td>
-                <td>{{ p.products.name }}</td>
-                <td>{{ p.sizes.name }}, {{ p.colors.name }}</td>
-                <td class="text-right quantity">
-                  <label class="text-danger" *ngIf="p.quantity <= 10">{{
-                    p.quantity
-                  }}</label>
-                  <label
-                    class="text-warning"
-                    *ngIf="10 < p.quantity && p.quantity <= 30"
-                    >{{ p.quantity }}</label
-                  >
-                  <label
-                    class="text-success"
-                    *ngIf="30 < p.quantity && p.quantity <= 50"
-                    >{{ p.quantity }}</label
-                  >
-                </td>
-              </tr>
-            </ng-container>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
 </div>
-
-<script>
-  console.log(123);
-</script>

@@ -21,6 +21,7 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
   quantityOrder: any[];
   productCodeMains: any[];
   productQuantityMains: any[];
+  userMains: any[];
   year: any = [];
 
   constructor(
@@ -143,8 +144,8 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
       this.quantityOrder = val['quantity'];
       this.productCodeMains = val['productCodeMains'];
       this.productQuantityMains = val['productQuantityMains'];
+      this.userMains = val['user'];
 
-      console.log(this.quantityOrder);
       setTimeout(() => {
         document.getElementById("orderDiv").innerHTML = `<canvas id="order"></canvas>`;
         document.getElementById("amountDiv").innerHTML = `<canvas id="amount"></canvas>`;

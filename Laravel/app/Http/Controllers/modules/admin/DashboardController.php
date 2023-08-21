@@ -33,6 +33,7 @@ class DashboardController extends RestController
         $tableProductQuantityMain = [];
         $tablePercent = [];
         $tableQuantity = [];
+        $tableUserMain = [];
 
         $month = $request->input('month', date("m"));
         $year = $request->input('year', date("Y"));
@@ -127,6 +128,17 @@ class DashboardController extends RestController
             };
         }
 
+        $userMain = DB::select('SELECT customer_name, customer_phone, SUM(total_amount) AS total_amount FROM orders WHERE order_status = "Hoàn thành" AND MONTH(date_created) = '.$month.' AND YEAR(date_created) = '.$year.' GROUP BY customer_name ORDER BY SUM(total_amount) DESC');
+        if(count($userMain) > 0) {
+            foreach($userMain as $key => $u) {
+                if($key < 10) {
+                    array_push($tableUserMain,$u);
+                } else {
+                    break;
+                }
+            };
+        }
+
         $data = [
             'boxes' => [
                 [
@@ -157,6 +169,7 @@ class DashboardController extends RestController
             'quantity' => $tableQuantity,
             'productCodeMains' => $tableProductCodeMain,
             'productQuantityMains' => $tableProductQuantityMain,
+            'user' => $tableUserMain,
         ];
 
         return $this->success($data);
