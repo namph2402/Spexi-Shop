@@ -8,6 +8,7 @@ use App\Repository\OrderRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
 use App\Repository\WarehouseRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends RestController
 {
@@ -28,18 +29,16 @@ class DashboardController extends RestController
     {
         $tableProduct = [];
         $tableOrder = [];
+        $tableProductCodeMain = [];
+        $tableProductQuantityMain = [];
         $tablePercent = [];
         $tableQuantity = [];
 
-        $total_amount = 0;
-        $total_amount_new = 0;
-        $total_amount_old = 0;
-
-        $users = $this->userRepository->get([WhereClause::query('status', 1)]);
-
-
         $month = $request->input('month', date("m"));
         $year = $request->input('year', date("Y"));
+
+        //Số lượng khách hàng
+        $users = $this->userRepository->get([WhereClause::query('status', 1)]);
 
         // Đơn hàng tháng này
         $orderNews = $this->repository->get([
@@ -47,6 +46,7 @@ class DashboardController extends RestController
             WhereClause::queryYear('date_created', $year),
             WhereClause::query('order_status', "Hoàn thành")
         ]);
+        $total_amount_new =  DB::table('orders')->whereOrderStatus('Hoàn thành')->whereMonth('date_created', '=', $month)->whereYear('date_created', '=', $year)->sum('total_amount');
 
         // Đơn hàng tháng cũ
         if($month == 1) {
@@ -55,28 +55,24 @@ class DashboardController extends RestController
                 WhereClause::queryYear('date_created', $year-1),
                 WhereClause::query('order_status', "Hoàn thành")
             ]);
+            $total_amount_old =  DB::table('orders')->whereOrderStatus('Hoàn thành')->whereMonth('date_created', '=', 12)->whereYear('date_created', '=', $year-1)->sum('total_amount');
         } else {
             $orderOlds = $this->repository->get([
                 WhereClause::queryMonth('date_created', $month-1),
                 WhereClause::queryYear('date_created', $year),
                 WhereClause::query('order_status', "Hoàn thành")
             ]);
+            $total_amount_old =  DB::table('orders')->whereOrderStatus('Hoàn thành')->whereMonth('date_created', '=', $month-1)->whereYear('date_created', '=', $year)->sum('total_amount');
         }
 
-        //  Thông tin đơn hàng tháng này
-        if (count($orderNews) > 0) {
-            foreach ($orderNews as $order) {
-                $total_amount_new += $order->total_amount;
-            }
-        }
-
-        // Thông tin đơn hàng tháng cũ
+        // Tính chênh lệch tháng
         if (count($orderOlds) > 0) {
-            foreach ($orderOlds as $order) {
-                $total_amount_old += $order->total_amount;
-            }
             $textPercent = ceil((($total_amount_new - $total_amount_old) / $total_amount_old) * 100);
-            $count = ceil(((count($orderNews) - count($orderOlds)) / count($orderNews)) * 100);
+            if(count($orderNews) > 0) {
+                $count = ceil(((count($orderNews) - count($orderOlds)) / count($orderNews)) * 100);
+            } else {
+                $count = 0;
+            }
         } else {
             $textPercent = 0;
             $count = 0;
@@ -89,21 +85,17 @@ class DashboardController extends RestController
         foreach ($products as $p) {
             array_push($tableProduct, $p);
         }
+
         //Đơn hàng mới
         $order = $this->repository->paginate(10, [WhereClause::query('order_status', 'Lên đơn')], 'date_created:desc');
         foreach ($order as $o) {
             array_push($tableOrder, $o);
         }
 
-        //Biểu đồ đơn hàng + doanh thu
-        $orderYears = $this->repository->get([
-            WhereClause::queryYear('date_created', $year),
-            WhereClause::query('order_status', "Hoàn thành")
-        ]);
+        //Biểu đồ đơn hàng + doanh thu trong năm
+        $orderYears = $this->repository->get([WhereClause::queryYear('date_created', $year), WhereClause::query('order_status', "Hoàn thành")]);
+        $total_amount_year =  DB::table('orders')->whereOrderStatus('Hoàn thành')->whereYear('date_created', '=', $year)->sum('total_amount');
         if (count($orderYears) > 0) {
-            foreach ($orderYears as $order) {
-                $total_amount += $order->total_amount;
-            }
             for($i = 1; $i <= 12; $i++) {
                 $amount_unit = 0;
                 $orderUnit = $this->repository->get([
@@ -116,10 +108,23 @@ class DashboardController extends RestController
                         $amount_unit += $o->total_amount;
                     }
                 }
-                $percent = round((($amount_unit / $total_amount)) * 100, 2);
+                $percent = round((($amount_unit / $total_amount_year)) * 100, 2);
                 array_push($tableQuantity, count($orderUnit));
                 array_push($tablePercent,$percent);
             }
+        }
+
+        // Biểu đồ sản phẩm bán chạy trong tháng
+        $productMain = DB::select('SELECT product_code, SUM(quantity) AS quantity FROM order_details WHERE MONTH(created_at) = '.$month.' AND YEAR(created_at) = '.$year.' GROUP BY product_code ORDER BY SUM(quantity) DESC');
+        if(count($productMain) > 0) {
+            foreach($productMain as $key => $p) {
+                if($key < 4) {
+                    array_push($tableProductCodeMain,$p->product_code);
+                    array_push($tableProductQuantityMain,$p->quantity);
+                } else {
+                    break;
+                }
+            };
         }
 
         $data = [
@@ -150,6 +155,8 @@ class DashboardController extends RestController
             'orders' => $tableOrder,
             'percents' => $tablePercent,
             'quantity' => $tableQuantity,
+            'productCodeMains' => $tableProductCodeMain,
+            'productQuantityMains' => $tableProductQuantityMain,
         ];
 
         return $this->success($data);

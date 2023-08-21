@@ -1,4 +1,28 @@
 <div class="row margin-bottom">
+  <div class="col-xs-12">
+    <form (ngSubmit)="load()" [formGroup]="searchForm">
+      <div *ngFor="let f of searchControls" class="form-group col-md-6">
+        <ng-template [ngIf]="f.type == 'select'">
+          <label [for]="f.formControl">
+            {{ f.label }}
+          </label>
+          <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                  class="form-control">
+            <option *ngFor="let option of f.data" [value]="option['value']">
+              {{ option["name"] }}
+            </option>
+          </select>
+        </ng-template>
+      </div>
+      <div class="col-md-12">
+        <button class="btn btn-default" type="submit">Tìm kiếm</button>
+        <button (click)="removeFilter()" class="btn btn-default" type="button">Xóa lọc</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="row margin-bottom">
   <div class="col-md-4 col-sm-6 col-xs-12" *ngFor="let box of boxes; let i = index">
     <div class="info-box">
       <span class="info-box-icon {{ box['bg'] }}"
@@ -20,11 +44,11 @@
 
 <div class="row margin-bottom">
   <div class="col-md-6">
-    <canvas class="bg-light" id="order"></canvas>
+    <div class="bg-light" id="orderDiv"></div>
   </div>
 
   <div class="col-md-6">
-    <canvas class="bg-light" id="amount"></canvas>
+    <div class="bg-light" id="amountDiv"></div>
   </div>
 </div>
 
@@ -123,7 +147,7 @@
       </div>
       <div class="box-body no-padding" style="height: 324px;">
         <div class="chartProduct">
-          <canvas id="product"></canvas>
+          <div class="bg-light" id="productDiv"></div>
         </div>
       </div>
     </div>
@@ -173,3 +197,7 @@
     </div>
   </div>
 </div>
+
+<script>
+  console.log(123);
+</script>
