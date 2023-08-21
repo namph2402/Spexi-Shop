@@ -1,3 +1,7 @@
+.bg-light {
+  background: white;
+}
+
 .quantity {
   font-size: 15px;
 }
@@ -29,4 +33,20 @@
 
 .text-success {
   color:  rgb(36, 206, 36);
+}
+
+.form-chart {
+  height: 500px;
+}
+
+.title-chart {
+  margin: 0;
+  padding: 10px;
+  font-size: 18px;
+  line-height: 20px;
+  background: #d2ffc8;
+}
+
+.chartProduct {
+  margin: 10px 0;
 }

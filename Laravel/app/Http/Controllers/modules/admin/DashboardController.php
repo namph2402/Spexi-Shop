@@ -8,7 +8,6 @@ use App\Repository\OrderRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
 use App\Repository\WarehouseRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class DashboardController extends RestController
 {
@@ -29,7 +28,8 @@ class DashboardController extends RestController
     {
         $tableProduct = [];
         $tableOrder = [];
-        $tableChart = [];
+        $tablePercent = [];
+        $tableQuantity = [];
 
         $total_amount = 0;
         $total_amount_new = 0;
@@ -37,29 +37,33 @@ class DashboardController extends RestController
 
         $users = $this->userRepository->get([WhereClause::query('status', 1)]);
 
-        // Đơn hàng tháng
+
+        $month = $request->input('month', date("m"));
+        $year = $request->input('year', date("Y"));
+
+        // Đơn hàng tháng này
         $orderNews = $this->repository->get([
-            WhereClause::queryMonth('date_created', date("m")),
-            WhereClause::queryYear('date_created', date("Y")),
+            WhereClause::queryMonth('date_created', $month),
+            WhereClause::queryYear('date_created', $year),
             WhereClause::query('order_status', "Hoàn thành")
         ]);
 
         // Đơn hàng tháng cũ
-        if(date("m") == 1) {
+        if($month == 1) {
             $orderOlds = $this->repository->get([
                 WhereClause::queryMonth('date_created', 12),
-                WhereClause::queryYear('date_created', date("Y")-1),
+                WhereClause::queryYear('date_created', $year-1),
                 WhereClause::query('order_status', "Hoàn thành")
             ]);
         } else {
             $orderOlds = $this->repository->get([
-                WhereClause::queryMonth('date_created', date("m")-1),
-                WhereClause::queryYear('date_created', date("Y")),
+                WhereClause::queryMonth('date_created', $month-1),
+                WhereClause::queryYear('date_created', $year),
                 WhereClause::query('order_status', "Hoàn thành")
             ]);
         }
 
-        //  Thông tin đơn hàng tháng
+        //  Thông tin đơn hàng tháng này
         if (count($orderNews) > 0) {
             foreach ($orderNews as $order) {
                 $total_amount_new += $order->total_amount;
@@ -79,44 +83,42 @@ class DashboardController extends RestController
         }
 
         // Bảng
+
+        //Sản phẩm sắp hết
         $products = $this->warehouseRepository->paginate(10, [WhereClause::query('quantity', '50', '<=')], 'quantity:asc', ['products', 'sizes', 'colors']);
         foreach ($products as $p) {
             array_push($tableProduct, $p);
         }
-
+        //Đơn hàng mới
         $order = $this->repository->paginate(10, [WhereClause::query('order_status', 'Lên đơn')], 'date_created:desc');
         foreach ($order as $o) {
             array_push($tableOrder, $o);
         }
 
+        //Biểu đồ đơn hàng + doanh thu
         $orderYears = $this->repository->get([
-            WhereClause::queryYear('date_created', date("Y")),
+            WhereClause::queryYear('date_created', $year),
             WhereClause::query('order_status', "Hoàn thành")
         ]);
-
         if (count($orderYears) > 0) {
             foreach ($orderYears as $order) {
                 $total_amount += $order->total_amount;
             }
-
             for($i = 1; $i <= 12; $i++) {
                 $amount_unit = 0;
                 $orderUnit = $this->repository->get([
                     WhereClause::queryMonth('date_created', $i),
-                    WhereClause::queryYear('date_created', date("Y")),
+                    WhereClause::queryYear('date_created', $year),
                     WhereClause::query('order_status', "Hoàn thành")
                 ]);
-
                 if(count($orderUnit) > 0){
                     foreach($orderUnit as $o) {
                         $amount_unit += $o->total_amount;
                     }
-                    $percent = ceil((($amount_unit / $total_amount)) * 100);
-                } else {
-                    $percent = 0;
                 }
-
-                array_push($tableChart,$percent);
+                $percent = round((($amount_unit / $total_amount)) * 100, 2);
+                array_push($tableQuantity, count($orderUnit));
+                array_push($tablePercent,$percent);
             }
         }
 
@@ -125,14 +127,14 @@ class DashboardController extends RestController
                 [
                     'bg' => 'bg-red',
                     'icon' => 'fa fa-shopping-cart',
-                    'text' => 'Đơn hàng trong tháng '.date("m"),
+                    'text' => 'Đơn hàng trong tháng '.$month,
                     'value' => count($orderNews),
                     'note' => $count,
                 ],
                 [
                     'bg' => 'bg-yellow',
                     'icon' => 'fa fa-money',
-                    'text' => 'Doanh thu trong tháng '.date("m"),
+                    'text' => 'Doanh thu trong tháng '.$month,
                     'value' => number_format($total_amount_new, 0, '.', ','),
                     'note' => $textPercent
                 ],
@@ -146,7 +148,8 @@ class DashboardController extends RestController
             ],
             'products' => $tableProduct,
             'orders' => $tableOrder,
-            'charts' => $tableChart,
+            'percents' => $tablePercent,
+            'quantity' => $tableQuantity,
         ];
 
         return $this->success($data);
