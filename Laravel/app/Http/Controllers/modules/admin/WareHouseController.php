@@ -34,10 +34,15 @@ class WarehouseController extends RestController
     public function index(Request $request)
     {
         $limit = $request->input('limit', null);
-        $clauses = [WhereClause::query('product_id', $request->product_id)];
-        $with = ['sizes', 'colors'];
+        $clauses = [];
+        $with = ['sizes', 'colors', 'product'];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:asc');
+
+        if ($request->has('product_id')) {
+            array_push($clauses, WhereClause::query('product_id', $request->product_id));
+        }
+
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {
@@ -76,7 +81,7 @@ class WarehouseController extends RestController
                 } else {
                     try {
                         DB::beginTransaction();
-                        $model = $this->repository->create($attributes);
+                        $this->repository->create($attributes);
                         DB::commit();
                     } catch (\Exception $e) {
                         Log::error($e);

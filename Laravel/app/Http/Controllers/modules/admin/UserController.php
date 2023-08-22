@@ -30,7 +30,17 @@ class UserController extends RestController
         $orderBy = $request->input('orderBy', 'id:desc');
 
         if ($request->has('search') && Str::length($request->search) > 0) {
-            array_push($clauses, WhereClause::queryLike('fullname', $request->search));
+            $search = $request->search;
+            array_push($clauses, WhereClause::orQuery([
+                WhereClause::queryLike('fullname', $request->search),
+                WhereClause::queryLike('phone', $request->search),
+                WhereClause::queryRelationHas('account', function ($q) use ($search) {
+                    $q->where('email', $search);
+                }),
+                WhereClause::queryRelationHas('account', function ($q) use ($search) {
+                    $q->where('username', $search);
+                }),
+            ]));
         }
 
         if ($request->has('search') && Str::length($request->search) == 0) {
@@ -43,10 +53,6 @@ class UserController extends RestController
             array_push($clauses, WhereClause::queryRelationHas('account', function ($q) use ($status) {
                 $q->where('status', $status);
             }));
-        }
-
-        if ($request->has('phone')) {
-            array_push($clauses, WhereClause::query('phone', $request->phone));
         }
 
         if ($limit) {

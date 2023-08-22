@@ -23,12 +23,20 @@ Route::group(['middleware' => ['auth.admin']], function () {
 
     Route::resource('store_posts', 'StorePostController');
 
+    // Staff
+    Route::resource('staffs', 'StaffController');
+    Route::group(['prefix' => 'staffs/{id}'], function () {
+        Route::post('enable', 'StaffController@enable');
+        Route::post('disable', 'StaffController@disable');
+        Route::post('repassword', 'StaffController@repassword');
+    });
+
     // User
+    Route::resource('users', 'UserController');
     Route::group(['prefix' => 'users/{id}'], function () {
         Route::post('enable', 'UserController@enable');
         Route::post('disable', 'UserController@disable');
     });
-    Route::resource('users', 'UserController');
 
     // Banner
     Route::resource('banner_groups', 'BannerGroupController');

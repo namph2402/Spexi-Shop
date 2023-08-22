@@ -154,7 +154,7 @@
           <tbody>
             <tr class="odd" *ngFor="let p of products">
               <td>{{ p.code }}</td>
-              <td>{{ p.products.name }}</td>
+              <td>{{ p.product.name }}</td>
               <td>{{ p.sizes.name }}, {{ p.colors.name }}</td>
               <td class="text-right quantity">
                 <label class="text-danger" *ngIf="p.quantity <= 10">{{

@@ -79,9 +79,6 @@ class OrderDetailController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-        if (!($model instanceof OrderDetail)) {
-            return $this->errorNotFound();
-        }
 
         $validator = $this->validateRequest($request, [
             'name' => 'nullable|max:255',

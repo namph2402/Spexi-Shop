@@ -90,9 +90,6 @@ class MenuController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-        if (!($model instanceof Menu)) {
-            return $this->errorNotFound();
-        }
 
         $validator = $this->validateRequest($request, [
             'group_id' => 'nullable|numeric',

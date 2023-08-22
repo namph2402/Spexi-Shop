@@ -15,6 +15,11 @@ export const APP_FEATURES = [
           link: '/store'
         },
         {
+          name: 'Quản lý nhân viên',
+          icon: 'fa fa-users',
+          link: '/staffs'
+        },
+        {
           name: 'Quản lý khách hàng',
           icon: 'fa fa-users',
           children: [
@@ -125,8 +130,13 @@ export const APP_FEATURES = [
   },
   {
     name: 'Quản lý bán hàng',
-    icon: 'fa fa-archive',
+    icon: 'fa fa-list-alt',
     children: [
+      {
+        name: 'Kho hàng',
+        icon: 'fa fa-archive',
+        link: '/warehouses'
+      },
       {
         name: 'Đơn hàng',
         icon: 'fa fa-bars',

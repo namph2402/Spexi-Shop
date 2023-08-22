@@ -25,6 +25,14 @@ export const MODULES_ROUTING = [
     loadChildren: 'app/modules/customer/customer.module#CustomerModule'
   },
   {
+    path: 'staffs',
+    loadChildren: 'app/modules/staff/staff.module#StaffModule'
+  },
+  {
+    path: 'warehouses',
+    loadChildren: 'app/modules/warehouse/warehouse.module#WarehouseModule'
+  },
+  {
     path: 'form-datas',
     loadChildren: 'app/modules/form-data/form-data.module#FormDataModule'
   },
