@@ -1,0 +1,29 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Nhập file</h4>
+  <button (click)="dismiss()" aria-label="Close" class="close pull-right" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <form [formGroup]="formGroup" novalidate>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+          </div>
+          <div class="custom-file">
+            <input (change)="onFileUploadChange($event)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" aria-describedby="inputGroupFileAddon01" class="custom-file-input"
+                   id="inputGroupFile01"
+                   type="file">
+            <label class="custom-file-label" for="inputGroupFile01">Chọn file</label>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button (click)="import()" [disabled]="formGroup.invalid" class="btn btn-primary" type="button">Nhập liệu</button>
+  <button (click)="dismiss()" class="btn btn-default" type="button">Hủy bỏ</button>
+</div>

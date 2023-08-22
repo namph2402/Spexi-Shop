@@ -1,0 +1,116 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Bình luận</h4>
+  <button (click)="dismiss()" aria-label="Close" class="close pull-right" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12 margin-bottom">
+      <button (click)="createComment()" *ngIf="article == true" class="btn btn-primary btn-sm pull-right" type="button">
+        <i class="fa fa-plus"></i> Thêm mới
+      </button>
+    </div>
+    <div class="col-xs-12">
+      <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+          <th style="width: 5%">#</th>
+          <th style="width: 20%">Khách hàng</th>
+          <th style="width: 20%">Bình luận</th>
+          <th style="width: 15%">Đánh giá</th>
+          <th style="width: 10%">Thời gian</th>
+          <th style="width: 10%">Trạng thái</th>
+          <th style="width: 10%">Thao tác</th>
+        </tr>
+        </thead>
+        <tbody *ngIf="list">
+        <tr *ngFor="let item of list; let i = index" class="odd">
+          <td style="text-align: center">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
+          <td>{{ item.author }}</td>
+          <td>{{ item.content }}</td>
+          <td>
+            <div *ngIf="item.rating == 5">
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+            </div>
+            <div *ngIf="item.rating == 4">
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+              <i aria-hidden="true" class="fa fa-star"></i>
+            </div>
+            <div *ngIf="item.rating == 3">
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+              <i aria-hidden="true" class="fa fa-star"></i>
+              <i aria-hidden="true" class="fa fa-star"></i>
+            </div>
+            <div *ngIf="item.rating == 2">
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+              <i aria-hidden="true" class="fa fa-star"></i>
+              <i aria-hidden="true" class="fa fa-star"></i>
+              <i aria-hidden="true" class="fa fa-star"></i>
+            </div>
+            <div *ngIf="item.rating == 1">
+              <i aria-hidden="true" class="fa fa-star rating"></i>
+              <i aria-hidden="true" class="fa fa-star"></i>
+              <i aria-hidden="true" class="fa fa-star"></i>
+              <i aria-hidden="true" class="fa fa-star"></i>
+              <i aria-hidden="true" class="fa fa-star"></i>
+            </div>
+          </td>
+          <td style="text-align: center">
+            {{ item.created_at | date : "dd-MM-yyyy" }}
+            {{ item.created_at | date : "HH:mm:ss" }}
+          </td>
+          <td style="text-align: center">
+            <ui-switch (change)="onStatusChange(item, i, $event)" *ngIf="item.status == 0"></ui-switch>
+            <ui-switch (change)="onStatusChange(item, i, $event)" *ngIf="item.status == 1"
+                       [checked]="item.status"></ui-switch>
+          </td>
+          <td style="text-align: center">
+            <button (click)="editComment(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
+              <i class="fa fa-pencil-square-o"></i>
+            </button>
+            <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
+                    placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
+                    type="button" style="width: 30px; height: 30px; padding: 0;">
+              <i class="fa fa-remove"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="panel-footer">
+  <div class="row">
+    <div class="col-xs-6">
+      <pagination (numPages)="pagination.numPages = $event" (pageChanged)="pageChanged($event)"
+                  [(ngModel)]="pagination.currentPage" [boundaryLinks]="true"
+                  [itemsPerPage]="pagination.itemsPerPage"
+                  [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems" class="pagination-sm"></pagination>
+    </div>
+    <div class="col-xs-6">
+      <div class="box-go-to">
+        <input [(ngModel)]="nextPage" class="col-xs-2" type="number"/>
+        <span class="col-xs-1">/</span>
+        <input [(ngModel)]="pagination.numPages" class="col-xs-2" disabled type="text"/>
+        <div class="col-xs-4">
+          <button (click)="goToPageNumber()">Đến</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button (click)="dismiss()" class="btn btn-default" type="button">Đóng</button>
+</div>

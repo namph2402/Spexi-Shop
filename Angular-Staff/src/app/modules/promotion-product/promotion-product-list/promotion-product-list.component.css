@@ -1,0 +1,29 @@
+.form-text {
+  font-size: 18px;
+  margin-right: 20px;
+}
+
+.form-form {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.form-update {
+  display: flex;
+  border: 1px solid #d2d6de;
+  padding: 0;
+  margin: 0 10px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.has-error {
+  border: 1px solid red !important;
+}

@@ -1,0 +1,84 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Thêm mới bài đăng</h4>
+  <button (click)="dismiss()" aria-label="Close" class="close pull-right" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <form [formGroup]="formGroup" novalidate>
+        <div *ngFor="let f of fields" [ngClass]="{ 'has-error': !formGroup.controls[f.formControl].valid }"
+             class="form-group">
+          <ng-template [ngIf]="f.type == 'input'">
+            <label [for]="f.formControl">
+              {{ f.label }}
+              <span *ngIf="f.typeof == 'number'" style="font-weight: normal">
+                ({{formGroup.controls[f.formControl].value | number : "1.0-0"}})
+              </span>
+            </label>
+            <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
+                   [type]="f.typeof" class="form-control"/>
+          </ng-template>
+          <ng-template [ngIf]="f.type == 'textarea'">
+            <label [for]="f.formControl">
+              {{ f.label }}
+            </label>
+            <textarea [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
+                      [rows]="5" class="form-control">
+            </textarea>
+          </ng-template>
+          <ng-template [ngIf]="f.type == 'file'">
+            <label [for]="f.formControl">
+              {{ f.label }}
+            </label>
+            <input (change)="f.config['onFileChange'](formGroup, f.formControl, $event)" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
+                   accept="{{ f.config['accept'] }}" class="form-control"
+                   type="file"/>
+          </ng-template>
+          <ng-template [ngIf]="f.type == 'checkbox'">
+            <div class="checkbox">
+              <label>
+                <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" type="checkbox"/>
+                {{ f.label }}
+              </label>
+            </div>
+          </ng-template>
+          <ng-template [ngIf]="f.type == 'select'">
+            <label [for]="f.formControl">
+              {{ f.label }}
+            </label>
+            <select [formControlName]="f.formControl" [id]="f.formControl" class="form-control">
+              <option *ngFor="let option of f.data" [value]="option['id']">
+                {{ option["name"] }}
+              </option>
+            </select>
+          </ng-template>
+          <ng-template [ngIf]="f.type == 'select2'">
+            <label [for]="f.formControl">
+              {{ f.label }}
+            </label>
+            <angular2-multiselect [data]="f.data" [formControlName]="f.formControl" [id]="f.formControl"
+                                  [settings]="f.config">
+            </angular2-multiselect>
+          </ng-template>
+          <ng-template [ngIf]="f.type == 'html'">
+            <label [for]="f.formControl">
+              {{ f.label }}
+            </label>
+            <ckeditor [config]="f.config" [formControlName]="f.formControl" [id]="f.formControl" debounce="500">
+            </ckeditor>
+          </ng-template>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button (click)="createWithImage()" [disabled]="formGroup.invalid" class="btn btn-primary" type="button">
+    Thêm mới
+  </button>
+  <button (click)="dismiss()" class="btn btn-default" type="button">
+    Hủy bỏ
+  </button>
+</div>

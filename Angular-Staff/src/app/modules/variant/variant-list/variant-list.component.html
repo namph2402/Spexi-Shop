@@ -1,0 +1,120 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-12">
+        <form (ngSubmit)="load()" [formGroup]="searchForm">
+          <div *ngFor="let f of searchControls" class="form-group col-md-6">
+            <ng-template [ngIf]="f.type == 'input'">
+              <label [for]="f.formControl">
+                {{ f.label }}
+              </label>
+              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
+                     [type]="f.typeof" class="form-control"/>
+            </ng-template>
+            <ng-template [ngIf]="f.type == 'textarea'">
+              <label [for]="f.formControl">
+                {{ f.label }}
+              </label>
+              <textarea [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                        [placeholder]="f.placeHolder" class="form-control">
+              </textarea>
+            </ng-template>
+            <ng-template [ngIf]="f.type == 'checkbox'">
+              <div class="checkbox">
+                <label>
+                  <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                         type="checkbox"/>
+                  {{ f.label }}
+                </label>
+              </div>
+            </ng-template>
+            <ng-template [ngIf]="f.type == 'select'">
+              <label [for]="f.formControl">
+                {{ f.label }}
+              </label>
+              <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                      class="form-control">
+                <option *ngFor="let option of f.data" [value]="option['id']">
+                  {{ option["name"] }}
+                </option>
+              </select>
+            </ng-template>
+            <ng-template [ngIf]="f.type == 'select2'">
+              <label [for]="f.formControl">
+                {{ f.label }}
+              </label>
+              <angular2-multiselect [data]="f.data" [formControlName]="f.formControl" [id]="f.formControl"
+                                    [settings]="f.config">
+              </angular2-multiselect>
+            </ng-template>
+          </div>
+          <div class="col-md-12">
+            <button class="btn btn-default" type="submit">Tìm kiếm</button>
+            <button (click)="removeFilter()" class="btn btn-default" type="button">Xóa lọc</button>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-6 col-xs-offset-6">
+        <button (click)="createVariant()" class="btn btn-primary pull-right" type="button">
+          <i class="fa fa-plus"></i> Thêm mới
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body no-padding">
+    <div class="col-xs-6">
+      <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+          <th style="width: 20%">#</th>
+          <th style="width: 60%">Màu sắc</th>
+          <th style="width: 20%">Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of listColor; let i = index" class="odd">
+          <td class="text-center">{{ i + 1 }}</td>
+          <td>{{ item.name }}</td>
+          <td class="text-center">
+            <button (click)="editVariantColor(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
+              <i class="fa fa-pencil-square-o"></i>
+            </button>
+            <button (confirm)="removeVariantColor(item)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
+                    mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
+                    style="width: 30px; height: 30px; padding: 0;" type="button">
+              <i aria-hidden="true" class="fa fa-remove"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-xs-6">
+      <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+          <th style="width: 20%">#</th>
+          <th style="width: 60%">Size</th>
+          <th style="width: 20%">Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of listSize; let i = index" class="odd">
+          <td class="text-center">{{ i + 1 }}</td>
+          <td>{{ item.name }}</td>
+          <td class="text-center">
+            <button (click)="editVariantSize(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
+              <i class="fa fa-pencil-square-o"></i>
+            </button>
+            <button (confirm)="removeVariantSize(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
+                    mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
+                    style="width: 30px; height: 30px; padding: 0;" type="button" style="width: 30px; height: 30px; padding: 0;">
+              <i aria-hidden="true" class="fa fa-remove"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

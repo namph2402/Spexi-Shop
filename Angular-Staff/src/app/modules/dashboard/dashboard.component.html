@@ -1,0 +1,180 @@
+<div class="row margin-bottom">
+  <div class="col-xs-12">
+    <form (ngSubmit)="load()" [formGroup]="searchForm">
+      <div *ngFor="let f of searchControls" class="form-group col-md-6">
+        <ng-template [ngIf]="f.type == 'select'">
+          <label [for]="f.formControl">
+            {{ f.label }}
+          </label>
+          <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                  class="form-control">
+            <option *ngFor="let option of f.data" [value]="option['value']">
+              {{ option["name"] }}
+            </option>
+          </select>
+        </ng-template>
+      </div>
+      <div class="col-md-12">
+        <button class="btn btn-default" type="submit">Tìm kiếm</button>
+        <button (click)="removeFilter()" class="btn btn-default" type="button">Xóa lọc</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="row margin-bottom">
+  <div class="col-md-4 col-sm-6 col-xs-12" *ngFor="let box of boxes; let i = index">
+    <div class="info-box">
+      <span class="info-box-icon {{ box['bg'] }}"
+        ><i class="fa {{ box['icon'] }}"></i
+      ></span>
+      <div class="info-box-content">
+        <span class="info-box-text">{{ box["text"] }}</span>
+        <span class="info-box-number">{{ box["value"] }}</span>
+        <p class="info-box-note increase" *ngIf="box['note'] > 0">
+          +{{ box["note"] }}% so với tháng trước
+        </p>
+        <p class="info-box-note decrease" *ngIf="box['note'] < 0">
+          {{ box["note"] }}% so với tháng trước
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row margin-bottom">
+  <div class="col-md-6">
+    <div class="bg-light" id="orderDiv"></div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="bg-light" id="amountDiv"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="box box-solid box-success">
+      <div class="box-header with-border">
+        <h3 class="box-title">Sản phẩm bán chạy trong tháng</h3>
+      </div>
+      <div class="box-body no-padding" style="height: 324px;">
+        <div class="chartProduct">
+          <div class="bg-light" id="productDiv"></div>
+        </div>
+      </div>
+    </div>
+    <div class="box box-solid box-warning">
+      <div class="box-header with-border">
+        <h3 class="box-title">Đơn hàng mới</h3>
+        <div class="box-tools pull-right">
+          <a class="label label-primary" [routerLink]="['/orders']">Tất cả</a>
+        </div>
+      </div>
+      <div class="box-body no-padding" style="height: 324px; overflow: auto;">
+        <table class="table-responsive table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th style="width: 25%">Mã</th>
+              <th style="width: 20%">Ngày tạo</th>
+              <th style="width: 25%">Khách hàng</th>
+              <th style="width: 20%">Tổng tiền</th>
+              <th style="width: 10%; padding-right: 0; padding-left: 0">
+                Trạng thái
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="odd" *ngFor="let o of orders">
+              <td>{{ o.code }}</td>
+              <td>
+                <p style="margin: 0">
+                  {{ o.created_at | date : "yyyy-MM-dd" }}
+                </p>
+                <p style="margin: 0">
+                  {{ o.created_at | date : "HH:mm:ss" }}
+                </p>
+              </td>
+              <td>{{ o.customer_name }}</td>
+              <td class="text-right">
+                {{ o.total_amount | number : "1.0-0" }}
+              </td>
+              <td class="text-right">
+                <label class="label label-success">{{ o.order_status }}</label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="box box-solid box-info">
+      <div class="box-header with-border">
+        <h3 class="box-title">Khách hàng tiềm năng</h3>
+      </div>
+      <div class="box-body no-padding" style="height: 324px; overflow: auto;">
+        <table class="table-responsive table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th style="width: 50%">Tên khách hàng</th>
+              <th style="width: 30%">Số điện thoại</th>
+              <th style="width: 20%">Tổng tiền</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let u of userMains; let i = index">
+              <tr class="odd">
+                <td>{{ u.customer_name }}</td>
+                <td>{{ u.customer_phone }}</td>
+                <td class="text-right">{{ u.total_amount | number : "1.0-0" }}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="box box-solid box-danger">
+      <div class="box-header with-border">
+        <h3 class="box-title">Sản phẩm sắp hết hàng</h3>
+        <div class="box-tools pull-right">
+          <a class="label label-warning" href="sfdghfdsa">Tất cả</a>
+        </div>
+      </div>
+      <div class="box-body no-padding" style="max-height: 324px; overflow: auto;">
+        <table class="table-responsive table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th style="width: 28%">Mã</th>
+              <th style="width: 45%">Tên</th>
+              <th style="width: 15%">Loại</th>
+              <th style="width: 12%">Còn lại</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="odd" *ngFor="let p of products">
+              <td>{{ p.code }}</td>
+              <td>{{ p.product.name }}</td>
+              <td>{{ p.sizes.name }}, {{ p.colors.name }}</td>
+              <td class="text-right quantity">
+                <label class="text-danger" *ngIf="p.quantity <= 10">{{
+                  p.quantity
+                }}</label>
+                <label
+                  class="text-warning"
+                  *ngIf="10 < p.quantity && p.quantity <= 30"
+                  >{{ p.quantity }}</label
+                >
+                <label
+                  class="text-success"
+                  *ngIf="30 < p.quantity && p.quantity <= 50"
+                  >{{ p.quantity }}</label
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

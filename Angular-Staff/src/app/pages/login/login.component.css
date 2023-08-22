@@ -1,0 +1,12 @@
+#btnLoginGoogle iframe {
+  display: flex !important;
+}
+
+.login-logo {
+  margin-bottom: 0;
+  height: 165px;
+}
+
+.img-circle {
+  width: 200px;
+}

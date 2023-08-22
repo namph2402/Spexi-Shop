@@ -1,0 +1,158 @@
+import {Component} from '@angular/core';
+import {AbstractCRUDComponent, AbstractCRUDModalComponent, AbstractModalComponent} from '../../../core/crud';
+import {BsModalService, ModalOptions} from 'ngx-bootstrap';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {PromotionMeta} from '../promotion.meta';
+import {PromotionService} from '../promotion.service';
+import {PromotionCreateComponent} from '../promotion-create/promotion-create.component';
+import {PromotionEditComponent} from '../promotion-edit/promotion-edit.component';
+import {FieldForm, ModalResult} from '../../../core/common';
+import {ObjectUtil} from '../../../core/utils';
+import {PromotionProductMeta} from '../../promotion-product/promotion-product.meta';
+import {PromotionProductListComponent} from '../../promotion-product/promotion-product-list/promotion-product-list.component';
+
+@Component({
+  selector: 'app-promotion-list',
+  templateUrl: './promotion-list.component.html',
+  styleUrls: ['./promotion-list.component.css'],
+  providers: [PromotionService]
+})
+export class PromotionListComponent extends AbstractCRUDComponent<PromotionMeta> {
+
+  constructor(
+    service: PromotionService,
+    modal: BsModalService,
+    builder: FormBuilder,
+  ) {
+    super(service, modal, builder);
+  }
+
+  onInit(): void {
+    this.load();
+  }
+
+  onDestroy(): void {
+  }
+
+  getTitle(): string {
+    return 'Quản lý khuyến mãi';
+  }
+
+  getCreateModalComponent(): any {
+    return PromotionCreateComponent;
+  }
+
+  getEditModalComponent(): any {
+    return PromotionEditComponent;
+  }
+
+  getCreateModalComponentOptions(): ModalOptions {
+    return {'class': 'modal-lg', ignoreBackdropClick: true};
+  }
+
+  getEditModalComponentOptions(): ModalOptions {
+    return {'class': 'modal-lg', ignoreBackdropClick: true};
+  }
+
+  buildSearchForm(): FormGroup {
+    return this.formBuilder.group({
+      search: new FormControl(null),
+      status: new FormControl(null),
+    });
+  }
+
+  initSearchForm(): FieldForm[] {
+    return [
+      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa', 'col-md-6'),
+      FieldForm.createSelect('Tìm kiếm trạng thái', 'status', 'Chọn một', [
+        {
+          id: '',
+          name: 'Tất cả',
+        },
+        {
+          id: 1,
+          name: 'Hoạt động',
+        },
+        {
+          id: 0,
+          name: 'Không hoạt động',
+        },
+      ], 'col-md-6'),
+    ];
+  }
+
+  initNewModel(): PromotionMeta {
+    return new PromotionMeta();
+  }
+
+  onStatusChange(item: PromotionMeta, index: number, enable: boolean) {
+    let methodAsync = null;
+    let titleMsg: string = 'Phát hành';
+    if (enable) {
+      methodAsync = this.service.enable(item.id);
+    } else {
+      methodAsync = this.service.disable(item.id);
+      titleMsg = 'Lưu kho';
+    }
+    methodAsync.subscribe((res: PromotionMeta) => {
+      this.service.toastSuccessfully(titleMsg);
+    }, () => this.service.toastFailed(titleMsg));
+    this.load();
+  }
+
+  createPromotion() {
+    let modalOptions = Object.assign(this.defaultModalOptions(), this.getCreateModalComponentOptions());
+    const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, modalOptions);
+    const modalRef = this.modalService.show(this.getCreateModalComponent(), config);
+    let modal: AbstractModalComponent<PromotionMeta> = <AbstractModalComponent<PromotionMeta>>modalRef.content;
+    modal.setModel(this.initNewModel());
+    modal.onHidden.subscribe((result: ModalResult<PromotionMeta>) => {
+      if (result.success) {
+        this.load();
+      }
+    });
+  }
+
+  editPromotion(item) {
+    let modalOptions = Object.assign(this.defaultModalOptions(), this.getEditModalComponentOptions());
+    const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, modalOptions);
+    const modalRef = this.modalService.show(this.getEditModalComponent(), config);
+    let modal: AbstractModalComponent<PromotionMeta> = <AbstractModalComponent<PromotionMeta>>modalRef.content;
+    modal.setModel(item);
+    modal.onHidden.subscribe((result: ModalResult<PromotionMeta>) => {
+      if (result.success) {
+        this.load();
+      }
+    });
+  }
+
+  viewProduct(item: PromotionMeta, i: number) {
+    let modalOptions = Object.assign(this.defaultModalOptions(), {'class': 'modal-huge'});
+    const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, modalOptions);
+    const modalRef = this.modalService.show(PromotionProductListComponent, config);
+    let modal: AbstractCRUDModalComponent<PromotionProductMeta> = <AbstractCRUDModalComponent<PromotionProductMeta>>modalRef.content;
+    modal.setRelatedModel(item);
+    let sub = modal.onHidden.subscribe((result: ModalResult<any>) => {
+      if (result.success) {
+        this.load();
+      }
+      sub.unsubscribe();
+    });
+  }
+
+  copy(copy_content: string) {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = copy_content;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+    this.service.toastSuccess('Copy url: ' + copy_content);
+  }
+
+}

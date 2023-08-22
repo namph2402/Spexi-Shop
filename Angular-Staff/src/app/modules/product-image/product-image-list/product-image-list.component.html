@@ -1,0 +1,78 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Album ảnh sản phẩm</h4>
+  <button (click)="dismiss()" aria-label="Close" class="close pull-right" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12 margin-bottom">
+      <button (click)="createImage()" class="btn btn-primary pull-right" type="button">Thêm ảnh</button>
+    </div>
+    <div class="col-xs-12">
+      <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+          <th style="width: 10%;">#</th>
+          <th>Ảnh</th>
+          <th style="width: 20%;">Trạng thái</th>
+          <th style="width: 20%;">Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of list;let i = index" class="odd">
+          <td class="text-center">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
+          <td class="text-center">
+            <img [src]="item.image" height="150px">
+          </td>
+          <td class="text-center">
+            <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 0"></ui-switch>
+            <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 1"
+                       [checked]="item.status"></ui-switch>
+          </td>
+          <td class="text-center">
+            <button (confirm)="upOrder(item ,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-default btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
+                    mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn tăng thứ tự?"
+                    popoverTitle="Thay đổi thứ tự" type="button" style="width: 30px; height: 30px; padding: 0;">
+              <i class="fa fa-arrow-up"></i>
+            </button>
+            <button (confirm)="downOrder(item,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-default btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
+                    mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn giảm thứ tự?"
+                    popoverTitle="Thay đổi thứ tự" type="button" style="width: 30px; height: 30px; padding: 0;">
+              <i class="fa fa-arrow-down"></i>
+            </button>
+            <button (confirm)="remove(item,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
+                    mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?"
+                    popoverTitle="Xóa" type="button" style="width: 30px; height: 30px; padding: 0;">
+              <i class="fa fa-remove"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="panel-footer">
+  <div class="row">
+    <div class="col-xs-6">
+      <pagination (numPages)="pagination.numPages = $event" (pageChanged)="pageChanged($event)"
+                  [(ngModel)]="pagination.currentPage" [boundaryLinks]="true"
+                  [itemsPerPage]="pagination.itemsPerPage" [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems"
+                  class="pagination-sm"></pagination>
+    </div>
+    <div class="col-xs-6">
+      <div class="box-go-to">
+        <input [(ngModel)]="nextPage" class="col-xs-2" type="number">
+        <span class="col-xs-1">/</span>
+        <input [(ngModel)]="pagination.numPages" class="col-xs-2" disabled type="text">
+        <div class="col-xs-4">
+          <button (click)="goToPageNumber()">Đến</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button (click)="dismiss()" class="btn btn-default" type="button">Đóng</button>
+</div>
