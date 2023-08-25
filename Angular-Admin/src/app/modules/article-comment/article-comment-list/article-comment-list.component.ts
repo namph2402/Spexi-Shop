@@ -6,6 +6,7 @@ import {ArticleCommentService} from '../article-comment.service';
 import {ArticleCommentMeta} from '../article-comment.meta';
 import {ObjectUtil} from '../../../core/utils';
 import {AppPagination, ModalResult} from '../../../core/common';
+import { ArticleCommentEditComponent } from '../article-comment-edit/article-comment-edit.component';
 
 @Component({
   selector: 'app-article-comment',
@@ -42,7 +43,7 @@ export class ArticleCommentListComponent extends AbstractCRUDModalComponent<Arti
   }
 
   getEditModalComponent(): any {
-    return null;
+    return ArticleCommentEditComponent;
   }
 
   getCreateModalComponentOptions(): ModalOptions {
@@ -101,5 +102,18 @@ export class ArticleCommentListComponent extends AbstractCRUDModalComponent<Arti
       this.service.toastSuccessfully(titleMsg);
     }, () => this.service.toastFailed(titleMsg));
     this.load();
+  }
+
+  editComment(item) {
+    let modalOptions = Object.assign(this.defaultModalOptions(), this.getEditModalComponentOptions());
+    const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, modalOptions);
+    const modalRef = this.modalService.show(this.getEditModalComponent(), config);
+    let modal: AbstractModalComponent<ArticleCommentMeta> = <AbstractModalComponent<ArticleCommentMeta>>modalRef.content;
+    modal.setModel(item);
+    modal.onHidden.subscribe((result: ModalResult<ArticleCommentMeta>) => {
+      if (result.success) {
+        this.load();
+      }
+    });
   }
 }

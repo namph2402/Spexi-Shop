@@ -17,10 +17,9 @@ Route::post('login', 'LoginController@login');
 
 Route::group(['middleware' => ['auth.admin']], function () {
 
+    Route::get('dashboard/export', 'DashboardController@export');
     Route::resource('dashboard', 'DashboardController');
-
     Route::resource('stores', 'StoreInformationController');
-
     Route::resource('store_posts', 'StorePostController');
 
     // Staff
@@ -193,6 +192,7 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::post('enable', 'NotificationController@enable');
         Route::post('disable', 'NotificationController@disable');
     });
+
     // Order
     Route::resource('orders', 'OrderController');
     Route::group(['prefix' => 'orders/{id}'], function () {
@@ -232,5 +232,6 @@ Route::group(['middleware' => ['auth.admin']], function () {
     Route::resource('shipping_services', 'ShippingServiceController');
     Route::resource('shipping_stores', 'ShippingStoreController');
 
+    //Import
     Route::resource('imports', 'ImportController');
 });

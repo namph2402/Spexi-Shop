@@ -4,7 +4,7 @@ import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {BsModalService, ModalOptions} from 'ngx-bootstrap';
 import {DashboardService} from './dashboard.service';
 import {Chart} from 'chart.js';
-import {FieldForm, ObjectUtil} from '../../core';
+import {DateTimeUtil, ExcelHelper, FieldForm, ObjectUtil} from '../../core';
 
 @Component({
   selector: 'app-dashboard',
@@ -208,6 +208,14 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
           }
         });
       }, 100);
+    });
+  }
+
+  export(filename: string) {
+    let param: any = ObjectUtil.combineValue({}, this.searchForm.value, true);
+    this.service.export(param).subscribe(blob => {
+      ExcelHelper.exportXLSXFile(blob, `${filename}_${DateTimeUtil.today('YYYY_MM_DD_X')}`);
+      this.service.toastSuccessfully('Xuất file', 'Thành công');
     });
   }
 }

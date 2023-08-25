@@ -80,7 +80,6 @@ class CommentController extends RestController
         }
 
         $validator = $this->validateRequest($request, [
-            'author' => 'nullable|max:255',
             'content' => 'nullable|max:255',
             'rating' => 'nullable|max:255',
         ]);
@@ -89,7 +88,6 @@ class CommentController extends RestController
         }
 
         $attributes = $request->only([
-            'author',
             'content',
             'rating'
         ]);

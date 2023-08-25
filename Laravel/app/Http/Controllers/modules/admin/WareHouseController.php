@@ -377,13 +377,13 @@ class WarehouseController extends RestController
     public function export()
     {
         $xlsx = [
-            'data' => [['Mã', 'Tên SP', 'Size', 'Màu', 'Giá nhập', 'Giá bán', 'Số lượng', 'Ghi chú']]
+            'Kho hàng' => [['Mã', 'Tên SP', 'Size', 'Màu', 'Giá nhập', 'Giá bán', 'Số lượng', 'Ghi chú']]
         ];
 
         $data = $this->repository->get([],'code:asc',['product','sizes','colors']);
 
         foreach ($data as $row) {
-            array_push($xlsx['data'], [
+            array_push($xlsx['Kho hàng'], [
                 $row->code,
                 $row->product->name,
                 $row->sizes->name,

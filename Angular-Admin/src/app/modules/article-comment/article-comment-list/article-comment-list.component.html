@@ -71,6 +71,9 @@
                        [checked]="item.status"></ui-switch>
           </td>
           <td style="text-align: center">
+            <button (click)="editComment(item)" class="btn btn-default" type="button" style="width: 30px; height: 30px; padding: 0;">
+              <i class="fa fa-pencil-square-o"></i>
+            </button>
             <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
                     placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
                     type="button" style="width: 30px; height: 30px; padding: 0;">
