@@ -10,7 +10,7 @@
             </div>
             <div class="login-group mb-4">
                 <i class="fas fa-user"></i>
-                <input type="text" name="username" class="login-input" placeholder="Tên đăng nhập"
+                <input type="text" name="username" class="login-input" placeholder="Tên đăng nhập/Email"
                        value="{{ old('username') }}">
             </div>
             <div class="login-group">

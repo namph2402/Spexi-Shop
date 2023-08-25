@@ -15,11 +15,13 @@ use Illuminate\Support\Str;
 
 class PromotionController extends RestController
 {
+    protected $repository;
     protected $productRepository;
 
     public function __construct(PromotionRepositoryInterface $repository, ProductRepositoryInterface $productRepository)
     {
         parent::__construct($repository);
+        $this->repository = $repository;
         $this->productRepository = $productRepository;
     }
 

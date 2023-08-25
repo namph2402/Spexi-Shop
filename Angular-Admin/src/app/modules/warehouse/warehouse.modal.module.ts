@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {WarehouseCreateComponent} from './warehouse-create/warehouse-create.component';
 import {WarehouseEditComponent} from './warehouse-edit/warehouse-edit.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ModalModule, PaginationModule, PopoverModule, TabsModule} from 'ngx-bootstrap';
@@ -9,6 +8,7 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {UiSwitchModule} from 'ngx-toggle-switch';
 import {CKEditorModule} from 'ng2-ckeditor';
 import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown';
+import { WarehouseImportComponent } from './warehouse-import/warehouse-import.component';
 
 
 @NgModule({
@@ -26,9 +26,9 @@ import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown';
     AngularMultiSelectModule,
     TabsModule.forRoot(),
   ],
-  declarations: [WarehouseCreateComponent, WarehouseEditComponent],
-  entryComponents: [WarehouseEditComponent, WarehouseCreateComponent],
-  exports: [WarehouseEditComponent, WarehouseCreateComponent],
+  declarations: [WarehouseEditComponent, WarehouseImportComponent],
+  entryComponents: [WarehouseEditComponent,WarehouseImportComponent],
+  exports: [WarehouseEditComponent, WarehouseImportComponent],
 })
 export class WarehouseModalModule {
 }

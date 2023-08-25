@@ -15,7 +15,7 @@ class CreateBannersTable extends Migration
     {
         Schema::create('banners', function (Blueprint $table) {
             $table->id();
-            $table->integer('group_id');
+            $table->integer('group_id')->index();
             $table->string('name');
             $table->string('image');
             $table->string('href')->nullable();

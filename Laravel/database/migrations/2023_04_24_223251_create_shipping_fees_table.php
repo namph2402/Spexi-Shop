@@ -15,8 +15,8 @@ class CreateShippingFeesTable extends Migration
     {
         Schema::create('shipping_fees', function (Blueprint $table) {
             $table->id();
-            $table->integer('province_id');
-            $table->integer('district_id');
+            $table->integer('province_id')->index();
+            $table->integer('district_id')->index();
             $table->integer('ward_id');
             $table->double('fee', 20, 2);
             $table->timestamps();

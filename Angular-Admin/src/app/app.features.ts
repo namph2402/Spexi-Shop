@@ -37,7 +37,6 @@ export const APP_FEATURES = [
         },
       ]
   },
-
   {
     name: 'Quản lý giao diện',
     icon: 'fa fa-desktop',
@@ -133,11 +132,6 @@ export const APP_FEATURES = [
     icon: 'fa fa-list-alt',
     children: [
       {
-        name: 'Kho hàng',
-        icon: 'fa fa-archive',
-        link: '/warehouses'
-      },
-      {
         name: 'Đơn hàng',
         icon: 'fa fa-bars',
         link: '/orders'
@@ -158,5 +152,21 @@ export const APP_FEATURES = [
         link: '/shipping_fees'
       },
     ]
-  }
+  },
+  {
+    name: 'Quản lý kho hàng',
+    icon: 'fa fa-university',
+    children: [
+      {
+        name: 'Kho hàng',
+        icon: 'fa fa-archive',
+        link: '/warehouses'
+      },
+      {
+        name: 'Phiếu kho',
+        icon: 'fa fa-wpforms',
+        link: '/imports'
+      }
+    ]
+  },
 ];

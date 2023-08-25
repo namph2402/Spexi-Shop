@@ -19,7 +19,6 @@ class CreateImportingNotesTable extends Migration
             $table->integer('creator_id')->index();
             $table->string('creator_name')->index();
             $table->text('description')->nullable();
-            $table->tinyInteger('is_approved')->default(0)->index();
             $table->timestamps();
         });
     }

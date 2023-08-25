@@ -30,8 +30,8 @@ export class ProductWarehouseEditComponent extends AbstractModalComponent<Produc
 
   buildForm(): FormGroup {
     return this.formBuilder.group({
-      weight: new FormControl(null, Validators.min(0)),
-      quantity: new FormControl(null, [Validators.min(0), Validators.maxLength(10), Validators.pattern('^(?=.*[0-9]+)[0-9]*$')]),
+      weight: new FormControl(null, [Validators.required, Validators.min(0)]),
+      quantity: new FormControl(null, [Validators.required, Validators.min(0), Validators.maxLength(10), Validators.pattern('^(?=.*[0-9]+)[0-9]*$')]),
     });
   }
 

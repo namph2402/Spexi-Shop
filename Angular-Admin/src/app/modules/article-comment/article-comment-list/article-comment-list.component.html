@@ -6,11 +6,6 @@
 </div>
 <div class="modal-body">
   <div class="row">
-    <div class="col-xs-12 margin-bottom">
-      <button (click)="createComment()" *ngIf="article == true" class="btn btn-primary btn-sm pull-right" type="button">
-        <i class="fa fa-plus"></i> Thêm mới
-      </button>
-    </div>
     <div class="col-xs-12">
       <table class="table table-bordered table-hover">
         <thead>
@@ -27,7 +22,7 @@
         <tbody *ngIf="list">
         <tr *ngFor="let item of list; let i = index" class="odd">
           <td style="text-align: center">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
-          <td>{{ item.author }}</td>
+          <td>{{ item.author.username }}</td>
           <td>{{ item.content }}</td>
           <td>
             <div *ngIf="item.rating == 5">
@@ -76,9 +71,6 @@
                        [checked]="item.status"></ui-switch>
           </td>
           <td style="text-align: center">
-            <button (click)="editComment(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
-              <i class="fa fa-pencil-square-o"></i>
-            </button>
             <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
                     placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
                     type="button" style="width: 30px; height: 30px; padding: 0;">

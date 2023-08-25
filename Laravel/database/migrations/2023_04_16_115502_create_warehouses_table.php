@@ -15,10 +15,10 @@ class CreateWarehousesTable extends Migration
     {
         Schema::create('warehouses', function (Blueprint $table) {
             $table->id();
-            $table->integer('product_id');
+            $table->integer('product_id')->index();
             $table->string('code');
-            $table->string('size_id');
-            $table->string('color_id');
+            $table->string('size_id')->index();
+            $table->string('color_id')->index();
             $table->double('weight', 20, 2)->default(0);
             $table->integer('quantity')->default(0);
             $table->integer('use_quantity')->default(0);

@@ -30,7 +30,7 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
     builder: FormBuilder,
   ) {
     super(service, modal, builder,);
-    for (let i = 1900; i < 2100; i++) {
+    for (let i = 2100; i > 1900; i--) {
       i
       let data = {
         'name' : i ,

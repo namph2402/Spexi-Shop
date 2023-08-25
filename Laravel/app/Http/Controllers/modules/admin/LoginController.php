@@ -26,11 +26,11 @@ class LoginController extends RestController
         ]);
 
         if (empty($user)) {
-            return $this->error('Tài khoản không đúng');
+            return $this->errorClient('Tài khoản không đúng');
         }
 
         if (!Hash::check($password, $user->password)) {
-            return $this->error('Mật khẩu không đúng');
+            return $this->errorClient('Mật khẩu không đúng');
         }
 
         return $this->success(['token' => $user->remember_token, 'name' => $user->name, 'avatar' => $user->avatar]);

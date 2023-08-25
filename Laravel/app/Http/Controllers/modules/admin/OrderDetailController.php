@@ -4,7 +4,6 @@ namespace App\Http\Controllers\modules\admin;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
-use App\Models\OrderDetail;
 use App\Repository\OrderDetailRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

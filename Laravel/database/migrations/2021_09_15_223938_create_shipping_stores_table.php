@@ -17,7 +17,7 @@ class CreateShippingStoresTable extends Migration
             $table->bigIncrements('id');
             $table->integer('unit_id')->index();
             $table->string('name');
-            $table->integer('partner_id');
+            $table->integer('partner_id')->index();
             $table->text('data');
             $table->boolean('is_often')->default(false);
             $table->timestamps();

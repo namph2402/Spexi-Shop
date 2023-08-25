@@ -18,7 +18,7 @@ class CreateArticlesTable extends Migration
             $table->longText('content');
             $table->string('author_name');
             $table->string('articleable_type');
-            $table->bigInteger('articleable_id');
+            $table->bigInteger('articleable_id')->index();
             $table->timestamps();
         });
     }

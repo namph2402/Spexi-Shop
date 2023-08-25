@@ -4,10 +4,7 @@ namespace App\Http\Controllers\modules\admin;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
-use App\Models\Product;
 use App\Repository\NotificationRepositoryInterface;
-use App\Utils\FileStorageUtil;
-use App\Utils\OfficeUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -105,7 +102,7 @@ class NotificationController extends RestController
             'content',
         ]);
         $attributes['slug'] = Str::slug($attributes['name']);
-        
+
         $test_name = $this->repository->find([WhereClause::query('name', $request->input('name')), WhereClause::queryDiff('id', $model->id)]);
         if ($test_name) {
             return $this->errorHad($request->input('name'));

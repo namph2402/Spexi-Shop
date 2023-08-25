@@ -79,6 +79,7 @@ export class PostTagItemCreateComponent extends AbstractModalComponent<PostTagMe
   assign(item: PostMeta) {
     (<PostTagService>this.service).attachTags(this.model.id, [item.id]).subscribe((res: PostMeta) => {
       this.service.toastSuccessfully('Thêm tag');
+      this.loaded();
     }, () => this.service.toastFailed('Thêm tag'));
   }
 

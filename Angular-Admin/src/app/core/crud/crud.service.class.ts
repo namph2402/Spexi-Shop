@@ -220,17 +220,16 @@ export class AbstractCRUDService<T> {
     return Observable.empty<any>();
   }
 
-  import(file: any, body: any) {
+  import(file: any, data: any) {
     const formData = new FormData();
-    Object.keys(body).forEach(key => formData.append(key, body[key]));
+    formData.append('name', data.name);
     formData.append('file', file);
+    formData.append('note', data.note);
     return this.http.post(`${this.urlRestAPI}/import`, formData, {
       headers: new HttpHeaders({uploadFile: 'true'}),
       responseType: 'blob',
       observe: 'response',
-    }).pipe(
-      catchError(err => this.handleErrorRequest(err))
-    );
+    }).pipe(catchError(err => this.handleErrorRequest(err)));
   }
 
   export(body: any) {
@@ -238,11 +237,6 @@ export class AbstractCRUDService<T> {
       responseType: 'blob',
       observe: 'response',
       params: body
-    })
-      .pipe(
-        catchError(err => this.handleErrorRequest(err))
-      );
+    }).pipe(catchError(err => this.handleErrorRequest(err)));
   }
-
-
 }

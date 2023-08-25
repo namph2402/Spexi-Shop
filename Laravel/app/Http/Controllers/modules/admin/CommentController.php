@@ -21,7 +21,7 @@ class CommentController extends RestController
     {
         $limit = $request->input('limit', null);
         $clauses = [WhereClause::query('article_id', $request->article_id)];
-        $with = [];
+        $with = ['author'];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:desc');
 

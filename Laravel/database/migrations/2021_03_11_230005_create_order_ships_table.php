@@ -15,10 +15,10 @@ class CreateOrderShipsTable extends Migration
     {
         Schema::create('order_ships', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('order_id');
-            $table->integer('unit_id');
-            $table->integer('service_id');
-            $table->integer('store_id');
+            $table->integer('order_id')->index();
+            $table->integer('unit_id')->index();
+            $table->integer('service_id')->index();
+            $table->integer('store_id')->index();
             $table->string('code');
             $table->string('status');
             $table->integer('status_id');

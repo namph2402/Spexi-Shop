@@ -18,4 +18,13 @@ class ProductTagRepository extends EloquentRepository implements ProductTagRepos
         return ProductTag::class;
     }
 
+    public function attach(ProductTag $tag, $productId)
+    {
+        $tag->products()->attach($productId);
+    }
+
+    public function detach(ProductTag $tag, $productId)
+    {
+        $tag->products()->detach($productId);
+    }
 }

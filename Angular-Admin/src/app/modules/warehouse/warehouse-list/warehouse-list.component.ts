@@ -4,15 +4,15 @@ import {BsModalService, ModalOptions} from 'ngx-bootstrap';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {WarehouseMeta} from '../warehouse.meta';
 import {WarehouseService} from '../warehouse.service';
-import {WarehouseCreateComponent} from '../warehouse-create/warehouse-create.component';
 import {WarehouseEditComponent} from '../warehouse-edit/warehouse-edit.component';
 import {ObjectUtil} from '../../../core/utils';
 import {FieldForm, ModalResult} from '../../../core/common';
+import {WarehouseImportComponent} from '../warehouse-import/warehouse-import.component';
 
 @Component({
-  selector: 'app-Warehouse',
-  templateUrl: './Warehouse-list.component.html',
-  styleUrls: ['./Warehouse-list.component.css'],
+  selector: 'app-warehouse',
+  templateUrl: './warehouse-list.component.html',
+  styleUrls: ['./warehouse-list.component.css'],
   providers: [WarehouseService]
 })
 export class WarehouseListComponent extends AbstractCRUDComponent<WarehouseMeta> {
@@ -33,11 +33,11 @@ export class WarehouseListComponent extends AbstractCRUDComponent<WarehouseMeta>
   }
 
   getTitle(): string {
-    return 'Quản lý nhân viên';
+    return 'Quản lý kho hàng';
   }
 
   getCreateModalComponent(): any {
-    return WarehouseCreateComponent;
+    return null;
   }
 
   getEditModalComponent(): any {
@@ -98,19 +98,6 @@ export class WarehouseListComponent extends AbstractCRUDComponent<WarehouseMeta>
     this.load();
   }
 
-  createWarehouse() {
-    let modalOptions = Object.assign(this.defaultModalOptions(), this.getCreateModalComponentOptions());
-    const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, modalOptions);
-    const modalRef = this.modalService.show(this.getCreateModalComponent(), config);
-    let modal: AbstractModalComponent<WarehouseMeta> = <AbstractModalComponent<WarehouseMeta>>modalRef.content;
-    modal.setModel(this.initNewModel());
-    modal.onHidden.subscribe((result: ModalResult<WarehouseMeta>) => {
-      if (result.success) {
-        this.load();
-      }
-    });
-  }
-
   editWarehouse(item) {
     let modalOptions = Object.assign(this.defaultModalOptions(), this.getEditModalComponentOptions());
     const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, modalOptions);
@@ -121,6 +108,18 @@ export class WarehouseListComponent extends AbstractCRUDComponent<WarehouseMeta>
       if (result.success) {
         this.load();
       }
+    });
+  }
+
+  import() {
+    const config = {ignoreBackdropClick: true};
+    const modalRef = this.modalService.show(WarehouseImportComponent, config);
+    let modal: AbstractModalComponent<any> = <AbstractModalComponent<any>>modalRef.content;
+    let sub = modal.onHidden.subscribe((result: ModalResult<any>) => {
+      if (result.success) {
+        this.load();
+      }
+      sub.unsubscribe();
     });
   }
 }

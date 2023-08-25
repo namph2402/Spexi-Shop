@@ -5,6 +5,8 @@ namespace App\Http\Controllers\modules\admin;
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
 use App\Models\Product;
+use App\Repository\ImportNoteDetailRepositoryInterface;
+use App\Repository\ImportNoteRepositoryInterface;
 use App\Repository\ProductCategoryRepositoryInterface;
 use App\Repository\ProductColorRepositoryInterface;
 use App\Repository\ProductRepositoryInterface;
@@ -12,12 +14,14 @@ use App\Repository\ProductSizeRepositoryInterface;
 use App\Repository\ProductTagRepositoryInterface;
 use App\Repository\PromotionRepositoryInterface;
 use App\Repository\WarehouseRepositoryInterface;
+use App\Utils\AuthUtil;
 use App\Utils\FileStorageUtil;
 use App\Utils\OfficeUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ProductController extends RestController
 {
@@ -28,15 +32,19 @@ class ProductController extends RestController
     protected $colorRepository;
     protected $sizeRepository;
     protected $warehouseRepository;
+    protected $importRepository;
+    protected $importDetailRepository;
 
     public function __construct(
-        ProductRepositoryInterface         $repository,
-        ProductCategoryRepositoryInterface $categoryRepository,
-        ProductTagRepositoryInterface      $tagRepository,
-        PromotionRepositoryInterface       $promotionRepository,
-        ProductSizeRepositoryInterface     $sizeRepository,
-        ProductColorRepositoryInterface    $colorRepository,
-        WarehouseRepositoryInterface       $warehouseRepository
+        ProductRepositoryInterface          $repository,
+        ProductCategoryRepositoryInterface  $categoryRepository,
+        ProductTagRepositoryInterface       $tagRepository,
+        PromotionRepositoryInterface        $promotionRepository,
+        ProductSizeRepositoryInterface      $sizeRepository,
+        ProductColorRepositoryInterface     $colorRepository,
+        WarehouseRepositoryInterface        $warehouseRepository,
+        ImportNoteRepositoryInterface       $importRepository,
+        ImportNoteDetailRepositoryInterface $importDetailRepository
     )
     {
         parent::__construct($repository);
@@ -47,6 +55,8 @@ class ProductController extends RestController
         $this->colorRepository = $colorRepository;
         $this->sizeRepository = $sizeRepository;
         $this->warehouseRepository = $warehouseRepository;
+        $this->importRepository = $importRepository;
+        $this->importDetailRepository = $importDetailRepository;
     }
 
     public function index(Request $request)
@@ -130,7 +140,7 @@ class ProductController extends RestController
         if ($test_name) {
             return $this->errorHad($request->input('name'));
         }
-
+        Log::info($request->note);
         try {
             DB::beginTransaction();
             $model = $this->repository->create($attributes);
@@ -449,9 +459,17 @@ class ProductController extends RestController
 
     public function import(Request $request)
     {
-        if (!$request->hasFile('file')) {
-            return $this->errorClient('Không có file');
+        $user = AuthUtil::getInstance()->getModel();
+
+        $validator = $this->validateRequest($request, [
+            'name' => 'required|max:255',
+            'file' => 'required',
+            'note' => 'required',
+        ]);
+        if ($validator) {
+            return $this->errorClient($validator);
         }
+
         $file = $request->file('file');
         if ($file->getClientOriginalExtension() != 'xlsx') {
             return $this->errorClient('Không đúng định dạng file .xlsx');
@@ -467,8 +485,8 @@ class ProductController extends RestController
             }
             foreach ($newData as $key => $row) {
                 $i = $key + 1;
-                $codeValue = trim($row[0]);
-                $categoryValue = trim($row[1]);
+                $categoryValue = trim($row[0]);
+                $codeValue = trim($row[1]);
                 $nameValue = trim($row[2]);
                 $priceValue = intval($row[3]);
                 $codeVariantValue = trim($row[4]);
@@ -477,103 +495,74 @@ class ProductController extends RestController
                 $weightValue = trim($row[7]);
                 $quantityValue = intval($row[8]);
 
-                if (empty($codeValue) || empty($categoryValue) || empty($nameValue) || empty($codeVariantValue) || empty($sizeValue) || empty($colorValue)) {
+                if (empty($categoryValue) || empty($codeValue) || empty($nameValue) || empty($codeVariantValue) || empty($sizeValue) || empty($colorValue)) {
                     return $this->errorClient('Lỗi dữ liệu dòng ' . $i);
                 }
             }
             try {
                 DB::beginTransaction();
-                foreach ($newData as $row) {
-                    $codeValue = trim($row[0]);
-                    $categoryValue = trim($row[1]);
-                    $nameValue = trim($row[2]);
-                    $priceValue = intval($row[3]);
-                    $codeVariantValue = trim($row[4]);
-                    $sizeValue = trim($row[5]);
-                    $colorValue = trim($row[6]);
-                    $weightValue = intval($row[7]);
-                    $quantityValue = intval($row[8]);
+                $import = $this->importRepository->create([
+                    'name' => $request->name,
+                    'creator_id' => $user->id,
+                    'creator_name' => $user->name,
+                    'description' => $request->note
+                ]);
 
-                    if (!array_key_exists($codeValue, $dict_products)) {
-                        // Tạo danh mục
-                        $category = $this->categoryRepository->find([WhereClause::query('name', $categoryValue)]);
-                        if (empty($category)) {
-                            $orderCategory = 0;
-                            $lastItem = $this->categoryRepository->find([], 'order:desc');
-                            if (!empty($lastItem)) {
-                                $orderCategory = $lastItem->order + 1;
-                            }
-                            $category = $this->categoryRepository->create([
-                                'name' => $categoryValue,
-                                'slug' => Str::slug($categoryValue),
-                                'order' => $orderCategory,
-                            ]);
-                        }
-
-                        // Tạo sản phẩm mới
-                        $orderProduct = 0;
-                        $lastItem = $this->repository->find([], 'order:desc');
-                        if (!empty($lastItem)) {
-                            $orderProduct = $lastItem->order + 1;
-                        }
-                        $product = $this->repository->create([
-                            'code' => $codeValue,
-                            'category_id' => $category->id,
-                            'category_slug' => $category->slug,
-                            'slug' => Str::slug($nameValue),
-                            'name' => $nameValue,
-                            'price' => $priceValue,
-                            'sale_price' => $priceValue,
-                            'order' => $orderProduct,
-                            'image' => '',
-                        ]);
+                if($import) {
+                    foreach ($newData as $row) {
+                        $categoryValue = trim($row[0]);
+                        $codeValue = trim($row[1]);
+                        $nameValue = trim($row[2]);
+                        $priceValue = intval($row[3]);
+                        $codeVariantValue = trim($row[4]);
+                        $sizeValue = trim($row[5]);
+                        $colorValue = trim($row[6]);
+                        $weightValue = doubleval($row[7]);
+                        $quantityValue = intval($row[8]);
 
                         // Tạo biến thể
                         $size = $this->sizeRepository->find([WhereClause::query('name', $sizeValue)]);
                         if (empty($size)) {
                             $size = $this->sizeRepository->create(['name' => $sizeValue]);
                         }
-
                         $color = $this->colorRepository->find([WhereClause::query('name', $colorValue)]);
                         if (empty($color)) {
                             $color = $this->colorRepository->create(['name' => $colorValue]);
                         }
 
-                        // Tạo kho
-                        $warehouse = $this->warehouseRepository->create([
-                            'product_id' => $product->id,
-                            'code' => $codeVariantValue,
-                            'size_id' => $size->id,
-                            'color_id' => $color->id,
-                            'weight' => $weightValue,
-                            'quantity' => $quantityValue,
-                        ]);
-                    } else {
-                        $product = $dict_products[$codeValue];
+                        if (!array_key_exists($codeValue, $dict_products)) {
+                            // Tạo danh mục
+                            $category = $this->categoryRepository->find([WhereClause::query('name', $categoryValue)]);
+                            if (empty($category)) {
+                                $orderCategory = 0;
+                                $lastItem = $this->categoryRepository->find([], 'order:desc');
+                                if (!empty($lastItem)) {
+                                    $orderCategory = $lastItem->order + 1;
+                                }
+                                $category = $this->categoryRepository->create([
+                                    'name' => $categoryValue,
+                                    'slug' => Str::slug($categoryValue),
+                                    'order' => $orderCategory,
+                                ]);
+                            }
 
-                        $this->repository->update($product->id, [
-                            'price' => $priceValue,
-                            'sale_price' => $priceValue,
-                        ]);
-
-                        $warehouse = $this->warehouseRepository->find([WhereClause::query('code', $codeVariantValue)]);
-
-                        if (!empty($warehouse)) {
-                            $this->warehouseRepository->update($warehouse->id, [
-                                'weight' => $weightValue,
-                                'quantity' => $warehouse->quantity + $quantityValue
+                            // Tạo sản phẩm mới
+                            $orderProduct = 0;
+                            $lastItem = $this->repository->find([], 'order:desc');
+                            if (!empty($lastItem)) {
+                                $orderProduct = $lastItem->order + 1;
+                            }
+                            $product = $this->repository->create([
+                                'code' => $codeValue,
+                                'category_id' => $category->id,
+                                'category_slug' => $category->slug,
+                                'slug' => Str::slug($nameValue),
+                                'name' => $nameValue,
+                                'price' => $priceValue,
+                                'sale_price' => $priceValue,
+                                'order' => $orderProduct,
+                                'image' => '',
                             ]);
-                        } else {
-                            // Tạo biến thể
-                            $size = $this->sizeRepository->find([WhereClause::query('name', $sizeValue)]);
-                            if (empty($size)) {
-                                $size = $this->sizeRepository->create(['name' => $sizeValue]);
-                            }
-
-                            $color = $this->colorRepository->find([WhereClause::query('name', $colorValue)]);
-                            if (empty($color)) {
-                                $color = $this->colorRepository->create(['name' => $colorValue]);
-                            }
 
                             // Tạo kho
                             $warehouse = $this->warehouseRepository->create([
@@ -584,10 +573,50 @@ class ProductController extends RestController
                                 'weight' => $weightValue,
                                 'quantity' => $quantityValue,
                             ]);
+                        } else {
+                            $product = $dict_products[$codeValue];
+
+                            $this->repository->update($product->id, [
+                                'price' => $priceValue,
+                                'sale_price' => $priceValue,
+                            ]);
+
+                            $warehouse = $this->warehouseRepository->find([WhereClause::query('code', $codeVariantValue)]);
+
+                            if (!empty($warehouse)) {
+                                $this->warehouseRepository->update($warehouse->id, [
+                                    'weight' => $weightValue,
+                                    'quantity' => $warehouse->quantity + $quantityValue
+                                ]);
+                            } else {
+                                // Tạo kho
+                                $warehouse = $this->warehouseRepository->create([
+                                    'product_id' => $product->id,
+                                    'code' => $codeVariantValue,
+                                    'size_id' => $size->id,
+                                    'color_id' => $color->id,
+                                    'weight' => $weightValue,
+                                    'quantity' => $quantityValue,
+                                ]);
+                            }
                         }
+
+                        $this->importDetailRepository->create([
+                            'note_id' => $import->id,
+                            'name' => $nameValue,
+                            'product_id' => $product->id,
+                            'product_code' => $product->code,
+                            'warehouse_id' => $warehouse->id,
+                            'warehouse_code' => $warehouse->code,
+                            'price' => $priceValue,
+                            'size' => $sizeValue,
+                            'color' => $colorValue,
+                            'quantity' => $quantityValue,
+                            'weight' => $weightValue,
+                        ]);
+                        DB::commit();
+                        $dict_products[$product->code] = $product;
                     }
-                    DB::commit();
-                    $dict_products[$product->code] = $product;
                 }
                 return $this->success([]);
             } catch (\Exception $e) {
@@ -596,6 +625,43 @@ class ProductController extends RestController
                 return $this->error($e->getMessage());
             }
             sleep(0.5);
+        }
+    }
+
+    public function export()
+    {
+        $xlsx = [
+            'data' => [['Mã', 'Tên SP', 'Size', 'Màu', 'Giá nhập', 'Giá bán', 'Số lượng', 'Ghi chú']]
+        ];
+
+        $data = $this->warehouseRepository->get([],'code:asc',['product','sizes','colors']);
+
+        foreach ($data as $row) {
+            array_push($xlsx['data'], [
+                $row->code,
+                $row->product->name,
+                $row->sizes->name,
+                $row->colors->name,
+                $row->product->price,
+                $row->product->sale_price,
+                $row->quantity,
+                null
+            ]);
+        }
+
+        try {
+            $writer = OfficeUtil::writeXLSX($xlsx);
+            $response = new StreamedResponse(
+                function () use ($writer) {
+                    $writer->save('php://output');
+                }
+            );
+            $response->headers->set('Content-Type', 'application/vnd.ms-excel');
+            $response->headers->set('Content-Disposition', 'attachment;filename="ket_qua_' . time() . '.xlsx"');
+            $response->headers->set('Cache-Control', 'max-age=0');
+            return $response;
+        } catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
+            return $this->error($e->getMessage());
         }
     }
 }

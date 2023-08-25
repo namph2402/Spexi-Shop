@@ -15,6 +15,6 @@ class ImportingNote extends Model
 
     public function product()
     {
-        return $this->belongsTo(ContentProduct::class, 'product_code', 'code');
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 }

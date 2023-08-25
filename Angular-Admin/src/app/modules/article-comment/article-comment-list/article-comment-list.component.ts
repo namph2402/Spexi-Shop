@@ -4,8 +4,6 @@ import {BsModalRef, BsModalService, ModalOptions} from 'ngx-bootstrap';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ArticleCommentService} from '../article-comment.service';
 import {ArticleCommentMeta} from '../article-comment.meta';
-import {ArticleCommentCreateComponent} from '../article-comment-create/article-comment-create.component';
-import {ArticleCommentEditComponent} from '../article-comment-edit/article-comment-edit.component';
 import {ObjectUtil} from '../../../core/utils';
 import {AppPagination, ModalResult} from '../../../core/common';
 
@@ -40,11 +38,11 @@ export class ArticleCommentListComponent extends AbstractCRUDModalComponent<Arti
   }
 
   getCreateModalComponent(): any {
-    return ArticleCommentCreateComponent;
+    return null;
   }
 
   getEditModalComponent(): any {
-    return ArticleCommentEditComponent;
+    return null;
   }
 
   getCreateModalComponentOptions(): ModalOptions {
@@ -103,31 +101,5 @@ export class ArticleCommentListComponent extends AbstractCRUDModalComponent<Arti
       this.service.toastSuccessfully(titleMsg);
     }, () => this.service.toastFailed(titleMsg));
     this.load();
-  }
-
-  createComment() {
-    let modalOptions = Object.assign(this.defaultModalOptions(), this.getCreateModalComponentOptions());
-    const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, modalOptions);
-    const modalRef = this.modalService.show(this.getCreateModalComponent(), config);
-    let modal: AbstractModalComponent<ArticleCommentMeta> = <AbstractModalComponent<ArticleCommentMeta>>modalRef.content;
-    modal.setModel(this.initNewModel());
-    modal.onHidden.subscribe((result: ModalResult<ArticleCommentMeta>) => {
-      if (result.success) {
-        this.load();
-      }
-    });
-  }
-
-  editComment(item) {
-    let modalOptions = Object.assign(this.defaultModalOptions(), this.getEditModalComponentOptions());
-    const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, modalOptions);
-    const modalRef = this.modalService.show(this.getEditModalComponent(), config);
-    let modal: AbstractModalComponent<ArticleCommentMeta> = <AbstractModalComponent<ArticleCommentMeta>>modalRef.content;
-    modal.setModel(item);
-    modal.onHidden.subscribe((result: ModalResult<ArticleCommentMeta>) => {
-      if (result.success) {
-        this.load();
-      }
-    });
   }
 }

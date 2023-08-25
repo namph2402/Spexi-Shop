@@ -41,12 +41,20 @@ class AccountController extends RestController
     {
         $username = $request->input('username');
         $password = $request->input('password');
-        if (Auth::attempt(['username' => $username, 'password' => $password])) {
-            if (Auth::user()->status == 1) {
-                $request->session()->regenerate();
-                return $this->successView('/', 'Bạn đã đăng nhập thành công');
-            } else {
-                return $this->errorView('Tài khoản bị khóa hoặc chưa được kích hoạt');
+
+        $user = $this->repository->find([WhereClause::orQuery([WhereClause::query('username', $username), WhereClause::query('email', $username)])]);
+
+        if($user) {
+            if (Auth::attempt(['username' => $user->username, 'password' => $password])) {
+                if (Auth::user()->status == 1) {
+                    $request->session()->regenerate();
+                    return $this->successView('/', 'Bạn đã đăng nhập thành công');
+                } else {
+                    return $this->errorView('Tài khoản bị khóa hoặc chưa được kích hoạt');
+                }
+            }
+            else {
+                return $this->errorView('Mật khẩu không đúng');
             }
         } else {
             return $this->errorView('Tài khoản không đúng');

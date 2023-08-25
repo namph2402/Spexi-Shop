@@ -16,7 +16,7 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('code');
-            $table->integer('user_id');
+            $table->integer('user_id')->index();
             $table->string('customer_name');
             $table->string('customer_phone');
             $table->string('customer_address');
@@ -30,7 +30,7 @@ class CreateOrdersTable extends Migration
             $table->double('cod_fee', 20, 2);
             $table->double('discount', 20, 2);
             $table->text('note')->nullable();
-            $table->integer('voucher_id')->nullable();
+            $table->integer('voucher_id')->index()->nullable();
             $table->string('payment_type');
             $table->boolean('payment_status');
             $table->string('order_status')->default('Lên đơn');

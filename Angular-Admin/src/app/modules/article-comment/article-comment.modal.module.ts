@@ -1,7 +1,5 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ArticleCommentCreateComponent} from './article-comment-create/article-comment-create.component';
-import {ArticleCommentEditComponent} from './article-comment-edit/article-comment-edit.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ModalModule, PaginationModule, PopoverModule} from 'ngx-bootstrap';
 import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
@@ -22,9 +20,9 @@ import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown';
     CKEditorModule,
     AngularMultiSelectModule,
   ],
-  declarations: [ArticleCommentCreateComponent, ArticleCommentEditComponent],
-  entryComponents: [ArticleCommentCreateComponent, ArticleCommentEditComponent],
-  exports: [ArticleCommentCreateComponent, ArticleCommentEditComponent]
+  declarations: [],
+  entryComponents: [],
+  exports: []
 })
 export class ArticleCommentModalModule {
 }

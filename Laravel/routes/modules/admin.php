@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth.admin']], function () {
     // Product
     Route::get('products/loadTag', 'ProductController@loadTag');
     Route::post('products/import', 'ProductController@import');
+    Route::get('products/export', 'ProductController@export');
     Route::resource('products', 'ProductController')->except(['update']);
     Route::group(['prefix' => 'products/{id}'], function () {
         Route::post('', 'ProductController@update');
@@ -95,7 +96,6 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::post('attach_tags', 'ProductTagController@attachTags');
         Route::post('detach_tags', 'ProductTagController@detachTags');
     });
-    Route::resource('product_tag_mappings', 'ProductTagMappingController');
 
     // Product variant
     Route::resource('product_sizes', 'ProductSizeController');
@@ -111,12 +111,13 @@ Route::group(['middleware' => ['auth.admin']], function () {
     });
 
     // Warehouse
+    Route::post('warehouses/import', 'WarehouseController@import');
+    Route::get('warehouses/export', 'WarehouseController@export');
     Route::resource('warehouses', 'WarehouseController');
     Route::group(['prefix' => 'warehouses/{id}'], function () {
         Route::post('enable', 'WarehouseController@enable');
         Route::post('disable', 'WarehouseController@disable');
     });
-
 
     // Promotion
     Route::resource('promotions', 'PromotionController')->except(['update']);
@@ -174,7 +175,6 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::post('attach_tags', 'PostTagController@attachTags');
         Route::post('detach_tags', 'PostTagController@detachTags');
     });
-    Route::resource('post_tag_mappings', 'PostTagMappingController');
 
     // Related post
     Route::group(['prefix' => 'related_posts'], function () {
@@ -231,4 +231,6 @@ Route::group(['middleware' => ['auth.admin']], function () {
     });
     Route::resource('shipping_services', 'ShippingServiceController');
     Route::resource('shipping_stores', 'ShippingStoreController');
+
+    Route::resource('imports', 'ImportController');
 });

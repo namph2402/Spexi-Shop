@@ -79,6 +79,7 @@ export class ProductTagItemCreateComponent extends AbstractModalComponent<Produc
   assign(item: ProductMeta) {
     (<ProductTagService>this.service).attachTags(this.model.id, [item.id]).subscribe((res: ProductMeta) => {
       this.service.toastSuccessfully('Thêm tag');
+      this.loaded();
     }, () => this.service.toastFailed('Thêm tag'));
   }
 

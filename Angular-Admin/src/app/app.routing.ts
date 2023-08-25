@@ -96,4 +96,8 @@ export const MODULES_ROUTING = [
     path: 'store_posts',
     loadChildren: 'app/modules/store-post/store-post.module#StorePostModule'
   },
+  {
+    path: 'imports',
+    loadChildren: 'app/modules/import/import.module#ImportModule'
+  },
 ];

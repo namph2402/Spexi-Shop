@@ -54,9 +54,12 @@
           </div>
         </form>
       </div>
-      <div class="col-xs-6 col-xs-offset-6" style="text-align: right;">
+      <div class="col-xs-6 col-xs-offset-6 text-right">
         <button (click)="import()" class="btn btn-default " type="button">
           <i class="fa fa-upload"></i> Nhập file excel
+        </button>
+        <button (click)="export('ton_kho')" class="btn btn-default" type="button">
+          <i class="fa fa-download"></i>Xuất file excel
         </button>
         <button (click)="createProduct()" class="btn btn-primary" type="button">
           <i class="fa fa-plus"></i> Thêm mới

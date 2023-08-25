@@ -17,12 +17,15 @@ class CreateImportingNoteDetailsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('note_id')->index();
             $table->string('name');
-            $table->integer('inventory_product_id')->index()->nullable();
-            $table->integer('product_id')->index()->nullable();
-            $table->string('product_code')->nullable();
-            $table->string('size')->nullable();
-            $table->integer('quantity')->default(1);
+            $table->integer('product_id')->index();
+            $table->string('product_code');
+            $table->integer('warehouse_id')->index();
+            $table->string('warehouse_code');
             $table->integer('price')->default(0);
+            $table->string('size');
+            $table->string('color');
+            $table->integer('quantity');
+            $table->double('weight', 20, 2);
             $table->timestamps();
         });
     }

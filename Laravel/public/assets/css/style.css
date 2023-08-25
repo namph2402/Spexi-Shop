@@ -4523,7 +4523,6 @@ input[type="button"].btn-block {
 }
 
 @media (max-width: 575.98px) {
-
     .navbar-expand-sm>.container,
     .navbar-expand-sm>.container-fluid,
     .navbar-expand-sm>.container-sm,
@@ -11595,4 +11594,49 @@ h6 {
     font-weight: bold;
     background: #feffc9;
     padding: 10px;
+}
+
+@media (max-width: 768px) {
+    .search-group {
+        margin: 0 !important;
+    }
+
+    .search-variant {
+        display: flex;
+        background: white;
+    }
+
+    .search-color,
+    .search-size {
+        width: 50%;
+    }
+
+    .search-color h5,
+    .search-size h5 {
+        margin-bottom: 10px !important;
+    }
+
+}
+
+@media (max-width: 575.98px) {
+    .product-list {
+        padding: 5px !important;
+    }
+
+    .product {
+        padding: 10px;
+        width:50%;
+    }
+
+    .product-item {
+        margin: 0 !important;
+    }
+
+    .product-text {
+        padding: 0 !important;
+    }
+
+    .product-text-price {
+        font-size: 14px;
+    }
 }
