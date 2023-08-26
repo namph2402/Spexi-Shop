@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="container-fluid">
-        <form action="/checkout/createOrder" class="row px-xl-5" method="POST" name="formCheckout" id="formCheckout">
+        <form action="/checkout/order" class="row px-xl-5" method="POST" name="formCheckout" id="formCheckout">
             <div class="col-lg-6">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Thông tin
                         nhận hàng</span></h5>
@@ -184,21 +184,20 @@
                     <div class="bg-light p-30">
                         <div class="form-group">
                             <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment_type" value="manual"
+                                <input type="radio" class="custom-control-input" name="payment_type" value="cod"
                                     id="directcheck" checked>
                                 <label class="custom-control-label" for="directcheck">Khi nhận hàng</label>
                             </div>
                         </div>
                         <div class="form-group mb-4">
                             <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment_type" value="bank"
+                                <input type="radio" class="custom-control-input" name="payment_type" value="vnpay"
                                     id="banktransfer">
-                                <label class="custom-control-label" for="banktransfer">Chuyển khoản</label>
+                                <label class="custom-control-label" for="banktransfer">Thanh toán Vnpay</label>
                             </div>
                         </div>
                         <button class="btn btn-block btn-primary font-weight-bold py-3" id="btnOrder" type="submit"
-                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">Đặt
-                            hàng
+                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">Đặt hàng
                         </button>
                     </div>
                 </div>

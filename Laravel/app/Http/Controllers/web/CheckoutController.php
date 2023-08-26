@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\web;
 
+use App\Common\Enum\OrderPaymentStatusEnum;
+use App\Common\Enum\PaymentMethodEnum;
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
 use App\Models\Order;
@@ -10,12 +12,15 @@ use App\Repository\DistrictRepositoryInterface;
 use App\Repository\NotificationRepositoryInterface;
 use App\Repository\OrderDetailRepositoryInterface;
 use App\Repository\OrderRepositoryInterface;
+use App\Repository\PaymentMethodRepositoryInterface;
+use App\Repository\PaymentTransactionRepositoryInterface;
 use App\Repository\PromotionRepositoryInterface;
 use App\Repository\ProvinceRepositoryInterface;
 use App\Repository\ShippingFeeRepositoryInterface;
 use App\Repository\UserProfileRepositoryInterface;
 use App\Repository\WardRepositoryInterface;
 use App\Repository\VoucherRepositoryInterface;
+use App\Utils\Payments\VnPayUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -34,19 +39,23 @@ class CheckoutController extends RestController
     protected $notificationRepository;
     protected $shipFeeRepository;
     protected $promotionRepository;
+    protected $paymentMethodRepository;
+    protected $transactionRepository;
 
     public function __construct(
-        OrderRepositoryInterface        $repository,
-        OrderDetailRepositoryInterface  $detailRepository,
-        ProvinceRepositoryInterface     $provinceRepository,
-        DistrictRepositoryInterface     $districtRepository,
-        WardRepositoryInterface         $wardRepository,
-        CartItemRepositoryInterface     $itemRepository,
-        UserProfileRepositoryInterface  $profileRepository,
-        VoucherRepositoryInterface      $voucherRepository,
-        NotificationRepositoryInterface $notificationRepository,
-        ShippingFeeRepositoryInterface  $shipFeeRepository,
-        PromotionRepositoryInterface    $promotionRepository
+        OrderRepositoryInterface         $repository,
+        OrderDetailRepositoryInterface   $detailRepository,
+        ProvinceRepositoryInterface      $provinceRepository,
+        DistrictRepositoryInterface      $districtRepository,
+        WardRepositoryInterface          $wardRepository,
+        CartItemRepositoryInterface      $itemRepository,
+        UserProfileRepositoryInterface   $profileRepository,
+        VoucherRepositoryInterface       $voucherRepository,
+        NotificationRepositoryInterface  $notificationRepository,
+        ShippingFeeRepositoryInterface   $shipFeeRepository,
+        PromotionRepositoryInterface     $promotionRepository,
+        PaymentMethodRepositoryInterface $paymentMethodRepository,
+        PaymentTransactionRepositoryInterface $transactionRepository
     ) {
         parent::__construct($repository);
         $this->detailRepository = $detailRepository;
@@ -59,6 +68,8 @@ class CheckoutController extends RestController
         $this->notificationRepository = $notificationRepository;
         $this->shipFeeRepository = $shipFeeRepository;
         $this->promotionRepository = $promotionRepository;
+        $this->paymentMethodRepository = $paymentMethodRepository;
+        $this->transactionRepository = $transactionRepository;
     }
 
     public function index(Request $request)
@@ -73,11 +84,12 @@ class CheckoutController extends RestController
         $items = explode(",", $itemC);
         $clauses = [WhereClause::queryIn('id', $items)];
         $with = ['product', 'warehouse.sizes', 'warehouse.colors'];
-
         $provinces = $this->provinceRepository->get([]);
-        $itemCheckout = $this->itemRepository->get($clauses, null, $with);
         $profile = $this->profileRepository->find([WhereClause::query('user_id', Auth::user()->id)]);
-
+        $itemCheckout = $this->itemRepository->get($clauses, null, $with);
+        if(!$request->has('item') || count($itemCheckout) <= 0) {
+            return redirect('/cart');
+        }
         if ($profile->province != null) {
             $provinceUser = $this->provinceRepository->find([WhereClause::query('name', $profile->province)], null, ['districts']);
         }
@@ -90,11 +102,9 @@ class CheckoutController extends RestController
                 $shipFee = $this->shipFeeRepository->find([WhereClause::query('ward_id', $wardUser->id)])->fee;
             }
         }
-
         foreach ($itemCheckout as $item) {
             $total += $item->amount;
         }
-
         $promotion = $this->promotionRepository->find(
             [
                 WhereClause::queryIn('type', ['3', '4']),
@@ -104,7 +114,6 @@ class CheckoutController extends RestController
             ],
             'type:desc,min_order_value:desc'
         );
-
         if (!empty($promotion)) {
             if ($promotion->type == 4) {
                 $discount = ($total * $promotion->discount_percent / 100) + $promotion->discount_value;
@@ -113,7 +122,6 @@ class CheckoutController extends RestController
             }
         }
         $totalAll = $total + $shipFee - $discount;
-
         $dataItem = [
             'total' => $total,
             'shipFee' => $shipFee,
@@ -135,20 +143,18 @@ class CheckoutController extends RestController
             'amount' => 'required|numeric',
             'shipping_fee' => 'required|numeric',
             'total_amount' => 'required|numeric',
+            'payment_type' => 'required|max:255',
             'items' => 'required',
         ]);
         if ($validator) {
             return $this->errorClient($validator);
         }
-
         $items = explode(",", $request->items);
         $clauses = [WhereClause::queryIn('id', $items)];
         $with = ['product', 'warehouse.sizes', 'warehouse.colors'];
-
         $province = $this->provinceRepository->findById($request->province_id);
         $district = $this->districtRepository->findById($request->district_id);
         $ward = $this->wardRepository->findById($request->ward_id);
-
         $attributes = $request->only([
             'customer_name',
             'customer_phone',
@@ -157,15 +163,12 @@ class CheckoutController extends RestController
             'amount',
             'shipping_fee',
             'total_amount',
-            'payment_type',
             'discount'
         ]);
-
         $code = 'DH' . Str::random(8);
         while (Order::query()->where('code', $code)->exists()) {
             $code = 'DH' . Str::random(8);
         }
-
         $attributes['code'] = $code;
         $attributes['user_id'] = Auth::user()->id;
         $attributes['province'] = $province->name;
@@ -175,13 +178,12 @@ class CheckoutController extends RestController
         $attributes['payment_status'] = 0;
         $attributes['date_created'] = date('Y-m-d');
         $attributes['voucher_id'] = $request->voucherId;
-
-        if ($request->payment_type == 'manual') {
-            $attributes['cod_fee'] = $request->total_amount;
+        $attributes['cod_fee'] = $request->total_amount;
+        if($request->payment_type == 'cod') {
+            $attributes['payment_type'] = PaymentMethodEnum::COD;
         } else {
-            $attributes['cod_fee'] = 0;
+            $attributes['payment_type'] = PaymentMethodEnum::VNPAY;
         }
-
         try {
             DB::beginTransaction();
             $order = $this->repository->create($attributes);
@@ -203,13 +205,16 @@ class CheckoutController extends RestController
                 }
             }
             if ($order) {
+                if ($request->payment_type == 'vnpay') {
+                    $paymentMethod = $this->paymentMethodRepository->find([WhereClause::query('name', PaymentMethodEnum::VNPAY)]);
+                    $paymentProcess = VnPayUtil::getInstance()->createRequest($order, $paymentMethod, $items);
+                } else {
+                    $paymentProcess = null;
+                    $paymentMethod = null;
+                }
+
                 if ($attributes['voucher_id'] != null) {
-                    $this->voucherRepository->update(
-                        $attributes['voucher_id'],
-                        [
-                            'remain_quantity' => DB::raw('`remain_quantity` - 1')
-                        ]
-                    );
+                    $this->voucherRepository->update($attributes['voucher_id'],['remain_quantity' => DB::raw('`remain_quantity` - 1')]);
                 }
                 $this->notificationRepository->create(
                     [
@@ -222,11 +227,51 @@ class CheckoutController extends RestController
                 );
             }
             DB::commit();
-            return $this->successView('cart', 'Thêm đơn hàng thành công');
+            return view('orders.payment', compact('order', 'paymentProcess', 'paymentMethod'));
         } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();
             return $this->errorView('Thêm đơn hàng thất bại');
+        }
+    }
+
+    public function vnpay(Request $request)
+    {
+        $inputData = $request->all();
+        $orderCode = $inputData['vnp_TxnRef'];
+        $order = $this->repository->find([WhereClause::query('code', $orderCode)]);
+        if (empty($order)) {
+            return VnPayUtil::responseOrderNotFoundToIPN();
+        }
+        if ($order->payment_type != PaymentMethodEnum::VNPAY) {
+            return VnPayUtil::responseUnknownToIPN();
+        }
+        $paymentMethod = $this->paymentMethodRepository->find([WhereClause::query('name', PaymentMethodEnum::VNPAY)]);
+        $payment = VnPayUtil::getInstance()->updateIPN($inputData, $order, $paymentMethod);
+        if ($payment['status'] == OrderPaymentStatusEnum::COMPLETED) {
+            try {
+                DB::beginTransaction();
+                $this->repository->update($order, [
+                    'cod_fee' => 0,
+                    'payment_status' => 1,
+                ]);
+                $this->transactionRepository->create([
+                    'order_id' => $order->id,
+                    'order_code' => $order->code,
+                    'method' => $order->payment_status,
+                    'status' => $payment['status'],
+                    'message' => $payment['message'],
+                    'dump_data' => json_encode($inputData)
+                ]);
+                DB::commit();
+                return $this->successView('cart', 'Đã thanh toán đơn hàng thành công');
+            } catch (\Exception $e) {
+                Log::error($e);
+                DB::rollBack();
+                return VnPayUtil::responseUnknownToIPN();
+            }
+        } else {
+            return $this->successView('cart', 'Thanh toán đơn hàng không thành công');
         }
     }
 }

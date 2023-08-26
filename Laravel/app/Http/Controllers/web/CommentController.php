@@ -25,16 +25,13 @@ class CommentController extends RestController
         $with = [];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:desc');
-
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
         }
-
         if ($request->has('search') && Str::length($request->search) == 0) {
             $data = '';
             return $this->success($data);
         }
-
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {

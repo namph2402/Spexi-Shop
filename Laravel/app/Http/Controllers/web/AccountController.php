@@ -41,9 +41,7 @@ class AccountController extends RestController
     {
         $username = $request->input('username');
         $password = $request->input('password');
-
         $user = $this->repository->find([WhereClause::orQuery([WhereClause::query('username', $username), WhereClause::query('email', $username)])]);
-
         if($user) {
             if (Auth::attempt(['username' => $user->username, 'password' => $password])) {
                 if (Auth::user()->status == 1) {
@@ -72,10 +70,8 @@ class AccountController extends RestController
         $username = $request->input('username');
         $email = $request->input('email');
         $password = $request->input('password');
-
         $checkUser = $this->repository->find([WhereClause::query('username', $username)]);
         $checkEmail = $this->repository->find([WhereClause::query('email', $email)]);
-
         if ($checkUser != null) {
             return redirect()->back()->with('msg_error', 'Tên đăng nhập đã tồn tại')->withInput();
         } else if ($checkEmail != null && $checkEmail->email_verified_at != null) {

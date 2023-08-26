@@ -15,15 +15,12 @@
     </div>
     <div class="container-fluid">
         @if (count($cart->items) > 0)
-            <form action="/checkout" method="POST" id="checkout">
+            <form action="/checkout" method="GET" id="checkout">
                 <div class="col-lg-12 table-responsive mb-5">
                     <table class="table table-light table-borderless table-hover text-center mb-0">
                         <thead class="thead-dark">
                             <tr>
-                                <th style="width:5%">
-                                    <input type="checkbox" id="cart_item_all" onclick="CheckAll(this)"
-                                        style="width: 20px; height: 20px; margin-top: 10px;">
-                                </th>
+                                <th style="width:5%">#</th>
                                 <th style="width:10%">Ảnh</th>
                                 <th style="width:35%">Sản phẩm</th>
                                 <th style="width:10%">Loại</th>
@@ -36,14 +33,10 @@
                         <tbody class="align-middle">
                             @foreach ($cart->items as $item)
                                 <tr>
-                                    <td>
-                                        <input type="checkbox" name="cart_item" value="{{ $item->id }}"
-                                            style="width: 20px; height: 20px; margin-top: 10px;">
-                                    </td>
+                                    <td><input type="checkbox" class="cart-item" value="{{ $item->id }}"></td>
                                     <td><img src="{{ $item->product->image }}" style="width: 50px;"></td>
                                     <td class="text-left">
-                                        <a href="{{ $item->product->full_path }}"
-                                            class="text-truncate">{{ $item->product->name }}</a>
+                                        <a href="{{ $item->product->full_path }}" class="text-truncate">{{ $item->product->name }}</a>
                                     </td>
                                     <td class="align-middle">
                                         {{ $item->warehouse->sizes->name }}, {{ $item->warehouse->colors->name }}
@@ -101,7 +94,10 @@
                     <p class="err-text err-cart d-none" id="errText">Vui lòng chọn sản phẩm mua hàng</p>
                 </div>
                 <input type="text" hidden name="item" id="item" value="">
-                @csrf
+            </form>
+            <form action="/vnpay" method="post">
+                <button type="submit" name="redirect">VnPay</button>
+            @csrf
             </form>
         @else
             <div class="row px-xl-5">

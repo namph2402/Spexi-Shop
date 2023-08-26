@@ -213,7 +213,7 @@
     $(document).ready(function () {
         $('#checkout').on('submit', function (e) {
             var arrItem = [];
-            var checkbox = document.getElementsByName('cart_item');
+            var checkbox = document.getElementsByClassName('cart-item');
             for (var i = 0; i < checkbox.length; i++) {
                 if (checkbox[i].checked === true) {
                     arrItem.push(checkbox[i].value);
@@ -388,15 +388,6 @@ function setParamsPage(name, value) {
     window.location.search = urlParams
 }
 
-function CheckAll(parent) {
-    var ids = document.getElementsByTagName('input');
-    for (var i = 0; i < ids.length; i++) {
-        if (ids[i].name == "cart_item") {
-            ids[i].checked = parent.checked;
-        }
-    }
-}
-
 function onProvinceIdChange() {
     const provinceId = document.getElementById('province_id').value;
     Checkout.getInstance().loadAllDistricts(provinceId, (data) => {
@@ -524,7 +515,6 @@ Array.prototype.forEach.call(document.querySelectorAll('.inputfile'), function (
             fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length);
         else
             fileName = e.target.value.split('\\').pop();
-
         if (fileName)
             label.querySelector('span').innerHTML = fileName;
         else

@@ -30,6 +30,13 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::post('repassword', 'StaffController@repassword');
     });
 
+    // Payment_method
+    Route::resource('payment_methods', 'PaymentMethodController');
+    Route::group(['prefix' => 'payment_methods/{id}'], function () {
+        Route::post('destroyConfig', 'PaymentMethodController@destroyConfig');
+        Route::post('destroyPaymentMethod', 'PaymentMethodController@destroy');
+    });
+
     // User
     Route::resource('users', 'UserController');
     Route::group(['prefix' => 'users/{id}'], function () {

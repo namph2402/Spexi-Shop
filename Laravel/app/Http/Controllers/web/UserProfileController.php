@@ -59,7 +59,6 @@ class UserProfileController extends RestController
             $wardUser = $this->wardRepository->find([WhereClause::query('name', $profile->ward)]);
         }
         $provinces = $this->provinceRepository->get([]);
-
         return view('profile.user', compact('profile','provinces','provinceUser', 'districtUser', 'wardUser'));
     }
 
@@ -84,19 +83,15 @@ class UserProfileController extends RestController
             'phone',
             'address'
         ]);
-
         $province = $this->provinceRepository->findById($request->province_id);
         $district = $this->districtRepository->findById($request->district_id);
         $ward = $this->wardRepository->findById($request->ward_id);
-
         if(!$province || !$district || !$ward) {
             return $this->errorView('Địa chỉ không đúng');
         }
-
         $attributes['province'] = $province->name;
         $attributes['district'] = $district->name;
         $attributes['ward'] = $ward->name;
-
         if ($request->file != null) {
             $image = FileStorageUtil::putFile('avatar', $request->file('file'));
             $attributes['avatar'] = $image;

@@ -25,12 +25,10 @@ class FormDataController extends RestController
             return $this->errorClient($validator);
         }
         $attributes['value'] = $request->email;
-
         $test_email = $this->repository->find([WhereClause::query('value', $request->email)]);
         if ($test_email) {
             return $this->successViewBack('Email của bạn đã được thêm');
         }
-
         try {
             DB::beginTransaction();
             $this->repository->create($attributes);

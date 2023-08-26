@@ -48,28 +48,18 @@ class CartController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
-
         $attributes = $request->only([
             'product_id',
             'quantity'
         ]);
-
         $warehouse = $this->warehouseRepository->find([WhereClause::query('size_id', $request->size_id), WhereClause::query('color_id', $request->color_id)]);
         $product = $this->productRepository->findByID($request->product_id);
         $cart = $this->repository->find([WhereClause::query('user_id', Auth::user()->id)]);
-
         $attributes['cart_id'] = $cart->id;
         $attributes['warehouse_id'] = $warehouse->id;
         $attributes['amount'] = $product->sale_price * $request->quantity;
-
-        $clause = [
-            WhereClause::query('cart_id', $cart->id),
-            WhereClause::query('product_id', $request->product_id),
-            WhereClause::query('warehouse_id', $warehouse->id),
-        ];
-
+        $clause = [WhereClause::query('cart_id', $cart->id), WhereClause::query('product_id', $request->product_id), WhereClause::query('warehouse_id', $warehouse->id),];
         $test_item = $this->itemRepository->find($clause);
-
         try {
             DB::beginTransaction();
             if ($test_item) {
@@ -93,23 +83,19 @@ class CartController extends RestController
     {
         $quantity = [];
         $totalAmount = 0;
-
         $item =  $this->itemRepository->findById($id, ['product']);
         if (empty($item)) {
             return $this->errorNotFoundView();
         }
-
         if ($request->quantity > 0) {
             $data = $this->itemRepository->update($id, [
                 'quantity' => $request->quantity,
                 'amount' => $request->quantity * $item->product->sale_price,
             ]);
-
             $cart = $this->repository->find(WhereClause::query('cart_id', $item->cart_id), null, ['items']);
             foreach ($cart->items as $i) {
                 $totalAmount += $i->amount;
             }
-
             $quantity = [
                 'id' =>  $data->id,
                 'quantity' =>  $data->quantity,

@@ -11596,6 +11596,12 @@ h6 {
     padding: 10px;
 }
 
+.cart-item {
+    width: 20px;
+    height: 20px;
+    margin-top: 10px;
+}
+
 @media (max-width: 768px) {
     .search-group {
         margin: 0 !important;
