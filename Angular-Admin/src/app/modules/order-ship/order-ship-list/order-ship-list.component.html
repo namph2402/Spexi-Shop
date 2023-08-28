@@ -114,10 +114,20 @@
                   (click)="shipping(item.shipping)">
                   <i class="fa fa-truck"></i>
                 </button>
-                <button *ngIf="item.shipping.status == 'Đang giao'" type="button" class="btn btn-success margin-r-5" style="width: 30px; height: 30px; padding: 0;"
-                  (click)="complete(item.shipping)">
-                  <i class="fa fa-check"></i>
-                </button>
+              <ng-template [ngIf]="item.shipping.status == 'Đang giao'">
+                  <button type="button" class="btn btn-success margin-r-5" style="width: 30px; height: 30px; padding: 0;"
+                    (click)="complete(item.shipping)">
+                    <i class="fa fa-check"></i>
+                  </button>
+                  <button type="button" class="btn btn-warning margin-r-5" style="width: 30px; height: 30px; padding: 0;"
+                    (click)="complete(item.shipping)">
+                    <i class="fa fa-refresh"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger margin-r-5" style="width: 30px; height: 30px; padding: 0;"
+                    (click)="complete(item.shipping)">
+                    <i class="fa fa-remove"></i>
+                  </button>
+                </ng-template>
               </div>
             </div>
           </td>

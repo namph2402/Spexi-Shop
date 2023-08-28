@@ -103,12 +103,12 @@ export class OrderEditComponent extends AbstractModalComponent<OrderMeta> {
         {
           id: 1,
           name: "Thanh toán khi nhận hàng",
-          value: "manual"
+          value: "CoD"
         },
         {
           id: 2,
-          name: "Chuyển khoản trực tiếp",
-          value: "transfer"
+          name: "Chuyển khoản VNPay",
+          value: "VNPay"
         },
       ]),
       FieldForm.createSelect('Trạng thái thanh toán', 'payment_status', '', [

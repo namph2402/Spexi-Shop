@@ -1,0 +1,210 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-12">
+        <form [formGroup]="searchForm" (ngSubmit)="load()">
+          <div class="form-group col-md-6" *ngFor="let f of searchControls">
+            <ng-template [ngIf]="f.type=='input'">
+              <label [for]="f.formControl">
+                {{f.label}}
+              </label>
+              <input [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                     class="form-control"
+                     [placeholder]="f.placeHolder" [type]="f.typeof">
+            </ng-template>
+            <ng-template [ngIf]="f.type=='textarea'">
+              <label [for]="f.formControl">
+                {{f.label}}
+              </label>
+              <textarea [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                        class="form-control"
+                        [placeholder]="f.placeHolder">
+          </textarea>
+            </ng-template>
+            <ng-template [ngIf]="f.type=='checkbox'">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" [id]="f.formControl" [name]="f.formControl"
+                         [formControlName]="f.formControl">
+                  {{f.label}}
+                </label>
+              </div>
+            </ng-template>
+            <ng-template [ngIf]="f.type=='select'">
+              <label [for]="f.formControl">
+                {{f.label}}
+              </label>
+              <select [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+                      class="form-control">
+                <option *ngFor="let option of f.data" [value]="option['id']">{{option['name']}}</option>
+              </select>
+            </ng-template>
+            <ng-template [ngIf]="f.type=='select2'">
+              <label [for]="f.formControl">
+                {{f.label}}
+              </label>
+              <angular2-multiselect [id]="f.formControl" [formControlName]="f.formControl"
+                                    [data]="f.data" [settings]="f.config">
+              </angular2-multiselect>
+            </ng-template>
+          </div>
+          <div class="col-md-12">
+            <button class="btn btn-default" type="submit" [disabled]="!searchForm.valid">
+              Tìm kiếm
+            </button>
+            <button class="btn btn-default" type="button" (click)="removeFilter()">
+              Xóa lọc
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-6 col-xs-offset-6">
+        <button type="button" title="Tạo mới từ khóa" class="btn btn-primary pull-right" (click)="addPayment()"><i
+          class="fa fa-plus-square"></i> Thêm mới
+        </button>
+      </div>
+    </div>
+  </div>
+  <table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>Cấu hình thanh toán</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="odd" *ngFor="let item of list;let i = index">
+      <td>
+        <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-xs-12" style="display: flex; justify-content: space-between; align-items: center">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapse{{i}}">{{item.name}} </a>
+                  </h4>
+                  <h4><button type="button" title="Xóa banner" class="btn btn-danger btn-sm" mwlConfirmationPopover
+                              popoverTitle="Xóa"
+                              popoverMessage="Bạn thực sự muốn xóa?"
+                              placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                              cancelText="No <i class='fa fa-remove'></i>" (confirm)="destroy(item, i)">
+                    <i class="fa fa-remove"></i>
+                  </button>
+                </h4>
+                </div>
+              </div>
+            </div>
+
+            <div id="collapse{{i}}" class="panel-collapse collapse">
+
+              <div class="panel-body">
+                <div class="row margin">
+                  <button *ngIf="item.data_config == null && item.name === 'Chuyển khoản'" type="button" title="Thêm dữ liệu" class="btn btn-primary btn-sm pull-right" (click)="addManual(item)"><i class="fa fa-plus-square"></i> Thêm dữ liệu </button>
+                  <button *ngIf="item.data_config == null && item.name === 'VNPay'" type="button" title="Thêm dữ liệu" class="btn btn-primary btn-sm pull-right" (click)="addVnpay(item)"><i class="fa fa-plus-square"></i> Thêm dữ liệu </button>
+                </div>
+
+                <table *ngIf="item.data_config != null && item.name === 'Chuyển khoản'" class="table table-bordered table-hover" id="table">
+                  <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Chủ tài khoản</th>
+                    <th>Tên ngân hàng</th>
+                    <th>Số tài khoản</th>
+                    <th>Chi nhánh</th>
+                    <th style="width: 20%">Thao tác</th>
+                  </tr>
+                  </thead>
+                  <tr *ngFor="let ite of item.data_config.accounts; let j=index">
+                    <td style="width: 5%">{{j + 1}}</td>
+                    <td>
+                      {{ite.owner_name}}
+                    </td>
+                    <td>
+                      {{ite.bank_name}}
+                    </td>
+                    <td>
+                      {{ite.bank_account}}
+                    </td>
+                    <td>
+                      {{ite.bank_branch}}
+                    </td>
+                    <td>
+                      <button type="button" title="Xóa banner" class="btn btn-danger btn-sm" mwlConfirmationPopover
+                              popoverTitle="Xóa"
+                              popoverMessage="Bạn thực sự muốn xóa?"
+                              placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                              cancelText="No <i class='fa fa-remove'></i>" (confirm)="destroyConfig(item, i)">
+                        <i class="fa fa-remove"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+
+                <table *ngIf="item.data_config != null && item.name === 'VNPay'" class="table table-bordered table-hover" id="table">
+                  <thead>
+                  <tr>
+                    <th>VNP Url</th>
+                    <th>VNP TmnCode</th>
+                    <th>VNP HashSecret</th>
+                    <th>VNP Locale</th>
+                    <th>VNP Version</th>
+                    <th>Thao tác</th>
+                  </tr>
+                  </thead>
+                  <tr>
+                    <td>
+                      {{item.data_config.vnp_Url}}
+                    </td>
+                    <td>
+                      {{item.data_config.vnp_TmnCode}}
+                    </td>
+                    <td>
+                      {{item.data_config.vnp_HashSecret}}
+                    </td>
+                    <td>
+                      {{item.data_config.vnp_Locale}}
+                    </td>
+                    <td>
+                      {{item.data_config.vnp_Version}}
+                    </td>
+                    <td style="text-align: center;">
+                      <button type="button" title="Xóa banner" class="btn btn-danger btn-sm" mwlConfirmationPopover
+                              popoverTitle="Xóa"
+                              popoverMessage="Bạn thực sự muốn xóa?"
+                              placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                              cancelText="No <i class='fa fa-remove'></i>" (confirm)="destroyConfig(item, i)">
+                        <i class="fa fa-remove"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <a class="text-center" data-toggle="collapse" href="#collapse{{i}}"><label
+                class="label label-default">Ẩn</label></a>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <pagination [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+                    [maxSize]="pagination.maxSize" [itemsPerPage]="pagination.itemsPerPage"
+                    (pageChanged)="pageChanged($event)" [boundaryLinks]="true" class="pagination-sm"
+                    (numPages)="pagination.numPages = $event"></pagination>
+      </div>
+      <div class="col-xs-6">
+        <div class="box-go-to">
+          <input type="number" class="col-xs-2" [(ngModel)]="nextPage">
+          <span class="col-xs-1">/</span>
+          <input type="text" class="col-xs-2" [(ngModel)]="pagination.numPages" disabled>
+          <div class="col-xs-4">
+            <button (click)="goToPageNumber()">Đến</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

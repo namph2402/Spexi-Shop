@@ -37,6 +37,9 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::post('destroyPaymentMethod', 'PaymentMethodController@destroy');
     });
 
+    // Transaction
+    Route::resource('payment_transactions', 'PaymentTransactionController');
+
     // User
     Route::resource('users', 'UserController');
     Route::group(['prefix' => 'users/{id}'], function () {

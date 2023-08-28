@@ -256,6 +256,7 @@ class CheckoutController extends RestController
                     'payment_status' => 1,
                 ]);
                 $this->transactionRepository->create([
+                    'name' => 'Giao dịch thanh toán đơn hàng '. $order->code,
                     'order_id' => $order->id,
                     'order_code' => $order->code,
                     'method' => $order->payment_status,
@@ -271,7 +272,7 @@ class CheckoutController extends RestController
                 return VnPayUtil::responseUnknownToIPN();
             }
         } else {
-            return $this->successView('cart', 'Thanh toán đơn hàng không thành công');
+            return $this->successView('cart', 'Thêm đơn hàng thành công');
         }
     }
 }

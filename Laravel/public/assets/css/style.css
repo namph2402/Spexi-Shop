@@ -11602,7 +11602,17 @@ h6 {
     margin-top: 10px;
 }
 
+.cate-list {
+    height: 130px;
+}
+
 @media (max-width: 768px) {
+
+    .info-item {
+        width: 50%;
+        flex: 0 0 50%;
+    }
+
     .search-group {
         margin: 0 !important;
     }
@@ -11610,6 +11620,10 @@ h6 {
     .search-variant {
         display: flex;
         background: white;
+    }
+
+    .list-item-search {
+        max-height: 140px;
     }
 
     .search-color,
@@ -11622,6 +11636,9 @@ h6 {
         margin-bottom: 10px !important;
     }
 
+    .promotion-list:last-child {
+        border: 1px solid red;
+    }
 }
 
 @media (max-width: 575.98px) {

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\modules\admin;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
-use App\Models\PostCategory;
 use App\Repository\PostCategoryRepositoryInterface;
 use App\Repository\PostRepositoryInterface;
 use Illuminate\Http\Request;

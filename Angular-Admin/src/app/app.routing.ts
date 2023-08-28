@@ -100,4 +100,12 @@ export const MODULES_ROUTING = [
     path: 'imports',
     loadChildren: 'app/modules/import/import.module#ImportModule'
   },
+  {
+    path: 'payment_methods',
+    loadChildren: 'app/modules/payment-method/payment-method.module#PaymentMethodModule'
+  },
+  {
+    path: 'payment-transactions',
+    loadChildren: 'app/modules/payment-transaction/payment-transaction.module#PaymentTransactionModule'
+  },
 ];

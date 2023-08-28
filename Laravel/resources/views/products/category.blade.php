@@ -15,7 +15,7 @@
     </div>
     <div class="container-fluid">
         <div class="row px-xl-5">
-            <form action="{{ Request::url() }}" class="col-lg-3 col-md-4" id="formSearchP">
+            <form action="{{ Request::url() }}" class="col-lg-3 col-md-4 mb-3" id="formSearchP">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Lọc theo giá</span></h5>
                 <div class="bg-light mb-30" style="padding: 1rem;">
                     <div class="d-flex align-items-center justify-content-between mb-3">
@@ -33,7 +33,7 @@
                             <span class="bg-secondary pr-3">Lọc theo màu</span>
                         </h5>
                         <div class="bg-light mb-30 search-group">
-                            <div class="row pl-3 pr-3">
+                            <div class="row pl-3 pr-3 list-item-search">
                                 @foreach ($colors as $c)
                                     <div class="col-md-6 custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                         <input type="checkbox" class="custom-control-input colorItem" value="{{ $c->id }}"
@@ -50,7 +50,7 @@
                             <span class="bg-secondary pr-3">Lọc theo Size</span>
                         </h5>
                         <div class="bg-light mb-30 search-group">
-                            <div class="row pl-3 pr-3">
+                            <div class="row pl-3 pr-3 list-item-search">
                                 @foreach ($sizes as $s)
                                     <div class="col-md-6 custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                         <input type="checkbox" class="custom-control-input sizeItem" value="{{ $s->id }}"
