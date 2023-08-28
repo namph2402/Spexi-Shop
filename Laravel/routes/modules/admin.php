@@ -40,6 +40,12 @@ Route::group(['middleware' => ['auth.admin']], function () {
     // Transaction
     Route::resource('payment_transactions', 'PaymentTransactionController');
 
+    // Expense
+    Route::resource('expenses', 'ExpenseController');
+    Route::group(['prefix' => 'expenses/{id}'], function () {
+        Route::post('confirm', 'ExpenseController@confirm');
+    });
+
     // User
     Route::resource('users', 'UserController');
     Route::group(['prefix' => 'users/{id}'], function () {

@@ -101,6 +101,10 @@ export const MODULES_ROUTING = [
     loadChildren: 'app/modules/import/import.module#ImportModule'
   },
   {
+    path: 'expenses',
+    loadChildren: 'app/modules/expense/expense.module#ExpenseModule'
+  },
+  {
     path: 'payment_methods',
     loadChildren: 'app/modules/payment-method/payment-method.module#PaymentMethodModule'
   },

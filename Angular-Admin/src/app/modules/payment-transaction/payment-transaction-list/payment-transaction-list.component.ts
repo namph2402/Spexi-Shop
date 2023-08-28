@@ -30,7 +30,7 @@ export class PaymentTransactionListComponent extends AbstractCRUDComponent<Payme
   }
 
   getTitle(): string {
-    return 'Quản lý dữ liệu';
+    return 'Quản lý giao dịch thanh toán';
   }
 
   getCreateModalComponent(): any {

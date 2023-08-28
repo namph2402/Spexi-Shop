@@ -5,6 +5,7 @@ import {BsModalService, ModalOptions} from 'ngx-bootstrap';
 import {DashboardService} from './dashboard.service';
 import {Chart} from 'chart.js';
 import {DateTimeUtil, ExcelHelper, FieldForm, ObjectUtil} from '../../core';
+import moment = require('moment');
 
 @Component({
   selector: 'app-dashboard',
@@ -18,6 +19,7 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
   products: any[];
   orders: any[];
   percent: any[];
+  expense: any[];
   quantityOrder: any[];
   productCodeMains: any[];
   productQuantityMains: any[];
@@ -72,8 +74,8 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
 
   buildSearchForm(): FormGroup {
     return this.formBuilder.group({
-      month: new FormControl(null),
-      year: new FormControl(null),
+      month: new FormControl(moment(new Date().getTime()).format('MM')),
+      year: new FormControl(moment(new Date().getTime()).format('YYYY')),
     });
   }
 
@@ -145,6 +147,7 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
       this.productCodeMains = val['productCodeMains'];
       this.productQuantityMains = val['productQuantityMains'];
       this.userMains = val['user'];
+      this.expense = val['expenses'];
 
       setTimeout(() => {
         document.getElementById("orderDiv").innerHTML = `<canvas id="order"></canvas>`;
@@ -160,26 +163,6 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
               backgroundColor: 'rgba(12, 167, 76, 0.5)',
               borderColor: 'rgb(12, 167, 76)',
               borderWidth: 2
-            }]
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: false
-              }
-            }
-          },
-        });
-        new Chart("amount", {
-          type: 'line',
-          data: {
-            labels: ['T.1', 'T.2', 'T.3', 'T.4', 'T.5', 'T.6', 'T.7', 'T.8', 'T.9', 'T.10', 'T.11', 'T.12'],
-            datasets: [{
-              label: 'Doanh số bán hàng',
-              data: this.percent,
-              backgroundColor: 'rgba(0, 0, 0, 0)',
-              borderColor: 'rgb(234, 238, 0)',
-              borderWidth: 3
             }]
           },
           options: {
@@ -207,6 +190,36 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
             }]
           }
         });
+        new Chart("amount", {
+          type: 'line',
+          data: {
+              datasets: [{
+                  label: 'Doanh thu',
+                  data: this.percent,
+                  backgroundColor: 'rgba(0, 0, 0, 0)',
+                  borderColor: 'rgb(234, 238, 0)',
+                  borderWidth: 3,
+                  order: 2
+              }, {
+                  label: 'Chi tiêu',
+                  data: this.expense,
+                  type: 'line',
+                  backgroundColor: 'rgba(0, 0, 0, 0)',
+                  borderColor: '#f53d3d',
+                  borderWidth: 3,
+                  order: 1
+              }],
+              labels: ['T.1', 'T.2', 'T.3', 'T.4', 'T.5', 'T.6', 'T.7', 'T.8', 'T.9', 'T.10', 'T.11', 'T.12'],
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: false
+              }
+            }
+          },
+       });
+
       }, 100);
     });
   }

@@ -56,7 +56,7 @@ export class PromotionEditComponent extends AbstractModalComponent<PromotionMeta
           name: 'Giảm giá đơn hàng',
         }
       ]),
-      FieldForm.createDateTimeInput('Thời gian hết hạn', 'expired_date', 'Chọn ngày hết hạn'),
+      FieldForm.createDateInput('Thời gian hết hạn', 'expired_date', 'Chọn ngày hết hạn'),
       FieldForm.createFileInput('Ảnh banner', 'image', 'Chọn ảnh', this.onFileUploadChange, 'image/*'),
       FieldForm.createCheckbox('Kích hoạt', 'status', 'Chọn'),
     ];

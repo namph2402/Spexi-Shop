@@ -52,7 +52,7 @@ export const APP_FEATURES = [
             {
               name: 'Giao dịch chi tiêu',
               icon: 'fa fa-money',
-              link: '/menus'
+              link: '/expenses'
             }
           ]
         },
