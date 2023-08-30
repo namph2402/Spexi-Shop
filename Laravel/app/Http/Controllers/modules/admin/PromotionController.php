@@ -42,8 +42,12 @@ class PromotionController extends RestController
             return $this->success($data);
         }
 
-        if ($request->has('status') && $request->status != '') {
+        if ($request->has('status') && $request->status != 'all') {
             array_push($clauses, WhereClause::query('status', $request->status));
+        }
+
+        if ($request->has('type') && $request->type != 'all') {
+            array_push($clauses, WhereClause::query('type', $request->type));
         }
 
         if ($request->has('createOrder')) {

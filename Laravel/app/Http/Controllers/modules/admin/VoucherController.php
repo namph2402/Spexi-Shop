@@ -38,6 +38,10 @@ class VoucherController extends RestController
             array_push($clauses, WhereClause::query('status', $request->status));
         }
 
+        if ($request->has('type') && $request->type != 'all') {
+            array_push($clauses, WhereClause::query('type', $request->type));
+        }
+
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {

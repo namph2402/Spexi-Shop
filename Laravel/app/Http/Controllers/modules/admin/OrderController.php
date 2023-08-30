@@ -48,7 +48,7 @@ class OrderController extends RestController
         $limit = $request->input('limit', null);
         $clauses = [];
         $orderBy = $request->input('orderBy', 'updated_at:desc');
-        $with = ['details.product.warehouses.sizes', 'details.product.warehouses.colors', 'voucher'];
+        $with = ['details.product.warehouses.size', 'details.product.warehouses.color', 'voucher'];
         $withCount = [];
 
         if ($request->has('search') && Str::length($request->search) > 0) {
@@ -152,14 +152,14 @@ class OrderController extends RestController
             DB::beginTransaction();
             $order = $this->repository->create($attributes);
             foreach ($products as $p) {
-                $warehouse = $this->warehouseRepository->findById($p['warehouse_id'], ['sizes', 'colors']);
+                $warehouse = $this->warehouseRepository->findById($p['warehouse_id'], ['size', 'color']);
                 $attributeDetails['order_id'] = $order->id;
                 $attributeDetails['product_id'] = $p['product']['id'];
                 $attributeDetails['product_code'] = $p['product']['code'];
                 $attributeDetails['product_name'] = $p['product']['name'];
                 $attributeDetails['warehouse_id'] = $p['warehouse_id'];
-                $attributeDetails['size'] = $warehouse->sizes->name;
-                $attributeDetails['color'] = $warehouse->colors->name;
+                $attributeDetails['size'] = $warehouse->size->name;
+                $attributeDetails['color'] = $warehouse->color->name;
                 $attributeDetails['quantity'] = $p['quantity'];
                 $attributeDetails['unit_price'] = $p['unit_price'];
                 $attributeDetails['amount'] = $attributeDetails['quantity'] * $attributeDetails['unit_price'];
@@ -251,7 +251,7 @@ class OrderController extends RestController
             }
 
             foreach ($products as $p) {
-                $warehouse = $this->warehouseRepository->findById($p['warehouse_id'], ['sizes', 'colors']);
+                $warehouse = $this->warehouseRepository->findById($p['warehouse_id'], ['size', 'color']);
 
                 $order_detail = $this->detailRepository->find([
                     WhereClause::query('order_id', $order->id),
@@ -263,8 +263,8 @@ class OrderController extends RestController
                 $attributeDetails['product_code'] = $p['product']['code'];
                 $attributeDetails['product_name'] = $p['product']['name'];
                 $attributeDetails['warehouse_id'] = $p['warehouse_id'];
-                $attributeDetails['size'] = $warehouse->sizes->name;
-                $attributeDetails['color'] = $warehouse->colors->name;
+                $attributeDetails['size'] = $warehouse->size->name;
+                $attributeDetails['color'] = $warehouse->color->name;
                 $attributeDetails['quantity'] = $p['quantity'];
                 $attributeDetails['unit_price'] = $p['unit_price'];
                 $attributeDetails['amount'] = $attributeDetails['quantity'] * $attributeDetails['unit_price'];

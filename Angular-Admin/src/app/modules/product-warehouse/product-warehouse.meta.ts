@@ -10,6 +10,6 @@ export class ProductWarehouseMeta {
   weight: number;
   quantity: number;
   use_quantity: number;
-  sizes: ProductSizeMeta;
-  colors:ProductColorMeta
+  size: ProductSizeMeta;
+  color:ProductColorMeta
 }

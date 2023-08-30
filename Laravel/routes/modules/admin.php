@@ -17,6 +17,8 @@ Route::post('login', 'LoginController@login');
 
 Route::group(['middleware' => ['auth.admin']], function () {
 
+    Route::put('profile', 'LoginController@password');
+
     Route::get('dashboard/export', 'DashboardController@export');
     Route::resource('dashboard', 'DashboardController');
     Route::resource('stores', 'StoreInformationController');

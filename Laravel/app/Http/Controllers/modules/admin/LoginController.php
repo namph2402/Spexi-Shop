@@ -7,6 +7,7 @@ use App\Http\Controllers\RestController;
 use App\Repository\SystemUserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class LoginController extends RestController
 {
@@ -33,6 +34,18 @@ class LoginController extends RestController
             return $this->errorClient('Mật khẩu không đúng');
         }
 
-        return $this->success(['token' => $user->remember_token, 'name' => $user->name, 'avatar' => $user->avatar]);
+        return $this->success(['token' => $user->remember_token,'username' => $user->username, 'name' => $user->name, 'avatar' => $user->avatar]);
+    }
+
+    public function password(Request $request) {
+        $user = $this->repository->find([WhereClause::query('name', 'admin')]);
+        if (!Hash::check($request->password, $user->password)) {
+            return $this->errorClient('Mật khẩu không đúng');
+        }
+        $password = $this->repository->update($user->id, [
+            'password' => Hash::make($request->newPassword),
+            'remember_token' => Str::random(100),
+        ]);
+        return $this->success($password);
     }
 }

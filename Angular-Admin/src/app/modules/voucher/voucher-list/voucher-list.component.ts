@@ -56,6 +56,7 @@ export class VoucherListComponent extends AbstractCRUDComponent<VoucherMeta> {
     return this.formBuilder.group({
       search: new FormControl(null),
       status: new FormControl(null),
+      type: new FormControl(null)
     });
   }
 
@@ -64,20 +65,32 @@ export class VoucherListComponent extends AbstractCRUDComponent<VoucherMeta> {
       FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa', 'col-md-6'),
       FieldForm.createSelect('Tìm kiếm trạng thái', 'status', 'Chọn một', [
         {
-          id: 'all',
           name: 'Tất cả',
+          value: 'all'
         },
         {
-          id: 1,
           name: 'Hoạt động',
+          value: 1
         },
         {
-          id: 0,
           name: 'Không hoạt động',
+          value: 0
         },
-      ], 'col-md-6'),
-    ];
-  }
+    ]),
+    FieldForm.createSelect('Loại voucher', 'type', 'Chọn một', [
+      {
+        name: 'Tất cả',
+        value: 'all'
+      },
+      {
+        name: 'Giảm giá đơn hàng',
+        value: 1
+      }, {
+        name: 'Free ship',
+        value: 2
+      }
+    ]),
+  ]}
 
   initNewModel(): VoucherMeta {
     return new VoucherMeta();

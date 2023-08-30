@@ -33,7 +33,7 @@ class CartController extends RestController
 
     public function index(Request $request)
     {
-        $cart = $this->repository->find([WhereClause::query('user_id', Auth::user()->id)], null, ['items.product', 'items.warehouse.sizes', 'items.warehouse.colors']);
+        $cart = $this->repository->find([WhereClause::query('user_id', Auth::user()->id)], null, ['items.product', 'items.warehouse.size', 'items.warehouse.color']);
         return view('orders.cart', compact('cart'));
     }
 
@@ -52,7 +52,7 @@ class CartController extends RestController
             'product_id',
             'quantity'
         ]);
-        $warehouse = $this->warehouseRepository->find([WhereClause::query('size_id', $request->size_id), WhereClause::query('color_id', $request->color_id)]);
+        $warehouse = $this->warehouseRepository->find([WhereClause::query('product_id', $request->product_id), WhereClause::query('size_id', $request->size_id), WhereClause::query('color_id', $request->color_id)]);
         $product = $this->productRepository->findByID($request->product_id);
         $cart = $this->repository->find([WhereClause::query('user_id', Auth::user()->id)]);
         $attributes['cart_id'] = $cart->id;

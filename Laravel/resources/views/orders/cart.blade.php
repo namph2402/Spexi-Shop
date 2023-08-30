@@ -39,7 +39,7 @@
                                         <a href="{{ $item->product->full_path }}" class="text-truncate">{{ $item->product->name }}</a>
                                     </td>
                                     <td class="align-middle">
-                                        {{ $item->warehouse->sizes->name }}, {{ $item->warehouse->colors->name }}
+                                        {{ $item->warehouse->size->name }}, {{ $item->warehouse->color->name }}
                                     </td>
                                     <td class="unit_price align-middle">
                                         {{ number_format($item->product->sale_price, 0, '.', '.') }} đ

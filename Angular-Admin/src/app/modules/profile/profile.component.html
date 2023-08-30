@@ -1,0 +1,18 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row" style=" display: flex; justify-content: center;">
+      <div class="col-xs-6">
+        <form (ngSubmit)="updatePassword()" [formGroup]="searchForm">
+          <div *ngFor="let f of searchControls" class="form-group col-md-12" [ngClass]="{ 'has-error': !searchForm.controls[f.formControl].valid && !searchForm.controls[f.formControl].disabled}">
+            <label [for]="f.formControl">{{ f.label }}</label>
+            <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control"/>
+          </div>
+          <div class="col-md-12 text-center">
+            <button class="btn btn-primary" type="submit">Đổi mật khẩu</button>
+            <button (click)="removeFilter()" class="btn btn-default" type="button">Cập nhật lại</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

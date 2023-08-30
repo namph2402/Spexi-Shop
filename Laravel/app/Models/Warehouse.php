@@ -13,13 +13,13 @@ class Warehouse extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 
-    public function sizes()
+    public function size()
     {
-        return $this->hasOne(ProductSize::class, 'id', 'size_id');
+        return $this->belongsTo(ProductSize::class, 'size_id');
     }
 
-    public function colors()
+    public function color()
     {
-        return $this->hasOne(ProductColor::class, 'id', 'color_id');
+        return $this->belongsTo(ProductColor::class, 'color_id');
     }
 }

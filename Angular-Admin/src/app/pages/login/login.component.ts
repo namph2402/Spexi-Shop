@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     let user = this.formGroup.value;
     this.authService.store(user).subscribe((res: AuthMeta) => {
       StorageUtil.set('name', res.name);
+      StorageUtil.set('username', res.username);
       StorageUtil.set('avatar', res.avatar);
       StorageUtil.set('token', res.token);
       this.router.navigateByUrl('');

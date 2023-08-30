@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-xs-12">
         <form (ngSubmit)="load()" [formGroup]="searchForm">
-          <div *ngFor="let f of searchControls" class="form-group col-md-6">
+          <div *ngFor="let f of searchControls" class="form-group col-md-4">
             <ng-template [ngIf]="f.type == 'input'">
               <label [for]="f.formControl">
                 {{ f.label }}

@@ -18,6 +18,7 @@ export class StorageUtil {
 
   static setUser(user: any) {
     StorageUtil.set('name', user['name']);
+    StorageUtil.set('username', user['username']);
     StorageUtil.set('avatar', user['avatar']);
     StorageUtil.set('token', user['token']);
   }
@@ -25,6 +26,7 @@ export class StorageUtil {
   static getUser() {
     let user: any = {};
     user.name = StorageUtil.get('name');
+    user.username = StorageUtil.get('username');
     user.avatar = StorageUtil.get('avatar');
     user.token = StorageUtil.get('token');
     return user;

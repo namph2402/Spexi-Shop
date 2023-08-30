@@ -109,7 +109,7 @@
                   (ngModelChange)="checkArr(item.warehouse_id, i)">
                   <option disabled hidden selected value="0">Chọn loại</option>
                   <option *ngFor="let w of item.product.warehouses" [value]="w.id">
-                    {{ w.sizes.name }} - {{ w.colors.name }}
+                    {{ w.size.name }} - {{ w.color.name }}
                   </option>
                 </select>
               </td>

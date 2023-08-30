@@ -112,4 +112,8 @@ export const MODULES_ROUTING = [
     path: 'payment-transactions',
     loadChildren: 'app/modules/payment-transaction/payment-transaction.module#PaymentTransactionModule'
   },
+  {
+    path: 'profile',
+    loadChildren: 'app/modules/profile/profile.module#ProfileModule'
+  }
 ];

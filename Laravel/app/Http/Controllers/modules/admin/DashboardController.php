@@ -96,7 +96,7 @@ class DashboardController extends RestController
         }
 
         // Sản phẩm sắp hết
-        $products = $this->warehouseRepository->paginate(10, [WhereClause::query('quantity', '50', '<=')], 'quantity:asc', ['product', 'sizes', 'colors']);
+        $products = $this->warehouseRepository->paginate(10, [WhereClause::query('quantity', '50', '<=')], 'quantity:asc', ['product', 'size', 'color']);
         foreach ($products as $p) {
             array_push($tableProduct, $p);
         }
@@ -334,14 +334,14 @@ class DashboardController extends RestController
         }
 
         // Sản phẩm sắp hết
-        $productOffs = $this->warehouseRepository->get([WhereClause::query('quantity', '50', '<=')], 'quantity:asc', ['product', 'sizes', 'colors']);
+        $productOffs = $this->warehouseRepository->get([WhereClause::query('quantity', '50', '<=')], 'quantity:asc', ['product', 'size', 'color']);
         foreach ($productOffs as $p) {
             array_push($xlsx["Sản phẩm sắp hết"], [
                 $p->code,
                 $p->product->name,
                 $p->product->sale_price,
-                $p->sizes->name,
-                $p->colors->name,
+                $p->size->name,
+                $p->color->name,
                 $p->quantity
             ]);
         }

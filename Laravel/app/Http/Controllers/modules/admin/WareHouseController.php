@@ -53,7 +53,7 @@ class WarehouseController extends RestController
     {
         $limit = $request->input('limit', null);
         $clauses = [];
-        $with = ['sizes', 'colors', 'product'];
+        $with = ['size', 'color', 'product'];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:asc');
 
@@ -380,14 +380,14 @@ class WarehouseController extends RestController
             'Kho hàng' => [['Mã', 'Tên SP', 'Size', 'Màu', 'Giá nhập', 'Giá bán', 'Số lượng', 'Ghi chú']]
         ];
 
-        $data = $this->repository->get([],'code:asc',['product','sizes','colors']);
+        $data = $this->repository->get([],'code:asc',['product','size','color']);
 
         foreach ($data as $row) {
             array_push($xlsx['Kho hàng'], [
                 $row->code,
                 $row->product->name,
-                $row->sizes->name,
-                $row->colors->name,
+                $row->size->name,
+                $row->color->name,
                 $row->product->price,
                 $row->product->sale_price,
                 $row->quantity,

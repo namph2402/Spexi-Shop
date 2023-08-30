@@ -58,26 +58,46 @@ export class PromotionListComponent extends AbstractCRUDComponent<PromotionMeta>
     return this.formBuilder.group({
       search: new FormControl(null),
       status: new FormControl(null),
+      type: new FormControl(null),
     });
   }
 
   initSearchForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa', 'col-md-6'),
+      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa'),
+      FieldForm.createSelect('Loại chương trình', 'type', 'Chọn một', [
+        {
+          name: 'Tất cả',
+          value: 'all'
+        },
+        {
+          name: 'Giảm giá sản phẩm',
+          value: 1
+        }, {
+          name: 'Đồng giá',
+          value: 2
+        }, {
+          name: 'FreeShip',
+          value: 3
+        }, {
+          name: 'Giảm giá đơn hàng',
+          value: 4
+        }
+      ]),
       FieldForm.createSelect('Tìm kiếm trạng thái', 'status', 'Chọn một', [
         {
-          id: '',
           name: 'Tất cả',
+          value: 'all'
         },
         {
-          id: 1,
           name: 'Hoạt động',
+          value: 1
         },
         {
-          id: 0,
           name: 'Không hoạt động',
+          value: 0
         },
-      ], 'col-md-6'),
+      ]),
     ];
   }
 

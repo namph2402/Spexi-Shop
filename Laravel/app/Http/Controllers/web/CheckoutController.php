@@ -83,7 +83,7 @@ class CheckoutController extends RestController
         $itemC = $request->item;
         $items = explode(",", $itemC);
         $clauses = [WhereClause::queryIn('id', $items)];
-        $with = ['product', 'warehouse.sizes', 'warehouse.colors'];
+        $with = ['product', 'warehouse.size', 'warehouse.color'];
         $provinces = $this->provinceRepository->get([]);
         $profile = $this->profileRepository->find([WhereClause::query('user_id', Auth::user()->id)]);
         $itemCheckout = $this->itemRepository->get($clauses, null, $with);
@@ -151,7 +151,7 @@ class CheckoutController extends RestController
         }
         $items = explode(",", $request->items);
         $clauses = [WhereClause::queryIn('id', $items)];
-        $with = ['product', 'warehouse.sizes', 'warehouse.colors'];
+        $with = ['product', 'warehouse.size', 'warehouse.color'];
         $province = $this->provinceRepository->findById($request->province_id);
         $district = $this->districtRepository->findById($request->district_id);
         $ward = $this->wardRepository->findById($request->ward_id);
@@ -194,8 +194,8 @@ class CheckoutController extends RestController
                 $attributeDetails['product_code'] = $item->product->code;
                 $attributeDetails['product_name'] = $item->product->name;
                 $attributeDetails['warehouse_id'] = $item->warehouse_id;
-                $attributeDetails['size'] = $item->warehouse->sizes->name;
-                $attributeDetails['color'] = $item->warehouse->colors->name;
+                $attributeDetails['size'] = $item->warehouse->size->name;
+                $attributeDetails['color'] = $item->warehouse->color->name;
                 $attributeDetails['unit_price'] = $item->product->sale_price;
                 $attributeDetails['quantity'] = $item->quantity;
                 $attributeDetails['amount'] = $item->amount;
