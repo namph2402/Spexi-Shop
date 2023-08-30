@@ -64,9 +64,9 @@ export class ShippingFeeCreateComponent extends AbstractModalComponent<ShippingF
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createSelect('Tìm kiếm theo tỉnh', 'province_id', 'Chọn một', 'loadAllProvinces', 'col-md-6'),
-      FieldForm.createSelect('Tìm kiếm theo huyện', 'district_id', 'Chọn một', [], 'col-md-6'),
-      FieldForm.createSelect('Tìm kiếm theo xã', 'ward_id', 'Chọn một', [], 'col-md-6'),
+      FieldForm.createSelect('Tìm kiếm theo tỉnh', 'province_id', 'Chọn một', 'loadAllProvinces'),
+      FieldForm.createSelect('Tìm kiếm theo huyện', 'district_id', 'Chọn một', []),
+      FieldForm.createSelect('Tìm kiếm theo xã', 'ward_id', 'Chọn một', []),
       FieldForm.createNumberInput('Tiền ship', 'fee', 'Nhập tiền ship'),
     ];
   }

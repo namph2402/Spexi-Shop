@@ -24,7 +24,7 @@ class CreateOrderShipsTable extends Migration
             $table->integer('status_id');
             $table->integer('total_fee');
             $table->string('expected_delivery_time')->nullable();
-            $table->string('note')->nullable();
+            $table->text('note')->nullable();
             $table->boolean('is_printed')->default(false);
             $table->timestamps();
         });

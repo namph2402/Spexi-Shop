@@ -226,6 +226,7 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::get('shipping', 'OrderShipController@shipping');
         Route::get('complete', 'OrderShipController@complete');
         Route::get('printBill', 'OrderShipController@printBill');
+        Route::post('note', 'OrderShipController@note');
     });
 
     // Voucher

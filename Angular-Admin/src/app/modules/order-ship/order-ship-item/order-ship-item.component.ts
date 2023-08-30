@@ -67,10 +67,10 @@ export class OrderShipItemComponent extends AbstractCRUDModalComponent<OrderShip
 
   initSearchForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tìm kiếm theo mã đơn hàng', 'code', 'Nhập từ khóa', 'col-md-6'),
-      FieldForm.createTextInput('Tìm kiếm theo tên khách hàng', 'search', 'Nhập từ khóa', 'col-md-6'),
-      FieldForm.createNumberInput('Tìm kiếm theo số điện thoại', 'customer_phone', 'Nhập từ khóa', 'col-md-6'),
-      FieldForm.createDateInput('Ngày tạo', 'created_date', 'Chọn ngày', 'col-md-6'),
+      FieldForm.createTextInput('Tìm kiếm theo mã đơn hàng', 'code', 'Nhập từ khóa'),
+      FieldForm.createTextInput('Tìm kiếm theo tên khách hàng', 'search', 'Nhập từ khóa'),
+      FieldForm.createNumberInput('Tìm kiếm theo số điện thoại', 'customer_phone', 'Nhập từ khóa'),
+      FieldForm.createDateInput('Ngày tạo', 'created_date', 'Chọn ngày'),
     ];
   }
 

@@ -62,12 +62,8 @@ export class VoucherListComponent extends AbstractCRUDComponent<VoucherMeta> {
 
   initSearchForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa', 'col-md-6'),
+      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa'),
       FieldForm.createSelect('Tìm kiếm trạng thái', 'status', 'Chọn một', [
-        {
-          name: 'Tất cả',
-          value: 'all'
-        },
         {
           name: 'Hoạt động',
           value: 1
@@ -78,10 +74,6 @@ export class VoucherListComponent extends AbstractCRUDComponent<VoucherMeta> {
         },
     ]),
     FieldForm.createSelect('Loại voucher', 'type', 'Chọn một', [
-      {
-        name: 'Tất cả',
-        value: 'all'
-      },
       {
         name: 'Giảm giá đơn hàng',
         value: 1

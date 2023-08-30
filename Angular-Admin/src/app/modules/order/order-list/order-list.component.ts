@@ -63,8 +63,8 @@ export class OrderListComponent extends AbstractCRUDComponent<OrderMeta> {
 
   initSearchForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tìm kiếm theo mã đơn', 'code', 'Nhập từ khóa', 'col-md-6'),
-      FieldForm.createTextInput('Tìm kiếm theo khách hàng', 'search', 'Nhập từ khóa', 'col-md-6'),
+      FieldForm.createTextInput('Tìm kiếm theo mã đơn', 'code', 'Nhập từ khóa'),
+      FieldForm.createTextInput('Tìm kiếm theo khách hàng', 'search', 'Nhập từ khóa'),
       FieldForm.createSelect('Trạng thái', 'order_status', 'Chọn một', [
         {
           name: "Lên đơn",
@@ -86,8 +86,8 @@ export class OrderListComponent extends AbstractCRUDComponent<OrderMeta> {
           name: "Đang giao",
           value: "Đang giao"
         },
-      ], 'col-md-6', 'name', 'value'),
-      FieldForm.createDateInput('Ngày tạo', 'created_date', 'Chọn ngày', 'col-md-6'),
+      ]),
+      FieldForm.createDateInput('Ngày tạo', 'created_date', 'Chọn ngày'),
     ];
   }
 

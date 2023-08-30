@@ -7,6 +7,7 @@ import { OrderShipService } from '../order-ship.service';
 import { AbstractCRUDComponent, AbstractCRUDModalComponent, AbstractModalComponent, AppPagination, FieldForm, ModalResult, ObjectUtil} from '../../../core';
 import { OrderShipItemComponent } from '../order-ship-item/order-ship-item.component';
 import { OrderShipInfoComponent } from '../order-ship-info/order-ship-info.component';
+import { OrderShipNoteComponent } from '../order-ship-note/order-ship-note.component';
 
 @Component({
   selector: 'app-order-ship-list',
@@ -55,17 +56,61 @@ export class OrderShipListComponent extends AbstractCRUDComponent<OrderShipMeta>
     return this.formBuilder.group({
       code: new FormControl(null),
       search: new FormControl(null),
-      customer_phone: new FormControl(null),
+      status: new FormControl(null),
+      ship_status: new FormControl(null),
       created_date: new FormControl(null),
     });
   }
 
   initSearchForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tìm kiếm theo mã đơn hàng', 'code', 'Nhập từ khóa', 'col-md-6'),
-      FieldForm.createTextInput('Tìm kiếm theo tên khách hàng', 'search', 'Nhập từ khóa', 'col-md-6'),
-      FieldForm.createNumberInput('Tìm kiếm theo số điện thoại', 'customer_phone', 'Nhập từ khóa', 'col-md-6'),
-      FieldForm.createDateInput('Ngày tạo', 'created_date', 'Chọn ngày', 'col-md-6'),
+      FieldForm.createTextInput('Tìm kiếm theo mã đơn hàng', 'code', 'Nhập từ khóa'),
+      FieldForm.createTextInput('Tìm kiếm theo khách hàng', 'search', 'Nhập từ khóa'),
+      FieldForm.createDateInput('Ngày tạo', 'created_date', 'Chọn ngày'),
+      FieldForm.createSelect('Trạng thái đơn hàng', 'status', 'Chọn một', [
+        {
+          name: "Lên đơn",
+          value: "Lên đơn"
+        },
+        {
+          name: "Xác nhận",
+          value: "Xác nhận"
+        },
+        {
+          name: "Chuẩn bị hàng",
+          value: "Chuẩn bị hàng"
+        },
+        {
+          name: "Đã chuẩn bị hàng",
+          value: "Đã chuẩn bị hàng"
+        },
+        {
+          name: "Đang giao",
+          value: "Đang giao"
+        },
+      ]),
+      FieldForm.createSelect('Trạng thái đơn vận', 'ship_status', 'Chọn một', [
+        {
+          name: "Lên đơn",
+          value: "Lên đơn"
+        },
+        {
+          name: "Xác nhận",
+          value: "Xác nhận"
+        },
+        {
+          name: "Chuẩn bị hàng",
+          value: "Chuẩn bị hàng"
+        },
+        {
+          name: "Đã chuẩn bị hàng",
+          value: "Đã chuẩn bị hàng"
+        },
+        {
+          name: "Đang giao",
+          value: "Đang giao"
+        },
+      ]),
     ];
   }
 
@@ -126,5 +171,21 @@ export class OrderShipListComponent extends AbstractCRUDComponent<OrderShipMeta>
       this.load();
     }, () => this.service.toastFailedEdited());
   }
+
+  note(item: OrderShipMeta, type: number) {
+    const modalRef = this.modalService.show(OrderShipNoteComponent, {ignoreBackdropClick: true, 'class': 'modal-lg'});
+    const modal: AbstractModalComponent<OrderShipMeta> = <AbstractModalComponent<OrderShipMeta>>modalRef.content;
+    const model = new OrderShipMeta();
+    model.type = type;
+    model.id = item.id;
+    modal.setModel(model);
+    const sub = modal.onHidden.subscribe((result: ModalResult<OrderShipMeta>) => {
+      if (result.success) {
+        this.load();
+      }
+      sub.unsubscribe();
+    });
+  }
+
 
 }

@@ -65,11 +65,17 @@ export class PromotionListComponent extends AbstractCRUDComponent<PromotionMeta>
   initSearchForm(): FieldForm[] {
     return [
       FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa'),
-      FieldForm.createSelect('Loại chương trình', 'type', 'Chọn một', [
+      FieldForm.createSelect('Tìm kiếm trạng thái', 'status', 'Chọn một', [
         {
-          name: 'Tất cả',
-          value: 'all'
+          name: 'Hoạt động',
+          value: 1
         },
+        {
+          name: 'Không hoạt động',
+          value: 0
+        },
+      ]),
+      FieldForm.createSelect('Loại chương trình', 'type', 'Chọn một', [
         {
           name: 'Giảm giá sản phẩm',
           value: 1
@@ -83,20 +89,6 @@ export class PromotionListComponent extends AbstractCRUDComponent<PromotionMeta>
           name: 'Giảm giá đơn hàng',
           value: 4
         }
-      ]),
-      FieldForm.createSelect('Tìm kiếm trạng thái', 'status', 'Chọn một', [
-        {
-          name: 'Tất cả',
-          value: 'all'
-        },
-        {
-          name: 'Hoạt động',
-          value: 1
-        },
-        {
-          name: 'Không hoạt động',
-          value: 0
-        },
       ]),
     ];
   }

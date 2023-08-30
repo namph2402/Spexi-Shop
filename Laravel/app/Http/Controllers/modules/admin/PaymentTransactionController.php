@@ -36,7 +36,7 @@ class PaymentTransactionController extends RestController
             return $this->success($data);
         }
 
-        if ($request->has('status') && $request->status != 'all') {
+        if ($request->has('status')) {
             array_push($clauses, WhereClause::query('status', $request->status));
         }
 

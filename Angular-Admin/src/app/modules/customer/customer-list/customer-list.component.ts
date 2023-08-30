@@ -54,12 +54,23 @@ export class CustomerListComponent extends AbstractCRUDComponent<CustomerMeta> {
   buildSearchForm(): FormGroup {
     return this.formBuilder.group({
       search: new FormControl(null),
+      status: new FormControl(null),
     });
   }
 
   initSearchForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa', 'col-md-6'),
+      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa'),
+      FieldForm.createSelect('Tìm kiếm trạng thái', 'status', 'Chọn một', [
+        {
+          name:'Hoạt động',
+          value: '1'
+        },
+        {
+          name:'Không hoạt động',
+          value: '0'
+        },
+      ]),
     ];
   }
 

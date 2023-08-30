@@ -4,6 +4,7 @@ import {ToasterService} from 'angular2-toaster';
 import {OrderShipMeta} from './order-ship.meta';
 import {catchError, map} from 'rxjs/operators';
 import {AbstractCRUDService, DataResponse, TitleService} from '../../core';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class OrderShipService extends AbstractCRUDService<OrderShipMeta> {
@@ -24,6 +25,11 @@ export class OrderShipService extends AbstractCRUDService<OrderShipMeta> {
 
   shipping(id: number) {
     return this.http.get<DataResponse<any>>(`${this.urlRestAPI}/${id}/shipping`, {params: {}})
+      .pipe(catchError(this.handleErrorRequest.bind(this)), map(res => res['data']));
+  }
+
+  note(item: OrderShipMeta): Observable<OrderShipMeta> {
+    return this.http.post<DataResponse<any>>(`${this.urlRestAPI}/${item['id']}/note`, item)
       .pipe(catchError(this.handleErrorRequest.bind(this)), map(res => res['data']));
   }
 

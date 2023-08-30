@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderShip extends Model
 {
+    public static $DANG_GIAO = "Đang giao";
+    public static $GIAO_LAI = "Giao lại";
+    public static $HOAN_THANH = "Hoàn thành";
+    public static $HUY_DON = "Hủy đơn";
+
     protected $guarded = [];
 
     public function order()

@@ -80,26 +80,21 @@ export class PostListComponent extends AbstractCRUDComponent<PostMeta> {
 
   initSearchForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa', 'col-md-6'),
-      FieldForm.createSelect('Tìm kiếm danh mục', 'category_id', 'Chọn một', 'loadAllCategory', 'col-md-6'),
+      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa'),
+      FieldForm.createSelect('Tìm kiếm danh mục', 'category_id', 'Chọn một', 'loadAllCategory'),
       FieldForm.createSelect('Tìm kiếm trạng thái', 'status', 'Chọn một', [
-        {
-          id: '0',
-          name: 'Tất cả',
-          value: 'all'
-        },
         {
           id: 1,
           name: 'Hoạt động',
           value: '1'
         },
         {
-          id: 2,
+          id: 0,
           name: 'Không hoạt động',
           value: '0'
         },
-      ], 'col-md-6', 'name', 'value'),
-      FieldForm.createSelect('Tìm kiếm thẻ', 'tag_id', 'Chọn một', 'loadAllTag', 'col-md-6'),
+      ]),
+      FieldForm.createSelect('Tìm kiếm thẻ', 'tag_id', 'Chọn một', 'loadAllTag'),
     ];
   }
 

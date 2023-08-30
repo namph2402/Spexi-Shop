@@ -48,7 +48,7 @@ class UserController extends RestController
             return $this->success($data);
         }
 
-        if ($request->has('status') && $request->status != 'all') {
+        if ($request->has('status')) {
             $status = $request->status;
             array_push($clauses, WhereClause::queryRelationHas('account', function ($q) use ($status) {
                 $q->where('status', $status);

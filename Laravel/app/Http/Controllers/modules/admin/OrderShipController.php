@@ -6,6 +6,7 @@ use App\Common\Enum\UnitName;
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
 use App\Models\Order;
+use App\Models\OrderShip;
 use App\Repository\OrderRepositoryInterface;
 use App\Repository\OrderShipRepositoryInterface;
 use App\Repository\ShippingServiceRepositoryInterface;
@@ -53,16 +54,12 @@ class OrderShipController extends RestController
         $orderBy = $request->input('orderBy', 'updated_at:desc');
 
         if ($request->has('search') && Str::length($request->search) > 0) {
-            array_push($clauses, WhereClause::queryLike('customer_name', $request->search));
+            array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('customer_name', $request->search), WhereClause::queryLike('customer_phone', $request->search)]));
         }
 
         if ($request->has('search') && Str::length($request->search) == 0) {
             $data = '';
             return $this->success($data);
-        }
-
-        if ($request->has('customer_phone')) {
-            array_push($clauses, WhereClause::queryLike('customer_phone', $request->customer_phone));
         }
 
         if ($request->has('created_date')) {
@@ -216,21 +213,18 @@ class OrderShipController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, [
                 'status' => 'Hoàn thành',
                 'status_id' => 7,
             ]);
-
             if($model) {
                 $this->orderRepository->update($model->order->id,
                 [
                     'order_status' => 'Hoàn thành'
                 ]);
             }
-
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -275,6 +269,36 @@ class OrderShipController extends RestController
             $this->repository->update($id,['is_printed' => 1]);
             return $this->success(['link' => $ghu->printOrders([$model->order])]);
         } catch (\Exception $e) {
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function note($id, Request $request)
+    {
+        $model = $this->repository->findById($id);
+        if (empty($model)) {
+            return $this->errorNotFound();
+        }
+        if( $request->type == 0) {
+            $attributes['note'] = $request->note;
+            $attributes['status'] = OrderShip::$HUY_DON;
+            $attributes['status_id'] = 0;
+        } else {
+            $attributes['note'] = $request->note;
+            $attributes['status'] = OrderShip::$GIAO_LAI;
+            $attributes['status_id'] = 5;
+        }
+        try {
+            DB::beginTransaction();
+            $model = $this->repository->update($id, $attributes);
+            $this->orderRepository->update($model->order_id, [
+                'order_status' => Order::$HUY_DON
+            ]);
+            DB::commit();
+            return $this->success($model);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

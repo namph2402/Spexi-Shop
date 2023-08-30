@@ -1,20 +1,20 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {BsModalRef} from 'ngx-bootstrap';
-import {OrderMeta} from '../order.meta';
-import {OrderService} from '../order.service';
+import {OrderShipService} from '../order-ship.service';
 import {AbstractModalComponent, FieldForm, ObjectUtil} from '../../../core';
+import {OrderShipMeta} from '../order-ship.meta';
 
 @Component({
-  selector: 'app-order-note',
-  templateUrl: './order-note.component.html',
-  styleUrls: ['./order-note.component.css'],
-  providers: [OrderService]
+  selector: 'app-order-ship-note',
+  templateUrl: './order-ship-note.component.html',
+  styleUrls: ['./order-ship-note.component.css'],
+  providers: [OrderShipService]
 })
-export class OrderNoteComponent extends AbstractModalComponent<OrderMeta> {
+export class OrderShipNoteComponent extends AbstractModalComponent<OrderShipMeta> {
 
   constructor(
-    service: OrderService,
+    service: OrderShipService,
     modal: BsModalRef,
     builder: FormBuilder,
   ) {
@@ -35,18 +35,18 @@ export class OrderNoteComponent extends AbstractModalComponent<OrderMeta> {
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createTextArea('Lý do hủy đơn', 'note', 'Nhập kí tự'),
+      FieldForm.createTextArea('Ghi chú', 'note', 'Nhập kí tự'),
     ];
   }
 
   loaded(): void {
   }
 
-  cancel() {
+  note() {
     let item: any = ObjectUtil.combineValue(this.model, this.formGroup.value);
-    (<OrderService>this.service).cancel(item).subscribe(res => {
-      this.service.toastSuccessfully('Hủy');
+    (<OrderShipService>this.service).note(item).subscribe(res => {
+      this.service.toastSuccessfully('Ghi chú');
       this.close(res);
-    }, () => this.service.toastFailed('Hủy'));
+    }, () => this.service.toastFailed('Ghi chú'));
   }
 }

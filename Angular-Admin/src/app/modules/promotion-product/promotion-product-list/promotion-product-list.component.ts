@@ -67,8 +67,8 @@ export class PromotionProductListComponent extends AbstractCRUDModalComponent<Pr
 
   initSearchForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa', 'col-md-6'),
-      FieldForm.createSelect('Tìm kiếm danh mục', 'category_id', 'Chọn một', [], 'col-md-6'),
+      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa'),
+      FieldForm.createSelect('Tìm kiếm danh mục', 'category_id', 'Chọn một', []),
     ];
   }
 

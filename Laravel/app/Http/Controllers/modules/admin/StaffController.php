@@ -39,11 +39,11 @@ class StaffController extends RestController
             return $this->success($data);
         }
 
-        if ($request->has('status') && $request->status != 'all') {
+        if ($request->has('status')) {
             array_push($clauses, WhereClause::query('status', $request->status));
         }
 
-        if ($request->has('position') && $request->position != 'all') {
+        if ($request->has('position')) {
             array_push($clauses, WhereClause::query('position', $request->position));
         }
 

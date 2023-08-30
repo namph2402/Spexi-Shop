@@ -57,7 +57,7 @@ export class FormDataListComponent extends AbstractCRUDComponent<FormDataMeta> {
 
   initSearchForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tìm kiếm theo email', 'search', 'Nhập từ khóa', 'col-md-6'),
+      FieldForm.createTextInput('Tìm kiếm theo email', 'search', 'Nhập từ khóa'),
     ];
   }
 

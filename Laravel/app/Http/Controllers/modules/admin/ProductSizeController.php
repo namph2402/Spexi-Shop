@@ -119,7 +119,7 @@ class ProductSizeController extends RestController
         }
         try {
             DB::beginTransaction();
-            $this->repository->delete($id);
+            $this->repository->delete($id,['warehouse']);
             DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {

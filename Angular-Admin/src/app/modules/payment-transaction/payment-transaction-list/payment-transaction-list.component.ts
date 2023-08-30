@@ -58,12 +58,8 @@ export class PaymentTransactionListComponent extends AbstractCRUDComponent<Payme
 
   initSearchForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa', 'col-md-6'),
+      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa'),
       FieldForm.createSelect('Trạng thái', 'status', 'Chọn một', [
-        {
-          name: "Tất cả",
-          value: "all"
-        },
         {
           name: "Thành công",
           value: "COMPLETED"

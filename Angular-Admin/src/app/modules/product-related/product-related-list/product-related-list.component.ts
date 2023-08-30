@@ -63,8 +63,8 @@ export class ProductRelatedListComponent extends AbstractCRUDModalComponent<Prod
 
   initSearchForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', '', 'col-md-6'),
-      FieldForm.createSelect('Tìm kiếm danh mục', 'category_id', 'Chọn một', [], 'col-md-6'),
+      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', ''),
+      FieldForm.createSelect('Tìm kiếm danh mục', 'category_id', 'Chọn một', []),
     ];
   }
 

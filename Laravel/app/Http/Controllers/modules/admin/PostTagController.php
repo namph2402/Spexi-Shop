@@ -28,23 +28,19 @@ class PostTagController extends RestController
         $withCount = [];
         $tagClauses = [];
         $orderBy = $request->input('orderBy', 'order:asc');
-
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
         }
-
         if ($request->has('search') && Str::length($request->search) == 0) {
             $data = '';
             return $this->success($data);
         }
-
         if ($request->has('post_id')) {
             $postId = $request->post_id;
             array_push($clauses, WhereClause::queryRelationHas('posts', function ($q) use ($postId) {
                 $q->where('id', $postId);
             }));
         }
-
         if ($request->has('post_id_add')) {
             $postIdAdd = $request->post_id_add;
             $tags = $this->repository->get([WhereClause::queryRelationHas('posts', function ($q) use ($postIdAdd) {
@@ -57,7 +53,6 @@ class PostTagController extends RestController
                 array_push($clauses, WhereClause::queryNotIn('id', $tagClauses));
             }
         }
-
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {
@@ -74,23 +69,18 @@ class PostTagController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
-
         $attributes = $request->only([
             'name',
         ]);
-
         $attributes['slug'] = Str::slug($attributes['name']);
-
         $lastItem = $this->repository->find([], 'order:desc');
         if ($lastItem) {
             $attributes['order'] = $lastItem->order + 1;
         }
-
         $test_name = $this->repository->find([WhereClause::query('name', $request->input('name'))]);
         if ($test_name) {
             return $this->errorHad($request->input('name'));
         }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->create($attributes);

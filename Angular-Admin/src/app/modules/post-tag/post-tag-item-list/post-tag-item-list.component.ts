@@ -61,7 +61,7 @@ export class PostTagItemListComponent extends AbstractCRUDModalComponent<PostTag
 
   initSearchForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa', 'col-md-6'),
+      FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa'),
     ];
   }
 
