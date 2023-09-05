@@ -5,7 +5,6 @@ namespace App\Http\Controllers\modules\admin;
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
 use App\Models\Product;
-use App\Models\ProductCategory;
 use App\Repository\ImportNoteDetailRepositoryInterface;
 use App\Repository\ImportNoteRepositoryInterface;
 use App\Repository\ProductCategoryRepositoryInterface;
@@ -173,6 +172,7 @@ class WarehouseController extends RestController
         if($model->quantity <= 0) {
             return $this->errorClient('Sản phẩm đã hết hàng');
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -191,6 +191,7 @@ class WarehouseController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+        
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);

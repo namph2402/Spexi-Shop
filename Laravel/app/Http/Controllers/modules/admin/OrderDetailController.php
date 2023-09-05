@@ -25,90 +25,19 @@ class OrderDetailController extends RestController
         $with = [];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:desc');
-
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
         }
-
         if ($request->has('search') && Str::length($request->search) == 0) {
             $data = '';
             return $this->success($data);
         }
-
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {
             $data = $this->repository->get($clauses, $orderBy, $with, $withCount);
         }
         return $this->success($data);
-    }
-
-    public function store(Request $request)
-    {
-        $validator = $this->validateRequest($request, [
-            'name' => 'required|max:255',
-            'username' => 'required|max:255',
-            'password' => 'required|max:255',
-        ]);
-        if ($validator) {
-            return $this->errorClient($validator);
-        }
-        $attributes = $request->only([
-            'name',
-            'username',
-            'password',
-        ]);
-        $attributes['password'] = Hash::make($request->input('password', '123456a@'));
-        $attributes['remember_token'] = Str::random(100);
-        try {
-            DB::beginTransaction();
-            $model = $this->repository->create($attributes);
-            DB::commit();
-            return $this->success($model);
-        } catch (\Exception $e) {
-            Log::error($e);
-            DB::rollBack();
-            return $this->error($e->getMessage());
-        }
-    }
-
-    public function update(Request $request, $id)
-    {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
-        $validator = $this->validateRequest($request, [
-            'name' => 'nullable|max:255',
-            'username' => 'nullable|max:255',
-            'password' => 'nullable|max:255',
-        ]);
-        if ($validator) {
-            return $this->errorClient($validator);
-        }
-
-        $columns = [
-            'name',
-            'username',
-            'password',
-        ];
-        $attributes = [];
-
-        foreach ($columns as $column) {
-            $attributes[$column] = $request->{$column};
-        }
-
-        try {
-            DB::beginTransaction();
-            $model = $this->repository->update($id, $attributes);
-            DB::commit();
-            return $this->success($model);
-        } catch (\Exception $e) {
-            Log::error($e);
-            DB::rollBack();
-            return $this->error($e->getMessage());
-        }
     }
 
     public function destroy($id)

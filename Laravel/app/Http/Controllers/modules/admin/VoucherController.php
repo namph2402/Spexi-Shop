@@ -64,6 +64,7 @@ class VoucherController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes = $request->only([
             'name',
             'code',
@@ -74,7 +75,6 @@ class VoucherController extends RestController
             'status',
             'min_order_value'
         ]);
-
         $attributes['remain_quantity'] = $request->quantity;
         $attributes['discount_value'] = $request->input('discount_value', 0);
         $attributes['discount_percent'] = $request->input('discount_percent', 0);
@@ -134,6 +134,7 @@ class VoucherController extends RestController
         if ($newQuantity <= 0) {
             $newQuantity = 0;
         }
+
         $attributes['remain_quantity'] = $newQuantity;
         $attributes['discount_value'] = $request->input('discount_value', 0);
         $attributes['discount_percent'] = $request->input('discount_percent', 0);
@@ -165,6 +166,7 @@ class VoucherController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->delete($id);
@@ -186,6 +188,7 @@ class VoucherController extends RestController
         if (strtotime($model->expired_date) < strtotime("now")) {
             return $this->errorClient('Thời gian hết hạn không đúng');
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -204,6 +207,7 @@ class VoucherController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);

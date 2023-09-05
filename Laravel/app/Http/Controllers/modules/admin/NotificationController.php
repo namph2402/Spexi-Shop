@@ -52,6 +52,7 @@ class NotificationController extends RestController
             'name' => 'required|max:255',
             'content' => 'required',
         ]);
+
         if ($validator) {
             return $this->errorClient($validator);
         }
@@ -126,6 +127,7 @@ class NotificationController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->delete($id);
@@ -144,6 +146,7 @@ class NotificationController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -162,6 +165,7 @@ class NotificationController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+        
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);

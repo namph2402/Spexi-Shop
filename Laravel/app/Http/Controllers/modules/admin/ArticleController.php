@@ -67,7 +67,7 @@ class ArticleController extends RestController
             'articleable_id',
             'content'
         ]);
-
+        
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);

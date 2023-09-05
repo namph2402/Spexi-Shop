@@ -79,7 +79,6 @@ class PaymentMethodController extends RestController
         if (!($model instanceof PaymentMethod)) {
             return $this->errorNotFound();
         }
-
         $attributes = [];
         if ($model->name == "VNPay") {
             $validator = $this->validateRequest($request, [
@@ -101,7 +100,6 @@ class PaymentMethodController extends RestController
             ];
             $attributes['config'] = json_encode($config, true);
         }
-
         if ($model->name == "Chuyển khoản") {
             $validator = $this->validateRequest($request, [
                 'owner_name' => 'required',
@@ -123,7 +121,6 @@ class PaymentMethodController extends RestController
             ];
             $attributes['config'] = json_encode($config, true);
         }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
@@ -145,7 +142,6 @@ class PaymentMethodController extends RestController
         if (!($model instanceof PaymentMethod)) {
             return $this->errorNotFound();
         }
-
         $attributes['config'] = null;
         try {
             DB::beginTransaction();

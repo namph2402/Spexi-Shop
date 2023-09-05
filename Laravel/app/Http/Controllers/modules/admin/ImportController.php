@@ -23,17 +23,15 @@ class ImportController extends RestController
         $clauses = [];
         $with = ['details'];
         $withCount = [];
-        $orderBy = $request->input('orderBy');
+        $orderBy = $request->input('orderBy','created_at:desc');
 
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('name', $request->search), WhereClause::queryLike('creator_name', $request->search)]));
         }
-
         if ($request->has('search') && Str::length($request->search) == 0) {
             $data = '';
             return $this->success($data);
         }
-
         if ($request->has('date')) {
             array_push($clauses, WhereClause::queryDate('created_at', $request->date));
         }
@@ -77,18 +75,15 @@ class ImportController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-
         $validator = $this->validateRequest($request, [
             'name' => 'nullable|max:255',
         ]);
         if ($validator) {
             return $this->errorClient($validator);
         }
-
         $attributes = $request->only([
             'name'
         ]);
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
@@ -107,6 +102,7 @@ class ImportController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->delete($id, ['details']);

@@ -29,7 +29,6 @@ class FormDataController extends RestController
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::queryLike('value', $request->search));
         }
-
         if ($request->has('search') && Str::length($request->search) == 0) {
             $data = '';
             return $this->success($data);
@@ -49,6 +48,7 @@ class FormDataController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->delete($model);

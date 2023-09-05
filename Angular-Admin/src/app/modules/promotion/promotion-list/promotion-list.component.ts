@@ -152,19 +152,4 @@ export class PromotionListComponent extends AbstractCRUDComponent<PromotionMeta>
     });
   }
 
-  copy(copy_content: string) {
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = copy_content;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
-    this.service.toastSuccess('Copy url: ' + copy_content);
-  }
-
 }

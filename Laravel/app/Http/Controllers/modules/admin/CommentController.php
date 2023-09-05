@@ -28,7 +28,6 @@ class CommentController extends RestController
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
         }
-
         if ($request->has('search') && Str::length($request->search) == 0) {
             $data = '';
             return $this->success($data);
@@ -110,6 +109,7 @@ class CommentController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->delete($id);
@@ -128,6 +128,7 @@ class CommentController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -146,6 +147,7 @@ class CommentController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);

@@ -33,7 +33,6 @@ class BannerController extends RestController
             'name' => 'required|max:255',
             'image' => 'required'
         ]);
-
         if ($validator->fails()) {
             return $this->errorClient($validator);
         }
@@ -73,12 +72,9 @@ class BannerController extends RestController
         $createdImages = [];
 
         $model = $this->repository->findById($id);
-
         if (empty($model)) {
             return $this->errorNotFound();
         }
-
-        $image_old = $model->image;
 
         $validator = $this->validateRequest($request, [
             'name' => 'nullable|max:255',
@@ -88,6 +84,7 @@ class BannerController extends RestController
             return $this->errorClient($validator);
         }
 
+        $image_old = $model->image;
         $attributes = $request->only([
             'name',
             'href',
@@ -120,7 +117,9 @@ class BannerController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $image = $model->image;
+
         try {
             DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>'), WhereClause::query('group_id', $model->group_id)], ['order' => DB::raw('`order` - 1')]);
@@ -141,6 +140,7 @@ class BannerController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -159,6 +159,7 @@ class BannerController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
@@ -179,10 +180,10 @@ class BannerController extends RestController
         }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<'), WhereClause::query('group_id', $model->group_id)], 'order:desc');
-
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
@@ -211,10 +212,10 @@ class BannerController extends RestController
         }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>'), WhereClause::query('group_id', $model->group_id)], 'order:asc');
-
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;

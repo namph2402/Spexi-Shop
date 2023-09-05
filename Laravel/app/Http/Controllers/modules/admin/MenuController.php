@@ -67,7 +67,7 @@ class MenuController extends RestController
             return $this->errorHad($request->input('name'));
         }
 
-        if($request->input('name') == 'Trang chủ') {
+        if ($request->input('name') == 'Trang chủ') {
             $attributes['url'] = null;
         }
 
@@ -81,7 +81,6 @@ class MenuController extends RestController
             DB::rollBack();
             return $this->error($e->getMessage());
         }
-
     }
 
     public function update(Request $request, $id)
@@ -112,8 +111,7 @@ class MenuController extends RestController
         if ($test_name) {
             return $this->errorHad($request->input('name'));
         }
-
-        if($request->input('name') == 'Trang chủ') {
+        if ($request->input('name') == 'Trang chủ') {
             $attributes['url'] = null;
         }
 
@@ -132,9 +130,11 @@ class MenuController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
+
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>'), WhereClause::query('group_id', $model->group_id)], ['order' => DB::raw('`order` - 1')]);
@@ -154,7 +154,6 @@ class MenuController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<'), WhereClause::query('group_id', $model->group_id)], 'order:desc');
 
         if (empty($swapModel)) {
@@ -188,21 +187,15 @@ class MenuController extends RestController
         }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>'), WhereClause::query('group_id', $model->group_id)], 'order:asc');
-
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update(
-                $id,
-                ['order' => $swapModel->order]
-            );
-            $swapModel = $this->repository->update(
-                $swapModel->id,
-                ['order' => $order]
-            );
+            $model = $this->repository->update($id,['order' => $swapModel->order]);
+            $swapModel = $this->repository->update($swapModel->id,['order' => $order]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {

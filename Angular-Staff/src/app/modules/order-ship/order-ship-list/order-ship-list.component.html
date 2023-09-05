@@ -1,0 +1,232 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-12">
+        <form (ngSubmit)="load()" [formGroup]="searchForm">
+          <div *ngFor="let f of searchControls" class="form-group col-md-4">
+            <ng-template [ngIf]="f.type == 'input'">
+              <label [for]="f.formControl">
+                {{ f.label }}
+              </label>
+              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control" />
+            </ng-template>
+            <ng-template [ngIf]="f.type == 'textarea'">
+              <label [for]="f.formControl">
+                {{ f.label }}
+              </label>
+              <textarea [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                [placeholder]="f.placeHolder" class="form-control">
+              </textarea>
+            </ng-template>
+            <ng-template [ngIf]="f.type == 'checkbox'">
+              <div class="checkbox">
+                <label>
+                  <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                    type="checkbox" />
+                  {{ f.label }}
+                </label>
+              </div>
+            </ng-template>
+            <ng-template [ngIf]="f.type == 'select'">
+              <label [for]="f.formControl">
+                {{ f.label }}
+              </label>
+              <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                class="form-control">
+                <option *ngFor="let option of f.data" [value]="option['value']">
+                  {{ option["name"] }}
+                </option>
+              </select>
+            </ng-template>
+            <ng-template [ngIf]="f.type == 'select2'">
+              <label [for]="f.formControl">
+                {{ f.label }}
+              </label>
+              <angular2-multiselect [data]="f.data" [formControlName]="f.formControl" [id]="f.formControl"
+                [settings]="f.config">
+              </angular2-multiselect>
+            </ng-template>
+          </div>
+          <div class="col-md-12">
+            <button class="btn btn-default" type="submit">Tìm kiếm</button>
+            <button (click)="removeFilter()" class="btn btn-default" type="button">Xóa lọc</button>
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-6 col-xs-offset-6">
+        <button (click)="showShip()" class="btn btn-primary pull-right" type="button">
+          Danh sách đơn mới
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body no-padding">
+    <table class="table-responsive table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th style="width: 10%">Mã đơn hàng</th>
+          <th style="width: 15%">Mã đơn vận</th>
+          <th style="width: 20%">Khách hàng</th>
+          <th style="width: 45%">Thông tin</th>
+          <th style="width: 10%">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of list; let i = index" class="odd">
+          <td class="text-center">
+            <label style="display: block">{{ item.code }}</label>
+              <label class="label" style="padding: 5px 10px"
+              [ngClass]="{
+                'label-primary':item.order_status == 'Chuẩn bị hàng',
+                'label-info':item.order_status == 'Đã chuẩn bị hàng',
+                'label-warning':item.order_status == 'Đang giao',
+                'label-success':item.order_status == 'Hoàn thành',
+                'label-danger':item.order_status == 'Hủy đơn'
+              }">{{ item.order_status }}</label>
+            <p style="margin: 10px 0 0">
+              {{ item.created_at | date : "yyyy-MM-dd" }}
+            </p>
+            <p>{{ item.created_at | date : "HH:mm:ss" }}</p>
+          </td>
+          <td class="text-center">
+            <div *ngIf="item.shipping">
+              <p>
+                <label class="label" style="padding: 5px 10px">
+                  <a href="javascript:void(0)" style="font-size: 14px;" (click)="infoShip(item.shipping,i)">Mã
+                    {{item.shipping.code}}</a>
+                </label>
+              </p>
+              <p>
+                <label class="label label-default" style="padding: 5px 10px">{{item.shipping.unit ? item.shipping.unit.name : ''}}</label>
+              </p>
+              <p>
+                <label class="label" style="padding: 5px 10px"
+                [ngClass]="{
+                  'label-primary':item.shipping.status == 'Điều phối giao hàng',
+                  'label-info':item.shipping.status == 'Đang giao',
+                  'label-warning':item.shipping.status == 'Giao lại',
+                  'label-success':item.shipping.status == 'Hoàn thành',
+                  'label-danger':item.shipping.status == 'Hủy đơn'
+                }">{{item.shipping.status}}</label>
+              </p>
+              <div style="margin-top: 10px;">
+                <button *ngIf="item.shipping.status == 'Điều phối giao hàng' || item.shipping.status == 'Giao lại'" type="button" class="btn btn-success margin-r-5" style="width: 30px; height: 30px; padding: 0;"
+                  (click)="shipping(item.shipping)">
+                  <i class="fa fa-truck"></i>
+                </button>
+                <ng-template [ngIf]="item.shipping.status == 'Đang giao'">
+                    <button type="button" class="btn btn-success margin-r-5" style="width: 30px; height: 30px; padding: 0;"
+                      (click)="complete(item.shipping)">
+                      <i class="fa fa-check"></i>
+                    </button>
+                    <button type="button" class="btn btn-warning margin-r-5" style="width: 30px; height: 30px; padding: 0;"
+                      (click)="note(item.shipping, 1)">
+                      <i class="fa fa-refresh"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger margin-r-5" style="width: 30px; height: 30px; padding: 0;"
+                      (click)="note(item.shipping, 0)">
+                      <i class="fa fa-remove"></i>
+                    </button>
+                  </ng-template>
+                  <textarea *ngIf="item.shipping.note" [cols]="9" [rows]="3" [value]="item.shipping.note" readonly style="min-width: 146px; max-width: 146px; min-height: 107px; margin-top: 10px;"></textarea>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p>{{ item.customer_name }}</p>
+            <p>{{ item.customer_phone }}</p>
+            <p>{{ item.customer_text }}</p>
+            <textarea *ngIf="item.customer_request" [cols]="30" [rows]="5" [value]="item.customer_request" readonly
+              style="min-width: 237px; max-width: 237px"></textarea>
+            <label>
+              <textarea *ngIf="item.note" [cols]="30" [rows]="4" value="Ghi chú: {{item.note}}" readonly
+                style="min-width: 237px; max-width: 237px">
+              </textarea>
+            </label>
+          </td>
+          <td>
+            <table class="table-responsive table table-bordered">
+              <thead>
+                <tr>
+                  <th style="width: 50%">Sản phẩm</th>
+                  <th style="width: 20%">Loại</th>
+                  <th style="width: 10%">S/L</th>
+                  <th style="width: 20%">Giá tiền</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let d of item.details">
+                  <td>
+                    <p><label>{{ d.product_code }}</label> - {{ d.product.name }}</p>
+                  </td>
+                  <td>
+                    <span style="display: block">{{ d.size }} - {{ d.color }}</span>
+                  </td>
+                  <td class="text-right">
+                    {{ d.quantity | number : "1.0-0" }}
+                  </td>
+                  <td class="text-right">
+                    {{ d.quantity * d.unit_price | number : "1.0-0" }}
+                  </td>
+                </tr>
+                <tr>
+                  <th class="text-right" colspan="3">Thành tiền</th>
+                  <td class="text-right">
+                    {{ item.amount | number : "1.0-0" }}
+                  </td>
+                </tr>
+                <tr>
+                  <th class="text-right" colspan="3">Phí ship</th>
+                  <td class="text-right">
+                    {{ item.shipping_fee | number : "1.0-0" }}
+                  </td>
+                </tr>
+                <tr *ngIf="item.discount > 0">
+                  <th class="text-right" colspan="3">Giảm giá</th>
+                  <td class="text-right">
+                    {{ item.discount | number : "1.0-0" }}
+                  </td>
+                </tr>
+                <tr>
+                  <th class="text-right" colspan="3">Tổng tiền</th>
+                  <th class="text-right">
+                    {{ item.total_amount | number : "1.0-0" }}
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td class="text-center">
+            <div style="margin-top: 20px;" *ngIf="item.shipping">
+              <button type="button" class="btn btn-sm margin-r-5" style="width: 30px; height: 30px; padding: 0;"
+                [ngClass]="{'btn-success':!item.shipping.is_printed,'btn-danger':item.shipping.is_printed}"
+                (click)="printShippingBill(item)">
+                <i class="fa fa-print"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-xs-6">
+        <pagination (numPages)="pagination.numPages = $event" (pageChanged)="pageChanged($event)"
+          [(ngModel)]="pagination.currentPage" [boundaryLinks]="true" [itemsPerPage]="pagination.itemsPerPage"
+          [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems" class="pagination-sm"></pagination>
+      </div>
+      <div class="col-xs-6">
+        <div class="box-go-to">
+          <input [(ngModel)]="nextPage" class="col-xs-2" type="number" />
+          <span class="col-xs-1">/</span>
+          <input [(ngModel)]="pagination.numPages" class="col-xs-2" disabled type="text" />
+          <div class="col-xs-4">
+            <button (click)="goToPageNumber()">Đến</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

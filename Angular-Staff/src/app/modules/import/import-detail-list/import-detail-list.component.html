@@ -1,0 +1,45 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Chi tiết phiếu nhập kho</h4>
+  <button (click)="dismiss()" aria-label="Close" class="close pull-right" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th style="width: 13%;">Mã sản phẩm</th>
+            <th style="width: 25%;">Tên sản phẩm</th>
+            <th style="width: 19%;">Mã kho hàng</th>
+            <th style="width: 9%;">Giá bán</th>
+            <th style="width: 8%;">Size</th>
+            <th style="width: 8%;">Màu</th>
+            <th style="width: 8%;padding: 8px 5px;">Số lượng</th>
+            <th style="width: 10%;padding: 8px 5px;">Khối lượng</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of list; let i = index" class="odd">
+            <td class="text-center">
+              <label>{{ item.product_code }}</label>
+            </td>
+            <td>{{ item.name }}</td>
+            <td class="text-center">{{ item.warehouse_code }}</td>
+            <td class="text-center">{{ item.price }}</td>
+            <td class="text-center">{{ item.size }}</td>
+            <td class="text-center">{{ item.color }}</td>
+            <td class="text-center">{{ item.quantity }}</td>
+            <td class="text-center">{{ item.weight }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button (click)="dismiss()" class="btn btn-default" type="button">
+    Đóng
+  </button>
+</div>

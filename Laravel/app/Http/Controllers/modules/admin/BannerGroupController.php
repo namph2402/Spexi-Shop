@@ -34,12 +34,11 @@ class BannerGroupController extends RestController
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
         }
-
         if ($request->has('search') && Str::length($request->search) == 0) {
             $data = '';
             return $this->success($data);
         }
-
+        
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {
@@ -58,7 +57,6 @@ class BannerGroupController extends RestController
         }
 
         $attributes['name'] = $request->name;
-
         $test_name = $this->repository->find([WhereClause::query('name', $request->input('name'))]);
         if ($test_name) {
             return $this->errorHad($request->input('name'));

@@ -32,12 +32,10 @@ class ExpenseController extends RestController
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('name', $request->search), WhereClause::queryLike('creator_name', $request->search)]));
         }
-
         if ($request->has('search') && Str::length($request->search) == 0) {
             $data = '';
             return $this->success($data);
         }
-
         if ($request->has('status')) {
             array_push($clauses, WhereClause::query('status', $request->status));
         }
@@ -67,7 +65,6 @@ class ExpenseController extends RestController
             'description',
             'amount',
         ]);
-
         $attributes['creator_id'] = $user->id;
         $attributes['creator_name'] = $user->name;
         $attributes['date_created'] = $request->input('date_created', Carbon::now());
@@ -105,7 +102,6 @@ class ExpenseController extends RestController
             'amount',
             'date_created'
         ]);
-
         if($attributes['date_created'] = '0000-00-00 00:00:00') {
             $attributes['date_created'] = Carbon::now();
         }
@@ -128,6 +124,7 @@ class ExpenseController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->delete($id);
@@ -146,6 +143,7 @@ class ExpenseController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);

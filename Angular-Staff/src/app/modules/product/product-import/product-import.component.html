@@ -1,0 +1,31 @@
+<div class="modal-header bg-primary">
+  <h4 class="modal-title pull-left">Nhập file</h4>
+  <button (click)="dismiss()" aria-label="Close" class="close pull-right" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <form [formGroup]="formGroup" novalidate>
+        <div class="form-group" [ngClass]="{ 'has-error': !formGroup.controls['name'].valid }">
+          <label for="name">Tên phiếu nhập</label>
+          <input formControlName="name" id="name" name="name" placeholder="Nhập tên" type="text" class="form-control"/>
+        </div>
+        <div class="custom-file margin-bottom form-group" [ngClass]="{ 'has-error': !formGroup.controls['file'].valid }">
+          <label class="custom-file-label" for="inputGroupFile01">Chọn file</label>
+          <input (change)="onFileUploadChange($event)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" aria-describedby="inputGroupFileAddon01"
+          class="custom-file-input" id="inputGroupFile01" type="file">
+        </div>
+        <div class="form-group" [ngClass]="{ 'has-error': !formGroup.controls['note'].valid }">
+          <label for="note">Ghi chú</label>
+          <textarea formControlName="note" id="note" name="note" placeholder="Nhập chi chú" rows="5" class="form-control"></textarea>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button (click)="import()" [disabled]="formGroup.invalid" class="btn btn-primary" type="button">Nhập liệu</button>
+  <button (click)="dismiss()" class="btn btn-default" type="button">Hủy bỏ</button>
+</div>

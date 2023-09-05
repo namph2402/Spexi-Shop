@@ -5,83 +5,6 @@ import { ProfileMeta } from "./profile.meta";
 import { BsModalService, ModalOptions } from "ngx-bootstrap";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 
-// @Component({
-//   selector: 'app-dashboard',
-//   templateUrl: 'profile.component.html',
-//   styleUrls: ['profile.component.css'],
-//   providers: [ProfileService]
-// })
-// export class ProfileComponent extends AbstractCRUDComponent<ProfileMeta> {
-
-//   constructor(
-//     service: ProfileMeta,
-//     modal: BsModalService,
-//     builder: FormBuilder,
-//   ) {
-//     super(service, modal, builder);
-//   }
-
-//   public onInit(): void {
-//     this.load();
-//   }
-
-//   public onDestroy(): void {
-//   }
-
-//   public getTitle(): string {
-//     return 'Đổi mật khẩu';
-//   }
-
-//   public getCreateModalComponent() {
-//     throw new Error('Method not implemented.');
-//   }
-//   public getEditModalComponent() {
-//     throw new Error('Method not implemented.');
-//   }
-//   public getCreateModalComponentOptions(): ModalOptions {
-//     throw new Error('Method not implemented.');
-//   }
-//   public getEditModalComponentOptions(): ModalOptions {
-//     throw new Error('Method not implemented.');
-//   }
-//   public buildSearchForm(): FormGroup {
-//     throw new Error('Method not implemented.');
-//   }
-//   public initNewModel(): ProfileMeta {
-//     throw new Error('Method not implemented.');
-//   }
-
-//   user: AuthMeta;
-//   form: FormGroup;
-
-//   ngOnInit() {
-//   }
-
-  // update() {
-  //   let data = {
-  //     name: this.form.controls['name'].value,
-  //     oldpassword: this.form.controls['oldpassword'].value,
-  //     password: this.form.controls['password'].value,
-  //   };
-  //   this.service.update(data).subscribe(() => {
-  //     this.toast.pop('success', 'Thay đổi thông tin cá nhân', 'Thành công');
-  //     StorageUtil.set('name', data.name);
-  //     this.form.controls['password'].setValue(null);
-  //     this.form.controls['confirmPassword'].setValue(null);
-  //   }, () => {
-  //     this.toast.pop('error', 'Thay đổi thông tin cá nhân', 'Thất bại');
-  //   });
-  // }
-
-  // matchPassword(c: FormGroup) {
-  //   if (c.get('password').value !== c.get('confirmPassword').value) {
-  //     return {matchPassword: true};
-  //   }
-  //   return null;
-  // }
-
-// }
-
 @Component({
   selector: 'app-profile',
   templateUrl: 'profile.component.html',
@@ -158,11 +81,24 @@ export class ProfileComponent extends AbstractCRUDComponent<ProfileMeta> {
     if(data.newPassword != data.rePassword) {
       this.service.toastError("Mật khẩu không khớp");
     } else {
-      this.service.update(data).subscribe((res: ProfileMeta) => {
+      (<ProfileService>this.service).update(data).subscribe((res: ProfileMeta) => {
         this.service.toastSuccess('Đổi mật khẩu thành công');
-        this.searchForm.reset();
+        this.reset();
       }, () => this.service.toastFailed('Đổi mật khẩu thất bại'));
     }
+  }
+
+  rePassword() {
+      (<ProfileService>this.service).repassword().subscribe((res: ProfileMeta) => {
+        this.service.toastSuccess('Lấy lại mật khẩu thành công');
+        this.searchForm.reset();
+      }, () => this.service.toastFailed('Lấy lại mật khẩu thất bại'));
+  }
+
+  reset() {
+    this.searchForm.get('password').setValue(null);
+    this.searchForm.get('newPassword').setValue(null);
+    this.searchForm.get('rePassword').setValue(null);
   }
 
 }
