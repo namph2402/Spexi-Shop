@@ -48,6 +48,7 @@ class ProductImageController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes = $request->only([
             'product_id',
         ]);
@@ -80,9 +81,10 @@ class ProductImageController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
-            $this->repository->bulkUpdate([WhereClause::query('product_id', $model->product_id), WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
             DB::beginTransaction();
+            $this->repository->bulkUpdate([WhereClause::query('product_id', $model->product_id), WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($id);
             FileStorageUtil::deleteFiles($model->image);
             DB::commit();
@@ -101,6 +103,7 @@ class ProductImageController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -140,10 +143,10 @@ class ProductImageController extends RestController
         }
 
         $swapModel = $this->repository->find([WhereClause::query('product_id', $model->product_id), WhereClause::query('order', $model->order, '<')], 'order:desc');
-
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
@@ -170,10 +173,10 @@ class ProductImageController extends RestController
         }
 
         $swapModel = $this->repository->find([WhereClause::query('product_id', $model->product_id), WhereClause::query('order', $model->order, '>')], 'order:asc');
-
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;

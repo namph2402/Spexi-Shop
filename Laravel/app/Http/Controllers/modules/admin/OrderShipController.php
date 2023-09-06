@@ -17,8 +17,6 @@ use App\Utils\GiaoHangUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class OrderShipController extends RestController
 {
@@ -53,11 +51,8 @@ class OrderShipController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy', 'updated_at:desc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('customer_name', $request->search), WhereClause::queryLike('customer_phone', $request->search)]));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('created_date')) {
@@ -84,14 +79,14 @@ class OrderShipController extends RestController
     {
         $successOrders = [];
 
-        $validator = Validator::make($request->all(), [
+        $validator = $this->validateRequest($request, [
             'order_ids' => 'required',
             'unit_id' => 'required|numeric',
             'store_id' => 'required|numeric',
             'service_id' => 'required|numeric',
         ]);
-        if ($validator->fails()) {
-            return $this->error($validator->errors());
+        if ($validator) {
+            return $this->errorClient($validator);
         }
 
         $orderIds = preg_split('/,/', $request->order_ids);
@@ -170,6 +165,7 @@ class OrderShipController extends RestController
         if (empty($model)) {
             return $this->errorClient('Đơn hàng không tồn tại');
         }
+
         $ghu = new GiaoHangUtil($model);
         $info = $ghu->getOrder($model);
         return $this->success($info);
@@ -190,8 +186,7 @@ class OrderShipController extends RestController
             ]);
 
             if($model) {
-                $this->orderRepository->update($model->order->id,
-                [
+                $this->orderRepository->update($model->order->id,[
                     'order_status' => 'Đang giao'
                 ]);
             }
@@ -236,11 +231,14 @@ class OrderShipController extends RestController
         if (empty($orderIdsStr)) {
             return $this->error('Không có đơn hàng nào');
         }
+
         $orderIds = preg_split('/,/', $orderIdsStr);
+
         $models = $this->orderRepository->get([WhereClause::queryIn('id',$orderIds)], null, ['shipping']);
         if (empty($models)) {
             return $this->error('Đối tượng không tồn tại');
         }
+
         try {
             DB::beginTransaction();
             $ghu = new GiaoHangUtil($models[0]);
@@ -260,6 +258,7 @@ class OrderShipController extends RestController
         if (empty($model)) {
             return $this->error('Đơn hàng không tồn tại');
         }
+
         try {
             $ghu = new GiaoHangUtil($model);
             $this->repository->update($id,['is_printed' => 1]);
@@ -275,6 +274,7 @@ class OrderShipController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         if( $request->type == 0) {
             $attributes['note'] = $request->note;
             $attributes['status'] = OrderShip::$HUY_DON;
@@ -284,6 +284,7 @@ class OrderShipController extends RestController
             $attributes['status'] = OrderShip::$GIAO_LAI;
             $attributes['status_id'] = 5;
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);

@@ -28,18 +28,18 @@ class PostTagController extends RestController
         $withCount = [];
         $tagClauses = [];
         $orderBy = $request->input('orderBy', 'order:asc');
-        if ($request->has('search') && Str::length($request->search) > 0) {
+
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
+
         if ($request->has('post_id')) {
             $postId = $request->post_id;
             array_push($clauses, WhereClause::queryRelationHas('posts', function ($q) use ($postId) {
                 $q->where('id', $postId);
             }));
         }
+
         if ($request->has('post_id_add')) {
             $postIdAdd = $request->post_id_add;
             $tags = $this->repository->get([WhereClause::queryRelationHas('posts', function ($q) use ($postIdAdd) {
@@ -52,6 +52,7 @@ class PostTagController extends RestController
                 array_push($clauses, WhereClause::queryNotIn('id', $tagClauses));
             }
         }
+
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {
@@ -68,18 +69,22 @@ class PostTagController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes = $request->only([
             'name',
         ]);
         $attributes['slug'] = Str::slug($attributes['name']);
+
         $lastItem = $this->repository->find([], 'order:desc');
         if ($lastItem) {
             $attributes['order'] = $lastItem->order + 1;
         }
+
         $test_name = $this->repository->find([WhereClause::query('name', $request->input('name'))]);
         if ($test_name) {
             return $this->errorHad($request->input('name'));
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->create($attributes);
@@ -109,7 +114,6 @@ class PostTagController extends RestController
         $attributes = $request->only([
             'name',
         ]);
-
         $attributes['slug'] = Str::slug($attributes['name']);
 
         $test_name = $this->repository->find([WhereClause::query('name', $request->input('name')), WhereClause::queryDiff('id', $model->id)]);
@@ -135,9 +139,10 @@ class PostTagController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-        $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
+
         try {
             DB::beginTransaction();
+            $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($id);
             DB::commit();
             return $this->success([]);
@@ -156,21 +161,19 @@ class PostTagController extends RestController
         }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
-
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update(
-                $id,
-                ['order' => $swapModel->order]
-            );
-            $swapModel = $this->repository->update(
-                $swapModel->id,
-                ['order' => $order]
-            );
+            $model = $this->repository->update($id,[
+                'order' => $swapModel->order
+            ]);
+            $swapModel = $this->repository->update($swapModel->id,[
+                'order' => $order
+            ]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -188,21 +191,19 @@ class PostTagController extends RestController
         }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
-
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update(
-                $id,
-                ['order' => $swapModel->order]
-            );
-            $swapModel = $this->repository->update(
-                $swapModel->id,
-                ['order' => $order]
-            );
+            $model = $this->repository->update($id,[
+                'order' => $swapModel->order
+            ]);
+            $swapModel = $this->repository->update($swapModel->id,[
+                'order' => $order
+            ]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -218,6 +219,7 @@ class PostTagController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             foreach ($request->post_ids as $postId) {
@@ -238,7 +240,9 @@ class PostTagController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $postId = $request->post_ids;
+        
         try {
             DB::beginTransaction();
             $this->repository->detach($model, $postId);

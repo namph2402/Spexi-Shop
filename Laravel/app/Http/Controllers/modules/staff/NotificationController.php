@@ -25,11 +25,8 @@ class NotificationController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:desc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('status')) {
@@ -124,6 +121,7 @@ class NotificationController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->delete($id);
@@ -142,6 +140,7 @@ class NotificationController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -160,6 +159,7 @@ class NotificationController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);

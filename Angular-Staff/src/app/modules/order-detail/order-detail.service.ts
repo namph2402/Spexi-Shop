@@ -8,7 +8,7 @@ import {AbstractCRUDService, TitleService} from '../../core';
 export class OrderDetailService extends AbstractCRUDService<OrderDetailMeta> {
 
   constructor(http: HttpClient, toaster: ToasterService, title: TitleService) {
-    super(http, title, toaster, 'chi tiết đơn hàng', 'order_details');
+    super(http, title, toaster, 'chi tiết đơn hàng', 'orders');
   }
 
 }

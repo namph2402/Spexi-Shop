@@ -117,12 +117,14 @@ class ShippingFeeController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $validator = $this->validateRequest($request, [
             'fee' => 'required|numeric',
         ]);
         if ($validator) {
             return $this->errorClient($validator);
         }
+        
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $request->only(['fee']));

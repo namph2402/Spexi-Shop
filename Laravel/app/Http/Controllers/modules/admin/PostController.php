@@ -33,11 +33,8 @@ class PostController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy', 'order:asc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('status')) {
@@ -186,7 +183,9 @@ class PostController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $image = $model->image;
+
         try {
             DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
@@ -207,6 +206,7 @@ class PostController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -225,6 +225,7 @@ class PostController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
@@ -243,21 +244,21 @@ class PostController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update(
-                $id,
-                ['order' => $swapModel->order]
-            );
-            $swapModel = $this->repository->update(
-                $swapModel->id,
-                ['order' => $order]
-            );
+            $model = $this->repository->update($id,[
+                'order' => $swapModel->order
+            ]);
+            $swapModel = $this->repository->update($swapModel->id,[
+                'order' => $order
+            ]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -273,21 +274,21 @@ class PostController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update(
-                $id,
-                ['order' => $swapModel->order]
-            );
-            $swapModel = $this->repository->update(
-                $swapModel->id,
-                ['order' => $order]
-            );
+            $model = $this->repository->update($id,[
+                'order' => $swapModel->order
+            ]);
+            $swapModel = $this->repository->update($swapModel->id,[
+                'order' => $order
+            ]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -305,11 +306,8 @@ class PostController extends RestController
         $postClauses = [];
         $orderBy = $request->input('orderBy', 'order:asc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('category_id')) {
@@ -324,16 +322,15 @@ class PostController extends RestController
         }
 
         if ($request->has('tag_id_add')) {
-
             $tagId = $request->tag_id_add;
             $posts = $this->repository->get([WhereClause::queryRelationHas('tags', function ($q) use ($tagId) {
                 $q->where('id', $tagId);
             })]);
+
             if (count($posts) > 0) {
                 foreach ($posts as $post) {
                     array_push($postClauses, $post->id);
                 }
-                Log::info($postClauses);
                 array_push($clauses, WhereClause::queryNotIn('id', $postClauses));
             }
         }
@@ -352,6 +349,7 @@ class PostController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             foreach ($request->tag_ids as $tagId) {
@@ -372,7 +370,9 @@ class PostController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $tagId = $request->tag_ids;
+
         try {
             DB::beginTransaction();
             $this->repository->detach($model, $tagId);

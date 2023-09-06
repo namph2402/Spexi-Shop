@@ -28,12 +28,11 @@ class ProductColorController extends RestController
         $with = [];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:desc');
-        if ($request->has('search') && Str::length($request->search) > 0) {
+
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
+
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {
@@ -50,13 +49,16 @@ class ProductColorController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes = $request->only([
             'name',
         ]);
+
         $test_name = $this->repository->find([WhereClause::query('name', $request->name),]);
         if ($test_name) {
             return $this->errorHad('Biến thể');
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->create($attributes);
@@ -75,23 +77,27 @@ class ProductColorController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $validator = $this->validateRequest($request, [
             'name' => 'nullable|max:255',
         ]);
         if ($validator) {
             return $this->errorClient($validator);
         }
-        $Colors = $request->only([
+
+        $attributes = $request->only([
             'product_id',
             'name',
         ]);
+
         $test_name = $this->repository->find([WhereClause::queryDiff('id', $model->id), WhereClause::query('name', $request->name)]);
         if ($test_name) {
             return $this->errorHad('Biến thể');
         }
+
         try {
             DB::beginTransaction();
-            $model = $this->repository->update($id, $Colors);
+            $model = $this->repository->update($id, $attributes);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -107,6 +113,7 @@ class ProductColorController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->delete($id,['warehouse']);

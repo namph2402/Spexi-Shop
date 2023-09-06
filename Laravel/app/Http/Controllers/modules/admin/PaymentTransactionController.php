@@ -8,7 +8,6 @@ use App\Repository\PaymentTransactionRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class PaymentTransactionController extends RestController
 {
@@ -27,11 +26,8 @@ class PaymentTransactionController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('name', $request->search), WhereClause::queryLike('order_code', $request->search)]));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('status')) {
@@ -52,6 +48,7 @@ class PaymentTransactionController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+        
         try {
             DB::beginTransaction();
             $this->repository->delete($id);

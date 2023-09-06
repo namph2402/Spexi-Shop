@@ -97,6 +97,7 @@ class UserProfileController extends RestController
             $attributes['avatar'] = $image;
             array_push($createdImages, $image);
         }
+
         try {
             DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('user_id', Auth::user()->id)], $attributes);

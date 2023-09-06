@@ -6,9 +6,6 @@ use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
 use App\Repository\ImportNoteRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class ImportController extends RestController
 {
@@ -25,11 +22,8 @@ class ImportController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy','created_at:desc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('name', $request->search), WhereClause::queryLike('creator_name', $request->search)]));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('date')) {

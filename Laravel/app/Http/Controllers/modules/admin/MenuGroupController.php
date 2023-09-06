@@ -8,7 +8,6 @@ use App\Repository\MenuGroupRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class MenuGroupController extends RestController
 {
@@ -26,11 +25,8 @@ class MenuGroupController extends RestController
         $clauses = [];
         $orderBy = $request->input('orderBy', 'id:asc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($limit) {
@@ -108,7 +104,7 @@ class MenuGroupController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-        
+
         try {
             DB::beginTransaction();
             $this->repository->delete($id, ['menus']);

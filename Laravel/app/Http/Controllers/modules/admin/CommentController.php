@@ -8,7 +8,6 @@ use App\Repository\CommentRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class CommentController extends RestController
 {
@@ -25,11 +24,8 @@ class CommentController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:desc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($limit) {

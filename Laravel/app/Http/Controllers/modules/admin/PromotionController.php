@@ -33,11 +33,8 @@ class PromotionController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:desc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('status')) {
@@ -159,6 +156,7 @@ class PromotionController extends RestController
         if ($test_name) {
             return $this->errorClient('Chương trình khuyến mãi đã tồn tại');
         }
+
         try {
             DB::beginTransaction();
             $promotion = $this->repository->update($id, $attributes);
@@ -201,6 +199,7 @@ class PromotionController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->delete($id,['mapping']);
@@ -234,6 +233,7 @@ class PromotionController extends RestController
                 }
             }
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -257,6 +257,7 @@ class PromotionController extends RestController
                 $this->productRepository->update($item->id, ['sale_price' => $item->price]);
             }
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
@@ -352,6 +353,7 @@ class PromotionController extends RestController
         }
 
         $product = $this->productRepository->findById($request->product_id);
+
         try {
             DB::beginTransaction();
             $this->repository->detach($model, $product->id);

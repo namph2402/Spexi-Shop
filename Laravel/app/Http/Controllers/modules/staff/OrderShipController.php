@@ -18,7 +18,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class OrderShipController extends RestController
 {
@@ -53,11 +52,8 @@ class OrderShipController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy', 'updated_at:desc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('customer_name', $request->search), WhereClause::queryLike('customer_phone', $request->search)]));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('created_date')) {
@@ -170,6 +166,7 @@ class OrderShipController extends RestController
         if (empty($model)) {
             return $this->errorClient('Đơn hàng không tồn tạ 21i');
         }
+        
         $ghu = new GiaoHangUtil($model);
         $info = $ghu->getOrder($model);
         return $this->success($info);
@@ -211,6 +208,7 @@ class OrderShipController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, [
@@ -243,6 +241,7 @@ class OrderShipController extends RestController
         if (empty($models)) {
             return $this->error('Đối tượng không tồn tại');
         }
+
         try {
             DB::beginTransaction();
             $ghu = new GiaoHangUtil($models[0]);
@@ -262,6 +261,7 @@ class OrderShipController extends RestController
         if (empty($model)) {
             return $this->error('Đơn hàng không tồn tại');
         }
+
         try {
             $ghu = new GiaoHangUtil($model);
             $this->repository->update($id,['is_printed' => 1]);
@@ -288,6 +288,7 @@ class OrderShipController extends RestController
             $attributes['status_id'] = 5;
             $status = Order::$DANG_GIAO;
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);

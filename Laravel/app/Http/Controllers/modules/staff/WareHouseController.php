@@ -172,6 +172,7 @@ class WarehouseController extends RestController
         if($model->quantity <= 0) {
             return $this->errorClient('Sản phẩm đã hết hàng');
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -190,6 +191,7 @@ class WarehouseController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);

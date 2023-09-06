@@ -8,7 +8,6 @@ use App\Repository\VoucherRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class VoucherController extends RestController
 {
@@ -25,11 +24,8 @@ class VoucherController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:desc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('status')) {
@@ -183,6 +179,7 @@ class VoucherController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         if (strtotime($model->expired_date) < strtotime("now")) {
             return $this->errorClient('Thời gian hết hạn không đúng');
         }

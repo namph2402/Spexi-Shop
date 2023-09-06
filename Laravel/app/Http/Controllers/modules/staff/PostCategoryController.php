@@ -29,11 +29,8 @@ class PostCategoryController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy', 'order:asc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($limit) {
@@ -125,6 +122,7 @@ class PostCategoryController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
@@ -146,21 +144,19 @@ class PostCategoryController extends RestController
         }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
-
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update(
-                $id,
-                ['order' => $swapModel->order]
-            );
-            $swapModel = $this->repository->update(
-                $swapModel->id,
-                ['order' => $order]
-            );
+            $model = $this->repository->update($id,[
+                'order' => $swapModel->order
+            ]);
+            $swapModel = $this->repository->update($swapModel->id,[
+                'order' => $order
+            ]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -178,21 +174,19 @@ class PostCategoryController extends RestController
         }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
-
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update(
-                $id,
-                ['order' => $swapModel->order]
-            );
-            $swapModel = $this->repository->update(
-                $swapModel->id,
-                ['order' => $order]
-            );
+            $model = $this->repository->update($id,[
+                'order' => $swapModel->order
+            ]);
+            $swapModel = $this->repository->update($swapModel->id,[
+                'order' => $order
+            ]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {

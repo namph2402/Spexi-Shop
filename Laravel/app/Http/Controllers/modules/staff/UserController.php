@@ -9,7 +9,6 @@ use App\Repository\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class UserController extends RestController
 {
@@ -29,7 +28,7 @@ class UserController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:desc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             $search = $request->search;
             array_push($clauses, WhereClause::orQuery([
                 WhereClause::queryLike('fullname', $request->search),
@@ -41,9 +40,6 @@ class UserController extends RestController
                     $q->where('username', $search);
                 }),
             ]));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('status')) {
@@ -67,6 +63,7 @@ class UserController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->delete($id, ['account']);
@@ -85,6 +82,7 @@ class UserController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->userRepository->update($model->user_id, ['status' => true]);
@@ -103,6 +101,7 @@ class UserController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->userRepository->update($model->user_id, ['status' => false]);

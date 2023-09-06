@@ -29,6 +29,7 @@ class FormDataController extends RestController
         if ($test_email) {
             return $this->successViewBack('Email của bạn đã được thêm');
         }
+
         try {
             DB::beginTransaction();
             $this->repository->create($attributes);

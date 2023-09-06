@@ -59,6 +59,7 @@ class PromotionProductMappingController extends RestController
         $withCount = [];
         $orderBy = 'order:asc';
         $promotion = $this->repository->get([], 'promotion_id:asc');
+        
         if (count($promotion) > 0) {
             foreach ($promotion as $p) {
                 array_push($arrID, $p->product_id);

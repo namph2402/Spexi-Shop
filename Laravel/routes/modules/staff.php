@@ -34,19 +34,12 @@ Route::group(['middleware' => ['auth.staff']], function () {
 
     // Payment_method
     Route::resource('payment_methods', 'PaymentMethodController');
-    Route::group(['prefix' => 'payment_methods/{id}'], function () {
-        Route::post('destroyConfig', 'PaymentMethodController@destroyConfig');
-        Route::post('destroyPaymentMethod', 'PaymentMethodController@destroy');
-    });
 
     // Transaction
     Route::resource('payment_transactions', 'PaymentTransactionController');
 
     // Expense
     Route::resource('expenses', 'ExpenseController');
-    Route::group(['prefix' => 'expenses/{id}'], function () {
-        Route::post('confirm', 'ExpenseController@confirm');
-    });
 
     // User
     Route::resource('users', 'UserController');
@@ -217,9 +210,8 @@ Route::group(['middleware' => ['auth.staff']], function () {
         Route::post('confirm', 'OrderController@confirm');
         Route::post('cancel', 'OrderController@cancel');
     });
-    Route::resource('order_details', 'OrderDetailController');
 
-    //Order ship
+    // Order ship
     Route::get('order_ships/printBills', 'OrderShipController@printBills');
     Route::resource('order_ships', 'OrderShipController');
     Route::group(['prefix' => 'order_ships/{id}'], function () {
@@ -244,10 +236,6 @@ Route::group(['middleware' => ['auth.staff']], function () {
 
     // Shipping unit
     Route::resource('shipping_units', 'ShippingUnitController');
-    Route::group(['prefix' => 'shipping_units'], function () {
-        Route::post('createUnitPartner', 'ShippingUnitController@createUnitPartner');
-        Route::post('{id}/synchronized', 'ShippingUnitController@synchronized');
-    });
     Route::resource('shipping_services', 'ShippingServiceController');
     Route::resource('shipping_stores', 'ShippingStoreController');
 

@@ -51,11 +51,8 @@ class OrderController extends RestController
         $with = ['details.product.warehouses.size', 'details.product.warehouses.color', 'voucher'];
         $withCount = [];
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('customer_name', $request->search), WhereClause::queryLike('customer_phone', $request->search)]));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('code') && Str::length($request->code) > 0) {
@@ -314,6 +311,7 @@ class OrderController extends RestController
         if (empty($model)) {
             return $this->errorClient('Đối tượng không tồn tại');
         }
+        
         if ($model->status == Order::$LEN_DON) {
             $model->delete();
             return $this->success($model);
@@ -328,8 +326,10 @@ class OrderController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $attributes['note'] = $request->note;
         $attributes['order_status'] = Order::$XAC_NHAN;
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
@@ -349,8 +349,10 @@ class OrderController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $attributes['note'] = $request->note;
         $attributes['order_status'] = Order::$HUY_DON;
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
@@ -378,7 +380,9 @@ class OrderController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $attributes['order_status'] = Order::$HOAN_THANH;
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);

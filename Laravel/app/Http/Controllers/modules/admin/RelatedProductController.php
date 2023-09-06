@@ -9,7 +9,6 @@ use App\Repository\RelatedProductRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class RelatedProductController extends RestController
 {
@@ -29,14 +28,11 @@ class RelatedProductController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy', 'order:asc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             $search = $request->search;
             array_push($clauses, WhereClause::queryRelationHas('product', function ($q) use ($search) {
                 $q->where('name', 'like', '%'.$search.'%');
             }));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('category_id')) {
@@ -63,6 +59,7 @@ class RelatedProductController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+        
         $attributes = $request->only([
             'product_id',
             'related_id'
@@ -91,14 +88,10 @@ class RelatedProductController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
-
-            $items = $this->repository->get([WhereClause::query('order', $model->order, '>')]);
-            foreach ($items as $item) {
-                $this->repository->update($item, ['order' => $item->order - 1]);
-            }
-
+            $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($id);
             DB::commit();
             return $this->success([]);
@@ -115,21 +108,21 @@ class RelatedProductController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update(
-                $id,
-                ['order' => $swapModel->order]
-            );
-            $swapModel = $this->repository->update(
-                $swapModel->id,
-                ['order' => $order]
-            );
+            $model = $this->repository->update($id,[
+                'order' => $swapModel->order
+            ]);
+            $swapModel = $this->repository->update($swapModel->id,[
+                'order' => $order
+            ]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -145,21 +138,21 @@ class RelatedProductController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update(
-                $id,
-                ['order' => $swapModel->order]
-            );
-            $swapModel = $this->repository->update(
-                $swapModel->id,
-                ['order' => $order]
-            );
+            $model = $this->repository->update($id,[
+                'order' => $swapModel->order
+            ]);
+            $swapModel = $this->repository->update($swapModel->id,[
+                'order' => $order
+            ]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -178,11 +171,8 @@ class RelatedProductController extends RestController
 
         $related = $this->repository->get([WhereClause::query('product_id', $request->product_id)], $orderBy, [], []);
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('category_id')) {

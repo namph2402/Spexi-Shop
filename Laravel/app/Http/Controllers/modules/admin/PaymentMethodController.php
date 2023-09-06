@@ -4,12 +4,10 @@ namespace App\Http\Controllers\modules\admin;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
-use App\Models\PaymentMethod;
 use App\Repository\PaymentMethodRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class PaymentMethodController extends RestController
 {
@@ -26,12 +24,11 @@ class PaymentMethodController extends RestController
         $with = [];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:desc');
-        if ($request->has('search') && Str::length($request->search) > 0) {
+
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
+
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {
@@ -44,11 +41,12 @@ class PaymentMethodController extends RestController
     public function store(Request $request)
     {
         $validator = $this->validateRequest($request, [
-            'name' => ['required'],
+            'name' => 'required',
         ]);
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes = $request->only([
             'name',
         ]);
@@ -57,6 +55,7 @@ class PaymentMethodController extends RestController
         if ($name_test) {
             return $this->errorClient('Cấu hình thanh toán đã tồn tại');
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->create($attributes);
@@ -75,9 +74,7 @@ class PaymentMethodController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-        if (!($model instanceof PaymentMethod)) {
-            return $this->errorNotFound();
-        }
+
         $attributes = [];
         if ($model->name == "VNPay") {
             $validator = $this->validateRequest($request, [
@@ -120,6 +117,7 @@ class PaymentMethodController extends RestController
             ];
             $attributes['config'] = json_encode($config, true);
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
@@ -138,10 +136,9 @@ class PaymentMethodController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-        if (!($model instanceof PaymentMethod)) {
-            return $this->errorNotFound();
-        }
+
         $attributes['config'] = null;
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
@@ -156,11 +153,20 @@ class PaymentMethodController extends RestController
 
     public function destroy($id)
     {
-        $model = (new PaymentMethod())->find($id);
+        $model = $this->repository->findById($id);
         if (empty($model)) {
-            return $this->error('Not found');
+            return $this->errorNotFound();
         }
-        $model->delete();
-        return $this->success([]);
+
+        try {
+            DB::beginTransaction();
+            $this->repository->delete($id);
+            DB::commit();
+            return $this->success([]);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return $this->error($e->getMessage());
+        }
     }
 }

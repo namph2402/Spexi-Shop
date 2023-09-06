@@ -30,12 +30,11 @@ class ProductCategoryController extends RestController
         $withCount = [];
         $categoryArr = [];
         $orderBy = $request->input('orderBy', 'order:asc');
-        if ($request->has('search') && Str::length($request->search) > 0) {
+
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
+
         if ($request->has('parent')) {
             $category = $this->repository->get([WhereClause::query('parent_id', 0), WhereClause::queryDiff('id', $request->parent)]);
             if ($category) {
@@ -47,6 +46,7 @@ class ProductCategoryController extends RestController
                 }
             }
         }
+
         if ($request->has('child')) {
             $category = $this->repository->get([], null, [], ['childrens']);
             if ($category) {
@@ -58,6 +58,7 @@ class ProductCategoryController extends RestController
                 array_push($clauses, WhereClause::queryIn('id', $categoryArr));
             }
         }
+
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {
@@ -74,6 +75,7 @@ class ProductCategoryController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes = $request->only([
             'name',
             'parent_id',
@@ -83,14 +85,17 @@ class ProductCategoryController extends RestController
             $image = FileStorageUtil::putFile('product_category_image', $request->file('image'));
             $attributes['image'] = $image;
         }
+
         $lastItem = $this->repository->find([], 'order:desc');
         if ($lastItem) {
             $attributes['order'] = $lastItem->order + 1;
         }
+
         $test_name = $this->repository->find([WhereClause::query('name', $request->input('name'))]);
         if ($test_name) {
             return $this->errorHad($request->input('name'));
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->create($attributes);
@@ -112,30 +117,37 @@ class ProductCategoryController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $image_old = $model->image;
+
         $validator = $this->validateRequest($request, [
             'name' => 'nullable|max:255',
         ]);
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes = $request->only([
             'name',
             'parent_id'
         ]);
         $attributes['slug'] = Str::slug($attributes['name']);
         $test_name = $this->repository->find([WhereClause::query('name', $request->input('name')), WhereClause::queryDiff('id', $model->id)]);
+
         if ($test_name) {
             return $this->errorHad($request->input('name'));
         }
+
         if (count($model->childrens) > 0 && $request->parent_id > 0) {
             return $this->errorClient('Danh mục này đang là danh mục cha');
         }
+
         if ($request->file('image') != '') {
             $image = FileStorageUtil::putFile('product_category_image', $request->file('image'));
             $attributes['image'] = $image;
             FileStorageUtil::deleteFiles($image_old);
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
@@ -160,6 +172,7 @@ class ProductCategoryController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>'), WhereClause::query('parent_id', 0)], ['order' => DB::raw('`order` - 1')]);
@@ -179,22 +192,21 @@ class ProductCategoryController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-        $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
 
+        $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update(
-                $id,
-                ['order' => $swapModel->order]
-            );
-            $swapModel = $this->repository->update(
-                $swapModel->id,
-                ['order' => $order]
-            );
+            $model = $this->repository->update($id,[
+                'order' => $swapModel->order
+            ]);
+            $swapModel = $this->repository->update($swapModel->id,[
+                'order' => $order
+            ]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -210,21 +222,21 @@ class ProductCategoryController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update(
-                $id,
-                ['order' => $swapModel->order]
-            );
-            $swapModel = $this->repository->update(
-                $swapModel->id,
-                ['order' => $order]
-            );
+            $model = $this->repository->update($id,[
+                'order' => $swapModel->order
+            ]);
+            $swapModel = $this->repository->update($swapModel->id,[
+                'order' => $order
+            ]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {

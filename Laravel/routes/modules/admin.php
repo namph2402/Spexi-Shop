@@ -218,7 +218,6 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::post('confirm', 'OrderController@confirm');
         Route::post('cancel', 'OrderController@cancel');
     });
-    Route::resource('order_details', 'OrderDetailController');
 
     //Order ship
     Route::get('order_ships/printBills', 'OrderShipController@printBills');

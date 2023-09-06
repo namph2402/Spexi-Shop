@@ -67,11 +67,8 @@ class ProductController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy', 'order:asc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('code', $request->search), WhereClause::queryLike('name', $request->search)]));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('status')) {
@@ -239,6 +236,7 @@ class ProductController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -257,6 +255,7 @@ class ProductController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
@@ -279,17 +278,16 @@ class ProductController extends RestController
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update(
-                $id,
-                ['order' => $swapModel->order]
-            );
-            $swapModel = $this->repository->update(
-                $swapModel->id,
-                ['order' => $order]
-            );
+            $model = $this->repository->update($id,[
+                'order' => $swapModel->order
+            ]);
+            $swapModel = $this->repository->update($swapModel->id,[
+                'order' => $order
+            ]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -309,17 +307,16 @@ class ProductController extends RestController
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');
         }
+
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update(
-                $id,
-                ['order' => $swapModel->order]
-            );
-            $swapModel = $this->repository->update(
-                $swapModel->id,
-                ['order' => $order]
-            );
+            $model = $this->repository->update($id,[
+                'order' => $swapModel->order
+            ]);
+            $swapModel = $this->repository->update($swapModel->id,[
+                'order' => $order
+            ]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -337,11 +334,8 @@ class ProductController extends RestController
         $postClauses = [];
         $orderBy = $request->input('orderBy', 'order:asc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('category_id')) {
@@ -384,6 +378,7 @@ class ProductController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             foreach ($request->tag_ids as $tagId) {
@@ -435,12 +430,15 @@ class ProductController extends RestController
                 array_push($clauses, WhereClause::queryDiff('id', $product->id));
             }
         }
+
         if (isset($request->search)) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
         }
+
         if (isset($request->category_id)) {
             array_push($clauses, WhereClause::query('category_id', $request->category_id));
         }
+        
         if (isset($request->status) && $request->status != '') {
             array_push($clauses, WhereClause::query('published', $request->status));
         }

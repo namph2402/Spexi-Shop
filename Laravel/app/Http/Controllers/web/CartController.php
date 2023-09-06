@@ -114,6 +114,7 @@ class CartController extends RestController
         if (empty($model)) {
             return $this->errorNotFoundView();
         }
+
         try {
             DB::beginTransaction();
             $this->itemRepository->delete($id);

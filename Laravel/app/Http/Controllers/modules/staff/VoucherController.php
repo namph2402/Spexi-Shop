@@ -8,7 +8,6 @@ use App\Repository\VoucherRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class VoucherController extends RestController
 {
@@ -25,11 +24,8 @@ class VoucherController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:desc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('status')) {
@@ -62,6 +58,7 @@ class VoucherController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+        
         $attributes = $request->only([
             'name',
             'code',
@@ -163,6 +160,7 @@ class VoucherController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->delete($id);
@@ -181,9 +179,11 @@ class VoucherController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         if (strtotime($model->expired_date) < strtotime("now")) {
             return $this->errorClient('Thời gian hết hạn không đúng');
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -202,6 +202,7 @@ class VoucherController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);

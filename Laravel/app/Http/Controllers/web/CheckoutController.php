@@ -184,6 +184,7 @@ class CheckoutController extends RestController
         } else {
             $attributes['payment_type'] = PaymentMethodEnum::VNPAY;
         }
+
         try {
             DB::beginTransaction();
             $order = $this->repository->create($attributes);

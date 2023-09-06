@@ -8,7 +8,6 @@ use App\Repository\FormDataRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class FormDataController extends RestController
 {
@@ -26,11 +25,8 @@ class FormDataController extends RestController
         $clauses = [];
         $orderBy = $request->input('orderBy', 'id:asc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('value', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($limit) {

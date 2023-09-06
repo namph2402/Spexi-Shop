@@ -16,7 +16,6 @@ use App\Utils\GiaoHangUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class OrderController extends RestController
@@ -51,18 +50,12 @@ class OrderController extends RestController
         $with = ['details.product.warehouses.size', 'details.product.warehouses.color', 'voucher'];
         $withCount = [];
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('customer_name', $request->search), WhereClause::queryLike('customer_phone', $request->search)]));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('code') && Str::length($request->code) > 0) {
             array_push($clauses, WhereClause::query('code', $request->code));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('created_date')) {
@@ -83,7 +76,7 @@ class OrderController extends RestController
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = $this->validateRequest($request, [
             'customer_name' => 'required',
             'customer_phone' => 'required',
             'customer_address' => 'required',
@@ -96,8 +89,8 @@ class OrderController extends RestController
             'total_amount' => 'required|numeric',
             'payment_type' => 'required'
         ]);
-        if ($validator->fails()) {
-            return $this->error($validator->errors());
+        if ($validator) {
+            return $this->errorClient($validator);
         }
 
         $code = 'DH' . Str::random(8);
@@ -132,12 +125,7 @@ class OrderController extends RestController
         $attributes['code'] = $code;
         $attributes['date_created'] = date('Y-m-d');
         $attributes['order_status'] = Order::$LEN_DON;
-
-        if ($request->payment_status == 0) {
-            $attributes['cod_fee'] = $request->total_amount;
-        } else {
-            $attributes['cod_fee'] = 0;
-        }
+        $attributes['cod_fee'] = $request->total_amount;
 
         $products = json_decode($request->product, true);
         if(empty($products)) {
@@ -186,7 +174,7 @@ class OrderController extends RestController
             return $this->errorClient('Không thể sửa đơn hàng');
         }
 
-        $validator = Validator::make($request->all(), [
+        $validator = $this->validateRequest($request, [
             'customer_name' => 'nullable',
             'customer_phone' => 'nullable',
             'customer_address' => 'nullable',
@@ -199,8 +187,8 @@ class OrderController extends RestController
             'total_amount' => 'nullable|numeric',
             'payment_type' => 'nullable'
         ]);
-        if ($validator->fails()) {
-            return $this->error($validator->errors());
+        if ($validator) {
+            return $this->errorClient($validator);
         }
 
         $attributes = $request->only([
@@ -312,7 +300,7 @@ class OrderController extends RestController
         if (empty($model)) {
             return $this->errorClient('Đối tượng không tồn tại');
         }
-        
+
         if ($model->status == Order::$LEN_DON) {
             $model->delete();
             return $this->success($model);

@@ -25,11 +25,8 @@ class NotificationController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:desc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('status')) {
@@ -50,7 +47,6 @@ class NotificationController extends RestController
             'name' => 'required|max:255',
             'content' => 'required',
         ]);
-
         if ($validator) {
             return $this->errorClient($validator);
         }

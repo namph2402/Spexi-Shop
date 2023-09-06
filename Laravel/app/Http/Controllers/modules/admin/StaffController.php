@@ -26,15 +26,12 @@ class StaffController extends RestController
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:desc');
 
-        if ($request->has('search') && Str::length($request->search) > 0) {
+        if ($request->has('search')) {
             array_push($clauses, WhereClause::orQuery([
                 WhereClause::queryLike('username', $request->search),
                 WhereClause::queryLike('fullname', $request->search),
                 WhereClause::queryLike('phone', $request->search),
             ]));
-        } else {
-            $data = '';
-            return $this->success($data);
         }
 
         if ($request->has('status')) {
@@ -68,6 +65,7 @@ class StaffController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes = $request->only([
             'username',
             'fullname',
@@ -163,6 +161,7 @@ class StaffController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $this->repository->delete($id);
@@ -181,6 +180,7 @@ class StaffController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -199,6 +199,7 @@ class StaffController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
@@ -217,6 +218,7 @@ class StaffController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+        
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id,[
