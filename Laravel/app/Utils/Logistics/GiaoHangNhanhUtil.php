@@ -21,80 +21,6 @@ class GiaoHangNhanhUtil extends GiaoHangAbstractUtil
         parent::__construct($input);
     }
 
-    /**
-     * @return mixed
-     * @throws \Exception
-     */
-    public function getProvinces()
-    {
-        $curl = Curl::to($this->endpoint . '/master-data/province')
-            ->withHeaders([
-                'Content-Type' => 'application/json',
-                'Token' => $this->token
-            ])
-            ->asJson()
-            ->returnResponseObject()
-            ->get();
-        if ($curl->status == 200) {
-            if ($curl->content->code == 200) {
-                return $curl->content->data;
-            } else {
-                throw new \Exception($curl->content->message);
-            }
-        } else {
-            throw new \Exception('Lỗi kết nối đến Giao hàng nhanh');
-        }
-    }
-
-    public function getDistricts($provinceId)
-    {
-        $curl = Curl::to($this->endpoint . '/master-data/district')
-            ->withHeaders([
-                'Content-Type' => 'application/json',
-                'Token' => $this->token
-            ])
-            ->withData([
-                'province_id' => $provinceId
-            ])
-            ->asJson()
-            ->returnResponseObject()
-            ->get();
-        if ($curl->status == 200) {
-            if ($curl->content->code == 200) {
-                return $curl->content->data;
-            } else {
-                throw new \Exception($curl->content->message);
-            }
-        } else {
-            throw new \Exception('Lỗi kết nối đến Giao hàng nhanh');
-        }
-    }
-
-    public function getWards($districtId)
-    {
-        $curl = Curl::to($this->endpoint . '/master-data/ward')
-            ->withHeaders([
-                'Content-Type' => 'application/json',
-                'Token' => $this->token
-            ])
-            ->withData([
-                'district_id' => $districtId
-            ])
-            ->asJson()
-            ->returnResponseObject()
-            ->get();
-        if ($curl->status == 200) {
-            if ($curl->content->code == 200) {
-                return $curl->content->data;
-            } else {
-                throw new \Exception($curl->content->message);
-            }
-        } else {
-            throw new \Exception('Lỗi kết nối đến Giao hàng nhanh');
-        }
-
-    }
-
     public function getOrder(OrderShip $order)
     {
         $curl = Curl::to($this->endpoint . '/v2/shipping-order/detail')
@@ -219,11 +145,6 @@ class GiaoHangNhanhUtil extends GiaoHangAbstractUtil
         } else {
             throw new \Exception('Lỗi kết nối đến Giao hàng nhanh');
         }
-    }
-
-    public function authenticate($account)
-    {
-        // TODO: Implement authenticate() method.
     }
 
     public function getServices()

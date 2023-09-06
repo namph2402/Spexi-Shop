@@ -211,7 +211,7 @@ class ShippingUnitController extends RestController
                         $attributes['unit_id'] = $item['unit_id'];
                         $attributes['name'] = $item['name'];
                         $attributes['partner_id'] = $item['partner_id'];
-                        $attributes['data'] = json_encode($item['data']);
+                        $attributes['data'] = $item['data'];
                         $attributes['is_often'] = $item['is_often'];
                         $this->shippingStore->create($attributes);
                     }
@@ -221,7 +221,7 @@ class ShippingUnitController extends RestController
                         $attributes1['unit_id'] = $item['unit_id'];
                         $attributes1['name'] = $item['name'];
                         $attributes1['code'] = $item['code'];
-                        $attributes1['data'] = json_encode($item['data']);
+                        $attributes1['data'] = $item['data'];
                         $attributes1['is_often'] = $item['is_often'];
                         $this->shippingService->create($attributes1);
                     }
@@ -237,7 +237,7 @@ class ShippingUnitController extends RestController
                         $attributes3['unit_id'] = $item['unit_id'];
                         $attributes3['name'] = $item['name'];
                         $attributes3['partner_id'] = $item['partner_id'];
-                        $attributes3['data'] = json_encode($item['data']);
+                        $attributes3['data'] = $item['data'];
                         $attributes3['is_often'] = $item['is_often'];
                         $this->shippingStore->create($attributes3);
                     }
@@ -247,7 +247,7 @@ class ShippingUnitController extends RestController
                         $attributes4['unit_id'] = $item['unit_id'];
                         $attributes4['name'] = $item['name'];
                         $attributes4['code'] = $item['code'];
-                        $attributes4['data'] = json_encode($item['data']);
+                        $attributes4['data'] = $item['data'];
                         $attributes4['is_often'] = $item['is_often'];
                         $this->shippingService->create($attributes4);
                     }

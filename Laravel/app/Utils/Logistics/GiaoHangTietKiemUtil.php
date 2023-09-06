@@ -6,7 +6,6 @@ use App\Models\Order;
 use App\Models\OrderShip;
 use App\Models\ShippingService;
 use App\Models\ShippingStore;
-use App\Models\Warehouse;
 use Illuminate\Support\Str;
 use Ixudra\Curl\Facades\Curl;
 
@@ -72,11 +71,10 @@ class GiaoHangTietKiemUtil extends GiaoHangAbstractUtil
         }
 
         foreach ($order->details as $d) {
-            $variant = Warehouse::whereProductId($d->product_id)->whereId($d->variant_id)->first();
             array_push($data['products'], [
                 'name' => $d->detail_code,
                 'price' => $d->unit_price,
-                'weight' => $variant->weight,
+                'weight' => $d->warehouse->weight,
                 'quantity' => $d->quantity,
                 'product_code' => $d->product_code
             ]);
@@ -135,21 +133,16 @@ class GiaoHangTietKiemUtil extends GiaoHangAbstractUtil
         return false;
     }
 
-    public function authenticate($account)
-    {
-        // TODO: Implement authenticate() method.
-    }
-
     public function getServices()
     {
         $services = [];
 
         array_push($services, [
             'unit_id' => $this->getShippingUnit()->id,
-            'name' => 'Chuẩn + Đến lấy hàng + Đường bộ',
+            'name' => 'Chuẩn + Đường bộ',
             'code' => 'cod_standard',
             'data' => [
-                'default_note' => 'Khách không lấy hàng thu ship 30k',
+                'default_note' => 'Cho khách xem hàng, không cho thử. Khách không lấy hàng thu ship 20k',
                 'pick_option' => 'cod',
                 'deliver_option' => '',
                 'actual_transfer_method' => 'road',
@@ -160,97 +153,14 @@ class GiaoHangTietKiemUtil extends GiaoHangAbstractUtil
 
         array_push($services, [
             'unit_id' => $this->getShippingUnit()->id,
-            'name' => 'Chuẩn + Giao tại cửa hàng + Đường bộ',
-            'code' => 'post_standard',
-            'data' => [
-                'default_note' => 'Khách không lấy hàng thu ship 30k',
-                'pick_option' => 'post',
-                'deliver_option' => '',
-                'actual_transfer_method' => 'road',
-                'transport' => 'road'
-            ],
-            'is_often' => 0
-        ]);
-        array_push($services, [
-            'unit_id' => $this->getShippingUnit()->id,
-            'name' => 'Chuẩn + Đến lấy hàng + Đường bay',
-            'code' => 'cod_standard',
-            'data' => [
-                'default_note' => 'Khách không lấy hàng thu ship 30k',
-                'pick_option' => 'cod',
-                'deliver_option' => '',
-                'actual_transfer_method' => 'fly',
-                'transport' => 'fly'
-            ],
-            'is_often' => 1
-        ]);
-
-        array_push($services, [
-            'unit_id' => $this->getShippingUnit()->id,
-            'name' => 'Chuẩn + Giao tại cửa hàng + Đường bay',
-            'code' => 'post_standard',
-            'data' => [
-                'default_note' => 'Khách không lấy hàng thu ship 30k',
-                'pick_option' => 'post',
-                'deliver_option' => '',
-                'actual_transfer_method' => 'fly',
-                'transport' => 'fly'
-            ],
-            'is_often' => 0
-        ]);
-
-        array_push($services, [
-            'unit_id' => $this->getShippingUnit()->id,
-            'name' => 'XTeam + Đến lấy hàng + Đường bộ',
+            'name' => 'XTeam + Đường bộ',
             'code' => 'cod_xteam',
             'data' => [
-                'default_note' => 'Khách không lấy hàng thu ship 30k',
+                'default_note' => 'Cho khách xem hàng, không cho thử. Khách không lấy hàng thu ship 30k',
                 'pick_option' => 'cod',
                 'deliver_option' => 'xteam',
                 'actual_transfer_method' => 'road',
                 'transport' => 'road'
-            ],
-            'is_often' => 0
-        ]);
-
-        array_push($services, [
-            'unit_id' => $this->getShippingUnit()->id,
-            'name' => 'XTeam + Giao tại cửa hàng  + Đường bộ',
-            'code' => 'post_xteam',
-            'data' => [
-                'default_note' => 'Khách không lấy hàng thu ship 30k',
-                'pick_option' => 'post',
-                'deliver_option' => 'xteam',
-                'actual_transfer_method' => 'road',
-                'transport' => 'road'
-            ],
-            'is_often' => 0
-        ]);
-
-        array_push($services, [
-            'unit_id' => $this->getShippingUnit()->id,
-            'name' => 'XTeam + Đến lấy hàng + Đường bay',
-            'code' => 'cod_xteam',
-            'data' => [
-                'default_note' => 'Khách không lấy hàng thu ship 30k',
-                'pick_option' => 'cod',
-                'deliver_option' => 'xteam',
-                'actual_transfer_method' => 'fly',
-                'transport' => 'fly'
-            ],
-            'is_often' => 0
-        ]);
-
-        array_push($services, [
-            'unit_id' => $this->getShippingUnit()->id,
-            'name' => 'XTeam + Giao tại cửa hàng  + Đường bay',
-            'code' => 'post_xteam',
-            'data' => [
-                'default_note' => 'Khách không lấy hàng thu ship 30k',
-                'pick_option' => 'post',
-                'deliver_option' => 'xteam',
-                'actual_transfer_method' => 'fly',
-                'transport' => 'fly'
             ],
             'is_often' => 0
         ]);
@@ -297,21 +207,6 @@ class GiaoHangTietKiemUtil extends GiaoHangAbstractUtil
         } else {
             throw new \Exception($curl->content->message);
         }
-    }
-
-    public function getProvinces()
-    {
-        // TODO: Implement getProvinces() method.
-    }
-
-    public function getDistricts($provinceId)
-    {
-        // TODO: Implement getDistricts() method.
-    }
-
-    public function getWards($districtId)
-    {
-        // TODO: Implement getWards() method.
     }
 
     public function getOrder(OrderShip $order)

@@ -92,6 +92,10 @@
             text-align: center;
         }
 
+        .barcode {
+            max-width: 100% !important;
+        }
+
         .cod-fee {
             font-size: 30px;
             font-weight: bold;
@@ -116,27 +120,29 @@
                         </td>
                         <td class="col-50 text-center">
                             <p><img alt="Logistics Logo"
-                                    src="{{ $order->shipping->unit->logo ?? asset('images/default.png') }}"
+                                    src="{{ $order->shipping->unit->logo ?? asset('img/ship/default.png') }}"
                                     width="100"></p>
                             <h2>{{ $order->shipping->unit->name }}</h2>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2" class="text-center">
-                            <svg class="barcode" jsbarcode-format="{{ $dataStoreOrder['barcodeType'] }}"
-                                jsbarcode-value="{{ $order->shipping->code }}" jsbarcode-textmargin="0"
+                            <svg class="barcode"
+                                jsbarcode-format="{{ $dataStoreOrder['barcodeType'] }}"
+                                jsbarcode-value="{{ $order->shipping->code }}"
+                                jsbarcode-textmargin="0"
                                 jsbarcode-fontoptions="bold">
                             </svg>
                         </td>
                     </tr>
                     @if ($order->shipping->unit->name == \App\Common\Enum\UnitName::TIET_KIEM)
-                    <tr>
-                        <td colspan="2" class="text-center">
-                            <h2 style="font-size: 40px;margin: 3px;">
-                                {{ \App\Utils\Logistics\GiaoHangTietKiemUtil::getLocationFromCode($order->shipping->code) }}
-                            </h2>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td colspan="2" class="text-center">
+                                <h2 style="font-size: 40px;margin: 3px;">
+                                    {{ \App\Utils\Logistics\GiaoHangTietKiemUtil::getLocationFromCode($order->shipping->code) }}
+                                </h2>
+                            </td>
+                        </tr>
                     @endif
                     <tr>
                         <td class="col-50">
@@ -154,7 +160,7 @@
                             <p>{{ join(', ', [$order->customer_address, $order->ward, $order->district, $order->province]) }}
                             </p>
                             @php
-                                $phone = "******" . substr($order->customer_phone, 6, 4);
+                                $phone = '******' . substr($order->customer_phone, 6, 4);
                             @endphp
                             <p>{{ $phone }}</p>
                         </td>
@@ -177,7 +183,7 @@
                                             <td class="text-center">{{ $index + 1 }}</td>
                                             <td class="text-left">{{ $d->product_code }}</td>
                                             <td class="text-lef">{{ $d->product_name }}</td>
-                                            <td class="text-left">{{ $d->size}}, {{ $d->color}}</td>
+                                            <td class="text-left">{{ $d->size }}, {{ $d->color }}</td>
                                             <td class="text-center">{{ $d->quantity }}</td>
                                         </tr>
                                     @endforeach
@@ -195,7 +201,7 @@
                         <td colspan="2">
                             <p>
                                 <u>Ghi chú: </u>
-                                <span>{{ $order->shipping->unit->config['default_note'] ?? 'Không giao được liên lạc lại shop, không tự ý hoàn đơn. Cho khách xem hàng, không cho thử.' }}</span>
+                                <span>{{ $order->shipping->service->data['default_note'] ?? 'Không giao được liên lạc lại shop. Cho khách xem hàng, không cho thử.' }}</span>
                             </p>
                         </td>
                     </tr>

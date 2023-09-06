@@ -78,7 +78,7 @@ export class OrderShipItemComponent extends AbstractCRUDModalComponent<OrderShip
     return new OrderShipMeta();
   }
 
-  public loaded() {
+  loaded() {
     this.statusSelectAll = false;
     let params: any = ObjectUtil.combineValue({
       limit: this.pagination.itemsPerPage,

@@ -220,7 +220,7 @@ Route::group(['middleware' => ['auth.staff']], function () {
     Route::resource('order_details', 'OrderDetailController');
 
     //Order ship
-    Route::get('order_ships/printBills', 'OrderShipController@PrintBills');
+    Route::get('order_ships/printBills', 'OrderShipController@printBills');
     Route::resource('order_ships', 'OrderShipController');
     Route::group(['prefix' => 'order_ships/{id}'], function () {
         Route::get('shipping', 'OrderShipController@shipping');

@@ -67,14 +67,15 @@
   <table class="panel-body table table-bordered table-hover">
     <thead>
       <tr>
-        <th style="width: 8%;">#</th>
+        <th style="width: 6%;">#</th>
         <th style="width: 17%;">Mã sản phẩm</th>
         <th style="width: 25%;">Tên sản phẩm</th>
         <th style="width: 10%;">Loại</th>
         <th style="width: 8%;">Số lượng</th>
-        <th style="width: 12%;">Khối lượng (kg)</th>
-        <th style="width: 10%;">Trạng thái</th>
-        <th style="width: 10%;">Thao tác</th>
+        <th style="width: 8%;">Đã bán</th>
+        <th style="width: 10%; padding: 8px 0">Khối lượng (kg)</th>
+        <th style="width: 8%;">Trạng thái</th>
+        <th style="width: 8%;">Thao tác</th>
       </tr>
     </thead>
     <tbody>
@@ -84,6 +85,7 @@
         <td>{{item.product.name}}</td>
         <td class="text-center">{{item.size.name}}, {{item.color.name}}</td>
         <td class="text-right">{{item.quantity}}</td>
+        <td class="text-right">{{item.use_quantity}}</td>
         <td class="text-right">{{item.weight}}</td>
         <td class="text-center">
           <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 0"></ui-switch>

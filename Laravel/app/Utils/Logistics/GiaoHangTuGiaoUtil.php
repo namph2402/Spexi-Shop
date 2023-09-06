@@ -18,11 +18,6 @@ class GiaoHangTuGiaoUtil extends GiaoHangAbstractUtil
         parent::__construct($input);
     }
 
-    public function authenticate($account)
-    {
-        throw new \Exception('Method chưa hỗ trợ');
-    }
-
     public function getServices()
     {
         $services = [];
@@ -58,30 +53,9 @@ class GiaoHangTuGiaoUtil extends GiaoHangAbstractUtil
         return $data;
     }
 
-    public function getProvinces()
-    {
-        throw new \Exception('Method chưa hỗ trợ');
-    }
-
-
-    public function getDistricts($provinceId)
-    {
-        throw new \Exception('Method chưa hỗ trợ');
-    }
-
-    public function getWards($districtId)
-    {
-        throw new \Exception('Method chưa hỗ trợ');
-    }
-
     public function getOrder(OrderShip $order)
     {
         return $order;
-    }
-
-    public function updateOrder(string $code, Order $order, ShippingService $service = null)
-    {
-        throw new \Exception('Method chưa hỗ trợ');
     }
 
     public function cancelOrder(OrderShip $order)
@@ -91,16 +65,6 @@ class GiaoHangTuGiaoUtil extends GiaoHangAbstractUtil
             ['status_id' => 0]
         );
         return $model;
-    }
-
-    public function returnOrder(OrderShip $order)
-    {
-        throw new \Exception('Method chưa hỗ trợ');
-    }
-
-    public function storingOrder(OrderShip $order)
-    {
-        throw new \Exception('Method chưa hỗ trợ');
     }
 
 }

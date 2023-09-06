@@ -65,12 +65,6 @@ abstract class GiaoHangAbstractUtil
 
     abstract public function getStores();
 
-    abstract public function getProvinces();
-
-    abstract public function getDistricts($provinceId);
-
-    abstract public function getWards($districtId);
-
     abstract public function getOrder(OrderShip $order);
 
     abstract public function createOrder(Order $order, ShippingStore $store, ShippingService $service = null);
@@ -88,7 +82,6 @@ abstract class GiaoHangAbstractUtil
         ];
         return view('giaohang.default', compact('orders', 'dataStoreOrder'))->render();
     }
-
 
     /**
      * @return mixed

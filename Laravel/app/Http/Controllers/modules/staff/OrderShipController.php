@@ -234,7 +234,7 @@ class OrderShipController extends RestController
         }
     }
 
-    public function PrintBills(Request $request)
+    public function printBills(Request $request)
     {
         $orderIdsStr = $request->order_ids;
         if (empty($orderIdsStr)) {

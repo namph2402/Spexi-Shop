@@ -66,21 +66,6 @@ class GiaoHangUtil
         return $this->util->getStores();
     }
 
-    public function getProvinces()
-    {
-        return $this->util->getProvinces();
-    }
-
-    public function getDistricts($provinceId)
-    {
-        return $this->util->getDistricts($provinceId);
-    }
-
-    public function getWards($districtId)
-    {
-        return $this->util->getWards($districtId);
-    }
-
     public function getOrder(OrderShip $order)
     {
         return $this->util->getOrder($order);
@@ -89,11 +74,6 @@ class GiaoHangUtil
     public function createOrder(Order $order, ShippingStore $store, ShippingService $service = null)
     {
         return $this->util->createOrder($order, $store, $service);
-    }
-
-    public function updateOrder(string $code, Order $order, ShippingService $service = null)
-    {
-        return $this->util->updateOrder($code, $order, $service);
     }
 
     public function cancelOrder(OrderShip $order)

@@ -63,7 +63,6 @@ export class OrderShipCreateResultComponent extends AbstractCRUDModalComponent<a
   }
 
   load(): void {
-    console.log(this.relatedModel);
     this.list = this.relatedModel;
     this.selectors = this.list.map(val => false);
   }
