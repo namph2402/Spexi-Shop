@@ -67,14 +67,15 @@ class ShippingUnitController extends RestController
         ]);
 
         if ($request->name == UnitName::TIET_KIEM) {
-            $attributes['logo'] = "https://docs.giaohangtietkiem.vn/images/logo.png";
+            $attributes['logo'] = env('APP_WEB_URL') . "/assets/img/ship/ghtk.webp";
             $attributes['class_name'] = "App\Utils\Logistics\GiaoHangTietKiemUtil";
         } else {
             if ($request->name == UnitName::NHANH) {
-                $attributes['logo'] = "https://khachhang.ghn.vn/images/logo-ghn/logo-ghn.png";
+                $attributes['logo'] = env('APP_WEB_URL') . "/assets/img/ship/ghn.png";
                 $attributes['class_name'] = "App\Utils\Logistics\GiaoHangNhanhUtil";
             } else {
                 if ($request->name == UnitName::TU_GIAO) {
+                    $attributes['logo'] = env('APP_WEB_URL') . "/assets/img/private/logo.webp";
                     $attributes['class_name'] = "App\Utils\Logistics\GiaoHangTuGiaoUtil";
                 }
             }

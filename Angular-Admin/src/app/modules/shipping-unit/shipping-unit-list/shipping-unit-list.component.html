@@ -94,7 +94,7 @@
           <td>
             <div *ngIf="item.shipping_services != null">
               <div class="list-config" *ngFor="let value of item.shipping_services">
-                <p style="width: 90%;">{{ value.name }}</p>
+                <p style="width: 90%; margin-right: 10px">{{ value.name }}</p>
                 <button class="btn btn-danger text-center btn-config" type="button" mwlConfirmationPopover
                   popoverTitle="Xóa" popoverMessage="Bạn thực sự muốn xóa?" placement="top"
                   confirmText="Yes <i class='fa fa-check'></i>" cancelText="No <i class='fa fa-remove'></i>"

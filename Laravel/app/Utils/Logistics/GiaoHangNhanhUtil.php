@@ -6,8 +6,6 @@ use App\Models\Order;
 use App\Models\OrderShip;
 use App\Models\ShippingService;
 use App\Models\ShippingStore;
-use App\Models\ShippingWardByUnit;
-use App\Models\Warehouse;
 use Carbon\Carbon;
 use Ixudra\Curl\Facades\Curl;
 
@@ -47,22 +45,14 @@ class GiaoHangNhanhUtil extends GiaoHangAbstractUtil
 
     public function createOrder(Order $order, ShippingStore $store, ShippingService $service = null)
     {
-        $toWard = ShippingWardByUnit::where('ward_name', 'like', $order->ward)
-            ->where('district_name', 'like', $order->district)
-            ->where('province_name', 'like', $order->province)
-            ->where('unit_id', $this->shippingUnit->id)
-            ->first();
-        if (empty($toWard)) {
-            throw new \Exception(sprintf('Địa chỉ %s không đúng', $order->customer_address));
-        }
         $data = [
             'from_name' => $store->name,
             'to_name' => $order->customer_name,
             'to_phone' => $order->customer_phone,
             'to_address' => $order->customer_address,
-            'to_ward_name' => $toWard->partner_name,
-            'to_district_name' => $toWard->partner_district_name,
-            'to_province_name' => $toWard->partner_province_name,
+            'to_ward_name' => $order->ward,
+            'to_district_name' => $order->district,
+            'to_province_name' => $order->province,
             'return_name' => $store->name,
             'return_phone' => $store->data['phone'],
             'return_address' => $store->data['address'],
@@ -76,7 +66,6 @@ class GiaoHangNhanhUtil extends GiaoHangAbstractUtil
             'note' => $order->customer_request,
             'required_note' => $service->data['default_note'] ?? '',
             'length' => $service->data['default_length'] ?? 10,
-            // 'weight' => '',
             'width' => $service->data['default_width'] ?? 10,
             'height' => $service->data['default_height'] ?? 10,
             'items' => []
@@ -84,11 +73,10 @@ class GiaoHangNhanhUtil extends GiaoHangAbstractUtil
 
         $total_weight = 0;
         foreach ($order->details as $d) {
-            $variant = Warehouse::whereProductId($d->product_id)->whereId($d->variant_id)->first();
-            $total_weight += $variant->weight * $d->quantity * 1000;
+            $total_weight += $d->warehouse->weight * $d->quantity * 1000;
             array_push($data['items'], [
-                'name' => $d->product->name,
-                'code' => $d->detail_code,
+                'name' => $d->product_name,
+                'code' => $d->product_code,
                 'quantity' => $d->quantity,
             ]);
         }
@@ -150,10 +138,10 @@ class GiaoHangNhanhUtil extends GiaoHangAbstractUtil
     public function getServices()
     {
         $curl = json_decode('{"code": 200,"message": "Success","data":[
-    {"service_id":53319,"short_name":"Nhanh","service_type_id":1},
-    {"service_id":53320,"short_name":"Chuẩn","service_type_id":2},
-    {"service_id":53321,"short_name":"Tiết kiệm","service_type_id":3}
-    ]}', false);
+            {"service_id":53320,"short_name":"Chuyển phát thương mại điện tử","service_type_id":2},
+            {"service_id":100039,"short_name":"Chuyển phát truyền thống","service_type_id":5}
+            ]}', false);
+
         if ($curl->code == 200) {
             $services = [];
             $respData = $curl->data;

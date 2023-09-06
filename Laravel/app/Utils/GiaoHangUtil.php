@@ -2,14 +2,11 @@
 
 namespace App\Utils;
 
-use App\Models\District;
 use App\Models\Order;
 use App\Models\OrderShip;
-use App\Models\Province;
 use App\Models\ShippingService;
 use App\Models\ShippingStore;
 use App\Models\ShippingUnit;
-use App\Models\Ward;
 use App\Utils\Logistics\GiaoHangAbstractUtil;
 use Illuminate\Support\Facades\Storage;
 
@@ -37,23 +34,6 @@ class GiaoHangUtil
             $input = ShippingUnit::whereName("Tự giao")->first();
         }
         $this->util = new $input->class_name($input);
-    }
-
-    public static function checkAddress(Order $order)
-    {
-        $province = Province::where('name', $order->province)->first();
-        if (empty($province)) {
-            return false;
-        }
-        $district = District::where('name', $order->district)->first();
-        if (empty($district)) {
-            return false;
-        }
-        $ward = Ward::where('name', $order->ward)->first();
-        if (empty($ward)) {
-            return false;
-        }
-        return true;
     }
 
     public function getServices()

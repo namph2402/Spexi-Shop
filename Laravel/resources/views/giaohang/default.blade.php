@@ -115,13 +115,15 @@
                 <tbody>
                     <tr>
                         <td class="col-50 text-center">
-                            <p><img alt="Company Logo" src="{{ $dataStoreOrder['logo'] }}" width="100"></p>
+                            <p style="display:flex; height: 63px">
+                                <img alt="Company Logo" style="margin: auto; width: 120px;" src="{{ $dataStoreOrder['logo'] }}">
+                            </p>
                             <h2>{{ $dataStoreOrder['name'] ?? 'Chưa cấu hình' }}</h2>
                         </td>
                         <td class="col-50 text-center">
-                            <p><img alt="Logistics Logo"
-                                    src="{{ $order->shipping->unit->logo ?? asset('img/ship/default.png') }}"
-                                    width="100"></p>
+                            <p style="display:flex; height: 63px">
+                                <img alt="Logistics Logo" style="margin: auto; width: 120px;" src="{{ $order->shipping->unit->logo}}">
+                            </p>
                             <h2>{{ $order->shipping->unit->name }}</h2>
                         </td>
                     </tr>
