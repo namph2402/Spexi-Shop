@@ -31,11 +31,11 @@ class ExpenseController extends RestController
 
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('name', $request->search), WhereClause::queryLike('creator_name', $request->search)]));
-        }
-        if ($request->has('search') && Str::length($request->search) == 0) {
+        } else {
             $data = '';
             return $this->success($data);
         }
+
         if ($request->has('status')) {
             array_push($clauses, WhereClause::query('status', $request->status));
         }
@@ -102,6 +102,7 @@ class ExpenseController extends RestController
             'amount',
             'date_created'
         ]);
+        
         if($attributes['date_created'] = '0000-00-00 00:00:00') {
             $attributes['date_created'] = Carbon::now();
         }

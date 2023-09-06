@@ -34,9 +34,7 @@ class RelatedProductController extends RestController
             array_push($clauses, WhereClause::queryRelationHas('product', function ($q) use ($search) {
                 $q->where('name', 'like', '%'.$search.'%');
             }));
-        }
-
-        if ($request->has('search') && Str::length($request->search) == 0) {
+        } else {
             $data = '';
             return $this->success($data);
         }
@@ -182,9 +180,7 @@ class RelatedProductController extends RestController
 
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        }
-
-        if ($request->has('search') && Str::length($request->search) == 0) {
+        } else {
             $data = '';
             return $this->success($data);
         }

@@ -31,9 +31,7 @@ class PostCategoryController extends RestController
 
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        }
-
-        if ($request->has('search') && Str::length($request->search) == 0) {
+        } else {
             $data = '';
             return $this->success($data);
         }
@@ -54,6 +52,7 @@ class PostCategoryController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes = $request->only([
             'name',
         ]);

@@ -41,9 +41,7 @@ class UserController extends RestController
                     $q->where('username', $search);
                 }),
             ]));
-        }
-
-        if ($request->has('search') && Str::length($request->search) == 0) {
+        } else {
             $data = '';
             return $this->success($data);
         }

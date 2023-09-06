@@ -25,13 +25,14 @@ class MenuGroupController extends RestController
         $withCount = [];
         $clauses = [];
         $orderBy = $request->input('orderBy', 'id:asc');
+
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        }
-        if ($request->has('search') && Str::length($request->search) == 0) {
+        } else {
             $data = '';
             return $this->success($data);
         }
+
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {
@@ -48,12 +49,14 @@ class MenuGroupController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes['name'] = $request->name;
 
         $test_name = $this->repository->find([WhereClause::query('name', $request->input('name'))]);
         if ($test_name) {
             return $this->errorHad($request->input('name'));
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->create($attributes);
@@ -72,17 +75,21 @@ class MenuGroupController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $validator = $this->validateRequest($request, [
             'name' => 'nullable|max:255',
         ]);
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes['name'] = $request->name;
+
         $test_name = $this->repository->find([WhereClause::query('name', $request->input('name')), WhereClause::queryDiff('id', $model->id)]);
         if ($test_name) {
             return $this->errorHad($request->input('name'));
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($model, $attributes);
@@ -101,6 +108,7 @@ class MenuGroupController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+        
         try {
             DB::beginTransaction();
             $this->repository->delete($id, ['menus']);

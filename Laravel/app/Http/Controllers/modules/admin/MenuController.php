@@ -111,6 +111,7 @@ class MenuController extends RestController
         if ($test_name) {
             return $this->errorHad($request->input('name'));
         }
+
         if ($request->input('name') == 'Trang chủ') {
             $attributes['url'] = null;
         }
@@ -130,7 +131,6 @@ class MenuController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
-
         if (empty($model)) {
             return $this->errorNotFound();
         }
@@ -154,11 +154,12 @@ class MenuController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-        $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<'), WhereClause::query('group_id', $model->group_id)], 'order:desc');
 
+        $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<'), WhereClause::query('group_id', $model->group_id)], 'order:desc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
         }
+        
         try {
             DB::beginTransaction();
             $order = $model->order;

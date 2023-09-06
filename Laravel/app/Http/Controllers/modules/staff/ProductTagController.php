@@ -31,9 +31,7 @@ class ProductTagController extends RestController
 
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        }
-
-        if ($request->has('search') && Str::length($request->search) == 0) {
+        } else {
             $data = '';
             return $this->success($data);
         }

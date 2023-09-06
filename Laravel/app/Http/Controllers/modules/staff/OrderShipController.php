@@ -55,9 +55,7 @@ class OrderShipController extends RestController
 
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('customer_name', $request->search), WhereClause::queryLike('customer_phone', $request->search)]));
-        }
-
-        if ($request->has('search') && Str::length($request->search) == 0) {
+        } else {
             $data = '';
             return $this->success($data);
         }

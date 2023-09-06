@@ -28,12 +28,12 @@ class BannerController extends RestController
     {
         $createdImages = [];
 
-        $validator = Validator::make($request->all(), [
+        $validator = $this->validateRequest($request, [
             'group_id' => 'required|numeric',
             'name' => 'required|max:255',
             'image' => 'required'
         ]);
-        if ($validator->fails()) {
+        if ($validator) {
             return $this->errorClient($validator);
         }
 
@@ -219,14 +219,12 @@ class BannerController extends RestController
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update(
-                $id,
-                ['order' => $swapModel->order]
-            );
-            $swapModel = $this->repository->update(
-                $swapModel->id,
-                ['order' => $order]
-            );
+            $model = $this->repository->update($id,[
+                'order' => $swapModel->order
+            ]);
+            $swapModel = $this->repository->update($swapModel->id,[
+                'order' => $order
+            ]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {

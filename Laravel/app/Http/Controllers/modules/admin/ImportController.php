@@ -27,11 +27,11 @@ class ImportController extends RestController
 
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('name', $request->search), WhereClause::queryLike('creator_name', $request->search)]));
-        }
-        if ($request->has('search') && Str::length($request->search) == 0) {
+        } else {
             $data = '';
             return $this->success($data);
         }
+
         if ($request->has('date')) {
             array_push($clauses, WhereClause::queryDate('created_at', $request->date));
         }
@@ -75,15 +75,18 @@ class ImportController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $validator = $this->validateRequest($request, [
             'name' => 'nullable|max:255',
         ]);
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes = $request->only([
             'name'
         ]);
+        
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);

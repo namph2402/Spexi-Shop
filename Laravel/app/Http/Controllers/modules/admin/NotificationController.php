@@ -27,9 +27,7 @@ class NotificationController extends RestController
 
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
-        }
-
-        if ($request->has('search') && Str::length($request->search) == 0) {
+        } else {
             $data = '';
             return $this->success($data);
         }
@@ -165,7 +163,7 @@ class NotificationController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-        
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);

@@ -53,18 +53,14 @@ class OrderController extends RestController
 
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('customer_name', $request->search), WhereClause::queryLike('customer_phone', $request->search)]));
-        }
-
-        if ($request->has('search') && Str::length($request->search) == 0) {
+        } else {
             $data = '';
             return $this->success($data);
         }
 
         if ($request->has('code') && Str::length($request->code) > 0) {
             array_push($clauses, WhereClause::query('code', $request->code));
-        }
-
-        if ($request->has('code') && Str::length($request->code) == 0) {
+        } else {
             $data = '';
             return $this->success($data);
         }
@@ -316,6 +312,7 @@ class OrderController extends RestController
         if (empty($model)) {
             return $this->errorClient('Đối tượng không tồn tại');
         }
+        
         if ($model->status == Order::$LEN_DON) {
             $model->delete();
             return $this->success($model);
@@ -330,8 +327,10 @@ class OrderController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $attributes['note'] = $request->note;
         $attributes['order_status'] = Order::$XAC_NHAN;
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
@@ -351,8 +350,10 @@ class OrderController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $attributes['note'] = $request->note;
         $attributes['order_status'] = Order::$HUY_DON;
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
@@ -380,7 +381,9 @@ class OrderController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $attributes['order_status'] = Order::$HOAN_THANH;
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);

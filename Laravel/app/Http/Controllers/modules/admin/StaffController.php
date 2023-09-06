@@ -32,9 +32,7 @@ class StaffController extends RestController
                 WhereClause::queryLike('fullname', $request->search),
                 WhereClause::queryLike('phone', $request->search),
             ]));
-        }
-
-        if ($request->has('search') && Str::length($request->search) == 0) {
+        } else {
             $data = '';
             return $this->success($data);
         }

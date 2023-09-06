@@ -55,9 +55,7 @@ class OrderShipController extends RestController
 
         if ($request->has('search') && Str::length($request->search) > 0) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('customer_name', $request->search), WhereClause::queryLike('customer_phone', $request->search)]));
-        }
-
-        if ($request->has('search') && Str::length($request->search) == 0) {
+        } else {
             $data = '';
             return $this->success($data);
         }
@@ -170,7 +168,7 @@ class OrderShipController extends RestController
     {
         $model = $this->repository->findById($id);
         if (empty($model)) {
-            return $this->errorClient('Đơn hàng không tồn tạ 21i');
+            return $this->errorClient('Đơn hàng không tồn tại');
         }
         $ghu = new GiaoHangUtil($model);
         $info = $ghu->getOrder($model);
@@ -213,6 +211,7 @@ class OrderShipController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, [
@@ -220,10 +219,7 @@ class OrderShipController extends RestController
                 'status_id' => 7,
             ]);
             if($model) {
-                $this->orderRepository->update($model->order->id,
-                [
-                    'order_status' => 'Hoàn thành'
-                ]);
+                $this->orderRepository->update($model->order->id,['order_status' => 'Hoàn thành']);
             }
             DB::commit();
             return $this->success($model);
