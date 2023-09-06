@@ -82,6 +82,7 @@
                 'label-info':item.order_status == 'Đã chuẩn bị hàng',
                 'label-warning':item.order_status == 'Đang giao',
                 'label-success':item.order_status == 'Hoàn thành',
+                'label-destroy':item.order_status == 'Hủy giao hàng',
                 'label-danger':item.order_status == 'Hủy đơn'
               }">{{ item.order_status }}</label>
             <p style="margin: 10px 0 0">
@@ -91,7 +92,7 @@
           </td>
           <td class="text-center">
             <div *ngIf="item.shipping">
-              <p>
+              <p class="order-code">
                 <label class="label" style="padding: 5px 10px">
                   <a href="javascript:void(0)" style="font-size: 14px;" (click)="infoShip(item.shipping,i)">Mã
                     {{item.shipping.code}}</a>
@@ -104,6 +105,7 @@
                 <label class="label" style="padding: 5px 10px"
                 [ngClass]="{
                   'label-primary':item.shipping.status == 'Điều phối giao hàng',
+                  'label-confirm':item.shipping.status == 'Đã tiếp nhận',
                   'label-info':item.shipping.status == 'Đang giao',
                   'label-warning':item.shipping.status == 'Giao lại',
                   'label-success':item.shipping.status == 'Hoàn thành',

@@ -7,3 +7,7 @@
 .label-secondary {
   background: rgb(154, 77, 255);
 }
+
+.label-destroy {
+  background: rgb(177, 115, 0);
+}

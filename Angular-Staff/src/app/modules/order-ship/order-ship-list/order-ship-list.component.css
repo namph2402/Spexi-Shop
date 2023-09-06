@@ -1,0 +1,12 @@
+.order-code {
+  width: 130px;
+  overflow: hidden;
+}
+
+.label-confirm {
+  background: #337ab7;
+}
+
+.label-destroy {
+  background: rgb(177, 115, 0);
+}

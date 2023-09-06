@@ -56,7 +56,6 @@ export class OrderShipListComponent extends AbstractCRUDComponent<OrderShipMeta>
     return this.formBuilder.group({
       code: new FormControl(null),
       search: new FormControl(null),
-      status: new FormControl(null),
       ship_status: new FormControl(null),
       created_date: new FormControl(null),
     });
@@ -67,49 +66,31 @@ export class OrderShipListComponent extends AbstractCRUDComponent<OrderShipMeta>
       FieldForm.createTextInput('Tìm kiếm theo mã đơn hàng', 'code', 'Nhập từ khóa'),
       FieldForm.createTextInput('Tìm kiếm theo khách hàng', 'search', 'Nhập từ khóa'),
       FieldForm.createDateInput('Ngày tạo', 'created_date', 'Chọn ngày'),
-      FieldForm.createSelect('Trạng thái đơn hàng', 'status', 'Chọn một', [
-        {
-          name: "Lên đơn",
-          value: "Lên đơn"
-        },
-        {
-          name: "Xác nhận",
-          value: "Xác nhận"
-        },
-        {
-          name: "Chuẩn bị hàng",
-          value: "Chuẩn bị hàng"
-        },
-        {
-          name: "Đã chuẩn bị hàng",
-          value: "Đã chuẩn bị hàng"
-        },
-        {
-          name: "Đang giao",
-          value: "Đang giao"
-        },
-      ]),
       FieldForm.createSelect('Trạng thái đơn vận', 'ship_status', 'Chọn một', [
         {
-          name: "Lên đơn",
-          value: "Lên đơn"
+          name: "Điều phối giao hàng",
+          value: "Điều phối giao hàng"
         },
         {
-          name: "Xác nhận",
-          value: "Xác nhận"
-        },
-        {
-          name: "Chuẩn bị hàng",
-          value: "Chuẩn bị hàng"
-        },
-        {
-          name: "Đã chuẩn bị hàng",
-          value: "Đã chuẩn bị hàng"
+          name: "Đã tiếp nhận",
+          value: "Đã tiếp nhận"
         },
         {
           name: "Đang giao",
           value: "Đang giao"
         },
+        {
+          name: "Giao lại",
+          value: "Giao lại"
+        },
+        {
+          name: "Hoàn thành",
+          value: "Hoàn thành"
+        },
+        {
+          name: "Hủy đơn",
+          value: "Hủy đơn"
+        }
       ]),
     ];
   }

@@ -64,8 +64,11 @@ class OrderShipController extends RestController
             array_push($clauses, WhereClause::query('code', $request->code));
         }
 
-        if ($request->has('status')) {
-            array_push($clauses, WhereClause::query('order_status', $request->status));
+        if ($request->has('ship_status')) {
+            $status = $request->ship_status;
+            array_push($clauses, WhereClause::queryRelationHas('shipping', function ($q) use ($status) {
+                $q->where('status', $status);
+            }));
         }
 
         if ($limit) {
@@ -166,7 +169,7 @@ class OrderShipController extends RestController
         if (empty($model)) {
             return $this->errorClient('Đơn hàng không tồn tạ 21i');
         }
-        
+
         $ghu = new GiaoHangUtil($model);
         $info = $ghu->getOrder($model);
         return $this->success($info);
@@ -185,14 +188,12 @@ class OrderShipController extends RestController
                 'status' => 'Đang giao',
                 'status_id' => 4,
             ]);
-
             if($model) {
                 $this->orderRepository->update($model->order->id,
                 [
                     'order_status' => 'Đang giao'
                 ]);
             }
-
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -281,7 +282,7 @@ class OrderShipController extends RestController
             $attributes['note'] = $request->note;
             $attributes['status'] = OrderShip::$HUY_DON;
             $attributes['status_id'] = 0;
-            $status = Order::$HUY_DON;
+            $status = Order::$HUY_GIAO;
         } else {
             $attributes['note'] = $request->note;
             $attributes['status'] = OrderShip::$GIAO_LAI;
