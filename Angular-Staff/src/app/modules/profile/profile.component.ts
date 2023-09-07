@@ -78,7 +78,6 @@ export class ProfileComponent extends AbstractCRUDComponent<ProfileMeta> {
 
   updatePassword() {
     let data: any = ObjectUtil.combineValue({}, this.searchForm.value, true);
-    console.log(data);
     if(data.newPassword != data.rePassword) {
       this.service.toastError("Mật khẩu không khớp");
     } else {

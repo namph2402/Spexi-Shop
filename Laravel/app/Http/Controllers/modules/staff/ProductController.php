@@ -63,7 +63,7 @@ class ProductController extends RestController
     {
         $limit = $request->input('limit', null);
         $clauses = [];
-        $with = ['category', 'article', 'tags', 'warehouses.size', 'warehouses.color'];
+        $with = ['category', 'article', 'tags', 'warehouses.size', 'warehouses.color', 'warehouseViews.size', 'warehouseViews.color'];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'order:asc');
 
@@ -438,7 +438,7 @@ class ProductController extends RestController
         if (isset($request->category_id)) {
             array_push($clauses, WhereClause::query('category_id', $request->category_id));
         }
-        
+
         if (isset($request->status) && $request->status != '') {
             array_push($clauses, WhereClause::query('published', $request->status));
         }

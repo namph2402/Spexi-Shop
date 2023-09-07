@@ -63,17 +63,13 @@ class ProductController extends RestController
     {
         $limit = $request->input('limit', null);
         $clauses = [];
-        $with = ['category', 'article', 'tags', 'warehouses.size', 'warehouses.color'];
+        $with = ['category', 'article', 'tags', 'warehouses.size', 'warehouses.color', 'warehouseViews.size', 'warehouseViews.color'];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'order:asc');
 
         if ($request->has('search')) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('code', $request->search), WhereClause::queryLike('name', $request->search)]));
         }
-        //  else {
-        //     $data = '';
-        //     return $this->success($data);
-        // }
 
         if ($request->has('status')) {
             array_push($clauses, WhereClause::query('status', $request->status));

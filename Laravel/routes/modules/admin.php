@@ -36,6 +36,8 @@ Route::group(['middleware' => ['auth.admin']], function () {
     // Payment_method
     Route::resource('payment_methods', 'PaymentMethodController');
     Route::group(['prefix' => 'payment_methods/{id}'], function () {
+        Route::post('enable', 'PaymentMethodController@enable');
+        Route::post('disable', 'PaymentMethodController@disable');
         Route::post('destroyConfig', 'PaymentMethodController@destroyConfig');
         Route::post('destroyPaymentMethod', 'PaymentMethodController@destroy');
     });

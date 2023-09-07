@@ -29,6 +29,10 @@ class PaymentMethodController extends RestController
             array_push($clauses, WhereClause::queryLike('name', $request->search));
         }
 
+        if ($request->has('status')) {
+            array_push($clauses, WhereClause::queryLike('status', $request->status));
+        }
+
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {
@@ -163,6 +167,44 @@ class PaymentMethodController extends RestController
             $this->repository->delete($id);
             DB::commit();
             return $this->success([]);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function enable($id)
+    {
+        $model = $this->repository->findById($id);
+        if (empty($model)) {
+            return $this->errorNotFound();
+        }
+
+        try {
+            DB::beginTransaction();
+            $model = $this->repository->update($id, ['status' => true]);
+            DB::commit();
+            return $this->success($model);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function disable($id)
+    {
+        $model = $this->repository->findById($id);
+        if (empty($model)) {
+            return $this->errorNotFound();
+        }
+
+        try {
+            DB::beginTransaction();
+            $model = $this->repository->update($id, ['status' => false]);
+            DB::commit();
+            return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();

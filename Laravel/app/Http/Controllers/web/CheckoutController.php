@@ -87,24 +87,32 @@ class CheckoutController extends RestController
         $provinces = $this->provinceRepository->get([]);
         $profile = $this->profileRepository->find([WhereClause::query('user_id', Auth::user()->id)]);
         $itemCheckout = $this->itemRepository->get($clauses, null, $with);
+
         if(!$request->has('item') || count($itemCheckout) <= 0) {
             return redirect('/cart');
         }
+
         if ($profile->province != null) {
             $provinceUser = $this->provinceRepository->find([WhereClause::query('name', $profile->province)], null, ['districts']);
         }
+
         if ($profile->district != null) {
             $districtUser = $this->districtRepository->find([WhereClause::query('name', $profile->district)], null, ['wards']);
         }
+
         if ($profile->ward != null) {
             $wardUser = $this->wardRepository->find([WhereClause::query('name', $profile->ward)]);
             if ($wardUser) {
                 $shipFee = $this->shipFeeRepository->find([WhereClause::query('ward_id', $wardUser->id)])->fee;
             }
         }
+
+        $payment = $this->paymentMethodRepository->get([WhereClause::query('status', 1)]);
+
         foreach ($itemCheckout as $item) {
             $total += $item->amount;
         }
+
         $promotion = $this->promotionRepository->find(
             [
                 WhereClause::queryIn('type', ['3', '4']),
@@ -121,6 +129,7 @@ class CheckoutController extends RestController
                 $shipFee = 0;
             }
         }
+
         $totalAll = $total + $shipFee - $discount;
         $dataItem = [
             'total' => $total,
@@ -128,7 +137,7 @@ class CheckoutController extends RestController
             'discount' => $discount,
             'totalAll' => $totalAll
         ];
-        return view('orders.checkout', compact('itemCheckout', 'provinces', 'itemC', 'profile', 'provinceUser', 'districtUser', 'wardUser', 'promotion', 'dataItem'));
+        return view('orders.checkout', compact('itemCheckout', 'provinces', 'itemC', 'profile', 'provinceUser', 'districtUser', 'wardUser', 'promotion', 'dataItem', 'payment'));
     }
 
     public function store(Request $request)
@@ -163,7 +172,8 @@ class CheckoutController extends RestController
             'amount',
             'shipping_fee',
             'total_amount',
-            'discount'
+            'discount',
+            'payment_type'
         ]);
         $code = 'DH' . Str::random(8);
         while (Order::query()->where('code', $code)->exists()) {
@@ -179,16 +189,12 @@ class CheckoutController extends RestController
         $attributes['date_created'] = date('Y-m-d');
         $attributes['voucher_id'] = $request->voucherId;
         $attributes['cod_fee'] = $request->total_amount;
-        if($request->payment_type == 'cod') {
-            $attributes['payment_type'] = PaymentMethodEnum::COD;
-        } else {
-            $attributes['payment_type'] = PaymentMethodEnum::VNPAY;
-        }
 
         try {
             DB::beginTransaction();
             $order = $this->repository->create($attributes);
             $itemCheckouts = $this->itemRepository->get($clauses, null, $with);
+
             foreach ($itemCheckouts as $item) {
                 $attributeDetails['order_id'] = $order->id;
                 $attributeDetails['product_id'] = $item->product->id;
@@ -205,18 +211,25 @@ class CheckoutController extends RestController
                     $this->itemRepository->delete($item->id);
                 }
             }
+
             if ($order) {
-                if ($request->payment_type == 'vnpay') {
+                $paymentProcess = null;
+                $paymentMethod = null;
+
+                if ($request->payment_type == PaymentMethodEnum::VNPAY) {
                     $paymentMethod = $this->paymentMethodRepository->find([WhereClause::query('name', PaymentMethodEnum::VNPAY)]);
                     $paymentProcess = VnPayUtil::getInstance()->createRequest($order, $paymentMethod, $items);
-                } else {
-                    $paymentProcess = null;
-                    $paymentMethod = null;
+                }
+
+                if ($request->payment_type == PaymentMethodEnum::MOMO) {
+                    $paymentMethod = $this->paymentMethodRepository->find([WhereClause::query('name', PaymentMethodEnum::MOMO)]);
+                    $paymentProcess = VnPayUtil::getInstance()->createRequest($order, $paymentMethod, $items);
                 }
 
                 if ($attributes['voucher_id'] != null) {
                     $this->voucherRepository->update($attributes['voucher_id'],['remain_quantity' => DB::raw('`remain_quantity` - 1')]);
                 }
+
                 $this->notificationRepository->create(
                     [
                         'name' => 'Đơn hàng ' . $order->code . ' được tạo thành công',

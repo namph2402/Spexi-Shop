@@ -50,10 +50,10 @@
                     <form action="/cart/addItem" method="post" id="formDetail" class="form mb-2 mt3">
                         <div class="d-flex mb-3">
                             <strong class="text-dark mr-3">Size :</strong>
-                            @foreach ($sizePs as $s)
+                            @foreach ($sizePs as $key=>$s)
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" class="custom-control-input" id="{{ $s->name }}"
-                                        value="{{ $s->id }}" name="size_id">
+                                        value="{{ $s->id }}" name="size_id" @if($key == 0) checked @endif>
                                     <label class="custom-control-label"
                                         for="{{ $s->name }}">{{ $s->name }}</label>
                                 </div>
@@ -61,10 +61,10 @@
                         </div>
                         <div class="d-flex mb-4">
                             <strong class="text-dark mr-3">Màu :</strong>
-                            @foreach ($colorPs as $c)
+                            @foreach ($colorPs as $key=>$c)
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" class="custom-control-input" id="{{ $c->name }}"
-                                        value="{{ $c->id }}" name="color_id">
+                                        value="{{ $c->id }}" name="color_id" @if($key == 0) checked @endif>
                                     <label class="custom-control-label"
                                         for="{{ $c->name }}">{{ $c->name }}</label>
                                 </div>

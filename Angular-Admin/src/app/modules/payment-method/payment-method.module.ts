@@ -9,6 +9,7 @@ import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown';
 import {CKEditorModule} from 'ng2-ckeditor';
 import {PaymentMethodModalModule} from './payment-method.modal.module';
 import {PaymentMethodListComponent} from './payment-method-list/payment-method-list.component';
+import { UiSwitchModule } from 'ngx-toggle-switch';
 
 const routing: Routes = [
   {
@@ -30,6 +31,7 @@ const routing: Routes = [
     NgSelectModule,
     AngularMultiSelectModule,
     CKEditorModule,
+    UiSwitchModule,
     PaymentMethodModalModule
   ],
   declarations: [PaymentMethodListComponent],

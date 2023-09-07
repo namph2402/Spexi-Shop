@@ -30,6 +30,10 @@ class LoginController extends RestController
             return $this->errorClient('Tài khoản không đúng');
         }
 
+        if ($user->status == 0) {
+            return $this->errorClient('Tài khoản chưa được kích hoạt');
+        }
+
         if (!Hash::check($password, $user->password)) {
             return $this->errorClient('Mật khẩu không đúng');
         }

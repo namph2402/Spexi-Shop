@@ -60,6 +60,16 @@ class WarehouseController extends RestController
             array_push($clauses, WhereClause::query('product_id', $request->product_id));
         }
 
+        if ($request->has('search')) {
+            $search = $request->search;
+            array_push($clauses, WhereClause::orQuery([
+                WhereClause::queryLike('code', $request->search),
+                WhereClause::queryRelationHas('product', function ($q) use ($search) {
+                        $q->where('name', 'like', '%'.$search.'%');
+                })
+            ]));
+        }
+
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {

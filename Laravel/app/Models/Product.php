@@ -45,7 +45,7 @@ class Product extends Model
 
     public function warehouseViews()
     {
-        return $this->hasMany(Warehouse::class)->where('status', '=', 1);
+        return $this->hasMany(Warehouse::class)->where('status', '=', 1)->where('quantity', '>', 0);
     }
 
     public function tags()

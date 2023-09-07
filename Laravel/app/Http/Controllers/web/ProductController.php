@@ -124,6 +124,8 @@ class ProductController extends RestController
         }
         $sizePs = $this->sizeRepository->get([WhereClause::queryIn('id', $arrSize)]);
         $colorPs = $this->colorRepository->get([WhereClause::queryIn('id', $arrColor)]);
+
+        // dd($product);
         return view('products.detail', compact('product', 'category', 'sizePs', 'colorPs'));
     }
 }

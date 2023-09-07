@@ -179,24 +179,17 @@
                     </div>
                 </div>
                 <div class="mb-4">
-                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Thanh
-                            toán</span></h5>
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Thanh toán</span></h5>
                     <div class="bg-light p-30">
+                        @foreach ($payment as $key=>$m)
                         <div class="form-group">
                             <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment_type" value="cod"
-                                    id="directcheck" checked>
-                                <label class="custom-control-label" for="directcheck">Khi nhận hàng</label>
+                                <input type="radio" class="custom-control-input" name="payment_type" value="{{ $m->name }}" id="{{ $m->name }}" @if($key == 0) checked @endif>
+                                <label class="custom-control-label" for="{{ $m->name }}">Thanh toán qua {{ $m->name }}</label>
                             </div>
                         </div>
-                        <div class="form-group mb-4">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment_type" value="vnpay"
-                                    id="banktransfer">
-                                <label class="custom-control-label" for="banktransfer">Thanh toán Vnpay</label>
-                            </div>
-                        </div>
-                        <button class="btn btn-block btn-primary font-weight-bold py-3" id="btnOrder" type="submit"
+                        @endforeach
+                        <button class="btn btn-block btn-primary font-weight-bold py-3 mt-4" id="btnOrder" type="submit"
                             data-bs-toggle="modal" data-bs-target="#staticBackdrop">Đặt hàng
                         </button>
                     </div>

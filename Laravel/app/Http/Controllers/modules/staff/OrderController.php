@@ -48,7 +48,7 @@ class OrderController extends RestController
         $limit = $request->input('limit', null);
         $clauses = [];
         $orderBy = $request->input('orderBy', 'updated_at:desc');
-        $with = ['details.product.warehouses.size', 'details.product.warehouses.color', 'voucher'];
+        $with = ['details.product.warehouseViews.size', 'details.product.warehouseViews.color', 'voucher'];
         $withCount = [];
 
         if ($request->has('search')) {
@@ -311,7 +311,7 @@ class OrderController extends RestController
         if (empty($model)) {
             return $this->errorClient('Đối tượng không tồn tại');
         }
-        
+
         if ($model->status == Order::$LEN_DON) {
             $model->delete();
             return $this->success($model);

@@ -27,6 +27,10 @@ class PaymentMethodController extends RestController
             array_push($clauses, WhereClause::queryLike('name', $request->search));
         }
 
+        if ($request->has('status')) {
+            array_push($clauses, WhereClause::queryLike('status', $request->status));
+        }
+
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {

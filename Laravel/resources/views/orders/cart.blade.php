@@ -95,10 +95,6 @@
                 </div>
                 <input type="text" hidden name="item" id="item" value="">
             </form>
-            <form action="/vnpay" method="post">
-                <button type="submit" name="redirect">VnPay</button>
-            @csrf
-            </form>
         @else
             <div class="row px-xl-5">
                 <div class="col-lg-12 table-responsive mb-5">

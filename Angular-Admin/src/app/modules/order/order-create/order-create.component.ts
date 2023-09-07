@@ -17,12 +17,13 @@ import { ShippingFeeMeta } from '../../shipping-fee/shipping-fee.meta';
 import { ShippingFeeService } from '../../shipping-fee/shipping-fee.service';
 import { CustomerService } from '../../customer/customer.service';
 import { CustomerMeta } from '../../customer/customer.meta';
+import { PaymentMethodService } from '../../payment-method/payment-method.service';
 
 @Component({
   selector: 'app-order-create',
   templateUrl: './order-create.component.html',
   styleUrls: ['./order-create.component.css'],
-  providers: [CustomerService, OrderService, VoucherService, ProductService, ProvinceService, ShippingFeeService]
+  providers: [CustomerService, OrderService, VoucherService, ProductService, ProvinceService, ShippingFeeService, PaymentMethodService]
 })
 export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
 
@@ -45,6 +46,7 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
     private provinceService: ProvinceService,
     private shipFeeService: ShippingFeeService,
     private customerService: CustomerService,
+    private paymentervice: PaymentMethodService
   ) {
     super(service, modal, builder);
   }
@@ -57,6 +59,10 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
 
   loadVouchers() {
     return this.voucherService.loadByParams({ status: 1 });
+  }
+
+  loadPayments() {
+    return this.paymentervice.loadByParams({ status: 1 });
   }
 
   loadAllProvinces() {
@@ -99,18 +105,7 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
       FieldForm.createTextArea('Yêu cầu của khách hàng', 'customer_request', 'Nhập kí tự', 5),
       FieldForm.createSingleSelect2('Sản phẩm', 'product', 'Chọn một', 'loadAllProducts'),
       FieldForm.createSingleSelect2('Mã giảm giá', 'voucher_list', 'Chọn một', 'loadVouchers'),
-      FieldForm.createSelect('Hình thức thanh toán', 'payment_type', '', [
-        {
-          id: 1,
-          name: "Thanh toán khi nhận hàng",
-          value: "CoD"
-        },
-        {
-          id: 2,
-          name: "Chuyển khoản VNPay",
-          value: "VNPay"
-        },
-      ]),
+      FieldForm.createSelect('Hình thức thanh toán', 'payment_type', 'Chọn một', 'loadPayments'),
       FieldForm.createSelect('Trạng thái thanh toán', 'payment_status', '', [
         {
           name: "Chưa thanh toán",
@@ -303,7 +298,6 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
       item.district = this.getFormValue('district')[0].name;
       item.ward = this.getFormValue('ward')[0].name;
       item.product = JSON.stringify(this.arrProduct);
-      console.log(item);
       this.service.store(item).subscribe(res => {
         this.service.toastSuccessfullyCreated();
         this.close(res);

@@ -33,7 +33,7 @@ export class ProductWarehouseListComponent extends AbstractCRUDModalComponent<Pr
   }
 
   getTitle(): string {
-    return 'Quản lý ảnh sản phẩm';
+    return 'Quản lý kho sản phẩm';
   }
 
   getCreateModalComponent(): any {

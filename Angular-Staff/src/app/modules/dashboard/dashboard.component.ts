@@ -18,11 +18,6 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
   boxes: any[];
   products: any[];
   orders: any[];
-  percent: any[];
-  expense: any[];
-  quantityOrder: any[];
-  productCodeMains: any[];
-  productQuantityMains: any[];
   userMains: any[];
   year: any = [];
 
@@ -141,94 +136,7 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
       this.boxes = val['boxes'];
       this.products = val['products'];
       this.orders = val['orders'];
-
-      this.percent = val['percents'];
-      this.quantityOrder = val['quantity'];
-      this.productCodeMains = val['productCodeMains'];
-      this.productQuantityMains = val['productQuantityMains'];
       this.userMains = val['user'];
-      this.expense = val['expenses'];
-
-      setTimeout(() => {
-        document.getElementById("orderDiv").innerHTML = `<canvas id="order"></canvas>`;
-        document.getElementById("amountDiv").innerHTML = `<canvas id="amount"></canvas>`;
-        document.getElementById("productDiv").innerHTML = `<canvas id="product"></canvas>`;
-        new Chart("order", {
-          type: 'bar',
-          data: {
-            labels: ['T.1', 'T.2', 'T.3', 'T.4', 'T.5', 'T.6', 'T.7', 'T.8', 'T.9', 'T.10', 'T.11', 'T.12'],
-            datasets: [{
-              label: 'Đơn hàng bán',
-              data: this.quantityOrder,
-              backgroundColor: 'rgba(12, 167, 76, 0.5)',
-              borderColor: 'rgb(12, 167, 76)',
-              borderWidth: 2
-            }]
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: false
-              }
-            }
-          },
-        });
-        new Chart("product", {
-          type: 'doughnut',
-          data : {
-            labels: this.productCodeMains,
-            datasets: [{
-              label: 'Sản phẩm',
-              data: this.productQuantityMains,
-              backgroundColor: [
-                'rgb(224, 3, 58)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 241, 110)',
-                'rgb(140, 255, 130)'
-              ],
-              hoverOffset: 4
-            }]
-          }
-        });
-        new Chart("amount", {
-          type: 'line',
-          data: {
-              datasets: [{
-                  label: 'Doanh thu',
-                  data: this.percent,
-                  backgroundColor: 'rgba(0, 0, 0, 0)',
-                  borderColor: 'rgb(234, 238, 0)',
-                  borderWidth: 3,
-                  order: 2
-              }, {
-                  label: 'Chi tiêu',
-                  data: this.expense,
-                  type: 'line',
-                  backgroundColor: 'rgba(0, 0, 0, 0)',
-                  borderColor: '#f53d3d',
-                  borderWidth: 3,
-                  order: 1
-              }],
-              labels: ['T.1', 'T.2', 'T.3', 'T.4', 'T.5', 'T.6', 'T.7', 'T.8', 'T.9', 'T.10', 'T.11', 'T.12'],
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: false
-              }
-            }
-          },
-       });
-
-      }, 100);
-    });
-  }
-
-  export(filename: string) {
-    let param: any = ObjectUtil.combineValue({}, this.searchForm.value, true);
-    this.service.export(param).subscribe(blob => {
-      ExcelHelper.exportXLSXFile(blob, `${filename}_${DateTimeUtil.today('YYYY_MM_DD_X')}`);
-      this.service.toastSuccessfully('Xuất file', 'Thành công');
     });
   }
 }

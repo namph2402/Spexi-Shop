@@ -96,12 +96,12 @@ export class StaffListComponent extends AbstractCRUDComponent<StaffMeta> {
 
   onStatusChange(item: StaffMeta, index: number, enable: boolean) {
     let methodAsync = null;
-    let titleMsg: string = 'Phát hành';
+    let titleMsg: string = 'Mở kích hoạt';
     if (enable) {
       methodAsync = this.service.enable(item.id);
     } else {
       methodAsync = this.service.disable(item.id);
-      titleMsg = 'Lưu kho';
+      titleMsg = 'Khóa kích hoạt';
     }
     methodAsync.subscribe((res: StaffMeta) => {
       this.service.toastSuccessfully(titleMsg);

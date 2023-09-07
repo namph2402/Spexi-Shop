@@ -6,7 +6,6 @@ import {TitleService} from '../../../core/services';
 import {PaymentMethodMeta} from '../payment-method.meta';
 import {PaymentMethodService} from '../payment-method.service';
 import {PaymentMethodCreateComponent} from '../payment-method-create/payment-method-create.component';
-import {PaymentMethodEditComponent} from '../payment-method-edit/payment-method-edit.component';
 import {ObjectUtil} from '../../../core/utils';
 import {ModalResult} from '../../../core/common';
 import {PaymentMethodEditVnpayComponent} from '../payment-method-vnpay-edit/payment-method-vnpay-edit.component';
@@ -35,7 +34,7 @@ export class PaymentMethodListComponent extends AbstractCRUDComponent<PaymentMet
   }
 
   getEditModalComponent(): any {
-    return PaymentMethodEditComponent;
+    return null;
   }
 
   getCreateModalComponentOptions(): ModalOptions {
@@ -65,7 +64,22 @@ export class PaymentMethodListComponent extends AbstractCRUDComponent<PaymentMet
     super(service, modal, builder);
   }
 
-  addPayment() {
+  onStatusChange(item: PaymentMethodMeta, index: number, enable: boolean) {
+    let methodAsync = null;
+    let titleMsg: string = 'Phát hành';
+    if (enable) {
+      methodAsync = this.service.enable(item.id);
+    } else {
+      methodAsync = this.service.disable(item.id);
+      titleMsg = 'Lưu kho';
+    }
+    methodAsync.subscribe((res: PaymentMethodMeta) => {
+      this.service.toastSuccessfully(titleMsg);
+    }, () => this.service.toastFailed(titleMsg));
+    this.load();
+  }
+
+  createPayment() {
     let modalOptions = Object.assign(this.defaultModalOptions(), this.getCreateModalComponentOptions());
     const config = ObjectUtil.combineValue({ ignoreBackdropClick: true }, modalOptions);
     const modalRef = this.modalService.show(this.getCreateModalComponent(), config);
@@ -75,19 +89,6 @@ export class PaymentMethodListComponent extends AbstractCRUDComponent<PaymentMet
       if (result.success) {
         this.load();
       }
-    });
-  }
-
-  addManual(item: PaymentMethodMeta) {
-    const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, this.getEditModalComponentOptions());
-    const modalRef = this.modalService.show(PaymentMethodEditComponent, config);
-    const modal: AbstractModalComponent<PaymentMethodMeta> = <AbstractModalComponent<PaymentMethodMeta>>modalRef.content;
-    modal.setModel(ObjectUtil.clone(item));
-    const sub = modal.onHidden.subscribe((result: ModalResult<PaymentMethodMeta>) => {
-      if (result.success) {
-            this.load();
-          }
-      sub.unsubscribe();
     });
   }
 
@@ -110,22 +111,5 @@ export class PaymentMethodListComponent extends AbstractCRUDComponent<PaymentMet
       this.load();
     }, () => this.service.toastFailedEdited());
   }
-  destroy(item: PaymentMethodMeta, i: number) {
-    (<PaymentMethodService>this.service).destroy(item.id).subscribe(res => {
-      this.service.toastSuccessfully('Xóa');
-      this.load();
-    }, () => this.service.toastFailedEdited());
-  }
 
-  public goToPageNumber() {
-    this.nextPage = Math.round(this.nextPage);
-    if (this.nextPage <= 0) {
-      this.nextPage = 1;
-    }
-    if (Math.round(this.nextPage) > this.pagination.numPages) {
-      this.nextPage = this.pagination.numPages;
-    }
-    this.pagination.currentPage = this.nextPage;
-    this.load();
-  }
 }

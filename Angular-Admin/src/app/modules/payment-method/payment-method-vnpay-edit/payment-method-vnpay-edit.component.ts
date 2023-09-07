@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {AbstractModalComponent} from '../../../core/crud';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {BsModalRef} from 'ngx-bootstrap';

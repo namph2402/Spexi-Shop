@@ -59,7 +59,7 @@
         </form>
       </div>
       <div class="col-xs-6 col-xs-offset-6">
-        <button type="button" title="Tạo mới từ khóa" class="btn btn-primary pull-right" (click)="addPayment()"><i
+        <button type="button" title="Tạo mới từ khóa" class="btn btn-primary pull-right" (click)="createPayment()"><i
           class="fa fa-plus-square"></i> Thêm mới
         </button>
       </div>
@@ -82,14 +82,14 @@
                   <h4 class="panel-title">
                     <a data-toggle="collapse" href="#collapse{{i}}">{{item.name}} </a>
                   </h4>
-                  <h4><button type="button" title="Xóa banner" class="btn btn-danger btn-sm" mwlConfirmationPopover
-                              popoverTitle="Xóa"
-                              popoverMessage="Bạn thực sự muốn xóa?"
-                              placement="top" confirmText="Yes <i class='fa fa-check'></i>"
-                              cancelText="No <i class='fa fa-remove'></i>" (confirm)="destroy(item, i)">
-                    <i class="fa fa-remove"></i>
-                  </button>
-                </h4>
+                  <div style="align-items: center;display: flex;">
+                    <ui-switch style="align-items: center;display: flex;" (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 0"></ui-switch>
+                    <ui-switch style="align-items: center;display: flex;" (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 1" [checked]="item.status"></ui-switch>
+                    <button style="margin-left: 10px;" type="button" title="Xóa banner" class="btn btn-danger btn-sm" mwlConfirmationPopover
+                      popoverTitle="Xóa"popoverMessage="Bạn thực sự muốn xóa?"placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                      cancelText="No <i class='fa fa-remove'></i>" (confirm)="remove(item, i)"><i class="fa fa-remove"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -98,47 +98,8 @@
 
               <div class="panel-body">
                 <div class="row margin">
-                  <button *ngIf="item.data_config == null && item.name === 'Chuyển khoản'" type="button" title="Thêm dữ liệu" class="btn btn-primary btn-sm pull-right" (click)="addManual(item)"><i class="fa fa-plus-square"></i> Thêm dữ liệu </button>
                   <button *ngIf="item.data_config == null && item.name === 'VNPay'" type="button" title="Thêm dữ liệu" class="btn btn-primary btn-sm pull-right" (click)="addVnpay(item)"><i class="fa fa-plus-square"></i> Thêm dữ liệu </button>
                 </div>
-
-                <table *ngIf="item.data_config != null && item.name === 'Chuyển khoản'" class="table table-bordered table-hover" id="table">
-                  <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Chủ tài khoản</th>
-                    <th>Tên ngân hàng</th>
-                    <th>Số tài khoản</th>
-                    <th>Chi nhánh</th>
-                    <th style="width: 20%">Thao tác</th>
-                  </tr>
-                  </thead>
-                  <tr *ngFor="let ite of item.data_config.accounts; let j=index">
-                    <td style="width: 5%">{{j + 1}}</td>
-                    <td>
-                      {{ite.owner_name}}
-                    </td>
-                    <td>
-                      {{ite.bank_name}}
-                    </td>
-                    <td>
-                      {{ite.bank_account}}
-                    </td>
-                    <td>
-                      {{ite.bank_branch}}
-                    </td>
-                    <td>
-                      <button type="button" title="Xóa banner" class="btn btn-danger btn-sm" mwlConfirmationPopover
-                              popoverTitle="Xóa"
-                              popoverMessage="Bạn thực sự muốn xóa?"
-                              placement="top" confirmText="Yes <i class='fa fa-check'></i>"
-                              cancelText="No <i class='fa fa-remove'></i>" (confirm)="destroyConfig(item, i)">
-                        <i class="fa fa-remove"></i>
-                      </button>
-                    </td>
-                  </tr>
-                </table>
-
                 <table *ngIf="item.data_config != null && item.name === 'VNPay'" class="table table-bordered table-hover" id="table">
                   <thead>
                   <tr>
