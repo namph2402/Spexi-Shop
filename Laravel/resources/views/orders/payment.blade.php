@@ -14,7 +14,7 @@
                         <a href="/products" class="btn btn-primary">Tiếp tục mua hàng</a>
                     </div>
                 </div>
-                @elseif($order->payment_type == \App\Common\Enum\PaymentMethodEnum::VNPAY)
+                @else
                 <div class="text-center">
                     <h3 class="mb-30">Cảm ơn bạn đã đặt hàng!</h3>
                     <p>Chúng tôi sẽ chuyển đến trang thanh toán theo phương thức {{ $paymentMethod->name }} sau <span id="timeout">5s</span> ...</p>
@@ -38,7 +38,7 @@
             }, timeout * 1000);
         }
     </script>
-    @if ($order->payment_type == \App\Common\Enum\PaymentMethodEnum::VNPAY)
+    @if ($order->payment_type == \App\Common\Enum\PaymentMethodEnum::VNPAY || $order->payment_type == \App\Common\Enum\PaymentMethodEnum::MOMO)
         <script>
             redirectToPaymentUrl('{!! $paymentProcess !!}', 'timeout', 5);
         </script>

@@ -8,7 +8,8 @@ import {PaymentMethodService} from '../payment-method.service';
 import {PaymentMethodCreateComponent} from '../payment-method-create/payment-method-create.component';
 import {ObjectUtil} from '../../../core/utils';
 import {ModalResult} from '../../../core/common';
-import {PaymentMethodEditVnpayComponent} from '../payment-method-vnpay-edit/payment-method-vnpay-edit.component';
+import {PaymentMethodVnpayEditComponent} from '../payment-method-vnpay-edit/payment-method-vnpay-edit.component';
+import { PaymentMethodMomoEditComponent } from '../payment-method-momo-edit/payment-method-momo-edit.component';
 
 @Component({
   selector: 'app-payment-method',
@@ -94,7 +95,20 @@ export class PaymentMethodListComponent extends AbstractCRUDComponent<PaymentMet
 
   addVnpay(item: PaymentMethodMeta) {
     const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, this.getEditModalComponentOptions());
-    const modalRef = this.modalService.show(PaymentMethodEditVnpayComponent, config);
+    const modalRef = this.modalService.show(PaymentMethodVnpayEditComponent, config);
+    const modal: AbstractModalComponent<PaymentMethodMeta> = <AbstractModalComponent<PaymentMethodMeta>>modalRef.content;
+    modal.setModel(ObjectUtil.clone(item));
+    const sub = modal.onHidden.subscribe((result: ModalResult<PaymentMethodMeta>) => {
+      if (result.success) {
+            this.load();
+          }
+      sub.unsubscribe();
+    });
+  }
+
+  addMomo(item: PaymentMethodMeta) {
+    const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, this.getEditModalComponentOptions());
+    const modalRef = this.modalService.show(PaymentMethodMomoEditComponent, config);
     const modal: AbstractModalComponent<PaymentMethodMeta> = <AbstractModalComponent<PaymentMethodMeta>>modalRef.content;
     modal.setModel(ObjectUtil.clone(item));
     const sub = modal.onHidden.subscribe((result: ModalResult<PaymentMethodMeta>) => {

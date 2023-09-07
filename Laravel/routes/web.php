@@ -85,7 +85,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'checkout'], function () {
         Route::get('', 'CheckoutController@index');
         Route::post('order', 'CheckoutController@store');
-        Route::get('complete/vnpay', 'CheckoutController@vnpay');
+        Route::get('completed/vnpay', 'CheckoutController@vnpay');
+        Route::get('completed/momo', 'CheckoutController@momo');
     });
 
     Route::group(['prefix' => 'voucher'], function () {

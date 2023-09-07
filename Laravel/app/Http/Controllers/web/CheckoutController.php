@@ -20,6 +20,7 @@ use App\Repository\ShippingFeeRepositoryInterface;
 use App\Repository\UserProfileRepositoryInterface;
 use App\Repository\WardRepositoryInterface;
 use App\Repository\VoucherRepositoryInterface;
+use App\Utils\Payments\MomoUtil;
 use App\Utils\Payments\VnPayUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -207,9 +208,9 @@ class CheckoutController extends RestController
                 $attributeDetails['quantity'] = $item->quantity;
                 $attributeDetails['amount'] = $item->amount;
                 $detail = $this->detailRepository->create($attributeDetails);
-                if ($detail) {
-                    $this->itemRepository->delete($item->id);
-                }
+                // if ($detail) {
+                //     $this->itemRepository->delete($item->id);
+                // }
             }
 
             if ($order) {
@@ -223,7 +224,7 @@ class CheckoutController extends RestController
 
                 if ($request->payment_type == PaymentMethodEnum::MOMO) {
                     $paymentMethod = $this->paymentMethodRepository->find([WhereClause::query('name', PaymentMethodEnum::MOMO)]);
-                    $paymentProcess = VnPayUtil::getInstance()->createRequest($order, $paymentMethod, $items);
+                    $paymentProcess = MomoUtil::getInstance()->createRequest($order, $paymentMethod, $items);
                 }
 
                 if ($attributes['voucher_id'] != null) {
@@ -254,14 +255,9 @@ class CheckoutController extends RestController
         $inputData = $request->all();
         $orderCode = $inputData['vnp_TxnRef'];
         $order = $this->repository->find([WhereClause::query('code', $orderCode)]);
-        if (empty($order)) {
-            return VnPayUtil::responseOrderNotFoundToIPN();
-        }
-        if ($order->payment_type != PaymentMethodEnum::VNPAY) {
-            return VnPayUtil::responseUnknownToIPN();
-        }
-        $paymentMethod = $this->paymentMethodRepository->find([WhereClause::query('name', PaymentMethodEnum::VNPAY)]);
-        $payment = VnPayUtil::getInstance()->updateIPN($inputData, $order, $paymentMethod);
+
+        $payment = VnPayUtil::getInstance()->updateIPN($inputData, $order);
+
         if ($payment['status'] == OrderPaymentStatusEnum::COMPLETED) {
             try {
                 DB::beginTransaction();
@@ -273,7 +269,7 @@ class CheckoutController extends RestController
                     'name' => 'Giao dịch thanh toán đơn hàng '. $order->code,
                     'order_id' => $order->id,
                     'order_code' => $order->code,
-                    'method' => $order->payment_status,
+                    'method' => $order->payment_type,
                     'status' => $payment['status'],
                     'message' => $payment['message'],
                     'dump_data' => json_encode($inputData)
@@ -283,10 +279,46 @@ class CheckoutController extends RestController
             } catch (\Exception $e) {
                 Log::error($e);
                 DB::rollBack();
-                return VnPayUtil::responseUnknownToIPN();
+                return redirect('cart')->with('Thanh toán đơn hàng thất bại');
             }
         } else {
             return $this->successView('cart', 'Thêm đơn hàng thành công');
         }
     }
+
+    public function momo(Request $request)
+    {
+        $inputData = $request->all();
+        $orderCode = $inputData['orderId'];
+        $order = $this->repository->find([WhereClause::query('code', $orderCode)]);
+
+        $payment = MomoUtil::getInstance()->updateIPN($inputData, $order);
+        if ($payment['status'] == OrderPaymentStatusEnum::COMPLETED) {
+            try {
+                DB::beginTransaction();
+                $this->repository->update($order, [
+                    'cod_fee' => 0,
+                    'payment_status' => 1,
+                ]);
+                $this->transactionRepository->create([
+                    'name' => 'Giao dịch thanh toán đơn hàng '. $order->code,
+                    'order_id' => $order->id,
+                    'order_code' => $order->code,
+                    'method' => $order->payment_type,
+                    'status' => $payment['status'],
+                    'message' => $payment['message'],
+                    'dump_data' => json_encode($inputData)
+                ]);
+                DB::commit();
+                return $this->successView('cart', 'Đã thanh toán đơn hàng thành công');
+            } catch (\Exception $e) {
+                Log::error($e);
+                DB::rollBack();
+                return redirect('cart')->with('Thanh toán đơn hàng thất bại');
+            }
+        } else {
+            return $this->successView('cart', 'Thêm đơn hàng thành công');
+        }
+    }
+
 }

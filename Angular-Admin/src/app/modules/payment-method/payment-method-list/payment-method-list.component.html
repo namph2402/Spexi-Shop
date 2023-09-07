@@ -95,10 +95,10 @@
             </div>
 
             <div id="collapse{{i}}" class="panel-collapse collapse">
-
               <div class="panel-body">
                 <div class="row margin">
-                  <button *ngIf="item.data_config == null && item.name === 'VNPay'" type="button" title="Thêm dữ liệu" class="btn btn-primary btn-sm pull-right" (click)="addVnpay(item)"><i class="fa fa-plus-square"></i> Thêm dữ liệu </button>
+                  <button *ngIf="item.data_config == null && item.name === 'VNPay'" type="button" title="Thêm dữ liệu" class="btn btn-primary btn-sm pull-right" (click)="addVnpay(item)">Thêm dữ liệu</button>
+                  <button *ngIf="item.data_config == null && item.name === 'Momo'" type="button" title="Thêm dữ liệu" class="btn btn-primary btn-sm pull-right" (click)="addMomo(item)">Thêm dữ liệu</button>
                 </div>
                 <table *ngIf="item.data_config != null && item.name === 'VNPay'" class="table table-bordered table-hover" id="table">
                   <thead>
@@ -138,9 +138,44 @@
                     </td>
                   </tr>
                 </table>
+                <table *ngIf="item.data_config != null && item.name === 'Momo'" class="table table-bordered table-hover" id="table">
+                  <thead>
+                  <tr>
+                    <th>MM Endpoint</th>
+                    <th>MM PartnerCode</th>
+                    <th>MM AccessKey</th>
+                    <th>MM SecretKey</th>
+                    <th>Thao tác</th>
+                  </tr>
+                  </thead>
+                  <tr>
+                    <td>
+                      {{item.data_config.mm_endpoint}}
+                    </td>
+                    <td>
+                      {{item.data_config.mm_partnerCode}}
+                    </td>
+                    <td>
+                      {{item.data_config.mm_accessKey}}
+                    </td>
+                    <td>
+                      {{item.data_config.mm_secretKey}}
+                    </td>
+                    <td style="text-align: center;">
+                      <button type="button" title="Xóa banner" class="btn btn-danger btn-sm" mwlConfirmationPopover
+                              popoverTitle="Xóa"
+                              popoverMessage="Bạn thực sự muốn xóa?"
+                              placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                              cancelText="No <i class='fa fa-remove'></i>" (confirm)="destroyConfig(item, i)">
+                        <i class="fa fa-remove"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </table>
               </div>
               <a class="text-center" data-toggle="collapse" href="#collapse{{i}}"><label
-                class="label label-default">Ẩn</label></a>
+                class="label label-default">Ẩn</label>
+              </a>
             </div>
           </div>
         </div>

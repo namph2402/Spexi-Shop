@@ -12,20 +12,7 @@ import {FieldForm} from '../../../core/common';
   styleUrls: ['./payment-method-vnpay-edit.component.css'],
   providers: [PaymentMethodService]
 })
-export class PaymentMethodEditVnpayComponent extends AbstractModalComponent<PaymentMethodMeta> {
-
-  onParentChange() {
-  }
-
-  initFieldForm(): FieldForm[] {
-    return [
-      FieldForm.createTextInput('VNP Url *', 'vnp_Url', 'Nhập kí tự'),
-      FieldForm.createTextInput('VNP TmnCode *', 'vnp_TmnCode', 'Nhập kí tự'),
-      FieldForm.createTextInput('VNP HashSecret *', 'vnp_HashSecret', 'Nhập kí tự'),
-      FieldForm.createTextInput('VNP Locale *', 'vnp_Locale', 'Nhập kí tự'),
-      FieldForm.createTextInput('VNP Version *', 'vnp_Version', 'Nhập kí tự'),
-    ];
-  }
+export class PaymentMethodVnpayEditComponent extends AbstractModalComponent<PaymentMethodMeta> {
 
   onInit(): void {
   }
@@ -43,6 +30,16 @@ export class PaymentMethodEditVnpayComponent extends AbstractModalComponent<Paym
     });
   }
 
+  initFieldForm(): FieldForm[] {
+    return [
+      FieldForm.createTextInput('VNP Url *', 'vnp_Url', 'Nhập kí tự'),
+      FieldForm.createTextInput('VNP TmnCode *', 'vnp_TmnCode', 'Nhập kí tự'),
+      FieldForm.createTextInput('VNP HashSecret *', 'vnp_HashSecret', 'Nhập kí tự'),
+      FieldForm.createTextInput('VNP Locale *', 'vnp_Locale', 'Nhập kí tự'),
+      FieldForm.createTextInput('VNP Version *', 'vnp_Version', 'Nhập kí tự'),
+    ];
+  }
+
   loaded(): void {
   }
 
@@ -53,6 +50,5 @@ export class PaymentMethodEditVnpayComponent extends AbstractModalComponent<Paym
   ) {
     super(service, modal, builder);
   }
-
 
 }

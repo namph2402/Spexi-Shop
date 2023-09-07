@@ -79,7 +79,6 @@ class PaymentMethodController extends RestController
             return $this->errorNotFound();
         }
 
-        $attributes = [];
         if ($model->name == "VNPay") {
             $validator = $this->validateRequest($request, [
                 'vnp_Url' => 'required',
@@ -100,24 +99,22 @@ class PaymentMethodController extends RestController
             ];
             $attributes['config'] = json_encode($config, true);
         }
-        if ($model->name == "Chuyển khoản") {
+
+        if ($model->name == "Momo") {
             $validator = $this->validateRequest($request, [
-                'owner_name' => 'required',
-                'bank_name' => 'required',
-                'bank_account' => 'required|numeric',
+                'endpoint' => 'required',
+                'partnerCode' => 'required',
+                'accessKey' => 'required',
+                'secretKey' => 'required',
             ]);
             if ($validator) {
                 return $this->errorClient($validator);
             }
             $config = [
-                "accounts" => [
-                    [
-                        "owner_name" => $request->owner_name,
-                        "bank_name" => $request->bank_name,
-                        "bank_account" => $request->bank_account,
-                        "bank_branch" => $request->bank_branch
-                    ]
-                ]
+                "mm_endpoint" => $request->endpoint,
+                "mm_partnerCode" => $request->partnerCode,
+                "mm_accessKey" => $request->accessKey,
+                "mm_secretKey" => $request->secretKey,
             ];
             $attributes['config'] = json_encode($config, true);
         }

@@ -7,7 +7,8 @@ import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown';
 import {CKEditorModule} from 'ng2-ckeditor';
-import {PaymentMethodEditVnpayComponent} from './payment-method-vnpay-edit/payment-method-vnpay-edit.component';
+import {PaymentMethodVnpayEditComponent} from './payment-method-vnpay-edit/payment-method-vnpay-edit.component';
+import { PaymentMethodMomoEditComponent } from './payment-method-momo-edit/payment-method-momo-edit.component';
 
 @NgModule({
   imports: [
@@ -22,9 +23,9 @@ import {PaymentMethodEditVnpayComponent} from './payment-method-vnpay-edit/payme
     AngularMultiSelectModule,
     CKEditorModule
   ],
-  declarations: [PaymentMethodCreateComponent, PaymentMethodEditVnpayComponent],
-  entryComponents: [PaymentMethodCreateComponent, PaymentMethodEditVnpayComponent],
-  exports: [PaymentMethodCreateComponent, PaymentMethodEditVnpayComponent],
+  declarations: [PaymentMethodCreateComponent, PaymentMethodVnpayEditComponent, PaymentMethodMomoEditComponent],
+  entryComponents: [PaymentMethodCreateComponent, PaymentMethodVnpayEditComponent, PaymentMethodMomoEditComponent],
+  exports: [PaymentMethodCreateComponent, PaymentMethodVnpayEditComponent, PaymentMethodMomoEditComponent],
 })
 export class PaymentMethodModalModule {
 }
