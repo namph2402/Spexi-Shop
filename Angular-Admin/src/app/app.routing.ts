@@ -109,6 +109,10 @@ export const MODULES_ROUTING = [
     loadChildren: 'app/modules/payment-method/payment-method.module#PaymentMethodModule'
   },
   {
+    path: 'provinces',
+    loadChildren: 'app/modules/province/province.module#ProvinceModule'
+  },
+  {
     path: 'payment-transactions',
     loadChildren: 'app/modules/payment-transaction/payment-transaction.module#PaymentTransactionModule'
   },

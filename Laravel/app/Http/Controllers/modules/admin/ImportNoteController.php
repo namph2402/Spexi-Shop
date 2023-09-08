@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class ImportController extends RestController
+class ImportNoteController extends RestController
 {
     public function __construct(ImportNoteRepositoryInterface $repository)
     {

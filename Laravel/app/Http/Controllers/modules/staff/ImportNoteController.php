@@ -7,7 +7,7 @@ use App\Http\Controllers\RestController;
 use App\Repository\ImportNoteRepositoryInterface;
 use Illuminate\Http\Request;
 
-class ImportController extends RestController
+class ImportNoteController extends RestController
 {
     public function __construct(ImportNoteRepositoryInterface $repository)
     {

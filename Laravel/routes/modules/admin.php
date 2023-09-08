@@ -17,9 +17,11 @@ Route::post('login', 'LoginController@login');
 
 Route::group(['middleware' => ['auth.admin']], function () {
 
+    // Profile
     Route::put('profile', 'LoginController@password');
     Route::put('profile/repassword', 'LoginController@repassword');
 
+    // Dashboard
     Route::get('dashboard/export', 'DashboardController@export');
     Route::resource('dashboard', 'DashboardController');
     Route::resource('stores', 'StoreInformationController');
@@ -33,7 +35,7 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::post('repassword', 'StaffController@repassword');
     });
 
-    // Payment_method
+    // PaymentMethod
     Route::resource('payment_methods', 'PaymentMethodController');
     Route::group(['prefix' => 'payment_methods/{id}'], function () {
         Route::post('enable', 'PaymentMethodController@enable');
@@ -77,14 +79,14 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::post('down', 'MenuController@down');
     });
 
-    // Post category
+    // PostCategory
     Route::resource('post_categories', 'PostCategoryController');
     Route::group(['prefix' => 'post_categories/{id}'], function () {
         Route::post('up', 'PostCategoryController@up');
         Route::post('down', 'PostCategoryController@down');
     });
 
-    // Product category
+    // ProductCategory
     Route::resource('product_categories', 'ProductCategoryController')->except(['update']);
     Route::group(['prefix' => 'product_categories/{id}'], function () {
         Route::post('', 'ProductCategoryController@update');
@@ -108,7 +110,7 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::get('loadAvailableProducts', 'ProductController@loadAvailableProducts');
     });
 
-    // Product tag
+    // ProductTag
     Route::resource('product_tags', 'ProductTagController');
     Route::group(['prefix' => 'product_tags/{id}'], function () {
         Route::post('up', 'ProductTagController@up');
@@ -117,11 +119,11 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::post('detach_tags', 'ProductTagController@detachTags');
     });
 
-    // Product variant
+    // ProductVariant
     Route::resource('product_sizes', 'ProductSizeController');
     Route::resource('product_colors', 'ProductColorController');
 
-    // Product image
+    // ProductImage
     Route::resource('product_images', 'ProductImageController')->except('update');
     Route::group(['prefix' => 'product_images/{id}'], function () {
         Route::post('enable', 'ProductImageController@enable');
@@ -155,7 +157,7 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::get('loadProduct', 'PromotionProductMappingController@loadProduct');
     });
 
-    // Related product
+    // RelatedProduct
     Route::group(['prefix' => 'related_products'], function () {
         Route::get('loadProduct', 'RelatedProductController@loadProduct');
         Route::post('{id}/up', 'RelatedProductController@up');
@@ -167,14 +169,14 @@ Route::group(['middleware' => ['auth.admin']], function () {
     Route::resource('articles', 'ArticleController')->only('store');
     Route::post('articles/{id}', 'ArticleController@update');
 
-    //Comment
+    // Comment
     Route::resource('comments', 'CommentController');
     Route::group(['prefix' => 'comments/{id}'], function () {
         Route::post('enable', 'CommentController@enable');
         Route::post('disable', 'CommentController@disable');
     });
 
-    //Post
+    // Post
     Route::get('posts/loadTag', 'PostController@loadTag');
     Route::resource('posts', 'PostController')->except(['update']);
     Route::group(['prefix' => 'posts/{id}'], function () {
@@ -187,7 +189,7 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::post('detach_tags', 'PostController@detachTags');
     });
 
-    //Post tag
+    // PostTag
     Route::resource('post_tags', 'PostTagController');
     Route::group(['prefix' => 'post_tags/{id}'], function () {
         Route::post('up', 'PostTagController@up');
@@ -204,10 +206,10 @@ Route::group(['middleware' => ['auth.admin']], function () {
     });
     Route::resource('related_posts', 'RelatedPostController');
 
-    //Form data
+    // Formdata
     Route::resource('form_datas', 'FormDataController');
 
-    //Notification
+    // Notification
     Route::resource('notifications', 'NotificationController');
     Route::group(['prefix' => 'notifications/{id}'], function () {
         Route::post('enable', 'NotificationController@enable');
@@ -221,7 +223,7 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::post('cancel', 'OrderController@cancel');
     });
 
-    //Order ship
+    // OrderShip
     Route::get('order_ships/printBills', 'OrderShipController@printBills');
     Route::resource('order_ships', 'OrderShipController');
     Route::group(['prefix' => 'order_ships/{id}'], function () {
@@ -239,12 +241,14 @@ Route::group(['middleware' => ['auth.admin']], function () {
     });
 
     // Shipping fee
+    Route::get('provinces/truncate', 'ProvinceController@truncate');
+    Route::post('provinces/import', 'ProvinceController@import');
     Route::resource('provinces', 'ProvinceController');
     Route::resource('districts', 'DistrictController');
     Route::resource('wards', 'WardController');
     Route::resource('shipping_fees', 'ShippingFeeController');
 
-    // Shipping unit
+    // ShippingUnit
     Route::resource('shipping_units', 'ShippingUnitController');
     Route::group(['prefix' => 'shipping_units'], function () {
         Route::post('createUnitPartner', 'ShippingUnitController@createUnitPartner');
@@ -253,6 +257,6 @@ Route::group(['middleware' => ['auth.admin']], function () {
     Route::resource('shipping_services', 'ShippingServiceController');
     Route::resource('shipping_stores', 'ShippingStoreController');
 
-    //Import
-    Route::resource('imports', 'ImportController');
+    // Import
+    Route::resource('imports', 'ImportNoteController');
 });

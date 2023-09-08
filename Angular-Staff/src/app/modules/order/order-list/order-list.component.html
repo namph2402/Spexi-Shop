@@ -154,8 +154,12 @@
             </table>
           </td>
           <td class="text-center">
-            <label *ngIf="item.payment_type == 'CoD'" class="label label-warning" style="padding: 5px 10px">Khi nhận hàng</label>
-            <label *ngIf="item.payment_type == 'VNPay'" class="label label-warning" style="padding: 5px 10px">VNPay</label>
+            <label class="label"
+            [ngClass]="{
+              'label-primary':item.payment_type == 'CoD',
+              'label-warning':item.payment_type == 'VNPay',
+              'label-danger':item.payment_type == 'Momo'
+            }">{{ item.payment_type }}</label>
             <label *ngIf="item.payment_status == 0" class="label label-default"
               style="padding: 10px; display: block; margin: 10px">Chưa thanh toán</label>
             <label *ngIf="item.payment_status == 1" class="label label-success"

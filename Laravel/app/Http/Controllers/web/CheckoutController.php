@@ -208,9 +208,9 @@ class CheckoutController extends RestController
                 $attributeDetails['quantity'] = $item->quantity;
                 $attributeDetails['amount'] = $item->amount;
                 $detail = $this->detailRepository->create($attributeDetails);
-                // if ($detail) {
-                //     $this->itemRepository->delete($item->id);
-                // }
+                if ($detail) {
+                    $this->itemRepository->delete($item->id);
+                }
             }
 
             if ($order) {

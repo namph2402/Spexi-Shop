@@ -240,5 +240,5 @@ Route::group(['middleware' => ['auth.staff']], function () {
     Route::resource('shipping_stores', 'ShippingStoreController');
 
     //Import
-    Route::resource('imports', 'ImportController');
+    Route::resource('imports', 'ImportNoteController');
 });

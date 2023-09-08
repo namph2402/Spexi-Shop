@@ -453,8 +453,8 @@ class ProductController extends RestController
 
     public function import(Request $request)
     {
+        set_time_limit(0);
         $user = AuthUtil::getInstance()->getModel();
-
         $validator = $this->validateRequest($request, [
             'name' => 'required|max:255',
             'file' => 'required',

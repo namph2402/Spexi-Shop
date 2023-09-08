@@ -8,7 +8,7 @@ import {ProvinceMeta} from './province.meta';
 export class ProvinceService extends AbstractCRUDService<ProvinceMeta> {
 
   constructor(http: HttpClient, toaster: ToasterService, title: TitleService) {
-    super(http, title, toaster, 'Quản lý kênh', 'provinces');
+    super(http, title, toaster, 'địa chỉ', 'provinces');
   }
 
 }

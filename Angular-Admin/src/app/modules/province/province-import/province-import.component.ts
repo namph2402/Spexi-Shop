@@ -1,20 +1,20 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {BsModalRef} from 'ngx-bootstrap';
-import {WarehouseService} from '../warehouse.service';
-import {WarehouseMeta} from '../warehouse.meta';
+import {ProvinceService} from '../province.service';
+import {ProvinceMeta} from '../province.meta';
 import {AbstractModalComponent, FieldForm} from '../../../core';
 
 @Component({
-  selector: 'app-warehouse-import',
-  templateUrl: './warehouse-import.component.html',
-  styleUrls: ['./warehouse-import.component.css'],
-  providers: [WarehouseService]
+  selector: 'app-province-import',
+  templateUrl: './province-import.component.html',
+  styleUrls: ['./province-import.component.css'],
+  providers: [ProvinceService]
 })
-export class WarehouseImportComponent extends AbstractModalComponent<WarehouseMeta> {
+export class ProvinceImportComponent extends AbstractModalComponent<ProvinceMeta> {
 
   constructor(
-    service: WarehouseService,
+    service: ProvinceService,
     modal: BsModalRef,
     builder: FormBuilder,
   ) {
@@ -29,9 +29,9 @@ export class WarehouseImportComponent extends AbstractModalComponent<WarehouseMe
 
   buildForm(): FormGroup {
     return this.formBuilder.group({
-      name: new FormControl(null, [Validators.required, Validators.maxLength(255)]),
+      name: new FormControl(null),
       file: new FormControl(null, Validators.required),
-      note: new FormControl(null, Validators.required)
+      note: new FormControl(null)
     });
   }
 

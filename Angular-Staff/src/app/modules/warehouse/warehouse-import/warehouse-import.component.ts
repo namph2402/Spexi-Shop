@@ -4,21 +4,19 @@ import {BsModalRef} from 'ngx-bootstrap';
 import {WarehouseService} from '../warehouse.service';
 import {WarehouseMeta} from '../warehouse.meta';
 import {AbstractModalComponent, FieldForm} from '../../../core';
-import {ProductService} from '../../product/product.service';
 
 @Component({
   selector: 'app-warehouse-import',
   templateUrl: './warehouse-import.component.html',
   styleUrls: ['./warehouse-import.component.css'],
-  providers: [WarehouseService, ProductService]
+  providers: [WarehouseService]
 })
 export class WarehouseImportComponent extends AbstractModalComponent<WarehouseMeta> {
 
   constructor(
     service: WarehouseService,
     modal: BsModalRef,
-    builder: FormBuilder,
-    productService: ProductService
+    builder: FormBuilder
   ) {
     super(service, modal, builder);
   }
