@@ -34,7 +34,7 @@ class MomoUtil extends SingletonPattern
         $ipnUrl = config('app.url') . '/checkout/completed/momo';
         $redirectUrl = config('app.url') . '/checkout/completed/momo';
         $requestId = time() . "";
-        $requestType = "payWithATM";
+        $requestType = $config->getType();
         $extraData = '';
 
         $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;

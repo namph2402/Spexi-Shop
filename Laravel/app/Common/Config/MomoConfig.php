@@ -7,6 +7,7 @@ class MomoConfig extends AbstractPayConfig
     protected $mm_partnerCode;
     protected $mm_accessKey;
     protected $mm_secretKey;
+    protected $mm_type;
 
     /**
      * @return MomoConfig
@@ -19,7 +20,7 @@ class MomoConfig extends AbstractPayConfig
     public function __construct(array $config)
     {
         parent::__construct('Momo', [
-            'mm_endpoint', 'mm_partnerCode', 'mm_accessKey', 'mm_secretKey'
+            'mm_endpoint', 'mm_partnerCode', 'mm_accessKey', 'mm_secretKey', 'mm_type'
         ], $config);
     }
 
@@ -53,6 +54,15 @@ class MomoConfig extends AbstractPayConfig
     public function getSecretKey()
     {
         return $this->mm_secretKey;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->mm_type;
     }
 
 }

@@ -1,5 +1,5 @@
 <div class="modal-header bg-primary">
-  <h4 class="modal-title pull-left">Chỉnh sửa danh mục</h4>
+  <h4 class="modal-title pull-left">Chỉnh sửa nhân viên</h4>
   <button (click)="dismiss()" aria-label="Close" class="close pull-right" type="button">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -13,7 +13,7 @@
           <ng-template [ngIf]="f.type=='input'">
             <label [for]="f.formControl">
               {{f.label}} <span
-              *ngIf="f.typeof == 'number'" style="font-weight: normal">
+              *ngIf="f.typeof == 'number' && f.formControl == 'wage'" style="font-weight: normal">
               ( {{formGroup.controls[f.formControl].value|number:'1.0-0'}} )
             </span>
             </label>

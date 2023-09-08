@@ -32,11 +32,11 @@ export class PaymentMethodVnpayEditComponent extends AbstractModalComponent<Paym
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('VNP Url *', 'vnp_Url', 'Nhập kí tự'),
-      FieldForm.createTextInput('VNP TmnCode *', 'vnp_TmnCode', 'Nhập kí tự'),
-      FieldForm.createTextInput('VNP HashSecret *', 'vnp_HashSecret', 'Nhập kí tự'),
-      FieldForm.createTextInput('VNP Locale *', 'vnp_Locale', 'Nhập kí tự'),
-      FieldForm.createTextInput('VNP Version *', 'vnp_Version', 'Nhập kí tự'),
+      FieldForm.createTextInput('VNP Url', 'vnp_Url', 'Nhập kí tự'),
+      FieldForm.createTextInput('VNP TmnCode', 'vnp_TmnCode', 'Nhập kí tự'),
+      FieldForm.createTextInput('VNP HashSecret', 'vnp_HashSecret', 'Nhập kí tự'),
+      FieldForm.createTextInput('VNP Locale', 'vnp_Locale', 'Nhập kí tự'),
+      FieldForm.createTextInput('VNP Version', 'vnp_Version', 'Nhập kí tự'),
     ];
   }
 

@@ -50,7 +50,7 @@
               {{f.label}}
             </label>
             <select [id]="f.formControl" [formControlName]="f.formControl" class="form-control">
-              <option *ngFor="let option of f.data" [value]="option['id']">{{option['name']}}</option>
+              <option *ngFor="let option of f.data" [value]="option['value']">{{option['name']}}</option>
             </select>
           </ng-template>
           <ng-template [ngIf]="f.type=='select2'">

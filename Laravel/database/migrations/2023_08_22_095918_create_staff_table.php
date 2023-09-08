@@ -25,7 +25,7 @@ class CreateStaffTable extends Migration
             $table->integer('gender');
             $table->string('address');
             $table->string('bank_name')->nullable();
-            $table->integer('bank_number')->nullable();
+            $table->string('bank_number')->nullable();
             $table->double('wage', 20, 2)->default(0);
             $table->string('position');
             $table->boolean('status')->default(true);

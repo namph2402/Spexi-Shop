@@ -59,8 +59,8 @@
         </form>
       </div>
       <div class="col-xs-6 col-xs-offset-6">
-        <button type="button" title="Tạo mới từ khóa" class="btn btn-primary pull-right" (click)="createPayment()"><i
-          class="fa fa-plus-square"></i> Thêm mới
+        <button type="button" title="Tạo mới từ khóa" class="btn btn-primary pull-right" (click)="createPayment()">
+          <i class="fa fa-plus"></i> Thêm mới
         </button>
       </div>
     </div>
@@ -145,6 +145,7 @@
                     <th>MM PartnerCode</th>
                     <th>MM AccessKey</th>
                     <th>MM SecretKey</th>
+                    <th>Loại</th>
                     <th>Thao tác</th>
                   </tr>
                   </thead>
@@ -160,6 +161,14 @@
                     </td>
                     <td>
                       {{item.data_config.mm_secretKey}}
+                    </td>
+                    <td class="text-center">
+                      <ng-template [ngIf]="item.data_config.mm_type == 'captureWallet'">
+                        QR
+                      </ng-template>
+                      <ng-template [ngIf]="item.data_config.mm_type == 'payWithATM'">
+                        ATM
+                      </ng-template>
                     </td>
                     <td style="text-align: center;">
                       <button type="button" title="Xóa banner" class="btn btn-danger btn-sm" mwlConfirmationPopover

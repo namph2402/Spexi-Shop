@@ -106,6 +106,7 @@ class PaymentMethodController extends RestController
                 'partnerCode' => 'required',
                 'accessKey' => 'required',
                 'secretKey' => 'required',
+                'type' => 'required',
             ]);
             if ($validator) {
                 return $this->errorClient($validator);
@@ -115,6 +116,7 @@ class PaymentMethodController extends RestController
                 "mm_partnerCode" => $request->partnerCode,
                 "mm_accessKey" => $request->accessKey,
                 "mm_secretKey" => $request->secretKey,
+                "mm_type" => $request->type,
             ];
             $attributes['config'] = json_encode($config, true);
         }

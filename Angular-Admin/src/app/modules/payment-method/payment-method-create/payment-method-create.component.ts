@@ -13,7 +13,7 @@ import {FieldForm} from '../../../core/common';
   providers: [PaymentMethodService]
 })
 export class PaymentMethodCreateComponent extends AbstractModalComponent<PaymentMethodMeta> {
-  
+
   onInit(): void {
   }
 
@@ -28,7 +28,7 @@ export class PaymentMethodCreateComponent extends AbstractModalComponent<Payment
 
   initFieldForm(): FieldForm[] {
     return [
-      FieldForm.createTextInput('Tên *', 'name', 'Nhập tên'),
+      FieldForm.createTextInput('Tên', 'name', 'Nhập tên'),
     ];
   }
 
