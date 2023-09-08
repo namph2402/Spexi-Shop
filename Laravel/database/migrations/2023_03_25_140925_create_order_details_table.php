@@ -17,6 +17,7 @@ class CreateOrderDetailsTable extends Migration
             $table->id();
             $table->integer('order_id')->index();
             $table->integer('product_id')->index();
+            $table->string('product_code');
             $table->string('product_name');
             $table->integer('warehouse_id')->index();
             $table->string('size');

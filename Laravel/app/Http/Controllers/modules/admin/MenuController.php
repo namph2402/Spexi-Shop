@@ -62,7 +62,7 @@ class MenuController extends RestController
             $attributes['order'] = $lastItem->order + 1;
         }
 
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name'), WhereClause::query('group_id', $request->group_id))]);
+        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name')), WhereClause::query('group_id', $request->group_id)]);
         if ($test_name) {
             return $this->errorHad($request->input('name'));
         }

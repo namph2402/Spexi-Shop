@@ -20,7 +20,7 @@
         <div class="row px-xl-5">
             <div class="col-lg-8 mb-5">
                 <div class="contact-form bg-light p-30">
-                    {!! $post->content !!}
+                    {!! $post->content ?? '' !!}
                 </div>
             </div>
             <div class="col-lg-4 mb-5">
