@@ -102,6 +102,7 @@ class WarehouseController extends RestController
                 $attributes['size_id'] = $s;
                 $attributes['color_id'] = $c;
                 $attributes['weight'] = "0.2";
+                $attributes['status'] = "0";
                 $test_name = $this->repository->find([WhereClause::query('product_id', $request->product_id), WhereClause::query('size_id', $s), WhereClause::query('color_id', $c)]);
                 if ($test_name) {
                     continue;

@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
+    <meta content="{{ $data['Name'] }}" name="keywords">
+    <meta content="{{ $data['Name'] }}" name="description">
     <title>{{ $data['Name'] }} -
         @yield('title')
     </title>

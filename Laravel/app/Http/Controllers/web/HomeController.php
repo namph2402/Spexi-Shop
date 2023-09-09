@@ -45,7 +45,7 @@ class HomeController extends RestController
             $q->where('name', 'Sub banner');
         })], 'order:asc');
         $categories = $this->categoryRepository->get([WhereClause::query('parent_id', 0)], 'order:asc', ['childrens.products.warehouses', 'products.warehouses']);
-        $featured = $this->tagRepository->find([WhereClause::query('name', 'Sản phẩm nổi bật')], null, ['productViews.comments']);
+        $featured = $this->tagRepository->find([WhereClause::query('name', 'Sản phẩm hot')], null, ['productViews.comments']);
         $recent = $this->tagRepository->find([WhereClause::query('name', 'Sản phẩm mới')], null, ['productViews.comments']);
         $promotions = $this->promotionRepository->get([WhereClause::query('status', 1), WhereClause::queryIn('type',['1','2'])]);
         return view('pages.index', compact('bannerMains', 'bannerSubs', 'categories', 'featured', 'promotions', 'recent'));

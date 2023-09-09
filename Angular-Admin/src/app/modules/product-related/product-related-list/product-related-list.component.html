@@ -51,7 +51,7 @@
         </thead>
         <tbody>
         <tr *ngFor="let item of list;let i = index" class="odd">
-          <td class="text-center">{{i + 1 + pagination.itemsPerPage * (pagination.currentPage - 1)}}</td>
+          <td class="text-center">{{i + 1}}</td>
           <td class="text-center">
             <img [src]="item.product.image" height="70px">
           </td>

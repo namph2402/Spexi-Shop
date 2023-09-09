@@ -63,7 +63,7 @@ export class ProductTagItemCreateComponent extends AbstractModalComponent<Produc
   }
 
   loadAllCategory() {
-    return this.categoryService.loadAll().subscribe(value => {
+    return this.categoryService.loadByParams({child: 0}).subscribe(value => {
       this.fields[1].data = value;
     });
   }

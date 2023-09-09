@@ -62,11 +62,10 @@
                     <div class="navbar-nav w-100">
                         @foreach ($categories as $c)
                             @if (count($c->childrens) > 0)
-                                <div class="nav-item dropdown dropright list-category">
+                                <div class="cate-item nav-item dropdown dropright list-category">
                                     <a href="{{ $c->full_path }}" class="nav-link dropdown-toggle">{{ $c->name }}<i
                                             class="fa fa-angle-right float-right mt-1"></i></a>
-                                    <div
-                                        class="dropdown-menu position-absolute rounded-0 border-0 m-0 list-category-childrens">
+                                    <div class="dropdown-menu position-absolute rounded-0 border-0 m-0 list-category-childrens">
                                         @foreach ($c->childrens as $child)
                                             <a href="{{ $child->full_path }}"
                                                 class="dropdown-item">{{ $child->name }}</a>
@@ -74,7 +73,7 @@
                                     </div>
                                 </div>
                             @else
-                                <a href="{{ $c->full_path }}" class="nav-item nav-link">{{ $c->name }}</a>
+                                <a href="{{ $c->full_path }}" class="cate-item nav-item nav-link">{{ $c->name }}</a>
                             @endif
                         @endforeach
                     </div>

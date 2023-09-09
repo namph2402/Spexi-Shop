@@ -131,7 +131,7 @@ export class PromotionProductListComponent extends AbstractCRUDModalComponent<Pr
   }
 
   loadAllCategory() {
-    return this.categoryService.loadAll().subscribe(value => {
+    return this.categoryService.loadByParams({child: 0}).subscribe(value => {
       this.searchControls[1].data = value;
     });
   }

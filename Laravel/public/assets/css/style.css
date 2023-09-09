@@ -10831,57 +10831,13 @@ h6 {
 
 .product-item {
     transition: .5s;
-}
-
-.product-action {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: .5s;
-}
-
-.product-action a.btn {
+    border-radius: 5px;
+    overflow: hidden;
     position: relative;
-    margin: 0 3px;
-    margin-top: 100px;
-    opacity: 0;
 }
 
 .product-item:hover {
     box-shadow: 0 0 30px #DDDDDD;
-}
-
-.product-item:hover .product-action {
-    background: rgba(255, 255, 255, 0.7);
-}
-
-.product-item:hover .product-action a.btn:first-child {
-    opacity: 1;
-    margin-top: 0;
-    transition: .3s 0s;
-}
-
-.product-item:hover .product-action a.btn:nth-child(2) {
-    opacity: 1;
-    margin-top: 0;
-    transition: .3s .05s;
-}
-
-.product-item:hover .product-action a.btn:nth-child(3) {
-    opacity: 1;
-    margin-top: 0;
-    transition: .3s .1s;
-}
-
-.product-item:hover .product-action a.btn:nth-child(4) {
-    opacity: 1;
-    margin-top: 0;
-    transition: .3s .15s;
 }
 
 .product-item .product-img img {
@@ -10889,11 +10845,54 @@ h6 {
 }
 
 .product-item:hover .product-img img {
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
 .product-item .btn:hover {
     color: #FFD333 !important;
+}
+
+.rating-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 24px;
+    width: 45px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 0 0 5px 0 ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rating-icon-value {
+    font-size: 14px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rating-icon-number {
+    margin: 0;
+    margin-left: 1px;
+    font-weight: 500;
+}
+
+.sale-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 24px;
+    width: 80px;
+    background: #e71e26;
+    text-align: center;
+    border-radius: 0 0 0 5px;
+}
+
+.sale-icon-value {
+    font-size: 14px;
+    color: white;
 }
 
 .table.table-borderless thead tr,
@@ -10930,6 +10929,15 @@ h6 {
     display: block;
     padding-top: 4px;
     padding-bottom: 4px;
+}
+
+.list-category-childrens a{
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.cate-item:hover ,.list-category-childrens a:hover {
+    background: #FFD333;
+    color: rgba(0, 0, 0, 0.7);
 }
 
 .list-menu:hover .list-menu-childrens {
@@ -11604,6 +11612,11 @@ h6 {
 
 .cate-list {
     height: 130px;
+}
+
+.price-sale {
+    color: #e71e26;
+    font-weight: 600 !important;
 }
 
 @media (max-width: 768px) {

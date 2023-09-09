@@ -88,18 +88,17 @@
         </div>
     </div>
     <div class="container-fluid pt-4">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4 test"><span class="bg-secondary pr-3">Các sản
-                phẩm</span></h2>
+        <h3 class="section-title position-relative text-uppercase mx-xl-5 mb-4 test"><span class="bg-secondary pr-3">Các sản phẩm</span></h3>
         <div class="row px-xl-5 pb-3">
             @foreach ($categories as $c)
-                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                <div class="col-lg-4 col-md-4 col-sm-6 pb-1">
                     <a class="d-block text-decoration-none cate-list" href="{{ $c->full_path }}">
                         <div class="cat-item d-flex align-items-center mb-4 cate-item">
                             <div class="overflow-hidden" style="width: 100px; height: 100px;">
                                 <img class="img-fluid" src="{{ $c->image }}" alt="">
                             </div>
                             <div class="flex-fill pl-3">
-                                <h6>{{ $c->name }}</h6>
+                                <h6 style="text-transform: capitalize">{{ $c->name }}</h6>
                                 @php
                                     $total = 0;
                                     if (count($c->childrens) > 0) {
@@ -128,9 +127,8 @@
     </div>
     @if ($featured)
         <div class="container-fluid pt-4 pb-3">
-            <a href="{{ $featured->full_path }}"
-                class="section-title position-relative text-uppercase mx-xl-5 mb-4 link-title test">
-                <span class="bg-secondary pr-3">Sản phẩm nổi bật</span>
+            <a href="{{ $featured->full_path }}" class="section-title position-relative text-uppercase mx-xl-5 mb-4 link-title test" style="font-size:1.75rem">
+                <span class="bg-secondary pr-3">Sản phẩm hot</span>
             </a>
             <div class="row px-xl-5">
                 <div class="col-12 pb-2 d-flex flex-wrap p-0 product-list">
@@ -278,9 +276,9 @@
     @endif
     @if ($recent)
         <div class="container-fluid pt-4 pb-3">
-            <a href="{{ $recent->full_path }}"
-                class="section-title position-relative text-uppercase mx-xl-5 mb-4 link-title test"><span
-                    class="bg-secondary pr-3">Sản phẩm mới</span></a>
+            <a href="{{ $recent->full_path }}" class="section-title position-relative text-uppercase mx-xl-5 mb-4 link-title test" style="font-size:1.75rem">
+                <span class="bg-secondary pr-3">Sản phẩm mới</span>
+            </a>
             <div class="row px-xl-5">
                 <div class="col-12 pb-2 d-flex flex-wrap p-0 product-list">
                 @foreach ($recent->productViews as $key => $p)
