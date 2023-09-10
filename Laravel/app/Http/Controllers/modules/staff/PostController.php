@@ -333,7 +333,6 @@ class PostController extends RestController
                 foreach ($posts as $post) {
                     array_push($postClauses, $post->id);
                 }
-                Log::info($postClauses);
                 array_push($clauses, WhereClause::queryNotIn('id', $postClauses));
             }
         }

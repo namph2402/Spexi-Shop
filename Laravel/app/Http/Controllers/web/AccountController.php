@@ -101,12 +101,16 @@ class AccountController extends RestController
 
     public function viewCapcha(Request $request)
     {
+        // if(!$request->has('email')) {
+        //     return redirect('sign-up');
+        // }
         $email = $request->email;
         return view('pages.capcha', compact('email'));
     }
 
     public function checkCapcha(Request $request)
     {
+        dd($request);
         $date = Date("Y-m-d");
         $email = $request->email;
 
@@ -139,7 +143,7 @@ class AccountController extends RestController
     {
         $name = StoreInformation::whereName('name')->first()->value;
         $user = User::where("username", "=", $request->user)->orWhere("email", "=", $request->user)->first();
-        
+
         if(!$user) {
             return $this->error('Tài khoản hoặc email không đúng');
         } else {

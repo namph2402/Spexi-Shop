@@ -135,7 +135,7 @@ class ProductController extends RestController
         if ($test_name) {
             return $this->errorHad($request->input('name'));
         }
-        Log::info($request->note);
+
         try {
             DB::beginTransaction();
             $model = $this->repository->create($attributes);
@@ -217,7 +217,9 @@ class ProductController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+        
         $image = $model->image;
+
         try {
             DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
@@ -276,6 +278,7 @@ class ProductController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
@@ -305,6 +308,7 @@ class ProductController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
+
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');
@@ -361,7 +365,6 @@ class ProductController extends RestController
                 foreach ($posts as $post) {
                     array_push($postClauses, $post->id);
                 }
-                Log::info($postClauses);
                 array_push($clauses, WhereClause::queryNotIn('id', $postClauses));
             }
         }
