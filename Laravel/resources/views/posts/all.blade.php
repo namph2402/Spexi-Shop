@@ -31,27 +31,34 @@
                         </div>
                     </form>
                 </div>
-                <h5 class="section-title position-relative text-uppercase mb-3">
-                    <span class="bg-secondary pr-3">Danh mục</span>
-                </h5>
-                <div class="bg-light mb-30" style="padding: 1rem">
-                    @foreach ($categoryPosts as $c)
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <a href="{{ $c->full_path }}" class="custom-control-label-search"
-                                for="price-all">{{ $c->name }}</a>
+                <div class="search-variant mb-30">
+                    <div class="search-color">
+                        <h5 class="section-title position-relative text-uppercase mb-3">
+                            <span class="bg-secondary pr-3">Danh mục</span>
+                        </h5>
+                        <div class="bg-light mb-30" style="padding: 1rem">
+                            @foreach ($categoryPosts as $c)
+                                <div
+                                    class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                    <a href="{{ $c->full_path }}" class="custom-control-label-search"
+                                        for="price-all">{{ $c->name }}</a>
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
-                </div>
-                <h5 class="section-title position-relative text-uppercase mb-3">
-                    <span class="bg-secondary pr-3">Gán thẻ</span>
-                </h5>
-                <div class="bg-light mb-30" style="padding: 1rem">
-                    @foreach ($tagPosts as $t)
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <a href="{{ $t->full_path }}" class="custom-control-label-search"
-                                for="price-all">{{ $t->name }}</a>
+                    </div>
+                    <div class="search-size">
+                        <h5 class="section-title position-relative text-uppercase mb-3">
+                            <span class="bg-secondary pr-3">Gán thẻ</span>
+                        </h5>
+                        <div class="bg-light mb-30" style="padding: 1rem">
+                            @foreach ($tagPosts as $t)
+                                <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                    <a href="{{ $t->full_path }}" class="custom-control-label-search"
+                                        for="price-all">{{ $t->name }}</a>
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
+                    </div>
                 </div>
             </div>
             <div class="col-lg-9 col-md-8">
@@ -60,7 +67,8 @@
                         <div class="col-lg-12 col-md-6 col-sm-6 pb-1">
                             <div class="post-item bg-light mb-4">
                                 <div class="post-img">
-                                    <img class="post-image img-fluid" data-src="{{ $p->image }}" src="{{ $p->image }}" alt="{{ $p->name }}">
+                                    <img class="post-image img-fluid" data-src="{{ $p->image }}"
+                                        src="{{ $p->image }}" alt="{{ $p->name }}">
                                 </div>
                                 <div class="post-title">
                                     <div class="post-content">
@@ -71,7 +79,8 @@
                                     </div>
                                     <div class="post-author">
                                         <i class="fas fa-user" style="margin-right: 5px"></i>{{ $p->article->author_name }}
-                                        <i class="fa fa-calendar" style="margin: 0 5px 0 30px"></i>{{ date_format($p->article->created_at, 'Y-m-d') }}
+                                        <i class="fa fa-calendar"
+                                            style="margin: 0 5px 0 30px"></i>{{ date_format($p->article->created_at, 'Y-m-d') }}
                                     </div>
                                 </div>
                             </div>
