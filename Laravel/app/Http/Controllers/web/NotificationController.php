@@ -27,11 +27,11 @@ class NotificationController extends RestController
 
     public function detail(Request $request, $slug)
     {
-        $clauses = [WhereClause::query('status',1), WhereClause::query('slug',$slug)];
-        $notification = $this->repository->find($clauses);
+        $notification = $this->repository->find([WhereClause::query('status',1), WhereClause::query('slug',$slug)]);
         if (empty($notification)) {
             return $this->errorNotFoundView();
         }
+
         return view('profile.notification-detail', compact('notification'));
     }
 }

@@ -118,6 +118,8 @@ class PromotionController extends RestController
             return $this->errorNotFound();
         }
 
+        $image_old = $model->image;
+        
         $validator = $this->validateRequest($request, [
             'name' => 'nullable|max:255',
             'expired_date' => 'nullable|date'
@@ -144,8 +146,8 @@ class PromotionController extends RestController
         $attributes['discount_value'] = $request->input('discount_value', 0);
         $attributes['discount_percent'] = $request->input('discount_percent', 0);
 
-        if ($request->hasFile('banner')) {
-            $attributes['banner'] = FileStorageUtil::putFile('promotion', $request->file('banner'));
+        if ($request->hasFile('image')) {
+            $attributes['image'] = FileStorageUtil::putFile('promotion', $request->file('image'));
         }
 
         if (strtotime($request->expired_date) < strtotime("now")) {
@@ -181,6 +183,9 @@ class PromotionController extends RestController
                             'sale_price' => DB::raw('`price` - (`price` * ' . $percent . ') - ' . $promotion->discount_value)
                         ]);
                 }
+            }
+            if ($request->file('image') != '') {
+                FileStorageUtil::deleteFiles($image_old);
             }
             return $this->success($promotion);
         } catch (\Exception $e) {

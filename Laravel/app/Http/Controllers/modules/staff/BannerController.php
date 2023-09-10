@@ -98,13 +98,15 @@ class BannerController extends RestController
             $image = FileStorageUtil::putFile('banners', $request->file('image'));
             $attributes['image'] = $image;
             array_push($createdImages, $image);
-            FileStorageUtil::deleteFiles($image_old);
         }
 
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
             DB::commit();
+            if ($request->file('image') != '') {
+                FileStorageUtil::deleteFiles($image_old);
+            }
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);

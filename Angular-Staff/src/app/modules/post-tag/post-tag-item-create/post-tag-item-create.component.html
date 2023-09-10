@@ -52,7 +52,7 @@
       </form>
     </div>
     <div class="col-xs-6 col-xs-offset-6">
-      <button (click)="assignAll()" class="btn btn-primary pull-right" type="button">Gán tất cả</button>
+      <button (click)="assignAll()" class="btn btn-primary pull-right" [disabled]="list == ''" type="button">Gán tất cả</button>
     </div>
   </div>
   <div class="row">
@@ -81,6 +81,5 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button (click)="assign()" [disabled]="formGroup.invalid" class="btn btn-primary" type="button">Thêm mới</button>
   <button (click)="dismiss()" class="btn btn-default" type="button">Hủy bỏ</button>
 </div>

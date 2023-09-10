@@ -48,12 +48,14 @@ class ShipController extends RestController
             return [];
         }
         $wards = [];
+
         foreach ($district->wards as $ward) {
             array_push($wards, [
                 'id' => $ward->id,
                 'name' => $ward->name,
             ]);
         }
+
         return $this->success($wards);
     }
 
@@ -67,6 +69,7 @@ class ShipController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+        
         $table = $this->repository->find([
             WhereClause::query('province_id', $request->province_id),
             WhereClause::query('district_id', $request->district_id),

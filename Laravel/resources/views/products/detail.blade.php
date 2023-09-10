@@ -45,7 +45,7 @@
                 <div class="h-100 bg-light p-30">
                     <h3>{{ $product->name }}</h3>
                     <h4 class="font-weight-semi-bold mb-4" style="color: red">
-                        {{ number_format($product->sale_price, 0, '.', '.') }} đ</h4>
+                        {{ number_format($product->sale_price, 0, '.', '.') }}đ</h4>
                     <div class="my-4 detail_summary">{!! $product->summary !!}</div>
                     <form action="/cart/addItem" method="post" id="formDetail" class="form mb-2 mt3">
                         <div class="d-flex mb-3">
@@ -181,8 +181,9 @@
     </div>
     @if (count($product->relateds) > 0)
         <div class="container-fluid py-5">
-            <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Bạn
-                    cũng có thể thích</span></h2>
+            <h3 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
+                <span class="bg-secondary pr-3 test">Bạn cũng có thể thích</span>
+            </h3>
             <div class="row px-xl-5">
                 <div class="col">
                     <div class="owl-carousel related-carousel">
@@ -190,100 +191,61 @@
                             @if ($r->product->status == 1)
                                 <div class="product-item bg-light">
                                     <div class="product-img position-relative overflow-hidden">
-                                        <img class="img-fluid w-100" src="{{ $r->product->image }}"
-                                            alt="{{ $r->product->name }}">
+                                        <img class="img-fluid w-100" src="{{ $r->product->image }}" alt="{{ $r->product->name }}">
                                     </div>
-                                    <div class="text-center py-4">
+                                    <div class="text-center py-3">
                                         <a class="h6 text-decoration-none text-truncate"
                                             href="{{ $r->product->full_path }}">{{ $r->product->name }}</a>
                                         <div class="d-flex align-items-center justify-content-center mt-2">
                                             @if ($r->product->sale_price == $r->product->price)
-                                                <h5>{{ number_format($r->product->price, 0, '.', '.') }} đ</h5>
+                                                <h5 class="product-text-price price-sale">{{ number_format($r->product->price, 0, '.', '.') }}đ</h5>
                                             @else
-                                                <h5>{{ number_format($r->product->sale_price, 0, '.', '.') }} đ</h5>
-                                                <h6 class="text-muted ml-2">
-                                                    <del>{{ number_format($r->product->price, 0, '.', '.') }} đ</del>
+                                                <h5 class="product-text-price price-sale">{{ number_format($r->product->sale_price, 0, '.', '.') }}đ</h5>
+                                                <h6 class="product-text-price text-muted ml-2">
+                                                    <del>{{ number_format($r->product->price, 0, '.', '.') }}đ</del>
                                                 </h6>
                                             @endif
                                         </div>
-                                        <div class="d-flex align-items-center justify-content-center mb-1">
-                                            @php
-                                                $medium = 0;
-                                                if (count($r->product->comments) > 0) {
-                                                    $total = 0;
-                                                    foreach ($r->product->comments as $c) {
-                                                        $total += $c->rating;
-                                                    }
-                                                    $medium = round($total / count($r->product->comments), 1);
+                                        @php
+                                            $medium = 0;
+                                            if (count($r->product->comments) > 0) {
+                                                $total = 0;
+                                                foreach ($r->product->comments as $c) {
+                                                    $total += $c->rating;
                                                 }
-                                            @endphp
-                                            <div class="text-primary mr-2">
-                                                @if ($medium == 1)
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="far fa-star"></small>
-                                                    <small class="far fa-star"></small>
-                                                    <small class="far fa-star"></small>
-                                                    <small class="far fa-star"></small>
-                                                @endif
-                                                @if (1 < $medium && $medium < 2)
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star-half-alt"></small>
-                                                    <small class="far fa-star"></small>
-                                                    <small class="far fa-star"></small>
-                                                    <small class="far fa-star"></small>
-                                                @endif
-                                                @if ($medium == 2)
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="far fa-star"></small>
-                                                    <small class="far fa-star"></small>
-                                                    <small class="far fa-star"></small>
-                                                @endif
-                                                @if (2 < $medium && $medium < 3)
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star-half-alt"></small>
-                                                    <small class="far fa-star"></small>
-                                                    <small class="far fa-star"></small>
-                                                @endif
-                                                @if ($medium == 3)
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="far fa-star"></small>
-                                                    <small class="far fa-star"></small>
-                                                @endif
-                                                @if (3 < $medium && $medium < 4)
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star-half-alt"></small>
-                                                    <small class="far fa-star"></small>
-                                                @endif
-                                                @if ($medium == 4)
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="far fa-star"></small>
-                                                @endif
-                                                @if (4 < $medium && $medium < 5)
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star-half-alt"></small>
-                                                @endif
-                                                @if ($medium == 5)
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                    <small class="fas fa-star"></small>
-                                                @endif
+                                                $medium = round($total / count($r->product->comments), 1);
+                                            }
+                                        @endphp
+                                        @if ($medium > 0)
+                                            <div class="rating-icon">
+                                                <span class="rating-icon-value">
+                                                    <small class="text-primary fas fa-star"></small>
+                                                    <p class="rating-icon-number">{{$medium}}</p>
+                                                </span>
                                             </div>
-                                            <small style="font-weight:600">({{ $medium }})</small>
-                                        </div>
+                                        @endif
+                                        @if ($r->product->sale_price < $r->product->price)
+                                            @php
+                                                $precent = round(100 - ($r->product->sale_price / $r->product->price * 100));
+                                            @endphp
+                                            <div class="sale-icon">
+                                                <span class="sale-icon-value">-{{$precent}}%</span>
+                                            </div>
+                                        @elseif(count($r->product->tags) > 0)
+                                            @foreach ($r->product->tags as $t)
+                                                @if ($t->name == 'Sản phẩm hot')
+                                                    <div class="hot-icon">
+                                                        <img src="{{asset('assets/img/icon/hotico.svg')}}">
+                                                    </div>
+                                                    @break
+                                                @elseif($t->name == 'Sản phẩm mới')
+                                                    <div class="new-icon">
+                                                        <span class="new-icon-value value-icon">NEW</span>
+                                                    </div>
+                                                    @break
+                                                @endif
+                                            @endforeach
+                                        @endif
                                     </div>
                                 </div>
                             @endif
@@ -295,9 +257,9 @@
     @endif
     @if (count($category) > 0)
         <div class="container-fluid py-5">
-            <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Sản
-                    phẩm
-                    cùng loại</span></h2>
+            <h3 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
+                <span class="bg-secondary pr-3 test">Sản phẩm cùng loại</span>
+            </h3>
             <div class="row px-xl-5">
                 <div class="col">
                     <div class="owl-carousel related-carousel">
@@ -306,99 +268,59 @@
                                 <div class="product-img position-relative overflow-hidden">
                                     <img class="img-fluid w-100" src="{{ $c->image }}" alt="{{ $c->name }}">
                                 </div>
-                                <div class="text-center py-4">
+                                <div class="text-center py-3">
                                     <a class="h6 text-decoration-none text-truncate"
                                         href="{{ $c->full_path }}">{{ $c->name }}</a>
                                     <div class="d-flex align-items-center justify-content-center mt-2">
                                         @if ($c->sale_price == $c->price)
-                                            <h5>{{ number_format($c->price, 0, '.', '.') }} đ</h5>
+                                            <h5 class="product-text-price price-sale">{{ number_format($c->price, 0, '.', '.') }}đ</h5>
                                         @else
-                                            <h5>{{ number_format($c->sale_price, 0, '.', '.') }} đ</h5>
-                                            <h6 class="text-muted ml-2">
-                                                <del>{{ number_format($c->price, 0, '.', '.') }}
-                                                    đ
-                                                </del>
+                                            <h5 class="product-text-price price-sale">{{ number_format($c->sale_price, 0, '.', '.') }}đ</h5>
+                                            <h6 class="product-text-price text-muted ml-2">
+                                                <del>{{ number_format($c->price, 0, '.', '.') }}đ</del>
                                             </h6>
                                         @endif
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-center mb-1">
-                                        @php
-                                            $medium = 0;
-                                            if (count($c->comments) > 0) {
-                                                $total = 0;
-                                                foreach ($c->comments as $cm) {
-                                                    $total += $cm->rating;
-                                                }
-                                                $medium = round($total / count($c->comments), 1);
+                                    @php
+                                        $medium = 0;
+                                        if (count($c->comments) > 0) {
+                                            $total = 0;
+                                            foreach ($c->comments as $cm) {
+                                                $total += $cm->rating;
                                             }
-                                        @endphp
-                                        <div class="text-primary mr-2">
-                                            @if ($medium == 1)
-                                                <small class="fas fa-star"></small>
-                                                <small class="far fa-star"></small>
-                                                <small class="far fa-star"></small>
-                                                <small class="far fa-star"></small>
-                                                <small class="far fa-star"></small>
-                                            @endif
-                                            @if (1 < $medium && $medium < 2)
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star-half-alt"></small>
-                                                <small class="far fa-star"></small>
-                                                <small class="far fa-star"></small>
-                                                <small class="far fa-star"></small>
-                                            @endif
-                                            @if ($medium == 2)
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="far fa-star"></small>
-                                                <small class="far fa-star"></small>
-                                                <small class="far fa-star"></small>
-                                            @endif
-                                            @if (2 < $medium && $medium < 3)
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star-half-alt"></small>
-                                                <small class="far fa-star"></small>
-                                                <small class="far fa-star"></small>
-                                            @endif
-                                            @if ($medium == 3)
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="far fa-star"></small>
-                                                <small class="far fa-star"></small>
-                                            @endif
-                                            @if (3 < $medium && $medium < 4)
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star-half-alt"></small>
-                                                <small class="far fa-star"></small>
-                                            @endif
-                                            @if ($medium == 4)
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="far fa-star"></small>
-                                            @endif
-                                            @if (4 < $medium && $medium < 5)
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star-half-alt"></small>
-                                            @endif
-                                            @if ($medium == 5)
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                                <small class="fas fa-star"></small>
-                                            @endif
+                                            $medium = round($total / count($c->comments), 1);
+                                        }
+                                    @endphp
+                                    @if ($medium > 0)
+                                        <div class="rating-icon">
+                                            <span class="rating-icon-value">
+                                                <small class="text-primary fas fa-star"></small>
+                                                <p class="rating-icon-number">{{$medium}}</p>
+                                            </span>
                                         </div>
-                                        <small style="font-weight:600">({{ $medium }})</small>
-                                    </div>
+                                    @endif
+                                    @if ($c->sale_price < $c->price)
+                                        @php
+                                            $precent = round(100 - ($c->sale_price / $c->price * 100));
+                                        @endphp
+                                        <div class="sale-icon">
+                                            <span class="sale-icon-value">-{{$precent}}%</span>
+                                        </div>
+                                    @elseif(count($c->tags) > 0)
+                                        @foreach ($c->tags as $t)
+                                            @if ($t->name == 'Sản phẩm hot')
+                                                <div class="hot-icon">
+                                                    <img src="{{asset('assets/img/icon/hotico.svg')}}">
+                                                </div>
+                                                @break
+                                            @elseif($t->name == 'Sản phẩm mới')
+                                                <div class="new-icon">
+                                                    <span class="new-icon-value value-icon">NEW</span>
+                                                </div>
+                                                @break
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 </div>
                             </div>
                         @endforeach

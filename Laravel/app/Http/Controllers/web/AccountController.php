@@ -41,6 +41,7 @@ class AccountController extends RestController
     {
         $username = $request->input('username');
         $password = $request->input('password');
+
         $user = $this->repository->find([WhereClause::orQuery([WhereClause::query('username', $username), WhereClause::query('email', $username)])]);
         if($user) {
             if (Auth::attempt(['username' => $user->username, 'password' => $password])) {
@@ -70,8 +71,10 @@ class AccountController extends RestController
         $username = $request->input('username');
         $email = $request->input('email');
         $password = $request->input('password');
+
         $checkUser = $this->repository->find([WhereClause::query('username', $username)]);
         $checkEmail = $this->repository->find([WhereClause::query('email', $email)]);
+
         if ($checkUser != null) {
             return redirect()->back()->with('msg_error', 'Tên đăng nhập đã tồn tại')->withInput();
         } else if ($checkEmail != null && $checkEmail->email_verified_at != null) {
@@ -106,10 +109,12 @@ class AccountController extends RestController
     {
         $date = Date("Y-m-d");
         $email = $request->email;
+
         $user = $this->repository->find([WhereClause::query('email', $email)]);
         if (!$user) {
             return redirect('sign-up');
         }
+
         if ($user->code == $request->code) {
             $userUpdate = $this->repository->update($user->id, [
                 'status' => 1,
@@ -134,6 +139,7 @@ class AccountController extends RestController
     {
         $name = StoreInformation::whereName('name')->first()->value;
         $user = User::where("username", "=", $request->user)->orWhere("email", "=", $request->user)->first();
+        
         if(!$user) {
             return $this->error('Tài khoản hoặc email không đúng');
         } else {

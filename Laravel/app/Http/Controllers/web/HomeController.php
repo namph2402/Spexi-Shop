@@ -41,12 +41,14 @@ class HomeController extends RestController
         $bannerMains = $this->bannerRepository->get([WhereClause::query('status', 1), WhereClause::queryRelationHas('group', function ($q) {
             $q->where('name', 'Main banner');
         })], 'order:asc');
+
         $bannerSubs = $this->bannerRepository->get([WhereClause::query('status', 1), WhereClause::queryRelationHas('group', function ($q) {
             $q->where('name', 'Sub banner');
         })], 'order:asc');
+
         $categories = $this->categoryRepository->get([WhereClause::query('parent_id', 0)], 'order:asc', ['childrens.products.warehouses', 'products.warehouses']);
-        $featured = $this->tagRepository->find([WhereClause::query('name', 'Sản phẩm hot')], null, ['productViews.comments']);
-        $recent = $this->tagRepository->find([WhereClause::query('name', 'Sản phẩm mới')], null, ['productViews.comments']);
+        $featured = $this->tagRepository->find([WhereClause::query('name', 'Sản phẩm hot')], null, ['productViews']);
+        $recent = $this->tagRepository->find([WhereClause::query('name', 'Sản phẩm mới')], null, ['productViews']);
         $promotions = $this->promotionRepository->get([WhereClause::query('status', 1), WhereClause::queryIn('type',['1','2'])]);
         return view('pages.index', compact('bannerMains', 'bannerSubs', 'categories', 'featured', 'promotions', 'recent'));
     }

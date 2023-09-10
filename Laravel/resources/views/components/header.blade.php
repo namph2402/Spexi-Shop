@@ -33,7 +33,7 @@
             <div class="col-lg-4 col-6 text-left">
                 <form action="/product_searchs" id="formSearch">
                     <div class="input-group">
-                        <input type="text" value="{{ request()->search }}" name="search" class="form-control"
+                        <input type="search" value="{{ request()->search }}" name="search" class="form-control"
                             placeholder="Tìm kiếm sản phẩm">
                         <div class="input-group-append">
                             <button type="submit" class="input-group-text bg-transparent text-primary">
@@ -53,7 +53,7 @@
         <div class="row px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
                 <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse"
-                    href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
+                    href="#navbar-vertical" style="height: 50px; padding: 0 30px;">
                     <h6 class="text-dark m-0"><i class="fa fa-bars mr-2"></i>Danh mục</h6>
                     <i class="fa fa-angle-down text-dark"></i>
                 </a>
@@ -143,7 +143,7 @@
                                 <i class="fas fa-user text-primary"></i><i class="fa fa-chevron-down"
                                     style="position: relative;top: 2px; left: 5px; color: #F5F5F5"></i>
                             </button>
-                            <div class="dropdown-menu dropdown-menu-right p-0">
+                            <div class="dropdown-menu dropdown-menu-right p-0" style="right: -1px; top: 49px; border-top: none;">
                                 @if ($user != null)
                                     <a class="dropdown-item link-user" href="/profile">Tài khoản</a>
                                     <a class="dropdown-item link-user" href="/sign-out">Đăng xuất</a>

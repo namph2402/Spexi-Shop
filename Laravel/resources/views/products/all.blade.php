@@ -99,20 +99,34 @@
                                         }
                                     @endphp
                                     @if ($medium > 0)
-                                    <div class="rating-icon">
-                                        <span class="rating-icon-value">
-                                            <small class="text-primary fas fa-star"></small>
-                                            <p class="rating-icon-number">{{$medium}}</p>
-                                        </span>
-                                    </div>
+                                        <div class="rating-icon">
+                                            <span class="rating-icon-value">
+                                                <small class="text-primary fas fa-star"></small>
+                                                <p class="rating-icon-number">{{$medium}}</p>
+                                            </span>
+                                        </div>
                                     @endif
                                     @if ($p->sale_price < $p->price)
-                                    @php
-                                        $precent = round(100 - ($p->sale_price / $p->price * 100));
-                                    @endphp
-                                    <div class="sale-icon">
-                                        <span class="sale-icon-value">-{{$precent}}%</span>
-                                    </div>
+                                        @php
+                                            $precent = round(100 - ($p->sale_price / $p->price * 100));
+                                        @endphp
+                                        <div class="sale-icon">
+                                            <span class="sale-icon-value">-{{$precent}}%</span>
+                                        </div>
+                                    @elseif(count($p->tags) > 0)
+                                        @foreach ($p->tags as $t)
+                                            @if ($t->name == 'Sản phẩm hot')
+                                                <div class="hot-icon">
+                                                    <img src="{{asset('assets/img/icon/hotico.svg')}}">
+                                                </div>
+                                                @break
+                                            @elseif($t->name == 'Sản phẩm mới')
+                                                <div class="new-icon">
+                                                    <span class="new-icon-value value-icon">NEW</span>
+                                                </div>
+                                                @break
+                                            @endif
+                                        @endforeach
                                     @endif
                                 </div>
                             </div>

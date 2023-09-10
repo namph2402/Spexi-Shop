@@ -48,6 +48,7 @@ class CartController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes = $request->only([
             'product_id',
             'quantity'
@@ -55,6 +56,7 @@ class CartController extends RestController
 
         $product = $this->productRepository->findByID($request->product_id);
         $cart = $this->repository->find([WhereClause::query('user_id', Auth::user()->id)]);
+
         $warehouse = $this->warehouseRepository->find([WhereClause::query('product_id', $request->product_id), WhereClause::query('size_id', $request->size_id), WhereClause::query('color_id', $request->color_id)]);
         if(empty($warehouse)) {
             return $this->errorView('Kho hàng không đủ loại hàng này');
@@ -63,6 +65,7 @@ class CartController extends RestController
         $attributes['cart_id'] = $cart->id;
         $attributes['warehouse_id'] = $warehouse->id;
         $attributes['amount'] = $product->sale_price * $request->quantity;
+        
         $clause = [WhereClause::query('cart_id', $cart->id), WhereClause::query('product_id', $request->product_id), WhereClause::query('warehouse_id', $warehouse->id),];
         $test_item = $this->itemRepository->find($clause);
 
@@ -94,7 +97,7 @@ class CartController extends RestController
         if (empty($item)) {
             return $this->errorNotFoundView();
         }
-        
+
         if ($request->quantity > 0) {
             $data = $this->itemRepository->update($id, [
                 'quantity' => $request->quantity,

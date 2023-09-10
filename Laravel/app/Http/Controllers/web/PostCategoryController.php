@@ -31,13 +31,16 @@ class PostCategoryController extends RestController
         $clause = [WhereClause::query('status', 1), WhereClause::query('category_slug',$slug)];
         $orderBy = 'order:asc';
         $with = ['article'];
+
         $categoryPostMain = $this->repository->find([WhereClause::query('status', 1), WhereClause::query('slug',$slug)]);
         if (empty($categoryPostMain)) {
             return $this->errorNotFoundView();
         }
+
         $categoryPosts = $this->repository->get([WhereClause::query('status', 1), WhereClause::queryDiff('slug',$slug)]);
         $tagPosts = $this->tagRepository->get([WhereClause::query('status', 1)], $orderBy);
         $posts = $this->postRepository->paginate($limit, $clause, $orderBy, $with);
+        
         return view('posts.category', compact('posts', 'categoryPostMain', 'categoryPosts', 'tagPosts'));
     }
 }

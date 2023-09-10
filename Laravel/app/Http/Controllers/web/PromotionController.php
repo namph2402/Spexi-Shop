@@ -46,10 +46,12 @@ class PromotionController extends RestController
         $arrSize = [];
         $arrPrice = [];
         $orderBy = 'order:asc';
-        $with = ['comments'];
+        $with = [];
+
         array_push($clause, WhereClause::queryRelationHas('promotions', function ($q) use ($arrSize) {
             $q->whereIn('type', ['1','2']);
         }));
+
         if ($request->has('color') && $request->color != 'All') {
             $colors = explode(",", $request->color);
             foreach ($colors as $color) {
@@ -59,6 +61,7 @@ class PromotionController extends RestController
                 $q->whereIn('color_id', $arrColor);
             }));
         }
+
         if ($request->has('size') && $request->size != 'All') {
             $sizes = explode(",", $request->size);
             foreach ($sizes as $size) {
@@ -68,39 +71,22 @@ class PromotionController extends RestController
                 $q->whereIn('size_id', $arrSize);
             }));
         }
-        if ($request->has('price') && $request->price != 'All') {
-            $prices = explode(",", $request->price);
-            foreach ($prices as $price) {
-                array_push($arrPrice, $price);
-                if($price == 1) {
-                    array_push($clause, WhereClause::query('sale_price', 100000, '<'));
-                }
-                if($price == 2) {
-                    array_push($clause, WhereClause::query('sale_price', 99999, '>'));
-                    array_push($clause, WhereClause::query('sale_price', 200001, '<'));
-                }
-                if($price == 3) {
-                    array_push($clause, WhereClause::query('sale_price', 199999, '>'));
-                    array_push($clause, WhereClause::query('sale_price', 300001, '<'));
-                }
-                if($price == 4) {
-                    array_push($clause, WhereClause::query('sale_price', 299999, '>'));
-                    array_push($clause, WhereClause::query('sale_price', 400001, '<'));
-                }
-                if($price == 5) {
-                    array_push($clause, WhereClause::query('sale_price', 399999, '>'));
-                    array_push($clause, WhereClause::query('sale_price', 500001, '<'));
-                }
-                if($price == 6) {
-                    array_push($clause, WhereClause::query('sale_price', 500000, '>'));
-                }
-            }
+
+        if (Str::length($request->priceFrom) > 0) {
+            array_push($clause, WhereClause::query('sale_price', $request->priceFrom, '>='));
         }
+
+        if (Str::length($request->priceTo) > 0) {
+            array_push($clause, WhereClause::query('sale_price', $request->priceTo, '<='));
+        }
+        
         $bannerPromotions = $this->bannerRepository->get([WhereClause::query('status', 1), WhereClause::queryRelationHas('group', function ($q) {
             $q->where('name', 'Promotion banner');
         })], 'order:asc');
+
         $promotions = $this->promotionRepository->get([WhereClause::query('status','1'), WhereClause::queryIn('type',['1','2'])]);
         $products = $this->repository->paginate($limit, $clause, $orderBy, $with);
+
         return view('promotions.all', compact('products', 'arrSize', 'arrColor', 'arrPrice', 'promotions', 'bannerPromotions'));
     }
 
@@ -113,11 +99,13 @@ class PromotionController extends RestController
         $arrPrice = [];
         $arrProduct = [];
         $orderBy = 'order:asc';
-        $with = ['comments','promotions'];
+        $with = ['promotions'];
+
         $promotionMain = $this->promotionRepository->find([WhereClause::query('slug', $slug),WhereClause::query('status', 1)], null, 'products');
         if (empty($promotionMain)) {
             return $this->errorNotFoundView();
         }
+
         if(count($promotionMain->products) > 0) {
             foreach($promotionMain->products as $p) {
                 array_push($arrProduct, $p->id);
@@ -125,6 +113,7 @@ class PromotionController extends RestController
         } else {
             array_push($arrProduct, 0);
         }
+
         array_push($clause, WhereClause::queryIn('id', $arrProduct));
         if ($request->has('color') && $request->color != 'All') {
             $colors = explode(",", $request->color);
@@ -135,6 +124,7 @@ class PromotionController extends RestController
                 $q->whereIn('color_id', $arrColor);
             }));
         }
+
         if ($request->has('size') && $request->size != 'All') {
             $sizes = explode(",", $request->size);
             foreach ($sizes as $size) {
@@ -144,14 +134,18 @@ class PromotionController extends RestController
                 $q->whereIn('size_id', $arrSize);
             }));
         }
+
         if (Str::length($request->priceFrom) > 0) {
             array_push($clause, WhereClause::query('sale_price', $request->priceFrom, '>='));
         }
+
         if (Str::length($request->priceTo) > 0) {
             array_push($clause, WhereClause::query('sale_price', $request->priceTo, '<='));
         }
+
         $promotions = $this->promotionRepository->get([WhereClause::query('status','1'), WhereClause::queryIn('type',['1','2']), WhereClause::queryDiff('id', $promotionMain->id)]);
         $products = $this->repository->paginate($limit, $clause, $orderBy, $with);
+
         return view('promotions.detail', compact('products', 'arrSize', 'arrColor', 'arrPrice', 'promotionMain', 'promotions'));
     }
 }

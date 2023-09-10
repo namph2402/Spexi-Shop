@@ -149,7 +149,6 @@ class PostController extends RestController
         if ($request->file('image') != '') {
             $image = FileStorageUtil::putFile('post_image', $request->file('image'));
             $attributes['image'] = $image;
-            FileStorageUtil::deleteFiles($image_old);
         }
 
         $attributes['slug'] = Str::slug($attributes['name']);
@@ -166,6 +165,9 @@ class PostController extends RestController
                 'content' => $request->input('content')
             ]);
             DB::commit();
+            if ($request->file('image') != '') {
+                FileStorageUtil::deleteFiles($image_old);
+            }
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
@@ -373,7 +375,7 @@ class PostController extends RestController
         }
 
         $tagId = $request->tag_ids;
-        
+
         try {
             DB::beginTransaction();
             $this->repository->detach($model, $tagId);

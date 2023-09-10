@@ -48,16 +48,21 @@ class UserProfileController extends RestController
         $districtUser = null;
         $wardUser = null;
         $clauses = [WhereClause::query('user_id', Auth::user()->id)];
+
         $profile = $this->repository->find($clauses, null, ['account']);
+
         if($profile->province != null) {
             $provinceUser = $this->provinceRepository->find([WhereClause::query('name', $profile->province)], null, ['districts']);
         }
+
         if($profile->district != null) {
             $districtUser = $this->districtRepository->find([WhereClause::query('name', $profile->district)], null, ['wards']);
         }
+
         if($profile->ward != null) {
             $wardUser = $this->wardRepository->find([WhereClause::query('name', $profile->ward)]);
         }
+
         $provinces = $this->provinceRepository->get([]);
         return view('profile.user', compact('profile','provinces','provinceUser', 'districtUser', 'wardUser'));
     }
@@ -76,6 +81,7 @@ class UserProfileController extends RestController
         if ($validator) {
             return $this->errorView($validator);
         }
+
         $attributes = $request->only([
             'fullname',
             'gender',
@@ -83,15 +89,19 @@ class UserProfileController extends RestController
             'phone',
             'address'
         ]);
+
         $province = $this->provinceRepository->findById($request->province_id);
         $district = $this->districtRepository->findById($request->district_id);
         $ward = $this->wardRepository->findById($request->ward_id);
+
         if(!$province || !$district || !$ward) {
             return $this->errorView('Địa chỉ không đúng');
         }
+
         $attributes['province'] = $province->name;
         $attributes['district'] = $district->name;
         $attributes['ward'] = $ward->name;
+
         if ($request->file != null) {
             $image = FileStorageUtil::putFile('avatar', $request->file('file'));
             $attributes['avatar'] = $image;
@@ -123,6 +133,7 @@ class UserProfileController extends RestController
         if (empty($order) || $order->user_id != Auth::user()->id) {
             return $this->errorNotFoundView();
         }
+
         return view('profile.order-detail', compact('order'));
     }
 
@@ -141,13 +152,16 @@ class UserProfileController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $user = $this->userRepository->findById(Auth::user()->id);
         if (!Hash::check($request->oldPassword, $user->password)) {
             return redirect()->back()->with('msg_error','Mật khẩu không đúng');
         }
+
         $user = $this->userRepository->update(Auth::user()->id, [
             'password' =>  Hash::make($request->password)
         ]);
+        
         return $this->successView('profile/password','Đã đổi mật kẩu thành công');
     }
 }

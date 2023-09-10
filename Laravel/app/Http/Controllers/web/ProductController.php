@@ -38,7 +38,7 @@ class ProductController extends RestController
         $arrSize = [];
         $arrPrice = [];
         $orderBy = 'order:asc';
-        $with = ['comments', 'tags'];
+        $with = [];
 
         if ($request->has('color') && $request->color != 'All') {
             $colors = explode(",", $request->color);
@@ -69,7 +69,6 @@ class ProductController extends RestController
 
         $products = $this->repository->paginate($limit, $clause, $orderBy, $with);
 
-        dd($products);
         return view('products.all', compact('products', 'arrSize', 'arrColor', 'arrPrice'));
     }
 
@@ -81,7 +80,7 @@ class ProductController extends RestController
         $arrSize = [];
         $arrPrice = [];
         $orderBy = 'order:asc';
-        $with = ['comments'];
+        $with = [];
 
         if ($request->has('color') && $request->color != 'All') {
             $colors = explode(",", $request->color);
@@ -106,6 +105,7 @@ class ProductController extends RestController
         if (Str::length($request->priceFrom) > 0) {
             array_push($clause, WhereClause::query('sale_price', $request->priceFrom, '>='));
         }
+
         if (Str::length($request->priceTo) > 0) {
             array_push($clause, WhereClause::query('sale_price', $request->priceTo, '<='));
         }
@@ -127,6 +127,7 @@ class ProductController extends RestController
             WhereClause::query('slug', $slug),
             WhereClause::query('status', 1)
         ], null, $with);
+
         if (empty($product) || count($product->warehouseViews) == 0) {
             return $this->errorNotFoundView();
         }
@@ -135,6 +136,7 @@ class ProductController extends RestController
             $arrSize[$item->size_id] = $item->size_id;
             $arrColor[$item->color_id] = $item->color_id;
         }
+        
         $sizePs = $this->sizeRepository->get([WhereClause::queryIn('id', $arrSize)]);
         $colorPs = $this->colorRepository->get([WhereClause::queryIn('id', $arrColor)]);
 

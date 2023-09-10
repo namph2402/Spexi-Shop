@@ -145,16 +145,18 @@ class ProductCategoryController extends RestController
         if ($request->file('image') != '') {
             $image = FileStorageUtil::putFile('product_category_image', $request->file('image'));
             $attributes['image'] = $image;
-            FileStorageUtil::deleteFiles($image_old);
         }
 
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             $this->productRepository->bulkUpdate([WhereClause::query('category_id', $id)], [
                 'category_slug' => $attributes['slug']
             ]);
+            DB::commit();
+            if ($request->file('image') != '') {
+                FileStorageUtil::deleteFiles($image_old);
+            }
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);

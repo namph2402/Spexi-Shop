@@ -43,6 +43,7 @@ class PostController extends RestController
         $clause = [WhereClause::query('status', 1), WhereClause::queryLike('name', $request->search)];
         $orderBy = 'order:asc';
         $with = ['article', 'comments'];
+
         $categoryPosts = $this->categoryRepository->get([WhereClause::query('status', 1)], $orderBy);
         $tagPosts = $this->tagRepository->get([WhereClause::query('status', 1)], $orderBy);
         $posts = $this->repository->paginate($limit, $clause, $orderBy, $with);
@@ -54,14 +55,17 @@ class PostController extends RestController
         $clause = [WhereClause::query('status', 1)];
         $orderBy = 'order:asc';
         $with = ['category','article', 'comments.author.profile', 'relateds.post'];
+
         $post = $this->repository->find([
             WhereClause::query('category_slug', $category_slug),
             WhereClause::query('slug', $slug),
             WhereClause::query('status', 1)
         ], null, $with);
+
         if (empty($post)) {
             return $this->errorNotFoundView();
         }
+
         $categoryPost = $this->repository->get([
             WhereClause::query('category_slug', $category_slug),
             WhereClause::queryDiff('id', $post->id),

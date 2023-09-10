@@ -10,7 +10,7 @@
             </div>
             <div class="col-lg-8 col-md-12">
                 <div class="row">
-                    <div class="col-md-4 mb-4">
+                    <div class="col-md-4 mb-4 footer-link">
                         <h5 class="text-secondary text-uppercase mb-4">Liên kết</h5>
                         <div class="d-flex flex-column justify-content-start">
                             @foreach ($links as $l)
@@ -19,7 +19,7 @@
                             @endforeach
                         </div>
                     </div>
-                    <div class="col-md-4 mb-4">
+                    <div class="col-md-4 mb-4 footer-category">
                         <h5 class="text-secondary text-uppercase mb-4">Danh mục</h5>
                         <div class="d-flex flex-column justify-content-start">
                             @foreach ($categories as $c)
@@ -31,7 +31,7 @@
                     <div class="col-md-4 mb-4">
                         <h5 class="text-secondary text-uppercase mb-4">NHẬN THÔNG TIN</h5>
                         <p>Theo dõi để được cập nhật tin tức</p>
-                        <form action="/form-data" id="formEmail" method="POST">
+                        <form action="/form-data" id="formEmail" method="POST" class="footer-mail">
                             <div class="input-group">
                                 <input type="email" style="border-radius: 0;" class="form-control" name="email" placeholder="Email của bạn">
                                 <div class="input-group-append">
@@ -40,7 +40,7 @@
                             </div>
                             @csrf
                         </form>
-                        <div class="d-flex mt-3">
+                        <div class="d-flex mt-3" class="footer-icon">
                             <a class="btn btn-primary btn-square mr-2" href="{{ $data['Tiktok'] }}"><img style="width:15px" src="{{asset('assets/img/tiktok.png')}}" alt=""></a>
                             <a class="btn btn-primary btn-square mr-2" href="{{ $data['Facebook'] }}"><i
                                     class="fab fa-facebook-f" style="color: black"></i></a>

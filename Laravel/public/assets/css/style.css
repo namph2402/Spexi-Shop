@@ -356,6 +356,10 @@ progress {
     -webkit-appearance: button;
 }
 
+::-webkit-scrollbar {
+    width: 0px;
+}
+
 output {
     display: inline-block;
 }
@@ -10715,7 +10719,7 @@ h6 {
 }
 
 .navbar-dark .navbar-nav .nav-link {
-    padding: 20px 10px;
+    padding: 13px 10px;
     color: #F5F5F5;
     outline: none;
 }
@@ -10893,6 +10897,29 @@ h6 {
 .sale-icon-value {
     font-size: 14px;
     color: white;
+}
+
+.hot-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.new-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 24px;
+    width: 60px;
+    background: #ffd642;
+    text-align: center;
+    border-radius: 0 0 0 5px;
+}
+
+.new-icon-value {
+    font-size: 14px;
+    color: black;
+    font-weight: 600;
 }
 
 .table.table-borderless thead tr,
@@ -11379,6 +11406,7 @@ h6 {
     padding: 0 24px;
     display: flex;
     align-items: center;
+    color: #837e6c;
 }
 
 .promotion-link:hover {
@@ -11597,6 +11625,41 @@ h6 {
     animation: my 700ms infinite;
 }
 
+@-o-keyframes my1 {
+    0% {
+        color: blue;
+    }
+
+    50% {
+        color: red;
+    }
+
+    100% {
+        color: green;
+    }
+}
+
+@keyframes my1 {
+    0% {
+        color: blue;
+    }
+
+    50% {
+        color: red;
+    }
+
+    100% {
+        color: green;
+    }
+}
+
+.value-icon {
+    -webkit-animation: my1 700ms infinite;
+    -moz-animation: my1 700ms infinite;
+    -o-animation: my1 700ms infinite;
+    animation: my1 700ms infinite;
+}
+
 .promotion-text {
     font-size: 16px;
     font-weight: bold;
@@ -11649,8 +11712,12 @@ h6 {
         margin-bottom: 10px !important;
     }
 
-    .promotion-list:last-child {
-        border: 1px solid red;
+    .promotion-list .promotion-1 {
+        display: none;
+    }
+
+    .footer-link, .footer-category {
+        width: 50%;
     }
 }
 

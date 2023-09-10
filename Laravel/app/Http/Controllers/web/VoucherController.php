@@ -33,7 +33,9 @@ class VoucherController extends RestController
             WhereClause::query('remain_quantity', '0', '>'),
             WhereClause::queryDate('expired_date', date("Y-m-d"), '>=')
         ]);
+
         $arrVoucher = [];
+
         if ($data != null) {
             $arrVoucher = [
                 'id' => $data->id,
@@ -43,6 +45,7 @@ class VoucherController extends RestController
                 'discount_percent' => $data->discount_percent
             ];
         }
+        
         return $this->success($arrVoucher);
     }
 }

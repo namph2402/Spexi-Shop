@@ -24,9 +24,11 @@ class CommentController extends RestController
         $with = [];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'id:desc');
+
         if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
         }
+
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {
@@ -45,12 +47,14 @@ class CommentController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes = $request->only([
             'content',
             'rating',
             'article_id'
         ]);
         $attributes['user_id'] = Auth::user()->id;
+        
         try {
             DB::beginTransaction();
             $this->repository->create($attributes);

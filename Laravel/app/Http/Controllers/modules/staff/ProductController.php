@@ -183,7 +183,6 @@ class ProductController extends RestController
             $image = FileStorageUtil::putFile('product_image', $request->file('image'));
             array_push($createdImages, $image);
             $attributes['image'] = $image;
-            FileStorageUtil::deleteFiles($image_old);
         }
 
         $attributes['sale_price'] = $request->price;
@@ -198,6 +197,9 @@ class ProductController extends RestController
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
             DB::commit();
+            if ($request->file('image') != '') {
+                FileStorageUtil::deleteFiles($image_old);
+            }
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
