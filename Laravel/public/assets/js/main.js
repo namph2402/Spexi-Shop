@@ -388,6 +388,15 @@ function setParamsPage(name, value) {
     window.location.search = urlParams
 }
 
+function changeFilter() {
+    display = document.getElementById("formSearchP").style.display;
+    if(display == '' || display == 'none') {
+        document.getElementById("formSearchP").style.display = 'block';
+    } else {
+        document.getElementById("formSearchP").style.display = 'none';
+    }
+}
+
 function onProvinceIdChange() {
     const provinceId = document.getElementById('province_id').value;
     Checkout.getInstance().loadAllDistricts(provinceId, (data) => {

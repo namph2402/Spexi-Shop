@@ -41,7 +41,7 @@
                             @csrf
                         </form>
                         <div class="d-flex mt-3" class="footer-icon">
-                            <a class="btn btn-primary btn-square mr-2" href="{{ $data['Tiktok'] }}"><img style="width:15px" src="{{asset('assets/img/tiktok.png')}}" alt=""></a>
+                            <a class="btn btn-primary btn-square mr-2" href="{{ $data['Tiktok'] }}"><img style="width:15px" src="{{asset('assets/img/icon/tiktok.png')}}" alt=""></a>
                             <a class="btn btn-primary btn-square mr-2" href="{{ $data['Facebook'] }}"><i
                                     class="fab fa-facebook-f" style="color: black"></i></a>
                             <a class="btn btn-primary btn-square" href="{{ $data['Instagram'] }}"><i class="fab fa-instagram" style="color: black"></i></a>

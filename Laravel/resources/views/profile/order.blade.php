@@ -35,8 +35,9 @@
                                         <tbody>
                                             @foreach ($item->details as $key => $d)
                                                 <tr>
-                                                    <td style="width:20%"><img class="w-100" src="{{ $d->product->image }}"
-                                                            alt="{{ $d->product_name }}"></td>
+                                                    <td style="width:20%">
+                                                        <img class="w-100" data-src="{{ $d->product->image }}" src="{{ $d->product->image }}" alt="{{ $d->product_name }}">
+                                                    </td>
                                                     <td style="width:60%">
                                                         <span class="text-product">{{ $d->product_name }}</span>
                                                     </td>

@@ -17,7 +17,7 @@
     <div class="container-fluid">
         @if ($promotionMain->image != null)
             <div class="row px-xl-5 pb-5">
-                <img class="col-12 banner-promotion" src="{{ $promotionMain->image }}" alt="{{ $promotionMain->name }}">
+                <img class="col-12 banner-promotion" data-src="{{ $promotionMain->image }}" src="{{ $promotionMain->image }}" alt="{{ $promotionMain->name }}">
             </div>
         @endif
         <div class="row px-xl-5 pb-5">
@@ -37,16 +37,13 @@
         </div>
 
         <div class="row px-xl-5">
-            <form action="{{ Request::url() }}" class="col-lg-3 col-md-4" id="formSearchP">
+            <form action="{{ Request::url() }}" class="col-lg-3 col-md-4 mb-3 formSearchP" id="formSearchP">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Lọc theo giá</span></h5>
-                <div class="bg-light mb-30" style="padding: 1rem;">
+                <div class="filter-price bg-light mb-30" style="padding: 1rem;">
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                        <label class="label-price">Từ</label>
-                        <input type="number" name="priceFrom" value="{{ request()->priceFrom }}" class="input-price priceItem">
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <label class="label-price">Đến</label>
-                        <input type="number" name="priceTo" value="{{ request()->priceTo }}" class="input-price priceItem">
+                        <input type="number" name="priceFrom" value="{{ request()->priceFrom }}" placeholder="Từ" class="input-price priceItem">
+                        <span>-</span>
+                        <input type="number" name="priceTo" value="{{ request()->priceTo }}" placeholder="Đến" class="input-price priceItem">
                     </div>
                 </div>
                 <div class="search-variant mb-30">
@@ -55,7 +52,7 @@
                             <span class="bg-secondary pr-3">Lọc theo màu</span>
                         </h5>
                         <div class="bg-light mb-30 search-group">
-                            <div class="row pl-3 pr-3">
+                            <div class="row pl-3 pr-3 list-item-search">
                                 @foreach ($colors as $c)
                                     <div class="col-md-6 custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                         <input type="checkbox" class="custom-control-input colorItem" value="{{ $c->id }}"
@@ -72,7 +69,7 @@
                             <span class="bg-secondary pr-3">Lọc theo Size</span>
                         </h5>
                         <div class="bg-light mb-30 search-group">
-                            <div class="row pl-3 pr-3">
+                            <div class="row pl-3 pr-3 list-item-search">
                                 @foreach ($sizes as $s)
                                     <div class="col-md-6 custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                         <input type="checkbox" class="custom-control-input sizeItem" value="{{ $s->id }}"
@@ -94,7 +91,7 @@
                             <div class="col-lg-4 col-md-6 col-sm-6 pb-1 product">
                                 <div class="product-item bg-light mb-4">
                                     <div class="product-img position-relative overflow-hidden">
-                                        <img class="img-fluid w-100" src="{{ $p->image }}" alt="{{ $p->name }}">
+                                        <img class="img-fluid w-100" data-src="{{ $p->image }}" src="{{ $p->image }}" alt="{{ $p->name }}">
                                     </div>
                                     <div class="product-text text-center py-3">
                                         <a class="product-text-name h6 text-decoration-none text-truncate"

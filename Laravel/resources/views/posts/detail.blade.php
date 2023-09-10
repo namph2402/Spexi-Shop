@@ -107,7 +107,7 @@
                         <div class="blog-list">
                             @foreach ($post->relateds as $r)
                                 <div class="blog-item">
-                                    <img class="blog-item-img w-100" src="{{ $r->post->image }}" alt="{{ $r->post->name }}">
+                                    <img class="blog-item-img w-100" data-src="{{ $r->post->image }}" src="{{ $r->post->image }}" alt="{{ $r->post->name }}">
                                     <div class="blog-item-info">
                                         <a href="{{ $r->post->full_path }}"
                                             class="blog-item-title">{{ $r->post->name }}</a>
@@ -121,7 +121,7 @@
                             <div class="blog-list">
                                 @foreach ($categoryPost as $c)
                                     <div class="blog-item">
-                                        <img class="blog-item-img w-100" src="{{ $c->image }}"
+                                        <img class="blog-item-img w-100" data-src="{{ $c->image }}" src="{{ $c->image }}"
                                             alt="{{ $c->name }}">
                                         <div class="blog-item-info">
                                             <a href="{{ $c->full_path }}"

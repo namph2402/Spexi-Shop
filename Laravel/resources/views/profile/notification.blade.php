@@ -20,9 +20,9 @@
                             <div class="col-md-12 form-voucher-content pl-0" style="height: 90px">
                                 <div class="form-notification-img">
                                     @if ($n->type == 1)
-                                        <img class="w-100 h-100" src="http://localhost:8000/assets/img/notification.webp">
+                                        <img class="w-100 h-100" src="http://localhost:8000/assets/img/icon/notification.webp">
                                     @else
-                                        <img class="w-100 h-100" src="http://localhost:8000/assets/img/order.webp">
+                                        <img class="w-100 h-100" src="http://localhost:8000/assets/img/icon/order.webp">
                                     @endif
                                 </div>
                                 <div class="form-voucher-info pr-0">

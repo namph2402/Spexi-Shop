@@ -123,9 +123,8 @@
             <div class="col-lg-4 p-0" style="background: white">
                 <div class="mt-5" style="border-left:1px solid rgb(237, 237, 237); height:500px">
                     <div class="d-flex justify-content-center pt-5">
-                        <img src="{{ $profile->avatar }}"
-                            style="border-radius: 50%; width:200px; height:200px; border: 1px solid #c9c9c9"
-                            id="img-preview">
+                        <img data-src="{{ $profile->avatar }}" src="{{ $profile->avatar }}" id="img-preview"
+                            style="border-radius: 50%; width:200px; height:200px; border: 1px solid #c9c9c9">
                     </div>
                     <div class="d-flex justify-content-center mt-4">
                         <input type="file" name="file" id="file" class="inputfile" />

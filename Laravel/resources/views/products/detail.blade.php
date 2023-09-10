@@ -20,14 +20,14 @@
             <div class="col-lg-5 mb-30">
                 <div id="product-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner bg-light">
-                        @foreach ($product->images as $key => $image)
+                        @foreach ($product->images as $key => $i)
                             @if ($key == 0)
                                 <div class="carousel-item active">
-                                    <img class="w-100 h-100" src="{{ $image->image }}" alt="{{ $product->name }}">
+                                    <img class="w-100 h-100" data-src="{{ $i->image }}" src="{{ $i->image }}" alt="{{ $product->name }}">
                                 </div>
                             @else
                                 <div class="carousel-item">
-                                    <img class="w-100 h-100" src="{{ $image->image }}" alt="{{ $product->name }}">
+                                    <img class="w-100 h-100" data-src="{{ $i->image }}" src="{{ $i->image }}" alt="{{ $product->name }}">
                                 </div>
                             @endif
                         @endforeach
@@ -191,7 +191,7 @@
                             @if ($r->product->status == 1)
                                 <div class="product-item bg-light">
                                     <div class="product-img position-relative overflow-hidden">
-                                        <img class="img-fluid w-100" src="{{ $r->product->image }}" alt="{{ $r->product->name }}">
+                                        <img class="img-fluid w-100" data-src="{{ $r->product->image }}" src="{{ $r->product->image }}" alt="{{ $r->product->name }}">
                                     </div>
                                     <div class="text-center py-3">
                                         <a class="h6 text-decoration-none text-truncate"
@@ -266,7 +266,7 @@
                         @foreach ($category as $c)
                             <div class="product-item bg-light">
                                 <div class="product-img position-relative overflow-hidden">
-                                    <img class="img-fluid w-100" src="{{ $c->image }}" alt="{{ $c->name }}">
+                                    <img class="img-fluid w-100" data-src="{{ $c->image }}" src="{{ $c->image }}" alt="{{ $c->name }}">
                                 </div>
                                 <div class="text-center py-3">
                                     <a class="h6 text-decoration-none text-truncate"

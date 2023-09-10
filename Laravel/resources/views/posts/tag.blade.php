@@ -17,8 +17,8 @@
     <div class="container-fluid">
         <div class="row px-xl-5">
             <div class="col-lg-3 col-md-4">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Tìm
-                        kiếm</span>
+                <h5 class="section-title position-relative text-uppercase mb-3">
+                    <span class="bg-secondary pr-3">Tìm kiếm</span>
                 </h5>
                 <div class="bg-light mb-30" style="padding: 1rem">
                     <form action="/post_searchs" id="formSearchPost">
@@ -32,8 +32,8 @@
                         </div>
                     </form>
                 </div>
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Danh
-                        mục</span>
+                <h5 class="section-title position-relative text-uppercase mb-3">
+                    <span class="bg-secondary pr-3">Danh mục</span>
                 </h5>
                 <div class="bg-light mb-30" style="padding: 1rem">
                     <form>
@@ -46,14 +46,13 @@
                         @endforeach
                     </form>
                 </div>
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Gán
-                        thẻ</span>
+                <h5 class="section-title position-relative text-uppercase mb-3">
+                    <span class="bg-secondary pr-3">Gán thẻ</span>
                 </h5>
                 <div class="bg-light mb-30" style="padding: 1rem">
                     <form>
                         @foreach ($tagPosts as $t)
-                            <div
-                                class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <a href="{{ $t->full_path }}" class="custom-control-label-search"
                                     for="price-all">{{ $t->name }}</a>
                             </div>
@@ -67,7 +66,7 @@
                         <div class="col-lg-12 col-md-6 col-sm-6 pb-1">
                             <div class="post-item bg-light mb-4">
                                 <div class="post-img">
-                                    <img class="post-image img-fluid" src="{{ $p->image }}" alt="{{ $p->name }}">
+                                    <img class="post-image img-fluid" data-src="{{ $p->image }}" src="{{ $p->image }}" alt="{{ $p->name }}">
                                 </div>
                                 <div class="post-title">
                                     <div class="post-content">

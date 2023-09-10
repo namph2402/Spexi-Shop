@@ -3,7 +3,7 @@
     Trang chủ
 @endsection
 @section('content')
-    <div class="container-fluid mb-3">
+    <div class="container-fluid container-item mb-3">
         <div class="row px-xl-5">
             <div class="col-lg-12">
                 <div id="header-carousel" class="carousel slide carousel-fade mb-30 mb-lg-0" data-ride="carousel">
@@ -20,8 +20,8 @@
                         <div class="carousel-inner">
                             @foreach ($bannerMains as $key => $b)
                                 @if ($key == 0)
-                                    <div class="carousel-item position-relative active" style="height: 430px;">
-                                        <img class="position-absolute w-100 h-100" src="{{ $b->image }}"
+                                    <div class="carousel-item position-relative banner-item active">
+                                        <img class="position-absolute w-100 h-100" data-src="{{ $b->image }}" src="{{ $b->image }}"
                                             style="object-fit: cover;">
                                         <div
                                             class="carousel-caption d-flex flex-column align-items-center justify-content-center">
@@ -36,7 +36,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    <div class="carousel-item position-relative" style="height: 430px;">
+                                    <div class="carousel-item position-relative banner-item">
                                         <img class="position-absolute w-100 h-100" src="{{ $b->image }}"
                                             style="object-fit: cover;">
                                         <div
@@ -59,43 +59,43 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid pt-4">
-        <div class="row px-xl-5 pb-3">
+    <div class="container-fluid container-item pt-4">
+        <div class="row px-xl-5 pb-3 info-list">
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1 info-item">
-                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+                <div class="d-flex align-items-center bg-light mb-4 p-30">
                     <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
-                    <h5 class="font-weight-semi-bold m-0">Sản phẩm chất lượng</h5>
+                    <h5 class="font-weight-semi-bold m-0 info-item-text">Sản phẩm chất lượng</h5>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1 info-item">
-                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+                <div class="d-flex align-items-center bg-light mb-4 p-30">
                     <h1 class="fa fa-shipping-fast text-primary m-0 mr-2"></h1>
-                    <h5 class="font-weight-semi-bold m-0">Miễn phí vận chuyển</h5>
+                    <h5 class="font-weight-semi-bold m-0 info-item-text">Miễn phí vận chuyển</h5>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1 info-item">
-                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+                <div class="d-flex align-items-center bg-light mb-4 p-30">
                     <h1 class="fas fa-exchange-alt text-primary m-0 mr-3"></h1>
-                    <h5 class="font-weight-semi-bold m-0">Giao hàng trong tuần</h5>
+                    <h5 class="font-weight-semi-bold m-0 info-item-text">Giao hàng trong tuần</h5>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1 info-item">
-                <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+                <div class="d-flex align-items-center bg-light mb-4 p-30">
                     <h1 class="fa fa-phone-volume text-primary m-0 mr-3"></h1>
-                    <h5 class="font-weight-semi-bold m-0">Hỗ trợ khách hàng 24/7</h5>
+                    <h5 class="font-weight-semi-bold m-0 info-item-text">Hỗ trợ khách hàng 24/7</h5>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container-fluid pt-4">
+    <div class="container-fluid container-item pt-4">
         <h3 class="section-title position-relative text-uppercase mx-xl-5 mb-4 test"><span class="bg-secondary pr-3">Các sản phẩm</span></h3>
-        <div class="row px-xl-5 pb-3">
+        <div class="row px-xl-5 pb-3 list-cate">
             @foreach ($categories as $c)
-                <div class="col-lg-4 col-md-4 col-sm-6 pb-1">
+                <div class="col-lg-4 col-md-4 col-sm-6 pb-1 category">
                     <a class="d-block text-decoration-none cate-list" href="{{ $c->full_path }}">
                         <div class="cat-item d-flex align-items-center mb-4 cate-item">
-                            <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                                <img class="img-fluid" src="{{ $c->image }}" alt="">
+                            <div class="overflow-hidden cate-img">
+                                <img class="img-fluid" data-src="{{ $c->image }}" src="{{ $c->image }}" alt="{{ $c->name }}">
                             </div>
                             <div class="flex-fill pl-3">
                                 <h6 style="text-transform: capitalize">{{ $c->name }}</h6>
@@ -126,7 +126,7 @@
         </div>
     </div>
     @if ($featured)
-        <div class="container-fluid pt-4 pb-3">
+        <div class="container-fluid container-item pt-4 pb-3">
             <a href="{{ $featured->full_path }}" class="section-title position-relative text-uppercase mx-xl-5 mb-4 link-title test" style="font-size:1.75rem">
                 <span class="bg-secondary pr-3">Sản phẩm hot</span>
             </a>
@@ -136,7 +136,7 @@
                     <div class="col-lg-3 col-md-4 col-sm-6 pb-1 product">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
-                                <img class="img-fluid w-100" src="{{ $p->image }}" alt="{{ $p->name }}">
+                                <img class="img-fluid w-100" data-src="{{ $p->image }}" src="{{ $p->image }}" alt="{{ $p->name }}">
                             </div>
                             <div class="product-text text-center py-3">
                                 <a class="h6 text-decoration-none text-truncate"
@@ -186,14 +186,14 @@
         </div>
     @endif
     @if (count($promotions) > 0)
-        <div class="container-fluid pt-4 pb-3">
+        <div class="container-fluid container-item pt-4 pb-3">
             <div class="row px-xl-5 promotion-list">
                 @foreach ($promotions as $key => $p)
                     @if ($key < 2)
                         @if (count($promotions) == 1)
-                            <div class="col-md-12">
-                                <div class="product-offer mb-30" style="height: 300px;">
-                                    <img class="img-fluid" src="{{ $p->image }}" alt="">
+                            <div class="col-md-12 promotion-index">
+                                <div class="product-offer mb-30">
+                                    <img class="img-fluid" data-src="{{ $p->image }}" src="{{ $p->image }}" alt=""{{ $p->name }}>
                                     <div class="offer-text">
                                         <h6 class="text-white text-uppercase">{{ $p->summary }}</h6>
                                         <h3 class="text-white mb-3">{{ $p->name }}</h3>
@@ -202,9 +202,9 @@
                                 </div>
                             </div>
                         @else
-                            <div class="col-md-6 promotion-{{$key}}">
-                                <div class="product-offer mb-30" style="height: 300px;">
-                                    <img class="img-fluid" src="{{ $p->image }}" alt="">
+                            <div class="col-md-6 promotion-index promotion-{{$key}}">
+                                <div class="product-offer mb-30">
+                                    <img class="img-fluid" data-src="{{ $p->image }}" src="{{ $p->image }}" alt="{{ $p->name }}">
                                     <div class="offer-text">
                                         <h6 class="text-white text-uppercase">{{ $p->summary }}</h6>
                                         <h3 class="text-white mb-3">{{ $p->name }}</h3>
@@ -214,14 +214,14 @@
                             </div>
                         @endif
                     @else
-                    @break
+                        @break
                     @endif
                 @endforeach
             </div>
         </div>
     @endif
     @if ($recent)
-        <div class="container-fluid pt-4 pb-3">
+        <div class="container-fluid container-item pt-4 pb-3">
             <a href="{{ $recent->full_path }}" class="section-title position-relative text-uppercase mx-xl-5 mb-4 link-title test" style="font-size:1.75rem">
                 <span class="bg-secondary pr-3">Sản phẩm mới</span>
             </a>
@@ -231,7 +231,7 @@
                     <div class="col-lg-3 col-md-4 col-sm-6 pb-1 product">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
-                                <img class="img-fluid w-100" src="{{ $p->image }}" alt="{{ $p->name }}">
+                                <img class="img-fluid w-100" data-src="{{ $p->image }}" src="{{ $p->image }}" alt="{{ $p->name }}">
                             </div>
                             <div class="text-center py-3">
                                 <a class="h6 text-decoration-none text-truncate"
@@ -280,14 +280,15 @@
             </div>
         </div>
     @endif
-    <div class="container-fluid py-4">
+    @if (count($bannerSubs) > 0)
+    <div class="container-fluid container-item py-4">
         <div class="row px-xl-5">
             <div class="col">
                 <div class="owl-carousel vendor-carousel">
                     @foreach ($bannerSubs as $b)
                         <a href="{{ $b->href }}">
                             <div class="bg-light p-4">
-                                <img src="{{ $b->image }}">
+                                <img  data-src="{{ $b->image }}" src="{{ $b->image }}">
                             </div>
                         </a>
                     @endforeach
@@ -295,4 +296,5 @@
             </div>
         </div>
     </div>
+    @endif
 @endsection

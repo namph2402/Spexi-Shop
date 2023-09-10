@@ -10788,6 +10788,7 @@ h6 {
 .product-offer {
     position: relative;
     overflow: hidden;
+    height: 300px;
 }
 
 .product-offer img {
@@ -10960,6 +10961,11 @@ h6 {
 
 .list-category-childrens a{
     color: rgba(0, 0, 0, 0.5);
+}
+
+.cate-img {
+    width: 100px;
+    height: 100px;
 }
 
 .cate-item:hover ,.list-category-childrens a:hover {
@@ -11414,16 +11420,17 @@ h6 {
     background-color: #ffcb0d;
 }
 
-.label-price {
-    display: block;
-    width: 50px;
-    margin: 0;
+.banner-item {
+    height: 430px;
 }
 
 .input-price {
-    flex: 1;
+    width: 120px;
     color: #6C757D;
     outline: none;
+    border-top: none;
+    border-right: none;
+    border-left: none;
 }
 
 .link-user {
@@ -11684,6 +11691,10 @@ h6 {
 
 @media (max-width: 768px) {
 
+    .formSearchP .section-title {
+        padding-bottom: 10px;
+    }
+
     .info-item {
         width: 50%;
         flex: 0 0 50%;
@@ -11702,6 +11713,10 @@ h6 {
         max-height: 140px;
     }
 
+    .filter-price {
+        margin-bottom: 10px;
+    }
+
     .search-color,
     .search-size {
         width: 50%;
@@ -11709,15 +11724,65 @@ h6 {
 
     .search-color h5,
     .search-size h5 {
+        padding-top: 10px;
         margin-bottom: 10px !important;
+        background: #F5F5F5
+    }
+
+    .promotion-index {
+        height: 200px !important;
+    }
+
+    .product-offer {
+        height: 100%;
     }
 
     .promotion-list .promotion-1 {
         display: none;
     }
 
+    .list-cate {
+        padding-bottom: 0px !important;
+        padding-top: 0.75rem;
+    }
+
+    .container-item {
+        padding: 1rem !important;
+    }
+
+    .category {
+        width: 50%;
+        padding: 5px;
+    }
+
+    .cate-list {
+        height: 75px;
+    }
+
+    .cate-item {
+        margin: 0 !important;
+    }
+
+    .cate-img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .section-title {
+        font-size: 1.1rem !important;
+        margin-bottom: 0px !important;
+    }
+
     .footer-link, .footer-category {
         width: 50%;
+    }
+
+    .banner-item {
+        height: 300px
+    }
+
+    #header-carousel {
+        margin: 0 !important;
     }
 }
 
@@ -11741,5 +11806,29 @@ h6 {
 
     .product-text-price {
         font-size: 14px;
+    }
+
+    .banner-item {
+        height: 200px
+    }
+
+    .info-list {
+        padding: 0 !important;
+    }
+
+    .info-item {
+        height: 70px;
+    }
+
+    .info-item .p-30 {
+        padding: 10px !important;
+    }
+
+    .info-item-text {
+        font-size: 1rem !important;
+    }
+
+    .animate__fadeInUp {
+        display: none !important;
     }
 }

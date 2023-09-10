@@ -53,8 +53,7 @@
                                     @foreach ($order->details as $d)
                                         <tr>
                                             <td class="text-center p-2">
-                                                <img class="w-100" src="{{ $d->product->image }}"
-                                                    alt="{{ $d->product_name }}">
+                                                <img class="w-100" data-src="{{ $d->product->image }}" src="{{ $d->product->image }}" alt="{{ $d->product_name }}">
                                             </td>
                                             <td class="p-2">{{ $d->product_name }}</td>
                                             <td class="text-center p-2">{{ $d->size }}, {{ $d->color }}</td>

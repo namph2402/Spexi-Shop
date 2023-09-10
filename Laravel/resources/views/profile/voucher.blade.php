@@ -20,12 +20,12 @@
                             <div class="form-voucher-content">
                                 <div class="form-voucher-img">
                                     @if ($v->type == 1)
-                                        <img class="w-100 h-100" src="http://localhost:8000/assets/img/order.webp">
+                                        <img class="w-100 h-100" src="http://localhost:8000/assets/img/icon/order.webp">
                                         <div class="form-voucher-note">
                                             <span>Giảm hàng</span>
                                         </div>
                                     @else
-                                        <img class="w-100 h-100" src="http://localhost:8000/assets/img/ship.webp">
+                                        <img class="w-100 h-100" src="http://localhost:8000/assets/img/icon/ship.webp">
                                         <div class="form-voucher-note">
                                             <span>Free ship</span>
                                         </div>
