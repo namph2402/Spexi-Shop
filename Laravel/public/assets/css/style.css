@@ -11689,6 +11689,10 @@ h6 {
     font-weight: 600 !important;
 }
 
+.product-text {
+    text-transform: capitalize;
+}
+
 @media (max-width: 768px) {
 
     .formSearchP .section-title {

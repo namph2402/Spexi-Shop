@@ -17,7 +17,7 @@
     <div class="container-fluid">
         @if ($promotionMain->image != null)
             <div class="row px-xl-5 pb-5">
-                <img class="col-12 banner-promotion" data-src="{{ $promotionMain->image }}" src="{{ $promotionMain->image }}" alt="{{ $promotionMain->name }}">
+                <img class="col-12 banner-promotion" data-src="{{ $promotionMain->image }}" src="{{ $promotionMain->image }}" alt="{{ $promotionMain->name }}" style="max-height: 400px;">
             </div>
         @endif
         <div class="row px-xl-5 pb-5">

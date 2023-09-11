@@ -233,7 +233,7 @@
                             <div class="product-img position-relative overflow-hidden">
                                 <img class="img-fluid w-100" data-src="{{ $p->image }}" src="{{ $p->image }}" alt="{{ $p->name }}">
                             </div>
-                            <div class="text-center py-3">
+                            <div class="product-text text-center py-3">
                                 <a class="h6 text-decoration-none text-truncate"
                                     href="{{ $p->full_path }}">{{ $p->name }}</a>
                                 <div class="d-flex align-items-center justify-content-center mt-2">

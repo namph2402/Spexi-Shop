@@ -43,8 +43,8 @@
 
             <div class="col-lg-7 h-auto mb-30">
                 <div class="h-100 bg-light p-30">
-                    <h3>{{ $product->name }}</h3>
-                    <h4 class="font-weight-semi-bold mb-4" style="color: red">
+                    <h3 class="product-text">{{ $product->name }}</h3>
+                    <h4 class="font-weight-semi-bold mb-4" style="color: red; font-weight: 600">
                         {{ number_format($product->sale_price, 0, '.', '.') }}đ</h4>
                     <div class="my-4 detail_summary">{!! $product->summary !!}</div>
                     <form action="/cart/addItem" method="post" id="formDetail" class="form mb-2 mt3">
