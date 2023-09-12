@@ -180,6 +180,9 @@
                             </div>
                         </div>
                     </div>
+                    @if ($key == 7)
+                    @break
+                    @endif
                 @endforeach
                 </div>
             </div>
@@ -275,6 +278,9 @@
                             </div>
                         </div>
                     </div>
+                    @if ($key == 7)
+                    @break
+                    @endif
                 @endforeach
                 </div>
             </div>

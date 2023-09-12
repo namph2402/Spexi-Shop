@@ -11693,6 +11693,16 @@ h6 {
     text-transform: capitalize;
 }
 
+.content-product {
+    text-indent: 20px;
+}
+
+.content-product p img {
+    max-width: 80%;
+    margin: 25px auto !important;
+    display: block;
+}
+
 @media (max-width: 768px) {
 
     .formSearchP .section-title {

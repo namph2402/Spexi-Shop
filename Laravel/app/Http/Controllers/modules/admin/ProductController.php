@@ -217,7 +217,7 @@ class ProductController extends RestController
         if (empty($model)) {
             return $this->errorNotFound();
         }
-        
+
         $image = $model->image;
 
         try {
@@ -619,6 +619,51 @@ class ProductController extends RestController
                         $dict_products[$product->code] = $product;
                     }
                 }
+                return $this->success([]);
+            } catch (\Exception $e) {
+                Log::error($e);
+                DB::rollBack();
+                return $this->error($e->getMessage());
+            }
+            sleep(0.5);
+        }
+    }
+
+    public function importProduct(Request $request)
+    {
+        set_time_limit(0);
+
+        $file = $request->file('file');
+        $newData = OfficeUtil::readXLSX($file->getRealPath(), 0, 2, 'A', -1, 'I');
+
+        if (!empty($newData)) {
+            try {
+                DB::beginTransaction();
+                foreach ($newData as $row) {
+                    $codeValue = trim($row[0]);
+                    $nameValue = trim($row[1]);
+                    $categoryValue = trim($row[2]);
+                    $priceValue = intval($row[3]);
+                    $summaryValue = trim($row[4]);
+
+                    $cate = $this->categoryRepository->find([WhereClause::query('name', $categoryValue)]);
+                    $lastItem = $this->repository->find([], 'order:desc');
+                    $order = $lastItem->order + 1;
+
+                    $this->repository->create([
+                        'category_id' => $cate->id,
+                        'category_slug' => $cate->slug,
+                        'name' => $nameValue,
+                        'code' => $codeValue,
+                        'slug' => Str::slug($nameValue),
+                        'image' => 'null',
+                        'summary' => $summaryValue,
+                        'sale_price' => $priceValue,
+                        'price' => $priceValue,
+                        'order' => $order,
+                    ]);
+                }
+                DB::commit();
                 return $this->success([]);
             } catch (\Exception $e) {
                 Log::error($e);

@@ -107,7 +107,9 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="tab-pane-1">
                             <h4 class="mb-3">Mô tả</h4>
-                            {!! $product->article->content !!}
+                            <div class="content-product">
+                                {!! $product->article->content ?? '' !!}
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="tab-pane-2">
                             <div class="row">
@@ -145,6 +147,7 @@
                                         </div>
                                     @endforeach
                                 </div>
+                                @if ($product->article != null)
                                 <form action="/comment" method="POST" class="col-md-6" id="formComment">
                                     <h4 class="mb-4">Thêm đánh giá</h4>
                                     <div class="d-flex my-3" style="align-items: center">
@@ -172,6 +175,7 @@
                                     </div>
                                     @csrf
                                 </form>
+                                @endif
                             </div>
                         </div>
                     </div>
