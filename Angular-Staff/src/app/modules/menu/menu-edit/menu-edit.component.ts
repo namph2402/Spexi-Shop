@@ -30,7 +30,7 @@ export class MenuEditComponent extends AbstractModalComponent<MenuMeta> {
   }
 
   loadAllMenu() {
-    return this.service.loadAll();
+    return this.service.loadByParams({group_id: this.model.group_id});
   }
 
   buildForm(): FormGroup {
