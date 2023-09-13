@@ -211,23 +211,44 @@
                                             @endif
                                         </div>
                                         @php
-                                            $medium = 0;
-                                            if (count($r->product->comments) > 0) {
-                                                $total = 0;
-                                                foreach ($r->product->comments as $c) {
-                                                    $total += $c->rating;
-                                                }
-                                                $medium = round($total / count($r->product->comments), 1);
+                                        $medium = 0;
+                                        $value = 0;
+                                        if (count($r->product->comments) > 0) {
+                                            $total = 0;
+                                            foreach ($r->product->comments as $c) {
+                                                $total += $c->rating;
                                             }
-                                        @endphp
-                                        @if ($medium > 0)
-                                            <div class="rating-icon">
-                                                <span class="rating-icon-value">
-                                                    <small class="text-primary fas fa-star"></small>
-                                                    <p class="rating-icon-number">{{$medium}}</p>
-                                                </span>
-                                            </div>
-                                        @endif
+                                            $medium = round($total / count($r->product->comments), 1);
+                                        }
+                                        if(count($r->product->warehouseViews) > 0) {
+                                            foreach ($r->product->warehouseViews as $w) {
+                                                $value += $w->use_quantity;
+                                            }
+                                            if($value < 1000) {
+                                                $quantity = $value;
+                                            } else {
+                                                $quantity = round($value / 1000, 1)."K";
+                                            }
+                                        }
+                                    @endphp
+                                    @if ($medium > 0 || $value > 0)
+                                        <div class="rating-icon">
+                                            @if ($medium > 0)
+                                            <span class="rating-icon-value">
+                                                <small class="text-primary fas fa-star"></small>
+                                                <p class="rating-icon-number">{{$medium}}</p>
+                                            </span>
+                                            @endif
+                                            @if ($medium > 0 && $value > 0)
+                                            <span style="color: white; margin:0 3px">|</span>
+                                            @endif
+                                            @if ($value > 0)
+                                            <span class="rating-icon-value">
+                                                <p class="rating-icon-number">Đã bán: {{ $quantity }}</p>
+                                            </span>
+                                            @endif
+                                        </div>
+                                    @endif
                                         @if ($r->product->sale_price < $r->product->price)
                                             @php
                                                 $precent = round(100 - ($r->product->sale_price / $r->product->price * 100));
@@ -287,6 +308,7 @@
                                     </div>
                                     @php
                                         $medium = 0;
+                                        $value = 0;
                                         if (count($c->comments) > 0) {
                                             $total = 0;
                                             foreach ($c->comments as $cm) {
@@ -294,13 +316,33 @@
                                             }
                                             $medium = round($total / count($c->comments), 1);
                                         }
+                                        if(count($c->comments) < 0) {
+                                            foreach ($c->warehouseViews as $w) {
+                                                $value += $w->use_quantity;
+                                            }
+                                            if($value < 1000) {
+                                                $quantity = $value;
+                                            } else {
+                                                $quantity = round($value / 1000, 1)."K";
+                                            }
+                                        }
                                     @endphp
-                                    @if ($medium > 0)
+                                    @if ($medium > 0 || $value > 0)
                                         <div class="rating-icon">
-                                            <span class="rating-icon-value">
-                                                <small class="text-primary fas fa-star"></small>
-                                                <p class="rating-icon-number">{{$medium}}</p>
+                                            @if ($medium > 0)
+                                                <span class="rating-icon-value">
+                                                    <small class="text-primary fas fa-star"></small>
+                                                    <p class="rating-icon-number">{{$medium}}</p>
                                             </span>
+                                            @endif
+                                            @if ($medium > 0 && $value > 0)
+                                                <span style="color: white; margin:0 3px">|</span>
+                                            @endif
+                                            @if ($value > 0)
+                                                <span class="rating-icon-value">
+                                                    <p class="rating-icon-number">Đã bán: {{ $quantity }}</p>
+                                                </span>
+                                            @endif
                                         </div>
                                     @endif
                                     @if ($c->sale_price < $c->price)

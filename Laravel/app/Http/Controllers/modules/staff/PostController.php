@@ -101,10 +101,11 @@ class PostController extends RestController
         try {
             DB::beginTransaction();
             $model = $this->repository->create($attributes);
+            Log::info($user);
             if ($model) {
                 $this->articleRepository->create([
                     'content' => $request->content,
-                    'author_name' => $user->name,
+                    'author_name' => $user->fullname,
                     'articleable_type' => 'posts',
                     'articleable_id' => $model->id
                 ]);

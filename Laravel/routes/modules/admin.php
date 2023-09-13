@@ -96,7 +96,7 @@ Route::group(['middleware' => ['auth.admin']], function () {
 
     // Product
     Route::get('products/loadTag', 'ProductController@loadTag');
-    Route::post('products/import', 'ProductController@importProduct');
+    Route::post('products/import', 'ProductController@import');
     Route::get('products/export', 'ProductController@export');
     Route::resource('products', 'ProductController')->except(['update']);
     Route::group(['prefix' => 'products/{id}'], function () {

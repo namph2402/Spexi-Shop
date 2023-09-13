@@ -136,7 +136,7 @@ class ProductController extends RestController
             $arrSize[$item->size_id] = $item->size_id;
             $arrColor[$item->color_id] = $item->color_id;
         }
-        
+
         $sizePs = $this->sizeRepository->get([WhereClause::queryIn('id', $arrSize)]);
         $colorPs = $this->colorRepository->get([WhereClause::queryIn('id', $arrColor)]);
 

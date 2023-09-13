@@ -92,7 +92,7 @@
                         <div class="navbar-nav mr-auto py-0">
                             @foreach ($menus as $m)
                                 @if (count($m->childrens) == 0)
-                                    @if (Request::url() == $m->full_path)
+                                    @if (Request::url() == $m->full_path || isset($url) == $m->full_path)
                                         <a href="{{ $m->full_path }}"
                                             class="nav-item nav-link active">{{ $m->name }}</a>
                                     @else

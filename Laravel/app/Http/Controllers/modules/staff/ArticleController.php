@@ -34,7 +34,7 @@ class ArticleController extends RestController
             'articleable_type',
             'content'
         ]);
-        $attributes['author_name'] = $user->name;
+        $attributes['author_name'] = $user->fullname;
 
         try {
             DB::beginTransaction();

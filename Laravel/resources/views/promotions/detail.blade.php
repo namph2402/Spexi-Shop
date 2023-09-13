@@ -150,10 +150,10 @@
                                 @if ($products->previousPageUrl())
                                     <li class="page-item">
                                         <a class="page-link" style="cursor:pointer"
-                                            onclick="setParamsPage('page','{{ (int) Request::get('page') - 1 }}')">Trước</a>
+                                            onclick="setParamsPage('page','{{ (int) Request::get('page') - 1 }}')"><i class="fas fa-chevron-circle-left"></i></a>
                                     </li>
                                 @else
-                                    <li class="page-item disabled"><a class="page-link">Trước</a></li>
+                                    <li class="page-item disabled"><a class="page-link"><i class="fas fa-chevron-circle-left"></i></a></li>
                                 @endif
                                 @for ($i = 1; $i <= $products->lastPage(); $i++)
                                     @if ($products->currentPage() == $i)
@@ -161,24 +161,25 @@
                                             <a class="page-link">{{ $i }}</a>
                                         </li>
                                     @else
-                                        <li class="page-item">
-                                            <a class="page-link" style="cursor:pointer"
-                                                onclick="setParamsPage('page','{{ $i }}')">{{ $i }}</a>
-                                        </li>
+                                        @if ($products->currentPage() + 3 >= $i && $products->currentPage() - 3 <= $i)
+                                            <li class="page-item">
+                                                <a class="page-link" style="cursor:pointer" onclick="setParamsPage('page','{{ $i }}')">{{ $i }}</a>
+                                            </li>
+                                        @endif
                                     @endif
                                 @endfor
                                 @if ($products->nextPageUrl())
                                     <li class="page-item">
                                         @if ((int) Request::get('page') == 0)
                                             <a class="page-link" style="cursor:pointer"
-                                                onclick="setParamsPage('page','{{ (int) Request::get('page') + 2 }}')">Sau</a>
+                                                onclick="setParamsPage('page','{{ (int) Request::get('page') + 2 }}')"><i class="fas fa-chevron-circle-right"></i></a>
                                         @else
                                             <a class="page-link" style="cursor:pointer"
-                                                onclick="setParamsPage('page','{{ (int) Request::get('page') + 1 }}')">Sau</a>
+                                                onclick="setParamsPage('page','{{ (int) Request::get('page') + 1 }}')"><i class="fas fa-chevron-circle-right"></i></a>
                                         @endif
                                     </li>
                                 @else
-                                    <li class="page-item disabled"><a class="page-link">Sau</a></li>
+                                    <li class="page-item disabled"><a class="page-link"><i class="fas fa-chevron-circle-right"></i></a></li>
                                 @endif
                             </ul>
                         </nav>
