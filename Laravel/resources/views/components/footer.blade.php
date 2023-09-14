@@ -2,7 +2,7 @@
     <div class="container-fluid bg-dark text-secondary mt-3 pt-3 wow fadeIn" data-wow-delay="0.1s">
         <div class="row px-xl-5 pt-4">
             <div class="col-lg-4 col-md-12 mb-4 pr-3 pr-xl-5">
-                <h5 class="text-secondary text-uppercase mb-4">{{ $data['Name'] }} shop</h5>
+                <h5 class="text-primary text-uppercase mb-4">{{ $data['Name'] }} shop</h5>
                 <p class="mb-4">{{ $data['Introduce'] }}</p>
                 <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>{{ $data['Address'] }}</p>
                 <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>{{ $data['Email'] }}</p>
@@ -11,7 +11,7 @@
             <div class="col-lg-8 col-md-12">
                 <div class="row">
                     <div class="col-md-4 mb-4 footer-link">
-                        <h5 class="text-secondary text-uppercase mb-4">Liên kết</h5>
+                        <h5 class="text-primary text-uppercase mb-4">Liên kết</h5>
                         <div class="d-flex flex-column justify-content-start">
                             @foreach ($links as $l)
                                 <a class="text-secondary mb-2" href="{{ $l->full_path }}"><i
@@ -20,7 +20,7 @@
                         </div>
                     </div>
                     <div class="col-md-4 mb-4 footer-category">
-                        <h5 class="text-secondary text-uppercase mb-4">Danh mục</h5>
+                        <h5 class="text-primary text-uppercase mb-4">Danh mục</h5>
                         <div class="d-flex flex-column justify-content-start">
                             @foreach ($categories as $c)
                                 <a class="text-secondary mb-2" href="{{ $c->full_path }}"><i
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <div class="col-md-4 mb-4">
-                        <h5 class="text-secondary text-uppercase mb-4">NHẬN THÔNG TIN</h5>
+                        <h5 class="text-primary text-uppercase mb-4">NHẬN THÔNG TIN</h5>
                         <p>Theo dõi để được cập nhật tin tức</p>
                         <form action="/form-data" id="formEmail" method="POST" class="footer-mail">
                             <div class="input-group">

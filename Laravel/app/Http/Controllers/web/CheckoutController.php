@@ -108,7 +108,7 @@ class CheckoutController extends RestController
             }
         }
 
-        $payment = $this->paymentMethodRepository->get([WhereClause::query('status', 1)]);
+        $payment = $this->paymentMethodRepository->get([WhereClause::query('status', 1)],'id:asc');
 
         foreach ($itemCheckout as $item) {
             $total += $item->amount;

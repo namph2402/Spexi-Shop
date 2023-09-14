@@ -15,7 +15,6 @@
     };
     spinner();
 
-    // Toast
     var toast = function () {
         setTimeout(function () {
             if ($('#toast-msg').length > 0) {
@@ -24,6 +23,22 @@
         }, 4000);
     };
     toast();
+
+    var sendCode = function () {
+        let remainTimeout = 40;
+        if ($('#timeCode').length > 0) {
+            setInterval(() => {
+                remainTimeout--;
+                if (remainTimeout > 0) {
+                    document.getElementById("timeSecond").innerHTML = remainTimeout + 's';
+                } else if (remainTimeout == 0) {
+                    document.querySelector("#timeCode").remove();
+                    document.getElementById("sendCode").style.display = 'block';
+                }
+            }, 1000);
+        }
+    };
+    sendCode();
 
     $(document).ready(function () {
         function toggleNavbarMethod() {
@@ -37,7 +52,6 @@
                 $('.navbar .dropdown').off('mouseover').off('mouseout');
             }
         }
-
         toggleNavbarMethod();
         $(window).resize(toggleNavbarMethod);
     });
@@ -116,7 +130,7 @@
                 newVal = 0;
             }
         }
-        //Update giỏ hàng
+
         Checkout.getInstance().updateQuantity(cartId, newVal, (data) => {
             if (data.length == 0) {
                 location.reload();
@@ -125,11 +139,10 @@
                 const amount = VND.format(data.amount);
                 const totalAmount = VND.format(data.totalAmount);
                 const name = 'amountItem' + `${cartId}`;
-                document.getElementById(name).innerHTML = `${amount} đ`;
-                document.getElementById("totalAmount").innerHTML = `${totalAmount} đ`;
+                document.getElementById(name).innerHTML = `${amount}đ`;
+                document.getElementById("totalAmount").innerHTML = `${totalAmount}đ`;
             }
         })
-
         a.parent().parent().find('input').val(newVal);
     });
 
@@ -356,11 +369,11 @@
             const regexName = new RegExp('^(?=.*[a-zA-Z0-9]+)[a-zA-Z0-9]*$');
             const regexEmail = new RegExp('[A-Za-z0-9._%-]+@[A-Za-z0-9._%-]+\\.[a-z]{2,3}');
             if (username == "" || regexName.test(username) == false) {
-                document.getElementById("errMsg").innerHTML = `Tên đăng nhập chỉ chứa chữ cái, số`;
+                document.getElementById("errMsg").innerHTML = `Tênđăng nhập chỉ chứa chữ cái, số`;
                 e.preventDefault();
             } else {
                 if (email == "" || regexEmail.test(email) == false) {
-                    document.getElementById("errMsg").innerHTML = `Email không đúng`;
+                    document.getElementById("errMsg").innerHTML = `Email khôngđúng`;
                     e.preventDefault();
                 } else {
                     if (password.trim().length < 6) {
@@ -408,6 +421,12 @@ function setParamsPage(name, value) {
     window.location.search = urlParams
 }
 
+function sendCapcha(url) {
+    const email = document.getElementById('emailCapcha').value;
+    const href = `/send-capcha?email=${email}`
+    window.location.href = url + href;
+}
+
 function changeFilter() {
     display = document.getElementById("formSearchP").style.display;
     if(display == '' || display == 'none') {
@@ -447,13 +466,13 @@ function getFee(status) {
         Checkout.getInstance().getShipFee(provinceId, districtId, wardId, (data) => {
             const VND = new Intl.NumberFormat('vi-VN', { tyle: 'currency', currency: 'VND', });
             const shipping_fee = VND.format(data.fee);
-            document.getElementById("shippingFeeView").innerHTML = `${shipping_fee} đ`;
+            document.getElementById("shippingFeeView").innerHTML = `${shipping_fee}đ`;
             document.getElementById("shipping_fee").value = `${data['fee']}`;
         })
     } else {
         const VND = new Intl.NumberFormat('vi-VN', { tyle: 'currency', currency: 'VND', });
         const shipping_fee = VND.format('0');
-        document.getElementById("shippingFeeView").innerHTML = `${shipping_fee} đ`;
+        document.getElementById("shippingFeeView").innerHTML = `${shipping_fee}đ`;
         document.getElementById("shipping_fee").value = `0`;
     }
     this.getTotal();
@@ -474,11 +493,11 @@ function applyVoucher() {
                 const shipView = VND.format(dataShip);
                 const discountView = VND.format(dataDiscount);
                 document.getElementById("amountDiscount").value = `${amount}`;
-                document.getElementById("shippingFeeView").innerHTML = `${shipView} đ`;
+                document.getElementById("shippingFeeView").innerHTML = `${shipView}đ`;
                 document.getElementById("shipping_fee").value = `${dataShip}`;
                 document.getElementById("discountView").ind("discount").value = `${dataDiscount}`;
                 document.getElementById("voucherId").value = null;
-                this.getTotal();nerHTML = `${discountView} đ`;
+                this.getTotal(); nerHTML = `${discountView}đ`;
                 document.getElementByI
                 $('#errVoucher').toggleClass("view-err");
                 setTimeout(() => [$('#errVoucher').toggleClass("view-err")], 2000);
@@ -491,7 +510,7 @@ function applyVoucher() {
                         const amountNew = amount - totalDiscount;
                         const discountView = VND.format(totalDiscount);
                         document.getElementById("amountDiscount").value = `${amountNew}`;
-                        document.getElementById("discountView").innerHTML = `${discountView} đ`;
+                        document.getElementById("discountView").innerHTML = `${discountView}đ`;
                         document.getElementById("discount").value = `${totalDiscount}`;
                         this.getTotal();
                     }
@@ -500,9 +519,9 @@ function applyVoucher() {
                     const shipView = VND.format(dataShip);
                     const discountView = VND.format(dataDiscount);
                     document.getElementById("amountDiscount").value = `${amount}`;
-                    document.getElementById("shippingFeeView").innerHTML = `${shipView} đ`;
+                    document.getElementById("shippingFeeView").innerHTML = `${shipView}đ`;
                     document.getElementById("shipping_fee").value = `${dataShip}`;
-                    document.getElementById("discountView").innerHTML = `${discountView} đ`;
+                    document.getElementById("discountView").innerHTML = `${discountView}đ`;
                     document.getElementById("discount").value = `${dataDiscount}`;
                     document.getElementById("voucherId").value = null;
                     this.getTotal();
@@ -515,9 +534,9 @@ function applyVoucher() {
         const shipView = VND.format(dataShip);
         const discountView = VND.format(dataDiscount);
         document.getElementById("amountDiscount").value = `${amount}`;
-        document.getElementById("shippingFeeView").innerHTML = `${shipView} đ`;
+        document.getElementById("shippingFeeView").innerHTML = `${shipView}đ`;
         document.getElementById("shipping_fee").value = `${dataShip}`;
-        document.getElementById("discountView").innerHTML = `${discountView} đ`;
+        document.getElementById("discountView").innerHTML = `${discountView}đ`;
         document.getElementById("discount").value = `${dataDiscount}`;
         document.getElementById("voucherId").value = null;
         this.getTotal();
@@ -532,7 +551,7 @@ function getTotal() {
     const totalView = VND.format(total);
     console.log(amount);
     document.getElementById("total_amount").value = `${total}`;
-    document.getElementById("totalAmountView").innerHTML = `${totalView} đ`;
+    document.getElementById("totalAmountView").innerHTML = `${totalView}đ`;
 }
 
 Array.prototype.forEach.call(document.querySelectorAll('.inputfile'), function (input) {

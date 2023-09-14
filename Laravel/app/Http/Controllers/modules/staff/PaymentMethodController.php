@@ -21,7 +21,7 @@ class PaymentMethodController extends RestController
         $clauses = [];
         $with = [];
         $withCount = [];
-        $orderBy = $request->input('orderBy', 'id:desc');
+        $orderBy = $request->input('orderBy', 'id:asc');
 
         if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));

@@ -7,7 +7,6 @@ use App\Http\Controllers\RestController;
 use App\Jobs\RetrievalPassword;
 use App\Jobs\SendMail;
 use App\Models\StoreInformation;
-use App\Models\User;
 use App\Repository\CartRepositoryInterface;
 use App\Repository\UserProfileRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
@@ -75,12 +74,12 @@ class AccountController extends RestController
         $checkUser = $this->repository->find([WhereClause::query('username', $username)]);
         $checkEmail = $this->repository->find([WhereClause::query('email', $email)]);
 
-        if ($checkUser != null) {
+        if ($checkUser && $checkUser->email_verified_at != null) {
             return redirect()->back()->with('msg_error', 'Tên đăng nhập đã tồn tại')->withInput();
-        } else if ($checkEmail != null && $checkEmail->email_verified_at != null) {
+        } else if ($checkEmail && $checkEmail->email_verified_at != null) {
             return redirect()->back()->with('msg_error', 'Email đã đăng ký')->withInput();
         } else {
-            if ($checkEmail != null && $checkEmail->email_verified_at == null) {
+            if ($checkEmail && $checkEmail->email_verified_at == null) {
                 $this->repository->delete($checkEmail->id);
             }
             $attributes = $request->only([
@@ -94,23 +93,44 @@ class AccountController extends RestController
             $user = $this->repository->create($attributes);
             if ($user) {
                 SendMail::dispatch($email, $code, $name);
-                return redirect('check-capcha')->with('email', $email);
+                return view('pages.capcha', compact('email'));
+            } else {
+                return $this->error('Không thể tạo tài khoản');
             }
         }
     }
 
-    public function viewCapcha(Request $request)
+    public function sendCapcha(Request $request)
     {
-        // if(!$request->has('email')) {
-        //     return redirect('sign-up');
-        // }
-        $email = $request->email;
-        return view('pages.capcha', compact('email'));
+        if(!$request->has('email')) {
+            return redirect('sign-up');
+        }
+
+        $name = StoreInformation::whereName('name')->first()->value;
+        $email = $request->input('email');
+
+        $checkEmail = $this->repository->find([WhereClause::query('email', $email)]);
+        if(!$checkEmail) {
+            return redirect('sign-up')->with('msg_error', 'Email chưa được đăng ký');
+        }
+
+        $code = rand(1000, 9999);
+        $user = $this->repository->update($checkEmail->id,[
+            'code' => $code
+        ]);
+        if ($user) {
+            SendMail::dispatch($email, $code, $name);
+            return view('pages.capcha', compact('email'));
+        }
+
     }
 
     public function checkCapcha(Request $request)
     {
-        dd($request);
+        if(!$request->has('email')) {
+            return redirect('sign-up');
+        }
+
         $date = Date("Y-m-d");
         $email = $request->email;
 
@@ -130,7 +150,8 @@ class AccountController extends RestController
             }
             return $this->successView('/sign-in', 'Đã tạo tài khoản thành công');
         } else {
-            return redirect()->back()->with('msg_error', 'Mã xác nhận không đúng')->with('email', $email)->withInput();
+            $msg = "Mã xác nhận không đúng";
+            return view('pages.capcha',compact('email', 'msg'));
         }
     }
 
@@ -142,7 +163,7 @@ class AccountController extends RestController
     public function retrievalPassword(Request $request)
     {
         $name = StoreInformation::whereName('name')->first()->value;
-        $user = User::where("username", "=", $request->user)->orWhere("email", "=", $request->user)->first();
+        $user = $this->repository->find([WhereClause::orQuery([WhereClause::query('username', $request->user), WhereClause::query('email', $request->user)])]);
 
         if(!$user) {
             return $this->error('Tài khoản hoặc email không đúng');

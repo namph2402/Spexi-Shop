@@ -79,7 +79,6 @@ class RestController extends Controller implements RestApiController
         return redirect()->back()->with('msg_error', $message)->withInput();
     }
 
-
     public function index(Request $request)
     {
         return $this->notSupport();

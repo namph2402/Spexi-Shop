@@ -23,7 +23,7 @@ Route::post('/sign-up', 'AccountController@checkSignup');
 Route::get('/retrieval', 'AccountController@retrieval');
 Route::post('/retrieval', 'AccountController@retrievalPassword');
 
-Route::get('/check-capcha', 'AccountController@viewCapcha');
+Route::get('/send-capcha', 'AccountController@sendCapcha');
 Route::post('/check-capcha', 'AccountController@checkCapcha');
 
 Route::get('/products', 'ProductController@index');

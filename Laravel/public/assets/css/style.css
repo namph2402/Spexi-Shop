@@ -61,7 +61,7 @@ body {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #6C757D;
+    color: #5c6268;
     text-align: left;
     background-color: #F5F5F5;
 }
@@ -11020,7 +11020,7 @@ h6 {
 
 .err-text {
     position: absolute;
-    color: red;
+    color: #ff4a4a;
     top: -20px;
 }
 
@@ -11192,6 +11192,15 @@ h6 {
 #eye-re i {
     padding-right: 0;
     cursor: pointer;
+}
+
+.btn-send {
+    display: none;
+    border: none !important;
+    background: none !important;
+    color: #FFD333 !important;
+    margin: auto;
+    outline: none;
 }
 
 .btn-login,

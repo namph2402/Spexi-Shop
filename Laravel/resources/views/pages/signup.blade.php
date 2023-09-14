@@ -42,7 +42,7 @@
             </div>
             @csrf
             <div class="mt-3" style="text-align: center">
-                <span>Bạn đã có tài khoản? <a href="/sign-in">Đăng nhập</a></span>
+                <span style="color: #d3d3d3">Bạn đã có tài khoản? <a href="/sign-in">Đăng nhập</a></span>
             </div>
         </form>
     </div>
