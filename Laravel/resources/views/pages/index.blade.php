@@ -125,14 +125,14 @@
             @endforeach
         </div>
     </div>
-    @if ($featured)
+    @if (count($featured))
         <div class="container-fluid container-item pt-4 pb-3">
-            <a href="{{ $featured->full_path }}" class="section-title position-relative text-uppercase mx-xl-5 mb-4 link-title test" style="font-size:1.75rem">
+            <a href="{{ $tagHot->full_path }}" class="section-title position-relative text-uppercase mx-xl-5 mb-4 link-title test" style="font-size:1.75rem">
                 <span class="bg-secondary pr-3">Sản phẩm hot</span>
             </a>
             <div class="row px-xl-5">
                 <div class="col-12 pb-2 d-flex flex-wrap p-0 product-list">
-                @foreach ($featured->productViews as $key => $p)
+                @foreach ($featured as $p)
                     <div class="col-lg-3 col-md-4 col-sm-6 pb-1 product wow fadeInUp" data-wow-delay="0.1s">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
@@ -244,14 +244,14 @@
             </div>
         </div>
     @endif
-    @if ($recent)
+    @if (count($recent) > 0)
         <div class="container-fluid container-item pt-4 pb-3">
-            <a href="{{ $recent->full_path }}" class="section-title position-relative text-uppercase mx-xl-5 mb-4 link-title test" style="font-size:1.75rem">
+            <a href="{{ $tagNew->full_path }}" class="section-title position-relative text-uppercase mx-xl-5 mb-4 link-title test" style="font-size:1.75rem">
                 <span class="bg-secondary pr-3">Sản phẩm mới</span>
             </a>
             <div class="row px-xl-5">
                 <div class="col-12 pb-2 d-flex flex-wrap p-0 product-list">
-                @foreach ($recent->productViews as $key => $p)
+                @foreach ($recent as $p)
                     <div class="col-lg-3 col-md-4 col-sm-6 pb-1 product wow fadeInUp" data-wow-delay="0.1s">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
@@ -320,9 +320,6 @@
                             </div>
                         </div>
                     </div>
-                    @if ($key == 7)
-                    @break
-                    @endif
                 @endforeach
                 </div>
             </div>
@@ -341,6 +338,41 @@
                         </a>
                     @endforeach
                 </div>
+            </div>
+        </div>
+    </div>
+    @endif
+    @if (count($posts))
+    <div class="container-fluid container-item pt-4 pb-3">
+        <a href="/posts" class="section-title position-relative text-uppercase mx-xl-5 mb-4 link-title test" style="font-size:1.75rem">
+            <span class="bg-secondary pr-3">Bài viết mới</span>
+        </a>
+        <div class="row px-xl-5">
+            <div class="col-12 pb-2 d-flex flex-wrap p-0 product-list">
+            @foreach ($posts as $p)
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1 product wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="product-item bg-light mb-4">
+                        <div class="product-img position-relative overflow-hidden">
+                            <img class="img-fluid w-100 post-img-index" data-src="{{ $p->image }}" src="{{ $p->image }}" alt="{{ $p->name }}" style="height: 250px; object-fit: cover;">
+                        </div>
+                        <div class="product-text text-center py-3">
+                            <a class="h6 text-decoration-none text-truncate"
+                                href="{{ $p->full_path }}">{{ $p->name }}</a>
+                            <div class="d-flex align-items-center justify-content-between mt-2" style="padding: 0 10px; font-size: 15px">
+                                <div>
+                                    <i class="fas fa-user" style="margin-right: 5px"></i>{{$p->article->author_name}}
+                                </div>
+                                <div>
+                                    <i class="fas fa-comment" style="margin-right: 5px"></i>{{count($p->comments)}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if ($key == 3)
+                @break
+                @endif
+            @endforeach
             </div>
         </div>
     </div>

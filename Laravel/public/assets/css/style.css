@@ -11289,6 +11289,14 @@ h6 {
     border-radius: 5px;
 }
 
+.blog-item img {
+    transition: .5s;
+}
+
+.blog-item:hover img {
+    transform: scale(1.05);
+}
+
 .blog-item-info {
     margin: 10px 0;
 }
@@ -11332,12 +11340,15 @@ h6 {
 .post-img {
     width: 35%;
     border-radius: 10px;
+    overflow: hidden;
 }
 
-.post-image {
-    border-radius: 10px;
-    width: 100%;
-    height: 100%;
+.post-item .post-img img {
+    transition: .5s;
+}
+
+.post-item:hover .post-img img {
+    transform: scale(1.1);
 }
 
 .post-title {
@@ -11868,5 +11879,9 @@ h6 {
 
     .animate__fadeInUp {
         display: none !important;
+    }
+
+    .post-img-index {
+        height: 150px !important;
     }
 }

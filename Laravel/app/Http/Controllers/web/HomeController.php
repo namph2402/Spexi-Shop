@@ -5,6 +5,7 @@ namespace App\Http\Controllers\web;
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
 use App\Repository\BannerRepositoryInterface;
+use App\Repository\PostRepositoryInterface;
 use App\Repository\ProductCategoryRepositoryInterface;
 use App\Repository\ProductRepositoryInterface;
 use App\Repository\ProductTagRepositoryInterface;
@@ -19,6 +20,7 @@ class HomeController extends RestController
     protected $tagRepository;
     protected $promotionRepository;
     protected $storePostRepository;
+    protected $postRepository;
 
     public function __construct(
         ProductRepositoryInterface         $repository,
@@ -26,6 +28,7 @@ class HomeController extends RestController
         ProductTagRepositoryInterface      $tagRepository,
         PromotionRepositoryInterface       $promotionRepository,
         BannerRepositoryInterface          $bannerRepository,
+        PostRepositoryInterface            $postRepository,
         StorePostRepositoryInterface       $storePostRepository)
     {
         parent::__construct($repository);
@@ -34,6 +37,7 @@ class HomeController extends RestController
         $this->tagRepository = $tagRepository;
         $this->promotionRepository = $promotionRepository;
         $this->storePostRepository = $storePostRepository;
+        $this->postRepository = $postRepository;
     }
 
     public function index(Request $request)
@@ -47,10 +51,23 @@ class HomeController extends RestController
         })], 'order:asc');
 
         $categories = $this->categoryRepository->get([WhereClause::query('parent_id', 0)], 'order:asc', ['childrens.products.warehouses', 'products.warehouses']);
-        $featured = $this->tagRepository->find([WhereClause::query('name', 'Sản phẩm hot')], null, ['productViews']);
-        $recent = $this->tagRepository->find([WhereClause::query('name', 'Sản phẩm mới')], null, ['productViews']);
-        $promotions = $this->promotionRepository->get([WhereClause::query('status', 1), WhereClause::queryIn('type',['1','2'])]);
-        return view('pages.index', compact('bannerMains', 'bannerSubs', 'categories', 'featured', 'promotions', 'recent'));
+
+        $tagHot = $this->tagRepository->find([WhereClause::query('name', 'Sản phẩm hot')]);
+        $featured = $this->repository->paginate(8,[
+            WhereClause::query('status', 1),
+            WhereClause::queryRelationHas('tags', function ($q) {$q->where('name', 'Sản phẩm hot');})
+        ], 'order:asc');
+
+        $tagNew = $this->tagRepository->find([WhereClause::query('name', 'Sản phẩm hot')]);
+        $recent = $this->repository->paginate(8,[
+            WhereClause::query('status', 1),
+            WhereClause::queryRelationHas('tags', function ($q) {$q->where('name', 'Sản phẩm mới');})
+        ], 'order:asc');
+
+        $posts = $this->postRepository->paginate(4,[WhereClause::query('status', 1)],'created_at:desc');
+
+        $promotions = $this->promotionRepository->paginate(2, [WhereClause::query('status', 1), WhereClause::queryIn('type',['1','2'])]);
+        return view('pages.index', compact('bannerMains', 'bannerSubs', 'categories', 'tagHot', 'featured', 'promotions', 'tagNew', 'recent', 'posts'));
     }
 
     public function privacy() {

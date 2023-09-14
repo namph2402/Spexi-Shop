@@ -67,8 +67,8 @@
                         <div class="col-lg-12 col-md-6 col-sm-6 pb-1 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="post-item bg-light mb-4">
                                 <div class="post-img">
-                                    <img class="post-image img-fluid" data-src="{{ $p->image }}"
-                                        src="{{ $p->image }}" alt="{{ $p->name }}">
+                                    <img class="img-fluid w-100 h-100" data-src="{{ $p->image }}"
+                                        src="{{ $p->image }}" alt="{{ $p->name }}" style="object-fit: cover;">
                                 </div>
                                 <div class="post-title">
                                     <div class="post-content">
