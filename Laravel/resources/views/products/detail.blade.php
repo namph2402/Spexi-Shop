@@ -1,6 +1,7 @@
 @extends('components.layout')
 @section('title')
     {{ $product->name }}
+    {{ $url = config('app.url').'/products'}}
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -107,7 +108,7 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="tab-pane-1">
                             <h4 class="mb-3">Mô tả</h4>
-                            <div class="content-product">
+                            <div class="content-product wow fadeIn" data-wow-delay="0.1s">
                                 {!! $product->article->content ?? '' !!}
                             </div>
                         </div>
@@ -193,7 +194,7 @@
                     <div class="owl-carousel related-carousel">
                         @foreach ($product->relateds as $r)
                             @if ($r->product->status == 1)
-                                <div class="product-item bg-light">
+                                <div class="product-item bg-light wow fadeInUp" data-wow-delay="0.1s">
                                     <div class="product-img position-relative overflow-hidden">
                                         <img class="img-fluid w-100" data-src="{{ $r->product->image }}" src="{{ $r->product->image }}" alt="{{ $r->product->name }}">
                                     </div>
@@ -289,7 +290,7 @@
                 <div class="col">
                     <div class="owl-carousel related-carousel">
                         @foreach ($category as $c)
-                            <div class="product-item bg-light">
+                            <div class="product-item bg-light wow fadeInUp" data-wow-delay="0.1s">
                                 <div class="product-img position-relative overflow-hidden">
                                     <img class="img-fluid w-100" data-src="{{ $c->image }}" src="{{ $c->image }}" alt="{{ $c->name }}">
                                 </div>

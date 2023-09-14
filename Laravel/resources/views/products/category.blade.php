@@ -1,6 +1,7 @@
 @extends('components.layout')
 @section('title')
     {{ $category->name }}
+    {{ $url = config('app.url').'/products'}}
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -66,7 +67,7 @@
                 <div class="row pb-3">
                     <div class="col-12 pb-2 d-flex flex-wrap p-0 product-list">
                         @foreach ($products as $p)
-                            <div class="col-lg-4 col-md-6 col-sm-6 pb-1 product">
+                            <div class="col-lg-4 col-md-6 col-sm-6 pb-1 product wow fadeInUp" data-wow-delay="0.1s">
                                 <div class="product-item bg-light mb-4">
                                     <div class="product-img position-relative overflow-hidden">
                                         <img class="img-fluid w-100" data-src="{{ $p->image }}" src="{{ $p->image }}" alt="{{ $p->name }}">

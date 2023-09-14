@@ -1,9 +1,29 @@
 (function ($) {
     "use strict";
+    new WOW().init();
 
     $(document).on("keypress", "form", function (event) {
         return event.keyCode != 13;
     });
+
+    var spinner = function () {
+        setTimeout(function () {
+            if ($('#spinner').length > 0) {
+                $('#spinner').removeClass('show');
+            }
+        }, 1);
+    };
+    spinner();
+
+    // Toast
+    var toast = function () {
+        setTimeout(function () {
+            if ($('#toast-msg').length > 0) {
+                document.querySelector("#toast-msg").remove();
+            }
+        }, 4000);
+    };
+    toast();
 
     $(document).ready(function () {
         function toggleNavbarMethod() {

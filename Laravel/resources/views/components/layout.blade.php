@@ -6,26 +6,29 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="{{ $data['Name'] }}" name="keywords">
     <meta content="{{ $data['Name'] }}" name="description">
-    <title>{{ $data['Name'] }} -
-        @yield('title')
-    </title>
+    <title>{{ $data['Name'] }} - @yield('title')</title>
     <link href="{{ asset('assets/img/private/favicon.ico') }}" rel="icon">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link rel='stylesheet' href="https://cdn.rawgit.com/daneden/animate.css/v3.1.0/animate.min.css">
+    <script src="https://cdn.rawgit.com/matthieua/WOW/1.0.1/dist/wow.min.js"></script>
     <link href="{{ asset('assets/lib/animate/animate.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 </head>
 
 <body>
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" role="status"></div>
+    </div>
     @if (session('msg_success'))
-        <div class="alert alert-success alert-dismissible fade show toast-msg">
+        <div id="toast-msg" class="alert alert-success alert-dismissible fade show toast-msg">
             <strong>Thành công!</strong> {{ session('msg_success') }}
         </div>
     @endif
     @if (session('msg_error'))
-        <div class="alert alert-danger alert-dismissible fade show toast-msg">
+        <div id="toast-msg" class="alert alert-danger alert-dismissible fade show toast-msg">
             <strong>Thất bại!</strong> {{ session('msg_error') }}
         </div>
     @endif

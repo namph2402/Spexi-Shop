@@ -64,7 +64,7 @@
             <div class="col-lg-9 col-md-8">
                 <div class="row pb-3">
                     @foreach ($posts as $p)
-                        <div class="col-lg-12 col-md-6 col-sm-6 pb-1">
+                        <div class="col-lg-12 col-md-6 col-sm-6 pb-1 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="post-item bg-light mb-4">
                                 <div class="post-img">
                                     <img class="post-image img-fluid" data-src="{{ $p->image }}"

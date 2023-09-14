@@ -1,6 +1,7 @@
 @extends('components.layout')
 @section('title')
     {{ $post->name }}
+    {{ $url = config('app.url').'/posts'}}
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -25,7 +26,7 @@
                             <span>Ngày đăng: {{ date_format($post->article->created_at, 'Y-m-d') }}</span>
                         </div>
                     </div>
-                    <div class="content-blog">
+                    <div class="content-blog wow fadeIn" data-wow-delay="0.1s">
                         {!! $post->article->content !!}
                         <span class="text-end"></span>
                     </div>

@@ -91,7 +91,7 @@
             style="width: 30px; height: 30px; padding: 0;">
             <i class="fa fa-pencil-square-o"></i>
           </button>
-          <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm"
+          <button *ngIf="item.status == 0" (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm"
             confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover placement="top"
             popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa" style="width: 30px; height: 30px; padding: 0;"
             type="button">
