@@ -11201,6 +11201,7 @@ h6 {
     color: #FFD333 !important;
     margin: auto;
     outline: none;
+    cursor: pointer;
 }
 
 .btn-login,

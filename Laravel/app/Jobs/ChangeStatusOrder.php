@@ -22,7 +22,7 @@ class ChangeStatusOrder implements ShouldQueue
     public function __construct($id)
     {
         $this->id = $id;
-        $this->delay = now()->addMinute(1);
+        $this->delay = now()->addMinute(30);
     }
 
     /**

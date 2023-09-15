@@ -1,6 +1,8 @@
 @extends('components.layout')
 @section('title')
     {{ $categoryPostMain->name }}
+@endsection
+@section('url')
     {{ $url = config('app.url').'/posts'}}
 @endsection
 @section('content')

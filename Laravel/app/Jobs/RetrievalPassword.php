@@ -30,7 +30,7 @@ class RetrievalPassword implements ShouldQueue
         $this->email = $email;
         $this->username = $username;
         $this->password = $password;
-        $this->delay = now()->addSeconds(20);
+        $this->delay = now()->addSeconds(10);
     }
 
     /**

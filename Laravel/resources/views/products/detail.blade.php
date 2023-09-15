@@ -1,6 +1,8 @@
 @extends('components.layout')
 @section('title')
     {{ $product->name }}
+@endsection
+@section('url')
     {{ $url = config('app.url').'/products'}}
 @endsection
 @section('content')

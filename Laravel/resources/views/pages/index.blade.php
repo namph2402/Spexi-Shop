@@ -60,7 +60,7 @@
         </div>
     </div>
     <div class="container-fluid container-item pt-4">
-        <div class="row px-xl-5 pb-3 info-list wow fadeInUp" data-wow-delay="0.1s">
+        <div class="row px-xl-5 pb-3 info-list wow fadeIn" data-wow-delay="0.1s">
             <div class="col-lg-3 col-md-6 col-sm-12 pb-1 info-item">
                 <div class="d-flex align-items-center bg-light mb-4 p-30">
                     <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
@@ -89,9 +89,9 @@
     </div>
     <div class="container-fluid container-item pt-4">
         <h3 class="section-title position-relative text-uppercase mx-xl-5 mb-4 test"><span class="bg-secondary pr-3">Các sản phẩm</span></h3>
-        <div class="row px-xl-5 pb-3 list-cate wow fadeIn" data-wow-delay="0.1s">
+        <div class="row px-xl-5 pb-3 list-cate">
             @foreach ($categories as $c)
-                <div class="col-lg-4 col-md-4 col-sm-6 pb-1 category">
+                <div class="col-lg-4 col-md-4 col-sm-6 pb-1 category wow fadeInUp" data-wow-delay="0.1s">
                     <a class="d-block text-decoration-none cate-list" href="{{ $c->full_path }}">
                         <div class="cat-item d-flex align-items-center mb-4 cate-item">
                             <div class="overflow-hidden cate-img">

@@ -27,7 +27,7 @@ class SendMail implements ShouldQueue
         $this->email = $email;
         $this->capcha = $capcha;
         $this->name = $name;
-        $this->delay = now()->addSeconds(20);
+        $this->delay = now()->addSeconds(10);
     }
 
     /**

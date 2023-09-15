@@ -1,6 +1,8 @@
 @extends('components.layout')
 @section('title')
     Tìm kiếm
+@endsection
+@section('url')
     {{ $url = config('app.url').'/products'}}
 @endsection
 @section('content')

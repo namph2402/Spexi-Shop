@@ -1,6 +1,8 @@
 @extends('components.layout')
 @section('title')
     {{ $promotionMain->name }}
+@endsection
+@section('url')
     {{ $url = config('app.url').'/promotions'}}
 @endsection
 @section('content')
