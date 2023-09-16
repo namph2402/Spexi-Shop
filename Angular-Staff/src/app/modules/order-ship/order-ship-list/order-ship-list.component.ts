@@ -65,7 +65,6 @@ export class OrderShipListComponent extends AbstractCRUDComponent<OrderShipMeta>
     return [
       FieldForm.createTextInput('Tìm kiếm theo mã đơn hàng', 'code', 'Nhập từ khóa'),
       FieldForm.createTextInput('Tìm kiếm theo khách hàng', 'search', 'Nhập từ khóa'),
-      FieldForm.createDateInput('Ngày tạo', 'created_date', 'Chọn ngày'),
       FieldForm.createSelect('Trạng thái đơn vận', 'ship_status', 'Chọn một', [
         {
           name: "Điều phối giao hàng",
@@ -92,6 +91,7 @@ export class OrderShipListComponent extends AbstractCRUDComponent<OrderShipMeta>
           value: "Hủy đơn"
         }
       ]),
+      FieldForm.createDateInput('Ngày tạo', 'created_date', 'Chọn ngày'),
     ];
   }
 
