@@ -59,7 +59,6 @@ export class OrderShipItemComponent extends AbstractCRUDModalComponent<OrderShip
     return this.formBuilder.group({
       code: new FormControl(null),
       search: new FormControl(null),
-      customer_phone: new FormControl(null),
       created_date: new FormControl(null),
       status: new FormControl('Chuẩn bị hàng'),
     });
@@ -69,7 +68,6 @@ export class OrderShipItemComponent extends AbstractCRUDModalComponent<OrderShip
     return [
       FieldForm.createTextInput('Tìm kiếm theo mã đơn hàng', 'code', 'Nhập từ khóa'),
       FieldForm.createTextInput('Tìm kiếm theo tên khách hàng', 'search', 'Nhập từ khóa'),
-      FieldForm.createNumberInput('Tìm kiếm theo số điện thoại', 'customer_phone', 'Nhập từ khóa'),
       FieldForm.createDateInput('Ngày tạo', 'created_date', 'Chọn ngày'),
     ];
   }

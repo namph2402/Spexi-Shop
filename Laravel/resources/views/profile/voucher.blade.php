@@ -16,7 +16,7 @@
             <div class="col-lg-12 pt-2 pb-4 mb-3" style="background: white">
                 <div class="row pl-2 pr-4">
                     @foreach ($vouchers as $v)
-                        <div class="col-md-6 form-voucher">
+                        <div class="col-md-6 form-voucher wow fadeIn" data-wow-delay="0.1s">
                             <div class="form-voucher-content">
                                 <div class="form-voucher-img">
                                     @if ($v->type == 1)

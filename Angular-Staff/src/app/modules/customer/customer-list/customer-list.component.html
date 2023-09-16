@@ -61,13 +61,12 @@
       <tr>
         <th style="width: 10%;">#</th>
         <th style="width: 10%;">Ảnh đại diện</th>
-        <th style="width: 15%;">Tên đăng nhập</th>
-        <th style="width: 15%;">Họ tên</th>
+        <th style="width: 20%;">Tên đăng nhập</th>
+        <th style="width: 20%;">Họ tên</th>
         <th style="width: 10%;">Số điện thoại</th>
         <th style="width: 10%;">Giới tính</th>
         <th style="width: 10%;">Ngày sinh</th>
         <th style="width: 10%;">Trạng thái</th>
-        <th style="width: 10%;">Thao tác</th>
       </tr>
     </thead>
     <tbody>
@@ -88,13 +87,6 @@
           <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.account.status == 0"></ui-switch>
           <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.account.status == 1"
             [checked]="item.account.status"></ui-switch>
-        </td>
-        <td class="text-center">
-          <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm"
-            confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover placement="top"
-            popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa" style="width: 30px; height: 30px; padding: 0;" type="button">
-            <i aria-hidden="true" class="fa fa-remove"></i>
-          </button>
         </td>
       </tr>
     </tbody>

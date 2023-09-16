@@ -57,25 +57,6 @@ class UserController extends RestController
         return $this->success($data);
     }
 
-    public function destroy($id)
-    {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
-        try {
-            DB::beginTransaction();
-            $this->repository->delete($id, ['account']);
-            DB::commit();
-            return $this->success([]);
-        } catch (\Exception $e) {
-            Log::error($e);
-            DB::rollBack();
-            return $this->error($e->getMessage());
-        }
-    }
-
     public function enable($id)
     {
         $model = $this->repository->findById($id);

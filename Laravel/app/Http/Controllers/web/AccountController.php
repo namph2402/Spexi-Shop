@@ -166,7 +166,7 @@ class AccountController extends RestController
         $user = $this->repository->find([WhereClause::orQuery([WhereClause::query('username', $request->user), WhereClause::query('email', $request->user)])]);
 
         if(!$user) {
-            return $this->error('Tài khoản hoặc email không đúng');
+            return $this->errorView('Tài khoản hoặc email không đúng');
         } else {
             $password = Str::random(6);
             $passwordNew = $this->repository->update($user->id,[

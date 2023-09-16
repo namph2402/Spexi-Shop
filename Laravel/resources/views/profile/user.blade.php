@@ -3,7 +3,7 @@
     Thông tin tài khoản
 @endsection
 @section('content-child')
-    <form action="/profile/update-profile" method="post" enctype="multipart/form-data" class="col-lg-9" name="updateProfile"
+    <form action="/profile/update-profile" method="post" enctype="multipart/form-data" class="col-lg-9 wow fadeIn" data-wow-delay="0.1s" name="updateProfile"
         id="updateProfile">
         <div class="row">
             <div class="col-12 p-0">

@@ -41,7 +41,7 @@ class SendMail implements ShouldQueue
         $code = $this->capcha;
         $store = $this->name;
         Mail::send('pages.sendCode', compact('code','store'), function($email) use($emailTo, $store){
-            $email->subject("[Thời trang ".$store."] Xác nhận đăng ký tài khoản");
+            $email->subject("[".$store." Shop] Xác nhận đăng ký tài khoản");
             $email->to($emailTo);
         });
     }

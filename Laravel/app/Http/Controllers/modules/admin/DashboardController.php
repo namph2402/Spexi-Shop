@@ -176,7 +176,7 @@ class DashboardController extends RestController
         $data = [
             'boxes' => [
                 [
-                    'bg' => 'bg-red',
+                    'bg' => 'bg-blue',
                     'icon' => 'fa fa-shopping-cart',
                     'text' => 'Đơn hàng tháng ' . $month,
                     'value' => count($orderNews),
@@ -192,7 +192,7 @@ class DashboardController extends RestController
                     'type' => "true"
                 ],
                 [
-                    'bg' => 'bg-blue',
+                    'bg' => 'bg-red',
                     'icon' => 'fa fa-money',
                     'text' => 'Chi tiêu tháng ' . $month,
                     'value' => number_format($expense_new, 0, '.', ','),

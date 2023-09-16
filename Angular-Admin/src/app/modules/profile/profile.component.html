@@ -8,7 +8,7 @@
             <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control"/>
           </div>
           <div class="col-md-12 text-center">
-            <button class="btn btn-primary" type="submit">Đổi mật khẩu</button>
+            <button class="btn btn-primary" [disabled]="searchForm.invalid" type="submit">Đổi mật khẩu</button>
             <button (click)="rePassword()" class="btn btn-default" type="button">Cập nhật lại</button>
           </div>
         </form>

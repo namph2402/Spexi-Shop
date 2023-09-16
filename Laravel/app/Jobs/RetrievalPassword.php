@@ -45,7 +45,7 @@ class RetrievalPassword implements ShouldQueue
         $usernameTo = $this->username;
         $passwordTo = $this->password;
         Mail::send('pages.sendPassword', compact('usernameTo', 'passwordTo'), function($email) use($emailTo, $storeTo){
-            $email->subject("[Thời trang ".$storeTo."] Lấy mật khẩu");
+            $email->subject("[".$storeTo." Shop] Lấy mật khẩu");
             $email->to($emailTo);
         });
     }
