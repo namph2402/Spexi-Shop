@@ -412,6 +412,61 @@
         })
     });
 
+    $(document).ready(function () {
+        let rangeInput = document.querySelectorAll('.range-input input');
+        if (rangeInput.length > 0) {
+            let rangeText = document.querySelectorAll('.range-text div');
+            let progress = document.querySelector('.progress1');
+            let priceMax = rangeInput[0].max;
+            let priceGap = 10000;
+
+            rangeInput.forEach(input => {
+                if (parseInt(rangeInput[0].value) != 0 || parseInt(rangeInput[1].value) != 1000000) {
+                    let minVal = parseInt(rangeInput[0].value);
+                    let maxVal = parseInt(rangeInput[1].value);
+
+                    if (maxVal - minVal < priceGap) {
+                        minVal = rangeInput[0].value = maxVal - priceGap;
+                        maxVal = rangeInput[1].value = minVal + priceGap;
+                    }
+
+                    let positionMin = ((minVal / priceMax) * 100).toFixed();
+                    let positionMax = (100 - ((maxVal / priceMax) * 100)).toFixed();
+
+                    progress.style.left = positionMin + '%';
+                    progress.style.right = positionMax + '%';
+                    rangeText[0].style.left = positionMin + '%';
+                    rangeText[1].style.right = positionMax + '%';
+                    rangeText[0].innerText = minVal.toLocaleString();
+                    rangeText[1].innerText = maxVal.toLocaleString();
+                }
+
+                input.addEventListener('input', (event) => {
+                    let minVal = parseInt(rangeInput[0].value);
+                    let maxVal = parseInt(rangeInput[1].value);
+
+                    if (maxVal - minVal < priceGap) {
+                        if (event.target.className === 'range-min') {
+                            minVal = rangeInput[0].value = maxVal - priceGap;
+                        } else {
+                            maxVal = rangeInput[1].value = minVal + priceGap;
+                        }
+                    }
+
+                    let positionMin = ((minVal / priceMax) * 100).toFixed();
+                    let positionMax = (100 - ((maxVal / priceMax) * 100)).toFixed();
+
+                    progress.style.left = positionMin + '%';
+                    progress.style.right = positionMax + '%';
+                    rangeText[0].style.left = positionMin + '%';
+                    rangeText[1].style.right = positionMax + '%';
+                    rangeText[0].innerText = minVal.toLocaleString();
+                    rangeText[1].innerText = maxVal.toLocaleString();
+                })
+            })
+        }
+    })
+
 })(jQuery);
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -429,7 +484,7 @@ function sendCapcha(url) {
 
 function changeFilter() {
     display = document.getElementById("formSearchP").style.display;
-    if(display == '' || display == 'none') {
+    if (display == '' || display == 'none') {
         document.getElementById("formSearchP").style.display = 'block';
     } else {
         document.getElementById("formSearchP").style.display = 'none';

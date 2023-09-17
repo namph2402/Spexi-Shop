@@ -11829,7 +11829,6 @@ h6 {
 
     .section-title {
         font-size: 1.1rem !important;
-        margin-bottom: 0px !important;
     }
 
     .footer-link, .footer-category {
@@ -11894,4 +11893,72 @@ h6 {
     .post-img-index {
         height: 150px !important;
     }
+}
+
+.search-price {
+    background: white;
+    height: 100px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.group{
+    background-color: #CBC2B9;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 2px #9d968f;
+    position: relative;
+}
+
+.range-input input{
+    -webkit-appearance: none;
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    margin: 0;
+    background-color: transparent;
+    transform: translateY(2px);
+    pointer-events: none;
+}
+.range-input input::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    width: 17px;
+    height: 17px;
+    background-color: #FFD333;
+    border: 3px solid #FFD333;
+    border-radius: 50%;
+    pointer-events: auto;
+}
+.progress1{
+    position: absolute;
+    height: 100%;
+    left: 0;
+    right: 0;
+    background: #FFD333;
+    border-radius: 5px;
+    background-attachment: fixed;
+}
+.range-text div{
+    position: absolute;
+    background-color: #e71e26;
+    color: #eee;
+    font-size: 7px;
+    padding: 5px;
+    left: 0;
+    width:auto;
+    min-width: 50px;
+    text-align: center;
+    border-radius: 3px;
+    top: 15px;
+    font-size: 11px;
+    transform: translateX(-50%);
+}
+
+.range-text .text-max{
+    left: unset;
+    right: 0;
+    font-size: 11px;
+    transform: translateX(50%);
 }

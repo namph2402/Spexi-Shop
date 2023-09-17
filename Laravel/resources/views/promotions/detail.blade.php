@@ -42,11 +42,17 @@
         <div class="row px-xl-5">
             <form action="{{ Request::url() }}" class="col-lg-3 col-md-4 mb-3 formSearchP" id="formSearchP">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Lọc theo giá</span></h5>
-                <div class="filter-price bg-light mb-30" style="padding: 1rem;">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <input type="number" name="priceFrom" value="{{ request()->priceFrom }}" placeholder="Từ" class="input-price priceItem">
-                        <span>-</span>
-                        <input type="number" name="priceTo" value="{{ request()->priceTo }}" placeholder="Đến" class="input-price priceItem">
+                <div class="search-price mb-30">
+                    <div class="group">
+                        <div class="progress1"></div>
+                        <div class="range-input">
+                            <input class="range-min" name="priceFrom" max="1000000" step="10000" type="range" value="{{ request()->priceFrom ? request()->priceFrom : 0}}">
+                            <input class="range-max" name="priceTo" max="1000000" step="10000" type="range" value="{{ request()->priceTo ? request()->priceTo : 1000000}}">
+                        </div>
+                        <div class="range-text">
+                            <div class="text-min">{{ request()->priceFrom ? request()->priceFrom : 0}}</div>
+                            <div class="text-max">{{ request()->priceTo ? number_format(request()->priceTo, 0, '.', '.') : number_format(1000000, 0, '.', '.')}}</div>
+                        </div>
                     </div>
                 </div>
                 <div class="search-variant mb-30">
