@@ -94,6 +94,14 @@ class BannerController extends RestController
             'summary'
         ]);
 
+        if($request->href == 'null') {
+            $attributes['href'] = null;
+        }
+
+        if($request->summary == 'null') {
+            $attributes['summary'] = null;
+        }
+
         if ($request->file('image') != '') {
             $image = FileStorageUtil::putFile('banners', $request->file('image'));
             $attributes['image'] = $image;

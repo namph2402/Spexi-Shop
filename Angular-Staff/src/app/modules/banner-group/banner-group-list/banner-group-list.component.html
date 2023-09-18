@@ -105,9 +105,7 @@
                         <label>{{ite.name}}</label>
                         <p>{{ite.summary}}</p>
                       </td>
-                      <td>
-                        <a [href]="ite.href">{{ite.href}}</a>
-                      </td>
+                      <td>{{ite.href}}</td>
                       <td class="text-center">
                         <ui-switch (change)="onStatusChange(ite,i,$event)" *ngIf="ite.status == 0"></ui-switch>
                         <ui-switch (change)="onStatusChange(ite,i,$event)" *ngIf="ite.status == 1"

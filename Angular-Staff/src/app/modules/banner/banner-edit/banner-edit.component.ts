@@ -35,7 +35,6 @@ export class BannerEditComponent extends AbstractModalComponent<BannerMeta> {
       summary: new FormControl(null, [Validators.maxLength(255), Validators.pattern('[^ ].*$')]),
       image: new FormControl(null, Validators.required),
       href: new FormControl(null, [Validators.maxLength(255), Validators.pattern('[^ ].*$')]),
-      group_id: new FormControl()
     });
   }
 

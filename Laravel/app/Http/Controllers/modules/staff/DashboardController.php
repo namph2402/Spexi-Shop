@@ -39,13 +39,13 @@ class DashboardController extends RestController
         }
 
         // Dữ liệu
-        $orderNew = $this->repository->get([WhereClause::query('order_status', 'Lên đơn'), WhereClause::queryMonth('date_created', date("m")), WhereClause::queryYear('date_created', date("Y"))]);
+        $orderNew = $this->repository->get([WhereClause::query('order_status', 'Lên đơn')]);
 
-        $orderShip = $this->repository->get([WhereClause::query('order_status', 'Đang giao'), WhereClause::queryMonth('date_created', date("m")), WhereClause::queryYear('date_created', date("Y"))]);
+        $orderShip = $this->repository->get([WhereClause::query('order_status', 'Đang giao')]);
 
-        $orderDone = $this->repository->get([WhereClause::query('order_status', 'Hoàn thành'), WhereClause::queryMonth('date_created', date("m")), WhereClause::queryYear('date_created', date("Y"))]);
+        $orderDone = $this->repository->get([WhereClause::query('order_status', 'Hoàn thành')]);
 
-        $orderError = $this->repository->get([WhereClause::query('order_status', 'Hủy đơn'), WhereClause::queryMonth('date_created', date("m")), WhereClause::queryYear('date_created', date("Y"))]);
+        $orderError = $this->repository->get([WhereClause::query('order_status', 'Hủy đơn')]);
 
         $data = [
             'boxes' => [
