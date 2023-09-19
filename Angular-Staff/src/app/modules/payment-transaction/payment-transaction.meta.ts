@@ -5,6 +5,8 @@ export class PaymentTransactionMeta {
   name: string;
   order_id: number;
   order_code: string;
+  creator_name: string;
+  amount: number;
   method: string;
   status: string;
   massage: string;

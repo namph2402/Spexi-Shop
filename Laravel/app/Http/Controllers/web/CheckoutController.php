@@ -269,10 +269,13 @@ class CheckoutController extends RestController
                     'name' => 'Giao dịch thanh toán đơn hàng '. $order->code,
                     'order_id' => $order->id,
                     'order_code' => $order->code,
+                    'creator_name' => $order->customer_name,
+                    'amount' => $order->total_amount,
                     'method' => $order->payment_type,
                     'status' => $payment['status'],
                     'message' => $payment['message'],
-                    'dump_data' => json_encode($inputData)
+                    'dump_data' => json_encode($inputData),
+                    'type' => 0
                 ]);
                 DB::commit();
                 return $this->successView('cart', 'Đã thanh toán đơn hàng thành công');
@@ -304,10 +307,13 @@ class CheckoutController extends RestController
                     'name' => 'Giao dịch thanh toán đơn hàng '. $order->code,
                     'order_id' => $order->id,
                     'order_code' => $order->code,
+                    'creator_name' => $order->customer_name,
+                    'amount' => $order->total_amount,
                     'method' => $order->payment_type,
                     'status' => $payment['status'],
                     'message' => $payment['message'],
-                    'dump_data' => json_encode($inputData)
+                    'dump_data' => json_encode($inputData),
+                    'type' => 0
                 ]);
                 DB::commit();
                 return $this->successView('cart', 'Đã thanh toán đơn hàng thành công');

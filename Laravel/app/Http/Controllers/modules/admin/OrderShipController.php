@@ -153,6 +153,12 @@ class OrderShipController extends RestController
                     $this->orderRepository->update($order->id, [
                         'order_status' => Order::$DA_CHUAN_BI_HANG
                     ]);
+                    foreach ($order->details as $d) {
+                        $this->warehouseRepository->update($d->warehouse_id, [
+                            'quantity' => $d->warehouse->quantity - $d->quantity,
+                            'use_quantity' => $d->warehouse->use_quantity + $d->quantity
+                        ]);
+                    }
                 }
                 DB::commit();
                 $order->load(['shipping.unit']);

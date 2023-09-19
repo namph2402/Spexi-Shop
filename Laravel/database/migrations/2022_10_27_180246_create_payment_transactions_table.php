@@ -18,10 +18,13 @@ class CreatePaymentTransactionsTable extends Migration
             $table->string('name');
             $table->bigInteger('order_id')->index();
             $table->string('order_code')->index();
+            $table->string('creator_name');
+            $table->double('amount', 20, 2);
             $table->string('method');
             $table->string('status');
             $table->text('message')->nullable();
             $table->longText('dump_data')->nullable();
+            $table->integer('type');
             $table->timestamps();
         });
     }

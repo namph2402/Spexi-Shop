@@ -22,21 +22,26 @@ class PaymentTransactionController extends RestController
         $clauses = [];
         $with = ['order'];
         $withCount = [];
-        $orderBy = $request->input('orderBy');
+        $orderBy = $request->input('orderBy','id:desc');
 
         if ($request->has('search')) {
             $search = $request->search;
             array_push($clauses, WhereClause::orQuery([
                 WhereClause::queryLike('name', $request->search),
                 WhereClause::queryLike('order_code', $request->search),
+                WhereClause::queryLike('creator_name', $request->search),
                 WhereClause::queryRelationHas('order', function ($q) use ($search) {
-                    $q->where('customer_name', 'like', '%'.$search.'%');
+                    $q->where('customer_phone', 'like', '%'.$search.'%');
                 })
             ]));
         }
 
         if ($request->has('status')) {
             array_push($clauses, WhereClause::query('status', $request->status));
+        }
+
+        if ($request->has('type')) {
+            array_push($clauses, WhereClause::query('type', $request->type));
         }
 
         if ($limit) {

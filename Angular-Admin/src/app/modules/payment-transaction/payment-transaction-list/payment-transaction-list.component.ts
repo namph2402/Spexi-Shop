@@ -53,6 +53,7 @@ export class PaymentTransactionListComponent extends AbstractCRUDComponent<Payme
     return this.formBuilder.group({
       search: new FormControl(null),
       status: new FormControl(null),
+      type: new FormControl(null)
     });
   }
 
@@ -68,7 +69,17 @@ export class PaymentTransactionListComponent extends AbstractCRUDComponent<Payme
           name: "Thất bại",
           value: "FAILED"
         }
-      ], 'col-md-6', 'name', 'value'),
+      ]),
+      FieldForm.createSelect('Loại', 'type', 'Chọn một', [
+        {
+          name: "Thanh toán",
+          value: "0"
+        },
+        {
+          name: "Hoàn tiền",
+          value: "1"
+        }
+      ]),
     ];
   }
 

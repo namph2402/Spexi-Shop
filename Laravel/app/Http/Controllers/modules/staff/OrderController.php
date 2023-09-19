@@ -8,10 +8,12 @@ use App\Jobs\ChangeStatusOrder;
 use App\Models\Order;
 use App\Repository\OrderDetailRepositoryInterface;
 use App\Repository\OrderRepositoryInterface;
+use App\Repository\PaymentTransactionRepositoryInterface;
 use App\Repository\ProductRepositoryInterface;
 use App\Repository\VoucherRepositoryInterface;
 use App\Repository\UserProfileRepositoryInterface;
 use App\Repository\WarehouseRepositoryInterface;
+use App\Utils\AuthUtil;
 use App\Utils\GiaoHangUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,14 +28,16 @@ class OrderController extends RestController
     protected $warehouseRepository;
     protected $userRepository;
     protected $voucherRepository;
+    protected $transactionRepository;
 
     public function __construct(
-        OrderRepositoryInterface       $repository,
-        ProductRepositoryInterface     $productRepository,
-        OrderDetailRepositoryInterface $detailRepository,
-        VoucherRepositoryInterface     $voucherRepository,
-        UserProfileRepositoryInterface $userRepository,
-        WarehouseRepositoryInterface   $warehouseRepository
+        OrderRepositoryInterface              $repository,
+        ProductRepositoryInterface            $productRepository,
+        OrderDetailRepositoryInterface        $detailRepository,
+        VoucherRepositoryInterface            $voucherRepository,
+        UserProfileRepositoryInterface        $userRepository,
+        PaymentTransactionRepositoryInterface $transactionRepository,
+        WarehouseRepositoryInterface          $warehouseRepository
     ) {
         parent::__construct($repository);
         $this->productRepository = $productRepository;
@@ -41,6 +45,7 @@ class OrderController extends RestController
         $this->voucherRepository = $voucherRepository;
         $this->userRepository = $userRepository;
         $this->warehouseRepository = $warehouseRepository;
+        $this->transactionRepository = $transactionRepository;
     }
 
     public function index(Request $request)
@@ -371,6 +376,8 @@ class OrderController extends RestController
 
     public function refund($id, Request $request)
     {
+        $user = AuthUtil::getInstance()->getModel();
+
         $model = $this->repository->findById($id);
         if (empty($model)) {
             return $this->errorNotFound();
@@ -382,8 +389,19 @@ class OrderController extends RestController
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
+            $this->transactionRepository->create([
+                'name' => 'Hoàn lại tiền cho khách đơn hàng '. $model->code,
+                'order_id' => $model->id,
+                'order_code' => $model->code,
+                'creator_name' => $user->fullname,
+                'amount' => $request->input("total_amount", $model->total_amount),
+                'method' => "Hoàn tiền",
+                'status' => "COMPLETED",
+                'message' => "Giao dịch thành công",
+                'dump_data' => null,
+                'type' => 1
+            ]);
             DB::commit();
-            ChangeStatusOrder::dispatch($model->id);
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
@@ -415,7 +433,7 @@ class OrderController extends RestController
 
     public function returned($id)
     {
-        $model = $this->repository->findById($id);
+        $model = $this->repository->findById($id, ['details.warehouse']);
         if (empty($model)) {
             return $this->errorNotFound();
         }
@@ -425,6 +443,14 @@ class OrderController extends RestController
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
+            if($model) {
+                foreach ($model->details as $d) {
+                    $this->warehouseRepository->update($d->warehouse_id, [
+                        'quantity' => $d->warehouse->quantity + $d->quantity,
+                        'use_quantity' => $d->warehouse->use_quantity - $d->quantity
+                    ]);
+                }
+            }
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
