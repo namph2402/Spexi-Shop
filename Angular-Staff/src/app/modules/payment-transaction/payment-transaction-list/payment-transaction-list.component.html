@@ -81,7 +81,13 @@
           <td>{{item.creator_name}}</td>
           <td>{{item.order.customer_phone}}</td>
           <td class="text-right">{{item.amount | number : "1.0-0"}}</td>
-          <td class="text-center">{{item.method}}</td>
+          <td class="text-center">
+            <label class="label"
+            [ngClass]="{
+              'label-success':item.type == '0',
+              'label-danger':item.type == '1'
+            }">{{item.method}}</label>
+          </td>
           <td>{{item.created_at | date : "yyyy-MM-dd H:m:s"}}</td>
           <td class="text-center">
             <label class="label label-success" *ngIf="item.status == 'COMPLETED'">Giao dịch thành công</label>
