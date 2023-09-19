@@ -6,8 +6,9 @@ import {OrderService} from './../order.service';
 import {OrderCreateComponent} from './../order-create/order-create.component';
 import {OrderEditComponent} from './../order-edit/order-edit.component';
 import {AbstractCRUDComponent, AbstractModalComponent, FieldForm, ModalResult, ObjectUtil} from '../../../core';
-import { OrderNoteComponent } from '../order-note/order-note.component';
+import { OrderCancelComponent } from '../order-cancel/order-cancel.component';
 import { OrderConfirmComponent } from '../order-confirm/order-confirm.component';
+import { OrderRefundComponent } from '../order-refund/order-refund.component';
 
 @Component({
   selector: 'app-order-list',
@@ -142,7 +143,7 @@ export class OrderListComponent extends AbstractCRUDComponent<OrderMeta> {
   }
 
   cancel(item: OrderMeta) {
-    const modalRef = this.modalService.show(OrderNoteComponent, {ignoreBackdropClick: true, 'class': 'modal-lg'});
+    const modalRef = this.modalService.show(OrderCancelComponent, {ignoreBackdropClick: true, 'class': 'modal-lg'});
     const modal: AbstractModalComponent<OrderMeta> = <AbstractModalComponent<OrderMeta>>modalRef.content;
     modal.setModel(item);
     const sub = modal.onHidden.subscribe((result: ModalResult<OrderMeta>) => {
@@ -151,5 +152,31 @@ export class OrderListComponent extends AbstractCRUDComponent<OrderMeta> {
       }
       sub.unsubscribe();
     });
+  }
+
+  refund(item: OrderMeta) {
+    const modalRef = this.modalService.show(OrderRefundComponent, {ignoreBackdropClick: true, 'class': 'modal-lg'});
+    const modal: AbstractModalComponent<OrderMeta> = <AbstractModalComponent<OrderMeta>>modalRef.content;
+    modal.setModel(item);
+    const sub = modal.onHidden.subscribe((result: ModalResult<OrderMeta>) => {
+      if (result.success) {
+        this.load();
+      }
+      sub.unsubscribe();
+    });
+  }
+
+  return(item: OrderMeta) {
+    (<OrderService>this.service).return(item.id).subscribe(res => {
+      this.service.toastSuccessfully('Hoàn hàng');
+      this.load();
+    }, () => this.service.toastFailedEdited());
+  }
+
+  returned(item: OrderMeta) {
+    (<OrderService>this.service).returned(item.id).subscribe(res => {
+      this.service.toastSuccessfully('Hoàn hàng');
+      this.load();
+    }, () => this.service.toastFailedEdited());
   }
 }

@@ -153,13 +153,10 @@ export class OrderShipListComponent extends AbstractCRUDComponent<OrderShipMeta>
     }, () => this.service.toastFailedEdited());
   }
 
-  note(item: OrderShipMeta, type: number) {
+  note(item: OrderShipMeta) {
     const modalRef = this.modalService.show(OrderShipNoteComponent, {ignoreBackdropClick: true, 'class': 'modal-lg'});
     const modal: AbstractModalComponent<OrderShipMeta> = <AbstractModalComponent<OrderShipMeta>>modalRef.content;
-    const model = new OrderShipMeta();
-    model.type = type;
-    model.id = item.id;
-    modal.setModel(model);
+    modal.setModel(item);
     const sub = modal.onHidden.subscribe((result: ModalResult<OrderShipMeta>) => {
       if (result.success) {
         this.load();

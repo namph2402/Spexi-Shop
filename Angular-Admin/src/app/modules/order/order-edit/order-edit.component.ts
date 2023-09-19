@@ -276,7 +276,7 @@ export class OrderEditComponent extends AbstractModalComponent<OrderMeta> {
   edit() {
     let status = 0;
     for (let i of this.arrProduct) {
-      const list: any = i.product.warehouses;
+      const list: any = i.product.warehouse_views;
       if (i.quantity == 0 || i.warehouse_id == 0) {
         this.service.toastError("Cần nhập đủ thông tin sản phẩm");
         status = 1;

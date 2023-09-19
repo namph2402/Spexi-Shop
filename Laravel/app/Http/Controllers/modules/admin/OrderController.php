@@ -47,15 +47,15 @@ class OrderController extends RestController
         $limit = $request->input('limit', null);
         $clauses = [];
         $orderBy = $request->input('orderBy', 'updated_at:desc');
-        $with = ['details.product.warehouseViews.size', 'details.product.warehouseViews.color', 'voucher'];
+        $with = ['details.product.warehouseViews.size', 'details.product.warehouseViews.color', 'voucher', 'shipping'];
         $withCount = [];
 
         if ($request->has('search')) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('customer_name', $request->search), WhereClause::queryLike('customer_phone', $request->search)]));
         }
 
-        if ($request->has('code') && Str::length($request->code) > 0) {
-            array_push($clauses, WhereClause::query('code', $request->code));
+        if ($request->has('code')) {
+            array_push($clauses, WhereClause::queryLike('code', $request->code));
         }
 
         if ($request->has('created_date')) {
@@ -301,9 +301,9 @@ class OrderController extends RestController
             return $this->errorClient('Đối tượng không tồn tại');
         }
 
-        if ($model->status == Order::$LEN_DON) {
-            $model->delete();
-            return $this->success($model);
+        if ($model->order_status == Order::$LEN_DON && $model->payment_status == 0) {
+            $this->repository->delete($model->id, ['details']);
+            return $this->success([]);
         } else {
             return $this->errorClient('Đơn hàng này không thể xóa');
         }
@@ -363,14 +363,58 @@ class OrderController extends RestController
         }
     }
 
-    public function complete($id)
+    public function refund($id, Request $request)
     {
         $model = $this->repository->findById($id);
         if (empty($model)) {
             return $this->errorNotFound();
         }
 
-        $attributes['order_status'] = Order::$HOAN_THANH;
+        $attributes['note'] = $request->note;
+        $attributes['order_status'] = Order::$DA_HOAN_TIEN;
+
+        try {
+            DB::beginTransaction();
+            $model = $this->repository->update($id, $attributes);
+            DB::commit();
+            ChangeStatusOrder::dispatch($model->id);
+            return $this->success($model);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function return($id)
+    {
+        $model = $this->repository->findById($id);
+        if (empty($model)) {
+            return $this->errorNotFound();
+        }
+
+        $attributes['order_status'] = Order::$HOAN_HANG;
+
+        try {
+            DB::beginTransaction();
+            $model = $this->repository->update($id, $attributes);
+            DB::commit();
+            return $this->success($model);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function returned($id)
+    {
+        $model = $this->repository->findById($id);
+        if (empty($model)) {
+            return $this->errorNotFound();
+        }
+
+        $attributes['order_status'] = Order::$DA_HOAN_HANG;
 
         try {
             DB::beginTransaction();

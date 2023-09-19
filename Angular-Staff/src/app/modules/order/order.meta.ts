@@ -33,6 +33,7 @@ export class OrderMeta {
   payment_type: string;
   payment_status: string;
   order_status: string;
+  is_completed: number;
   created_at: string;
   updated_at: string;
   voucher: VoucherMeta;

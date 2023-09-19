@@ -76,14 +76,16 @@
         <tr *ngFor="let item of list; let i = index" class="odd">
           <td class="text-center">
             <label style="display: block">{{ item.code }}</label>
-              <label class="label" style="padding: 5px 10px"
+              <label class="label label-status" style="padding: 5px 10px"
               [ngClass]="{
-                'label-primary':item.order_status == 'Chuẩn bị hàng',
-                'label-info':item.order_status == 'Đã chuẩn bị hàng',
-                'label-warning':item.order_status == 'Đang giao',
-                'label-success':item.order_status == 'Hoàn thành',
-                'label-destroy':item.order_status == 'Hủy giao hàng',
-                'label-danger':item.order_status == 'Hủy đơn'
+                'label-3':item.order_status == 'Chuẩn bị hàng',
+                'label-4':item.order_status == 'Đã chuẩn bị hàng',
+                'label-5':item.order_status == 'Đang giao',
+                'label-6':item.order_status == 'Hoàn thành',
+                'label-7':item.order_status == 'Hủy đơn',
+                'label-8':item.order_status == 'Hoàn hàng',
+                'label-9':item.order_status == 'Đã hoàn hàng',
+                'label-10':item.order_status == 'Đã hoàn tiền'
               }">{{ item.order_status }}</label>
             <p style="margin: 10px 0 0">
               {{ item.created_at | date : "yyyy-MM-dd" }}
@@ -123,12 +125,8 @@
                       <i class="fa fa-check"></i>
                     </button>
                     <button type="button" class="btn btn-warning margin-r-5" style="width: 30px; height: 30px; padding: 0;"
-                      (click)="note(item.shipping, 1)">
+                      (click)="note(item.shipping)">
                       <i class="fa fa-refresh"></i>
-                    </button>
-                    <button type="button" class="btn btn-danger margin-r-5" style="width: 30px; height: 30px; padding: 0;"
-                      (click)="note(item.shipping, 0)">
-                      <i class="fa fa-remove"></i>
                     </button>
                   </ng-template>
                   <textarea *ngIf="item.shipping.note" [cols]="9" [rows]="3" [value]="item.shipping.note" readonly style="min-width: 146px; max-width: 146px; min-height: 107px; margin-top: 10px;"></textarea>

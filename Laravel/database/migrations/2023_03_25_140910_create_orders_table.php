@@ -34,6 +34,7 @@ class CreateOrdersTable extends Migration
             $table->string('payment_type');
             $table->boolean('payment_status');
             $table->string('order_status')->default('Lên đơn');
+            $table->boolean('is_completed')->default(false);
             $table->date("date_created");
             $table->timestamps();
         });

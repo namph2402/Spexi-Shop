@@ -60,7 +60,11 @@ class OrderShipController extends RestController
         }
 
         if ($request->has('code')) {
-            array_push($clauses, WhereClause::query('code', $request->code));
+            array_push($clauses, WhereClause::queryLike('code', $request->code));
+        }
+
+        if ($request->has('order_status')) {
+            array_push($clauses, WhereClause::query('order_status', $request->order_status));
         }
 
         if ($request->has('ship_status')) {
@@ -215,7 +219,10 @@ class OrderShipController extends RestController
                 'status_id' => 7,
             ]);
             if($model) {
-                $this->orderRepository->update($model->order->id,['order_status' => 'Hoàn thành']);
+                $this->orderRepository->update($model->order->id,[
+                    'order_status' => 'Hoàn thành',
+                    'is_completed' => 1
+                ]);
             }
             DB::commit();
             return $this->success($model);
@@ -276,22 +283,14 @@ class OrderShipController extends RestController
             return $this->errorNotFound();
         }
 
-        if( $request->type == 0) {
-            $attributes['note'] = $request->note;
-            $attributes['status'] = OrderShip::$HUY_DON;
-            $attributes['status_id'] = 0;
-            $status = Order::$HUY_GIAO;
-        } else {
-            $attributes['note'] = $request->note;
-            $attributes['status'] = OrderShip::$GIAO_LAI;
-            $attributes['status_id'] = 5;
-            $status = Order::$DANG_GIAO;
-        }
+        $attributes['note'] = $request->note;
+        $attributes['status'] = OrderShip::$GIAO_LAI;
+        $attributes['status_id'] = 5;
 
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            $this->orderRepository->update($model->order_id, ['order_status' => $status]);
+            $this->orderRepository->update($model->order_id, ['order_status' => Order::$DANG_GIAO]);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {

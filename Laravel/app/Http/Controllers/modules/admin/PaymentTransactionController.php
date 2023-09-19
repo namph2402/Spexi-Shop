@@ -27,7 +27,14 @@ class PaymentTransactionController extends RestController
         $orderBy = $request->input('orderBy');
 
         if ($request->has('search')) {
-            array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('name', $request->search), WhereClause::queryLike('order_code', $request->search)]));
+            $search = $request->search;
+            array_push($clauses, WhereClause::orQuery([
+                WhereClause::queryLike('name', $request->search),
+                WhereClause::queryLike('order_code', $request->search),
+                WhereClause::queryRelationHas('order', function ($q) use ($search) {
+                    $q->where('customer_name', 'like', '%'.$search.'%');
+                })
+            ]));
         }
 
         if ($request->has('status')) {

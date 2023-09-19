@@ -6,12 +6,12 @@ import {OrderService} from '../order.service';
 import {AbstractModalComponent, FieldForm, ObjectUtil} from '../../../core';
 
 @Component({
-  selector: 'app-order-note',
-  templateUrl: './order-note.component.html',
-  styleUrls: ['./order-note.component.css'],
+  selector: 'app-order-cancel',
+  templateUrl: './order-cancel.component.html',
+  styleUrls: ['./order-cancel.component.css'],
   providers: [OrderService]
 })
-export class OrderNoteComponent extends AbstractModalComponent<OrderMeta> {
+export class OrderCancelComponent extends AbstractModalComponent<OrderMeta> {
 
   constructor(
     service: OrderService,

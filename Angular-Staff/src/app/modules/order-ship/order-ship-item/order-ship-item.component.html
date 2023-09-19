@@ -86,18 +86,7 @@
               style="margin: 10px auto; width: 15px; height: 15px" type="checkbox" /></td>
           <td class="text-center">
             <label style="display: block">{{ item.code }}</label>
-            <label *ngIf="item.order_status == 'Lên đơn'" class="label label-primary" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Xác nhận'" class="label label-info" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Chuẩn bị hàng'" class="label label-warning" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Đang giao'" class="label label-warning" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Hoàn thành'" class="label label-success" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
-            <label *ngIf="item.order_status == 'Hủy đơn'" class="label label-danger" style="padding: 5px 10px">
-              {{ item.order_status }}</label>
+            <label class="label label-warning" style="padding: 5px 10px">{{ item.order_status }}</label>
             <p style="margin: 10px 0 0">
               {{ item.created_at | date : "yyyy-MM-dd" }}
             </p>

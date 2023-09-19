@@ -15,6 +15,9 @@ class Order extends Model
     public static $HOAN_THANH = "Hoàn thành";
     public static $HUY_DON = "Hủy đơn";
     public static $HUY_GIAO = "Hủy giao hàng";
+    public static $HOAN_HANG = "Hoàn hàng";
+    public static $DA_HOAN_HANG = "Đã hoàn hàng";
+    public static $DA_HOAN_TIEN = "Đã hoàn tiền";
 
     protected $guarded = [];
     protected $appends = [

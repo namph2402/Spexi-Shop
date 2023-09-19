@@ -29,7 +29,6 @@ export class OrderShipItemComponent extends AbstractCRUDModalComponent<OrderShip
   }
 
   onInit(): void {
-    this.loaded();
   }
 
   onDestroy(): void {
@@ -60,7 +59,6 @@ export class OrderShipItemComponent extends AbstractCRUDModalComponent<OrderShip
       code: new FormControl(null),
       search: new FormControl(null),
       created_date: new FormControl(null),
-      status: new FormControl('Chuẩn bị hàng'),
     });
   }
 
@@ -77,10 +75,14 @@ export class OrderShipItemComponent extends AbstractCRUDModalComponent<OrderShip
   }
 
   loaded() {
+  }
+
+  load() {
     this.statusSelectAll = false;
     let params: any = ObjectUtil.combineValue({
       limit: this.pagination.itemsPerPage,
       page: this.pagination.currentPage,
+      order_status: "Chuẩn bị hàng"
     }, this.searchForm.value, true);
     this.service.loadByPage(params).subscribe(res => {
       this.list = res.data;
@@ -112,7 +114,7 @@ export class OrderShipItemComponent extends AbstractCRUDModalComponent<OrderShip
           sub2.unsubscribe();
         });
       }
-      this.loaded();
+      this.load();
       sub.unsubscribe();
     });
   }
