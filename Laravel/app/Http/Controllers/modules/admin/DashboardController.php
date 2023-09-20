@@ -149,7 +149,7 @@ class DashboardController extends RestController
         }
 
         // Biểu đồ sản phẩm bán chạy trong tháng
-        $productMain = DB::select('SELECT product_code, SUM(quantity) AS quantity FROM order_details WHERE MONTH(created_at) = ' . $month . ' AND YEAR(created_at) = ' . $year . ' GROUP BY product_code ORDER BY SUM(quantity) DESC');
+        $productMain = DB::select('SELECT product_code, SUM(quantity) AS quantity FROM order_details WHERE MONTH(created_at) = ' . $month . ' AND YEAR(created_at) = ' . $year . ' AND order_id IN ( SELECT id FROM orders  WHERE order_status IN("Hoàn thành")) GROUP BY product_code ORDER BY SUM(quantity) DESC');
         if (count($productMain) > 0) {
             foreach ($productMain as $key => $p) {
                 if ($key < 4) {

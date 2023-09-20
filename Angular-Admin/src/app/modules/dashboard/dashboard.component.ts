@@ -152,7 +152,26 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
       setTimeout(() => {
         document.getElementById("orderDiv").innerHTML = `<canvas id="order"></canvas>`;
         document.getElementById("amountDiv").innerHTML = `<canvas id="amount"></canvas>`;
-        document.getElementById("productDiv").innerHTML = `<canvas id="product"></canvas>`;
+        if(this.productCodeMains.length > 0) {
+          document.getElementById("productDiv").innerHTML = `<canvas id="product"></canvas>`;
+          new Chart("product", {
+            type: 'doughnut',
+            data : {
+              labels: this.productCodeMains,
+              datasets: [{
+                label: 'Sản phẩm',
+                data: this.productQuantityMains,
+                backgroundColor: [
+                  'rgb(224, 3, 58)',
+                  'rgb(54, 162, 235)',
+                  'rgb(255, 241, 110)',
+                  'rgb(140, 255, 130)'
+                ],
+                hoverOffset: 4
+              }]
+            }
+          });
+        }
         new Chart("order", {
           type: 'bar',
           data: {
@@ -172,23 +191,6 @@ export class DashboardComponent extends AbstractCRUDComponent<any> {
               }
             }
           },
-        });
-        new Chart("product", {
-          type: 'doughnut',
-          data : {
-            labels: this.productCodeMains,
-            datasets: [{
-              label: 'Sản phẩm',
-              data: this.productQuantityMains,
-              backgroundColor: [
-                'rgb(224, 3, 58)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 241, 110)',
-                'rgb(140, 255, 130)'
-              ],
-              hoverOffset: 4
-            }]
-          }
         });
         new Chart("amount", {
           type: 'line',

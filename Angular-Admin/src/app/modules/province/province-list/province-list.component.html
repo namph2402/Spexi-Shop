@@ -58,7 +58,8 @@
         <button (click)="import()" class="btn btn-info" type="button">
           <i class="fa fa-upload" style="margin-right: 5px;"></i>Nhập file excel
         </button>
-        <button (click)="truncate()" class="btn btn-danger" type="button">
+        <button (confirm)="truncate()" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger" confirmText="Yes <i class='fa fa-check'></i>"
+          mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa toàn bộ?" popoverTitle="Xóa toàn bộ" type="button">
           <i class="fa fa-remove" style="margin-right: 5px;"></i>Xóa toàn bộ
         </button>
       </div>

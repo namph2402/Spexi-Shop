@@ -121,6 +121,9 @@ class OrderShipController extends RestController
                 if ($d->warehouse->weight <= 0 && $unit->name != UnitName::TU_GIAO) {
                     return $this->errorClient('Sản phẩm ' . $d->product_code . ' chưa cấu hình khối lượng');
                 }
+                if ($d->warehouse->quantity < $d->quantity) {
+                    return $this->errorClient('Sản phẩm ' . $d->product_code . ' không đủ hàng trong kho');
+                }
             }
         }
 
@@ -155,10 +158,15 @@ class OrderShipController extends RestController
                         'order_status' => Order::$DA_CHUAN_BI_HANG
                     ]);
                     foreach ($order->details as $d) {
-                        $this->warehouseRepository->update($d->warehouse_id, [
+                        $warehouse = $this->warehouseRepository->update($d->warehouse_id, [
                             'quantity' => $d->warehouse->quantity - $d->quantity,
                             'use_quantity' => $d->warehouse->use_quantity + $d->quantity
                         ]);
+                        if($warehouse->quantity == 0) {
+                            $this->warehouseRepository->update($warehouse->id, [
+                                'status' => 0
+                            ]);
+                        }
                     }
                 }
                 DB::commit();
