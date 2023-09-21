@@ -119,7 +119,7 @@ class PromotionController extends RestController
         }
 
         $image_old = $model->image;
-        
+
         $validator = $this->validateRequest($request, [
             'name' => 'nullable|max:255',
             'expired_date' => 'nullable|date'
@@ -328,7 +328,6 @@ class PromotionController extends RestController
                 if (count($item['promotions']) > 0) {
                     $promotion = $this->repository->findById($item['promotions']['0']['id']);
                     $this->repository->detach($promotion, $item['id']);
-                    $this->productRepository->update($item['id'], ['sale_price' => $item['price']]);
                 }
                 $this->repository->attach($model, $item['id']);
 
