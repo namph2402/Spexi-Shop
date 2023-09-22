@@ -18,7 +18,7 @@
     </div>
     <div class="container-fluid">
         <div class="row px-xl-5">
-            <form action="{{ Request::url() }}" class="col-lg-3 col-md-4 mb-3 formSearchP" id="formSearchP">
+            <form action="{{ Request::url() }}" class="col-lg-3 col-md-4 mb-3 formSearchP wow fadeIn" data-wow-delay="0.1s" id="formSearchP">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Lọc theo giá</span></h5>
                 <div class="search-price mb-30">
                     <div class="group">
@@ -66,6 +66,22 @@
                                 @endforeach
                             </div>
                             <input type="text" hidden name="size" id="size" value="All">
+                        </div>
+                    </div>
+                </div>
+                <div class="search-variant mb-30">
+                    <div class="search-color">
+                        <h5 class="section-title position-relative text-uppercase mb-3">
+                            <span class="bg-secondary pr-3">Tag liên quan</span>
+                        </h5>
+                        <div class="bg-light mb-30 search-group">
+                            <div class="row pl-3 pr-3 list-item-search">
+                                @foreach ($tags as $t)
+                                <li class="promotion-item">
+                                    <a class="promotion-link p-2" href="{{ $t->full_path }}">{{ $t->name }}</a>
+                                </li>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -145,7 +161,7 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="col-12">
+                    <div class="col-12 wow fadeIn" data-wow-delay="0.1s">
                         <nav>
                             <ul class="pagination justify-content-center">
                                 @if ($products->previousPageUrl())

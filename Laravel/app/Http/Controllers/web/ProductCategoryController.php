@@ -6,17 +6,20 @@ use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
 use App\Repository\ProductCategoryRepositoryInterface;
 use App\Repository\ProductRepositoryInterface;
+use App\Repository\ProductTagRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ProductCategoryController extends RestController
 {
     protected $productRepository;
+    protected $tagRepository;
 
-    public function __construct(ProductCategoryRepositoryInterface $repository, ProductRepositoryInterface $productRepository)
+    public function __construct(ProductCategoryRepositoryInterface $repository, ProductRepositoryInterface $productRepository, ProductTagRepositoryInterface $tagRepository)
     {
         parent::__construct($repository);
         $this->productRepository = $productRepository;
+        $this->tagRepository = $tagRepository;
     }
 
     public function detail(Request $request, $slug)
@@ -71,8 +74,8 @@ class ProductCategoryController extends RestController
         if (Str::length($request->priceTo) > 0) {
             array_push($clause, WhereClause::query('sale_price', $request->priceTo, '<='));
         }
-        
+        $tags = $this->tagRepository->get([WhereClause::query('status', 1)],'order:asc');
         $products = $this->productRepository->paginate($limit, $clause, $orderBy, $with);
-        return view('products.category', compact('products', 'category', 'arrSize', 'arrColor', 'arrPrice'));
+        return view('products.category', compact('products', 'category', 'arrSize', 'arrColor', 'arrPrice', 'tags'));
     }
 }

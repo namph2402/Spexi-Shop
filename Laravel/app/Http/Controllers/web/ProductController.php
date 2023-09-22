@@ -8,6 +8,7 @@ use App\Repository\ProductCategoryRepositoryInterface;
 use App\Repository\ProductColorRepositoryInterface;
 use App\Repository\ProductRepositoryInterface;
 use App\Repository\ProductSizeRepositoryInterface;
+use App\Repository\ProductTagRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -16,11 +17,13 @@ class ProductController extends RestController
     protected $categoryRepository;
     protected $sizeRepository;
     protected $colorRepository;
+    protected $tagRepository;
 
     public function __construct(
         ProductRepositoryInterface         $repository,
         ProductCategoryRepositoryInterface $categoryRepository,
         ProductSizeRepositoryInterface     $sizeRepository,
+        ProductTagRepositoryInterface      $tagRepository,
         ProductColorRepositoryInterface    $colorRepository
     )
     {
@@ -28,6 +31,7 @@ class ProductController extends RestController
         $this->categoryRepository = $categoryRepository;
         $this->colorRepository = $colorRepository;
         $this->sizeRepository = $sizeRepository;
+        $this->tagRepository = $tagRepository;
     }
 
     public function index(Request $request)
@@ -67,9 +71,10 @@ class ProductController extends RestController
             array_push($clause, WhereClause::query('sale_price', $request->priceTo, '<='));
         }
 
+        $tags = $this->tagRepository->get([WhereClause::query('status', 1)],'order:asc');
         $products = $this->repository->paginate($limit, $clause, $orderBy, $with);
 
-        return view('products.all', compact('products', 'arrSize', 'arrColor', 'arrPrice'));
+        return view('products.all', compact('products', 'arrSize', 'arrColor', 'arrPrice', 'tags'));
     }
 
     public function search(Request $request)
@@ -110,8 +115,9 @@ class ProductController extends RestController
             array_push($clause, WhereClause::query('sale_price', $request->priceTo, '<='));
         }
 
+        $tags = $this->tagRepository->get([WhereClause::query('status', 1)],'order:asc');
         $products = $this->repository->paginate($limit, $clause, $orderBy, $with);
-        return view('products.search', compact('products', 'arrSize', 'arrColor', 'arrPrice'));
+        return view('products.search', compact('products', 'arrSize', 'arrColor', 'arrPrice', 'tags'));
     }
 
     public function detail(Request $request, $category_slug, $slug)

@@ -9,6 +9,7 @@ use App\Repository\ProductCategoryRepositoryInterface;
 use App\Repository\ProductColorRepositoryInterface;
 use App\Repository\ProductRepositoryInterface;
 use App\Repository\ProductSizeRepositoryInterface;
+use App\Repository\ProductTagRepositoryInterface;
 use App\Repository\PromotionRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -20,6 +21,7 @@ class PromotionController extends RestController
     protected $colorRepository;
     protected $promotionRepository;
     protected $bannerRepository;
+    protected $tagRepository;
 
     public function __construct(
         ProductRepositoryInterface         $repository,
@@ -27,6 +29,7 @@ class PromotionController extends RestController
         ProductSizeRepositoryInterface     $sizeRepository,
         ProductColorRepositoryInterface    $colorRepository,
         PromotionRepositoryInterface       $promotionRepository,
+        ProductTagRepositoryInterface      $tagRepository,
         BannerRepositoryInterface       $bannerRepository
     )
     {
@@ -36,6 +39,7 @@ class PromotionController extends RestController
         $this->sizeRepository = $sizeRepository;
         $this->promotionRepository = $promotionRepository;
         $this->bannerRepository = $bannerRepository;
+        $this->tagRepository = $tagRepository;
     }
 
     public function index(Request $request)
@@ -79,15 +83,16 @@ class PromotionController extends RestController
         if (Str::length($request->priceTo) > 0) {
             array_push($clause, WhereClause::query('sale_price', $request->priceTo, '<='));
         }
-        
+
         $bannerPromotions = $this->bannerRepository->get([WhereClause::query('status', 1), WhereClause::queryRelationHas('group', function ($q) {
             $q->where('name', 'Promotion banner');
         })], 'order:asc');
 
         $promotions = $this->promotionRepository->get([WhereClause::query('status','1'), WhereClause::queryIn('type',['1','2'])]);
         $products = $this->repository->paginate($limit, $clause, $orderBy, $with);
+        $tags = $this->tagRepository->get([WhereClause::query('status', 1)],'order:asc');
 
-        return view('promotions.all', compact('products', 'arrSize', 'arrColor', 'arrPrice', 'promotions', 'bannerPromotions'));
+        return view('promotions.all', compact('products', 'arrSize', 'arrColor', 'arrPrice', 'promotions', 'bannerPromotions', 'tags'));
     }
 
     public function detail(Request $request, $slug)
@@ -145,7 +150,8 @@ class PromotionController extends RestController
 
         $promotions = $this->promotionRepository->get([WhereClause::query('status','1'), WhereClause::queryIn('type',['1','2']), WhereClause::queryDiff('id', $promotionMain->id)]);
         $products = $this->repository->paginate($limit, $clause, $orderBy, $with);
+        $tags = $this->tagRepository->get([WhereClause::query('status', 1)],'order:asc');
 
-        return view('promotions.detail', compact('products', 'arrSize', 'arrColor', 'arrPrice', 'promotionMain', 'promotions'));
+        return view('promotions.detail', compact('products', 'arrSize', 'arrColor', 'arrPrice', 'promotionMain', 'promotions', 'tags'));
     }
 }

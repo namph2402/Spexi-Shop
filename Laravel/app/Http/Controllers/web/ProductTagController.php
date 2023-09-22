@@ -69,8 +69,8 @@ class ProductTagController extends RestController
         if (Str::length($request->priceTo) > 0) {
             array_push($clause, WhereClause::query('sale_price', $request->priceTo, '<='));
         }
-
+        $tags = $this->repository->get([WhereClause::query('status', 1), WhereClause::queryDiff('name', $tag->name)],'order:asc');
         $products = $this->productRepository->paginate($limit, $clause, $orderBy, $with);
-        return view('products.tag', compact('products', 'tag', 'arrSize', 'arrColor', 'arrPrice'));
+        return view('products.tag', compact('products', 'tag', 'arrSize', 'arrColor', 'arrPrice', 'tags'));
     }
 }
