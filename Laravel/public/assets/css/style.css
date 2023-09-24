@@ -6938,6 +6938,10 @@ button.bg-dark:focus {
     content: "";
 }
 
+.border-none {
+    border: none !important;
+}
+
 .d-none {
     display: none !important;
 }
@@ -11746,6 +11750,12 @@ h6 {
     max-width: 80%;
     margin: 25px auto !important;
     display: block;
+}
+
+#formSearch {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    overflow: hidden;
 }
 
 @media (max-width: 768px) {

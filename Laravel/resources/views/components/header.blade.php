@@ -33,10 +33,10 @@
             <div class="col-lg-4 col-6 text-left">
                 <form action="/product_searchs" id="formSearch">
                     <div class="input-group">
-                        <input type="search" value="{{ request()->search }}" name="search" class="form-control"
+                        <input type="search" value="{{ request()->search }}" name="search" class="form-control border-none"
                             placeholder="Tìm kiếm sản phẩm">
                         <div class="input-group-append">
-                            <button type="submit" class="input-group-text bg-transparent text-primary">
+                            <button type="submit" class="input-group-text bg-transparent text-primary border-none">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
