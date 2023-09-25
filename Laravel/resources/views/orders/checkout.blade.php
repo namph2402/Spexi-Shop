@@ -105,7 +105,7 @@
                                 </div>
                                 <div class="name_product ml-3 mt-2">
                                     <p class="d-block item-checkout text-dark m-0">{{ $item->product->name }}</p>
-                                    <p class="d-block">Xanh, Đen</p>
+                                    <p class="d-block">{{ $item->warehouse->size->name }}, {{ $item->warehouse->color->name }}</p>
                                 </div>
                                 <div class="d-block w-20 mt-2 mr-2 text-right">
                                     <p class="d-block m-0">
