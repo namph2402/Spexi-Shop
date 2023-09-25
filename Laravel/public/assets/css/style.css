@@ -11022,12 +11022,6 @@ h6 {
     position: relative;
 }
 
-.err-text {
-    position: absolute;
-    color: #ff4a4a;
-    top: -20px;
-}
-
 .rate {
     height: 30px;
 }
@@ -11072,17 +11066,6 @@ h6 {
     overflow: auto;
 }
 
-.err-cart {
-    right: 60px;
-    font-size: 20px;
-    top: -35px;
-}
-
-
-.view-err {
-    display: block !important;
-}
-
 .item-checkout {
     font-size: 17px;
     font-weight: 600;
@@ -11095,20 +11078,6 @@ h6 {
 
 .form-group {
     position: relative;
-}
-
-.err-mess {
-    position: absolute;
-    color: red;
-    left: 15px;
-    top: 70px;
-}
-
-.err-mess-user {
-    position: absolute;
-    color: red;
-    left: 15px;
-    bottom: -20px;
 }
 
 .form-group label {
@@ -11132,6 +11101,23 @@ h6 {
     left: 10px;
 }
 
+.err-text {
+    position: absolute;
+    color: #ff4a4a;
+    top: -20px;
+    display: none;
+}
+
+.err-cart {
+    position: absolute;
+    color: #ff4a4a;
+    right: 60px;
+    font-size: 20px;
+    top: -35px;
+    display: none;
+}
+
+
 #wrapper {
     min-height: 70vh;
     display: flex;
@@ -11139,7 +11125,7 @@ h6 {
     align-items: center;
 }
 
-#login,
+#signin,
 #signup,
 #capcha,
 #retrieval {
@@ -11151,32 +11137,21 @@ h6 {
     box-shadow: 0px 0px 17px 2px;
 }
 
-.login-heading,
-.signup-heading {
-    font-size: 25px;
-    color: #f5f5f5;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.login-group,
-.signup-group {
+.account-group {
+    position: relative;
     border-bottom: 1px solid #fff;
-    margin-top: 15px;
-    margin-bottom: 20px;
     display: flex;
+    margin-bottom: 1.5rem;
 }
 
-.login-group i,
-.signup-group i {
+.account-group i {
     color: #fff;
     font-size: 14px;
     padding-top: 5px;
     padding-right: 10px;
 }
 
-.login-input,
-.signup-input {
+.account-input {
     background: transparent;
     border: 0;
     outline: 0;
@@ -11184,18 +11159,25 @@ h6 {
     flex-grow: 1;
 }
 
-.login-input::placeholder {
+.account-input::placeholder {
     color: #f5f5f5;
 }
 
-.signup-input::placeholder {
-    color: #f5f5f5;
+.account-btn {
+    margin: auto;
 }
 
 #eye i,
 #eye-re i {
     padding-right: 0;
     cursor: pointer;
+}
+
+.error-message {
+    position: absolute;
+    color: #ff5959;
+    left: 25px;
+    bottom: -22px;
 }
 
 .btn-send {
@@ -11206,15 +11188,6 @@ h6 {
     margin: auto;
     outline: none;
     cursor: pointer;
-}
-
-.btn-login,
-.btn-signup {
-    margin: auto;
-}
-
-.errSignup {
-    color: #ff5959;
 }
 
 .list-info {
@@ -11553,12 +11526,6 @@ h6 {
     text-align: center;
     font-size: 0.9rem;
     background: #ee4d2d9e;
-}
-
-.errPassword {
-    color: red;
-    display: block;
-    text-align: center;
 }
 
 .toast-msg {

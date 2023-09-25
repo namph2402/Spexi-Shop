@@ -3,8 +3,7 @@
     Thông tin tài khoản
 @endsection
 @section('content-child')
-    <form action="/profile/update-profile" method="post" enctype="multipart/form-data" class="col-lg-9 wow fadeIn" data-wow-delay="0.1s" name="updateProfile"
-        id="updateProfile">
+    <form action="/profile/update-profile" id="updateProfile" method="post" enctype="multipart/form-data" class="col-lg-9 wow fadeIn" data-wow-delay="0.1s">
         <div class="row">
             <div class="col-12 p-0">
                 <nav class="breadcrumb bg-light mb-3">
@@ -14,7 +13,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-8" style="background: white">
+            <div class="col-lg-8 bg-light">
                 <div class="p-2 pt-3">
                     <div class="d-flex">
                         <div class="col-md-6 form-group">
@@ -24,20 +23,20 @@
                         <div class="col-md-6 form-group">
                             <label class="pb-1">Email đăng ký</label>
                             <div class="d-flex align-items-center">
-                                <input class="form-control" type="email" name="email" value="{{ $profile->account->email }}" disabled>
+                                <input class="form-control" type="email" value="{{ $profile->account->email }}" disabled>
                             </div>
                         </div>
                     </div>
                     <div class="d-flex">
                         <div class="col-md-6 form-group">
                             <label class="pb-1">Tên khách hàng</label>
-                            <input class="form-control" type="text" name="fullname" placeholder="Nhập tên" value="{{ $profile->fullname }}">
-                            <small class="err-mess-user d-none" id="errName">Vui lòng nhập đúng thông tin</small>
+                            <input class="form-control" type="text" id="fullname" name="fullname" placeholder="Nhập tên" value="{{ $profile->fullname }}">
+                            <small class="error-message"></small>
                         </div>
                         <div class="col-md-6 form-group">
                             <label class="pb-1">Số điện thoại</label>
-                            <input class="form-control" type="number" name="phone" placeholder="Nhập số điện thoại" value="{{ $profile->phone }}">
-                            <small class="err-mess-user d-none" id="errPhone">Vui lòng nhập đúng thông tin</small>
+                            <input class="form-control" type="number" id="phone" name="phone" placeholder="Nhập số điện thoại" value="{{ $profile->phone }}">
+                            <small class="error-message"></small>
                         </div>
                     </div>
                     <div class="form-group">
@@ -86,14 +85,14 @@
                                 </select>
                             </div>
                         </div>
-                        <small class="err-mess-user d-none" id="errAddress">Vui lòng nhập đúng thông tin</small>
+                        <small class="error-message"></small>
                     </div>
-                    <div class="col-md-12 form-group">
+                    <div class="form-group col-md-12">
                         <label class="pb-1">Địa chỉ chi tiết</label>
-                        <input class="form-control" type="text" name="address" placeholder="Địa chỉ" value="{{ $profile->address }}">
-                        <small class="err-mess-user d-none" id="errAdd">Vui lòng nhập đúng thông tin</small>
+                        <input class="form-control" type="text" id="address" name="address" placeholder="Địa chỉ" value="{{ $profile->address }}">
+                        <small class="error-message"></small>
                     </div>
-                    <div class="col-md-12 form-group">
+                    <div class="form-group col-md-12">
                         <div class="w-100 d-flex align-items-center">
                             <label class="pb-1 mr-5">Giới tính</label>
                             <div class="col-lg-6 d-flex justify-content-between">
@@ -110,8 +109,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 form-group mt-2">
-                        <label class="pb-1">Ngày sinh</label>
+                    <div class="form-group col-md-12">
+                        <label class="pb-1 m-0">Ngày sinh</label>
                         <input class="form-control" type="date" name="dob" value="{{ $profile->dob }}">
                     </div>
                     <div class="mt-5" style="text-align:center">

@@ -175,49 +175,6 @@
         }
     });
 
-    $('#updateProfile').on('submit', function (e) {
-        var name = document.updateProfile.fullname.value;
-        var phone = document.updateProfile.phone.value;
-        var ward = document.updateProfile.ward_id.value;
-        var address = document.updateProfile.address.value;
-
-        const regexName = new RegExp('^(?=.*[a-zA-Z\đàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵĐÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴ]+)[a-zA-Z\đàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵĐÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴ ]*$');
-        const regexPhone = new RegExp('^(0)[0-9]{9}$');
-
-        if (name == "" || regexName.test(name) == false) {
-            $('#errName').toggleClass("view-err");
-            document.getElementById("btnUpdate").disabled = true
-            e.preventDefault();
-            setTimeout(() => [$('#errName').toggleClass("view-err"), document.getElementById("btnUpdate").disabled = false], 2000);
-        }
-        if (phone == "" || regexPhone.test(phone) == false) {
-            $('#errPhone').toggleClass("view-err");
-            document.getElementById("btnUpdate").disabled = true
-            e.preventDefault();
-            setTimeout(() => [$('#errPhone').toggleClass("view-err"), document.getElementById("btnUpdate").disabled = false], 2000);
-        }
-        if (ward == "") {
-            $('#errAddress').toggleClass("view-err");
-            document.getElementById("btnUpdate").disabled = true
-            e.preventDefault();
-            setTimeout(() => [$('#errAddress').toggleClass("view-err"), document.getElementById("btnUpdate").disabled = false], 2000);
-        }
-        if (address == "") {
-            $('#errAdd').toggleClass("view-err");
-            document.getElementById("btnUpdate").disabled = true
-            e.preventDefault();
-            setTimeout(() => [$('#errAdd').toggleClass("view-err"), document.getElementById("btnUpdate").disabled = false], 2000);
-        }
-    });
-
-    $('#login').on('submit', function (e) {
-        var u = $('input[name=username]', '#login').val();
-        var p = $('input[name=password]', '#login').val();
-        if (u.trim().length == 0 || p.trim().length == 0) {
-            e.preventDefault();
-        }
-    });
-
     $('#capcha').on('submit', function (e) {
         var u = $('input[name=code]', '#capcha').val();
         if (u.trim().length == 0) {
@@ -237,7 +194,7 @@
             var s = $('input[name=size_id]:checked', '#formDetail').val();
             var c = $('input[name=color_id]:checked', '#formDetail').val();
             if (s == undefined || c == undefined) {
-                $('#errText').toggleClass("view-err");
+                $('#errText').toggleClass("d-block");
                 e.preventDefault();
             }
         })
@@ -253,7 +210,7 @@
                 }
             }
             if (arrItem.length == 0) {
-                $('#errText').toggleClass("view-err");
+                $('#errText').toggleClass("d-block");
                 e.preventDefault();
             } else {
                 document.getElementById('item').value = arrItem;
@@ -287,57 +244,6 @@
     });
 
     $(document).ready(function () {
-        $('#formCheckout').on('submit', function (e) {
-            var name = document.formCheckout.customer_name.value;
-            var phone = document.formCheckout.customer_phone.value;
-            var province = document.formCheckout.province_id.value;
-            var district = document.formCheckout.district_id.value;
-            var ward = document.formCheckout.ward_id.value;
-            var address = document.formCheckout.customer_address.value;
-
-            const regexName = new RegExp('^(?=.*[a-zA-Z\đàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵĐÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴ]+)[a-zA-Z\đàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵĐÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴ ]*$');
-            const regexPhone = new RegExp('^(0)[0-9]{9}$');
-
-            if (name == "" || regexName.test(name) == false) {
-                $('#errName').toggleClass("view-err");
-                document.getElementById("btnOrder").disabled = true
-                e.preventDefault();
-                setTimeout(() => [$('#errName').toggleClass("view-err"), document.getElementById("btnOrder").disabled = false], 2000);
-            }
-            if (phone == "" || regexPhone.test(phone) == false) {
-                $('#errPhone').toggleClass("view-err");
-                document.getElementById("btnOrder").disabled = true
-                e.preventDefault();
-                setTimeout(() => [$('#errPhone').toggleClass("view-err"), document.getElementById("btnOrder").disabled = false], 2000);
-            }
-            if (province == "") {
-                $('#errProvince').toggleClass("view-err");
-                document.getElementById("btnOrder").disabled = true
-                e.preventDefault();
-                setTimeout(() => [$('#errProvince').toggleClass("view-err"), document.getElementById("btnOrder").disabled = false], 2000);
-            }
-            if (district == "") {
-                $('#errDistrict').toggleClass("view-err");
-                document.getElementById("btnOrder").disabled = true
-                e.preventDefault();
-                setTimeout(() => [$('#errDistrict').toggleClass("view-err"), document.getElementById("btnOrder").disabled = false], 2000);
-            }
-            if (ward == "") {
-                $('#errWard').toggleClass("view-err");
-                document.getElementById("btnOrder").disabled = true
-                e.preventDefault();
-                setTimeout(() => [$('#errWard').toggleClass("view-err"), document.getElementById("btnOrder").disabled = false], 2000);
-            }
-            if (address == "") {
-                $('#errAddress').toggleClass("view-err");
-                document.getElementById("btnOrder").disabled = true
-                e.preventDefault();
-                setTimeout(() => [$('#errAddress').toggleClass("view-err"), document.getElementById("btnOrder").disabled = false], 2000);
-            }
-        })
-    });
-
-    $(document).ready(function () {
         $('#eye').click(function () {
             $(this).toggleClass('open');
             $(this).children('i').toggleClass('fa-eye-slash fa-eye');
@@ -357,59 +263,6 @@
                 $(this).prev().attr('type', 'password');
             }
         });
-    });
-
-    $(document).ready(function () {
-        $('#signup').on('submit', function (e) {
-            var username = document.signup.username.value;
-            var email = document.signup.email.value;
-            var password = document.signup.password.value;
-            var re_password = document.signup.re_password.value;
-
-            const regexName = new RegExp('^(?=.*[a-zA-Z0-9]+)[a-zA-Z0-9]*$');
-            const regexEmail = new RegExp('[A-Za-z0-9._%-]+@[A-Za-z0-9._%-]+\\.[a-z]{2,3}');
-            if (username == "" || regexName.test(username) == false) {
-                document.getElementById("errMsg").innerHTML = `Tênđăng nhập chỉ chứa chữ cái, số`;
-                e.preventDefault();
-            } else {
-                if (email == "" || regexEmail.test(email) == false) {
-                    document.getElementById("errMsg").innerHTML = `Email khôngđúng`;
-                    e.preventDefault();
-                } else {
-                    if (password.trim().length < 6) {
-                        document.getElementById("errMsg").innerHTML = `Mật khẩu phải lớn hơn 6 kí tự`;
-                        e.preventDefault();
-                    } else {
-                        if (password != re_password) {
-                            document.getElementById("errMsg").innerHTML = `Mật khẩu không khớp`;
-                            e.preventDefault();
-                        }
-                    }
-                }
-            }
-        })
-    });
-
-    $(document).ready(function () {
-        $('#updatePassword').on('submit', function (e) {
-            var oldPassword = document.updatePassword.oldPassword.value;
-            var password = document.updatePassword.password.value;
-            var re_password = document.updatePassword.re_password.value;
-
-            if (oldPassword.trim().length == 0) {
-                e.preventDefault();
-            } else {
-                if (password.trim().length < 6) {
-                    document.getElementById("errMsg").innerHTML = `Mật khẩu phải lớn hơn 6 kí tự`;
-                    e.preventDefault();
-                } else {
-                    if (password != re_password) {
-                        document.getElementById("errMsg").innerHTML = `Mật khẩu không khớp`;
-                        e.preventDefault();
-                    }
-                }
-            }
-        })
     });
 
     $(document).ready(function () {
@@ -467,6 +320,74 @@
         }
     })
 
+    document.addEventListener('DOMContentLoaded', function () {
+        Validator({
+            form: '#signup',
+            formGroupSelector: '.account-group',
+            errorSelector: '.error-message',
+            rules: [
+                Validator.isUserName('#username'),
+                Validator.isEmail('#email'),
+                Validator.minLength('#password', 6),
+                Validator.isRequired('#re_password'),
+                Validator.isConfirmed('#re_password', function () {
+                    return document.querySelector('#signup #password').value;
+                }, 'Mật khẩu nhập lại không chính xác')
+            ],
+        });
+
+        Validator({
+            form: '#signin',
+            formGroupSelector: '.account-group',
+            errorSelector: '.error-message',
+            rules: [
+                Validator.isRequired('#username'),
+                Validator.minLength('#password', 6),
+            ],
+        });
+
+        Validator({
+            form: '#updateProfile',
+            formGroupSelector: '.form-group',
+            errorSelector: '.error-message',
+            rules: [
+                Validator.isName('#fullname'),
+                Validator.isPhone('#phone'),
+                Validator.isRequired('#ward_id'),
+                Validator.isRequired('#address'),
+            ],
+        });
+
+        Validator({
+            form: '#formCheckout',
+            formGroupSelector: '.form-group',
+            errorSelector: '.error-message',
+            rules: [
+                Validator.isName('#customer_name'),
+                Validator.isPhone('#customer_phone'),
+                Validator.isRequired('#customer_address'),
+                Validator.isRequired('#province_id'),
+                Validator.isRequired('#district_id'),
+                Validator.isRequired('#ward_id'),
+            ],
+        });
+
+        Validator({
+            form: '#updatePassword',
+            formGroupSelector: '.form-group',
+            errorSelector: '.error-message',
+            rules: [
+                Validator.minLength('#oldPassword', 6),
+                Validator.minLength('#password', 6),
+                Validator.isRequired('#re_password'),
+                Validator.isConfirmed('#re_password', function () {
+                    return document.querySelector('#updatePassword #password').value;
+                }, 'Mật khẩu nhập lại không chính xác')
+            ],
+        });
+
+    });
+
 })(jQuery);
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -476,19 +397,199 @@ function setParamsPage(name, value) {
     window.location.search = urlParams
 }
 
+function Validator(options) {
+    function getParent(element, selector) {
+        while (element.parentElement) {
+            if (element.parentElement.matches(selector)) {
+                return element.parentElement;
+            }
+            element = element.parentElement;
+        }
+    }
+
+    var selectorRules = {};
+
+    function validate(inputElement, rule) {
+        var errorElement = getParent(inputElement, options.formGroupSelector).querySelector(options.errorSelector);
+        var errorMessage;
+
+        var rules = selectorRules[rule.selector];
+
+        for (var i = 0; i < rules.length; ++i) {
+            switch (inputElement.type) {
+                case 'radio':
+                case 'checkbox':
+                    errorMessage = rules[i](
+                        formElement.querySelector(rule.selector + ':checked')
+                    );
+                    break;
+                default:
+                    errorMessage = rules[i](inputElement.value);
+            }
+            if (errorMessage) break;
+        }
+
+        if (errorMessage) {
+            errorElement.innerText = errorMessage;
+            getParent(inputElement, options.formGroupSelector).classList.add('invalid');
+        } else {
+            errorElement.innerText = '';
+            getParent(inputElement, options.formGroupSelector).classList.remove('invalid');
+        }
+
+        return !errorMessage;
+    }
+
+    var formElement = document.querySelector(options.form);
+    if (formElement) {
+
+        formElement.onsubmit = function (e) {
+            e.preventDefault();
+
+            var isFormValid = true;
+
+            options.rules.forEach(function (rule) {
+                var inputElement = formElement.querySelector(rule.selector);
+                var isValid = validate(inputElement, rule);
+                if (!isValid) {
+                    isFormValid = false;
+                }
+            });
+
+            if (isFormValid) {
+                if (typeof options.onSubmit === 'function') {
+                    var enableInputs = formElement.querySelectorAll('[name]');
+                    var formValues = Array.from(enableInputs).reduce(function (values, input) {
+
+                        switch (input.type) {
+                            case 'radio':
+                                values[input.name] = formElement.querySelector('input[name="' + input.name + '"]:checked').value;
+                                break;
+                            case 'checkbox':
+                                if (!input.matches(':checked')) {
+                                    values[input.name] = '';
+                                    return values;
+                                }
+                                if (!Array.isArray(values[input.name])) {
+                                    values[input.name] = [];
+                                }
+                                values[input.name].push(input.value);
+                                break;
+                            case 'file':
+                                values[input.name] = input.files;
+                                break;
+                            default:
+                                values[input.name] = input.value;
+                        }
+
+                        return values;
+                    }, {});
+                    options.onSubmit(formValues);
+                }
+                else {
+                    formElement.submit();
+                }
+            }
+        }
+
+        options.rules.forEach(function (rule) {
+
+            if (Array.isArray(selectorRules[rule.selector])) {
+                selectorRules[rule.selector].push(rule.test);
+            } else {
+                selectorRules[rule.selector] = [rule.test];
+            }
+
+            var inputElements = formElement.querySelectorAll(rule.selector);
+
+            Array.from(inputElements).forEach(function (inputElement) {
+
+                inputElement.onblur = function () {
+                    validate(inputElement, rule);
+                }
+
+                inputElement.oninput = function () {
+                    var errorElement = getParent(inputElement, options.formGroupSelector).querySelector(options.errorSelector);
+                    errorElement.innerText = '';
+                    getParent(inputElement, options.formGroupSelector).classList.remove('invalid');
+                }
+            });
+        });
+    }
+
+}
+
+Validator.isRequired = function (selector, message) {
+    return {
+        selector: selector,
+        test: function (value) {
+            return value ? undefined : message || 'Vui lòng nhập đầy đủ thông tin'
+        }
+    };
+}
+
+Validator.isName = function (selector, message) {
+    return {
+        selector: selector,
+        test: function (value) {
+            var regex = /^(?=.*[a-zA-Z\đàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵĐÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴ]+)[a-zA-Z\đàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵĐÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴ ]*$/;
+            return regex.test(value) ? undefined : message || 'Vui lòng nhập tên của bạn';
+        }
+    };
+}
+
+Validator.isUserName = function (selector, message) {
+    return {
+        selector: selector,
+        test: function (value) {
+            var regex = /^(?=.*[a-zA-Z0-9]+)[a-zA-Z0-9]*$/;
+            return regex.test(value) ? undefined : message || 'Vui lòng nhập tên đăng nhập';
+        }
+    };
+}
+
+Validator.isEmail = function (selector, message) {
+    return {
+        selector: selector,
+        test: function (value) {
+            var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            return regex.test(value) ? undefined : message || 'Vui lòng nhập email của bạn';
+        }
+    };
+}
+
+Validator.isPhone = function (selector, message) {
+    return {
+        selector: selector,
+        test: function (value) {
+            var regex = /^(0)[0-9]{9}$/;
+            return regex.test(value) ? undefined : message || 'Vui lòng nhập số điện thoại của bạn';
+        }
+    };
+}
+
+Validator.minLength = function (selector, min, message) {
+    return {
+        selector: selector,
+        test: function (value) {
+            return value.length >= min ? undefined : message || `Vui lòng nhập tối thiểu ${min} kí tự`;
+        }
+    };
+}
+
+Validator.isConfirmed = function (selector, getConfirmValue, message) {
+    return {
+        selector: selector,
+        test: function (value) {
+            return value === getConfirmValue() ? undefined : message || 'Giá trị nhập vào không chính xác';
+        }
+    }
+}
+
 function sendCapcha(url) {
     const email = document.getElementById('emailCapcha').value;
     const href = `/send-capcha?email=${email}`
     window.location.href = url + href;
-}
-
-function changeFilter() {
-    display = document.getElementById("formSearchP").style.display;
-    if (display == '' || display == 'none') {
-        document.getElementById("formSearchP").style.display = 'block';
-    } else {
-        document.getElementById("formSearchP").style.display = 'none';
-    }
 }
 
 function onProvinceIdChange() {
@@ -554,8 +655,8 @@ function applyVoucher() {
                 document.getElementById("voucherId").value = null;
                 this.getTotal(); nerHTML = `${discountView}đ`;
                 document.getElementByI
-                $('#errVoucher').toggleClass("view-err");
-                setTimeout(() => [$('#errVoucher').toggleClass("view-err")], 2000);
+                $('#errVoucher').toggleClass("d-block");
+                setTimeout(() => [$('#errVoucher').toggleClass("d-block")], 2000);
             } else {
                 if (amount > data['min_order_value']) {
                     if (data['type'] == 2) {
@@ -580,8 +681,8 @@ function applyVoucher() {
                     document.getElementById("discount").value = `${dataDiscount}`;
                     document.getElementById("voucherId").value = null;
                     this.getTotal();
-                    $('#errVoucher').toggleClass("view-err");
-                    setTimeout(() => [$('#errVoucher').toggleClass("view-err"), document.getElementById("btnVoucher").disabled = false], 2000);
+                    $('#errVoucher').toggleClass("d-block");
+                    setTimeout(() => [$('#errVoucher').toggleClass("d-block"), document.getElementById("btnVoucher").disabled = false], 2000);
                 }
             }
         })
@@ -604,7 +705,6 @@ function getTotal() {
     const shippingFee = +document.getElementById('shipping_fee').value;
     const total = amount + shippingFee;
     const totalView = VND.format(total);
-    console.log(amount);
     document.getElementById("total_amount").value = `${total}`;
     document.getElementById("totalAmountView").innerHTML = `${totalView}đ`;
 }

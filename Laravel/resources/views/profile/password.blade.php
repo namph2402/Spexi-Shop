@@ -3,7 +3,7 @@
     Thông tin tài khoản
 @endsection
 @section('content-child')
-    <form action="/profile/update-password" method="post" class="col-lg-9" name="updatePassword" id="updatePassword">
+    <form action="/profile/update-password" method="post" class="col-lg-9" id="updatePassword">
         <div class="row">
             <div class="col-12 p-0">
                 <nav class="breadcrumb bg-light mb-3">
@@ -12,8 +12,8 @@
                 </nav>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12" style="background: white">
+        <div class="row bg-light">
+            <div class="col-lg-10">
                 <div class="p-2 pt-3">
                     <div class="col-md-12 form-group">
                         <label class="pb-2">Tên đăng nhập</label>
@@ -21,18 +21,18 @@
                     </div>
                     <div class="col-md-12 form-group">
                         <label class="pb-2">Mật khẩu cũ</label>
-                        <input class="form-control" type="password" name="oldPassword" value="">
+                        <input class="form-control" type="password" id="oldPassword" name="oldPassword">
+                        <small class="error-message"></small>
                     </div>
                     <div class="col-md-12 form-group">
                         <label class="pb-2">Mật khẩu mới</label>
-                        <input class="form-control" type="password" name="password" value="">
+                        <input class="form-control" type="password" id="password" name="password">
+                        <small class="error-message"></small>
                     </div>
                     <div class="col-md-12 form-group">
                         <label class="pb-2">Nhập lại mật khẩu</label>
-                        <input class="form-control" type="password" name="re_password" value="">
-                    </div>
-                    <div class="w-100">
-                        <span class="errPassword" id="errMsg"></span>
+                        <input class="form-control" type="password" id="re_password" name="re_password">
+                        <small class="error-message"></small>
                     </div>
                     <div class="mt-4" style="text-align:center">
                         <button type="submit" class="btn btn-primary mb-3" id="btnUpdate">Cập nhật</button>

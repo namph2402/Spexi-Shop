@@ -81,8 +81,7 @@
                                     <span class="text-right d-block" style="font-size:20px">Tổng tiền</span>
                                 </td>
                                 <td colspan="2" class="text-left" style="font-weight:700;">
-                                    <span class="ml-2" id="totalAmount"
-                                        style="font-size:20px">{{ number_format($total_amount, 0, '.', '.') }} đ</span>
+                                    <span class="ml-2" id="totalAmount" style="font-size:20px">{{ number_format($total_amount, 0, '.', '.') }} đ</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -91,9 +90,9 @@
                 <div class="col-lg-12" style="text-align: right">
                     <a href="/products" class="btn btn-primary">Tiếp tục mua hàng</a>
                     <button type="submit" class="btn btn-primary ml-2 mr-5">Thanh toán</button>
-                    <p class="err-text err-cart d-none" id="errText">Vui lòng chọn sản phẩm mua hàng</p>
+                    <p class="err-cart" id="errText">Vui lòng chọn sản phẩm mua hàng</p>
                 </div>
-                <input type="text" hidden name="item" id="item" value="">
+                <input type="text" hidden name="item" id="item">
             </form>
         @else
             <div class="row px-xl-5">

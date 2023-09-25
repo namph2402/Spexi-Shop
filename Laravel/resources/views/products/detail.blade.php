@@ -55,10 +55,8 @@
                             <strong class="text-dark mr-3">Size :</strong>
                             @foreach ($sizePs as $key=>$s)
                                 <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" class="custom-control-input" id="{{ $s->name }}"
-                                        value="{{ $s->id }}" name="size_id" @if($key == 0) checked @endif>
-                                    <label class="custom-control-label"
-                                        for="{{ $s->name }}">{{ $s->name }}</label>
+                                    <input type="radio" class="custom-control-input" id="{{ $s->name }}" value="{{ $s->id }}" name="size_id">
+                                    <label class="custom-control-label" for="{{ $s->name }}">{{ $s->name }}</label>
                                 </div>
                             @endforeach
                         </div>
@@ -66,10 +64,8 @@
                             <strong class="text-dark mr-3">Màu :</strong>
                             @foreach ($colorPs as $key=>$c)
                                 <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" class="custom-control-input" id="{{ $c->name }}"
-                                        value="{{ $c->id }}" name="color_id" @if($key == 0) checked @endif>
-                                    <label class="custom-control-label"
-                                        for="{{ $c->name }}">{{ $c->name }}</label>
+                                    <input type="radio" class="custom-control-input" id="{{ $c->name }}" value="{{ $c->id }}" name="color_id">
+                                    <label class="custom-control-label" for="{{ $c->name }}">{{ $c->name }}</label>
                                 </div>
                             @endforeach
                         </div>
@@ -91,7 +87,7 @@
                             <button class="btn btn-primary px-3" type="submit"><i class="fa fa-shopping-cart mr-1"></i>
                                 Thêm vào giỏ
                             </button>
-                            <p id="errText" class="err-text d-none">Vui lòng chọn size và màu</p>
+                            <span id="errText" class="err-text d-none">Vui lòng chọn size và màu</span>
                         </div>
                         <input type="text" hidden name="product_id" value="{{ $product->id }}">
                         @csrf

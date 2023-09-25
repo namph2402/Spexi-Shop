@@ -52,18 +52,18 @@ class UserProfileController extends RestController
         $profile = $this->repository->find($clauses, null, ['account']);
 
         if($profile->province != null) {
-            $provinceUser = $this->provinceRepository->find([WhereClause::query('name', $profile->province)], null, ['districts']);
+            $provinceUser = $this->provinceRepository->find([WhereClause::query('name', $profile->province)], 'id:asc', ['districts']);
         }
 
         if($profile->district != null) {
-            $districtUser = $this->districtRepository->find([WhereClause::query('name', $profile->district)], null, ['wards']);
+            $districtUser = $this->districtRepository->find([WhereClause::query('name', $profile->district)], 'id:asc', ['wards']);
         }
 
         if($profile->ward != null) {
-            $wardUser = $this->wardRepository->find([WhereClause::query('name', $profile->ward)]);
+            $wardUser = $this->wardRepository->find([WhereClause::query('name', $profile->ward)], 'id:asc');
         }
 
-        $provinces = $this->provinceRepository->get([]);
+        $provinces = $this->provinceRepository->get([], 'id:asc');
         return view('profile.user', compact('profile','provinces','provinceUser', 'districtUser', 'wardUser'));
     }
 
@@ -161,7 +161,7 @@ class UserProfileController extends RestController
         $user = $this->userRepository->update(Auth::user()->id, [
             'password' =>  Hash::make($request->password)
         ]);
-        
+
         return $this->successView('profile/password','Đã đổi mật kẩu thành công');
     }
 }

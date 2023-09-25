@@ -15,28 +15,24 @@
         </div>
     </div>
     <div class="container-fluid">
-        <form action="/checkout/order" class="row px-xl-5" method="POST" name="formCheckout" id="formCheckout">
+        <form action="/checkout/order" class="row px-xl-5" method="POST" id="formCheckout">
             <div class="col-lg-6">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Thông tin
-                        nhận hàng</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Thông tin nhận hàng</span></h5>
                 <div class="bg-light p-25 mb-4">
                     <div class="row">
                         <div class="col-md-12 form-group">
                             <label>Tên khách hàng *</label>
-                            <input class="form-control" type="text" name="customer_name" placeholder="Nhập tên"
-                                value="{{ $profile->fullname }}">
-                            <small class="err-mess d-none" id="errName">Vui lòng nhập đúng thông tin</small>
+                            <input class="form-control" type="text" id="customer_name" name="customer_name" placeholder="Nhập tên" value="{{ $profile->fullname }}">
+                            <small class="error-message"></small>
                         </div>
                         <div class="col-md-12 form-group">
                             <label>Số điện thoại *</label>
-                            <input class="form-control" type="number" name="customer_phone"
-                                placeholder="Nhập số điện thoại" value="{{ $profile->phone }}">
-                            <small class="err-mess d-none" id="errPhone">Vui lòng nhập đúng thông tin</small>
+                            <input class="form-control" type="number" id="customer_phone" name="customer_phone" placeholder="Nhập số điện thoại" value="{{ $profile->phone }}">
+                            <small class="error-message"></small>
                         </div>
                         <div class="col-md-12 form-group">
                             <label>Tỉnh/Thành phố *</label>
-                            <select class="custom-select" name="province_id" id="province_id"
-                                onchange="onProvinceIdChange()">
+                            <select class="custom-select" id="province_id" name="province_id" onchange="onProvinceIdChange()">
                                 @if ($provinceUser != null)
                                     <option selected hidden value="{{ $provinceUser->id }}">{{ $provinceUser->name }}
                                     </option>
@@ -47,12 +43,11 @@
                                     <option value="{{ $province['id'] }}">{{ $province['name'] }}</option>
                                 @endforeach
                             </select>
-                            <small class="err-mess d-none" id="errProvince">Vui lòng chọn tỉnh/thành phố</small>
+                            <small class="error-message"></small>
                         </div>
                         <div class="col-md-12 form-group">
                             <label>Quận/Huyện *</label>
-                            <select class="custom-select" name="district_id" id="district_id"
-                                onchange="onDistrictIdChange()">
+                            <select class="custom-select" id="district_id" name="district_id" onchange="onDistrictIdChange()">
                                 @if ($districtUser != null)
                                     <option selected hidden value="{{ $districtUser->id }}">{{ $districtUser->name }}
                                     </option>
@@ -65,11 +60,11 @@
                                     @endforeach
                                 @endif
                             </select>
-                            <small class="err-mess d-none" id="errDistrict">Vui lòng chọn quận/huyện</small>
+                            <small class="error-message"></small>
                         </div>
                         <div class="col-md-12 form-group">
                             <label>Xã/Phường *</label>
-                            <select class="custom-select" name="ward_id" id="ward_id" onchange="getFee(0)">
+                            <select class="custom-select" id="ward_id" name="ward_id" onchange="getFee(0)">
                                 @if ($wardUser != null)
                                     <option selected hidden value="{{ $wardUser->id }}">{{ $wardUser->name }}</option>
                                 @else
@@ -81,13 +76,12 @@
                                     @endforeach
                                 @endif
                             </select>
-                            <small class="err-mess d-none" id="errWard">Vui lòng chọn xã/phường</small>
+                            <small class="error-message"></small>
                         </div>
                         <div class="col-md-12 form-group">
                             <label>Địa chỉ chi tiết *</label>
-                            <input class="form-control" type="text" name="customer_address" placeholder="Nhập địa chỉ"
-                                value="{{ $profile->address }}">
-                            <small class="err-mess d-none" id="errAddress">Vui lòng nhập địa chỉ</small>
+                            <input class="form-control" type="text" id="customer_address" name="customer_address" placeholder="Nhập địa chỉ" value="{{ $profile->address }}">
+                            <small class="error-message"></small>
                         </div>
                         <div class="col-md-12 form-group">
                             <label>Ghi chú tới shop</label>

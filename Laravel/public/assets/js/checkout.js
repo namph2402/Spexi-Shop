@@ -19,15 +19,6 @@ const Checkout = (function () {
 
     function init() {
         return {
-            redirectToPaymentUrl: (url, updateElementId = 'timeout', timeout = 5) => {
-                setInterval(() => {
-                    document.getElementById(updateElementId).innerHTML = timeout + 's';
-                }, 100);
-                setTimeout(function () {
-                    window.location.href = url;
-                }, timeout * 100);
-            },
-
             loadAllDistricts: (provinceId, onLoaded) => {
                 loadAjax(`/districts/${provinceId}`, (data) => {
                     onLoaded(data);
