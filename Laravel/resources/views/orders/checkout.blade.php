@@ -123,10 +123,8 @@
                         <div class="d-flex justify-content-between mb-3">
                             <h6>Tổng tiền</h6>
                             <h6 id="amountView">{{ number_format($dataItem['total'], 0, '.', '.') }} đ</h6>
-                            <input type="number" hidden name="amount" id="amount"
-                                value="{{ $dataItem['total'] }}">
-                            <input type="number" hidden name="amountDiscount" id="amountDiscount"
-                                value="{{ $dataItem['total'] }}">
+                            <input type="number" hidden name="amount" id="amount" value="{{ $dataItem['total'] }}">
+                            <input type="number" hidden name="amountDiscount" id="amountDiscount" value="{{ $dataItem['total'] }}">
                         </div>
                         <div class="d-flex justify-content-between mb-3">
                             <h6 class="font-weight-medium">Phí vận chuyển</h6>
@@ -139,8 +137,7 @@
                             <h6 class="font-weight-medium">Giảm giá</h6>
                             <h6 class="font-weight-medium" id="discountView">
                                 {{ number_format($dataItem['discount'], 0, '.', '.') }} đ</h6>
-                            <input type="number" hidden name="discount" id="discount"
-                                value="{{ $dataItem['discount'] }}">
+                            <input type="number" hidden name="discount" id="discount" value="{{ $dataItem['discount'] }}">
                         </div>
                         @if (!empty($promotion))
                             <span class="d-block test promotion-text mb-3">Khuyến mãi: {{$promotion->name}} khi đơn hàng từ {{ number_format($promotion->min_order_value, 0, '.', '.') }} đ</span>
@@ -160,7 +157,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <small class="err-voucher d-none" id="errVoucher">Mã giảm giá không đúng</small>
+                            <small class="err-voucher" id="errVoucher">Mã giảm giá không đúng</small>
                         </div>
                     </div>
                     <div class="pt-2">

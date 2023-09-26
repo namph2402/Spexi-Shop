@@ -123,7 +123,7 @@ class UserProfileController extends RestController
     public function order(Request $request)
     {
         $clauses = [WhereClause::query('user_id', Auth::user()->id)];
-        $orders = $this->orderRepository->paginate(10, $clauses, null, ['details.product']);
+        $orders = $this->orderRepository->paginate(10, $clauses, 'created_at:desc', ['details.product']);
         return view('profile.order', compact('orders'));
     }
 

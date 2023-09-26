@@ -11099,6 +11099,7 @@ h6 {
     color: red;
     top: 45px;
     left: 10px;
+    display: none;
 }
 
 .err-text {

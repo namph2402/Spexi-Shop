@@ -33,7 +33,7 @@ class ChangeStatusOrder implements ShouldQueue
     public function handle()
     {
         $model = Order::find($this->id);
-        if($model->order_status == Order::$XAC_NHAN) {
+        if($model && $model->order_status == Order::$XAC_NHAN) {
             $model->order_status = Order::$CHUAN_BI_HANG;
             $model->save();
         }

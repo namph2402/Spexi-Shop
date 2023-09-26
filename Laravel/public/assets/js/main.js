@@ -651,10 +651,10 @@ function applyVoucher() {
                 document.getElementById("amountDiscount").value = `${amount}`;
                 document.getElementById("shippingFeeView").innerHTML = `${shipView}đ`;
                 document.getElementById("shipping_fee").value = `${dataShip}`;
-                document.getElementById("discountView").ind("discount").value = `${dataDiscount}`;
+                document.getElementById("discountView").innerHTML = `${discountView}đ`;
+                document.getElementById("discount").value = `${dataDiscount}`;
                 document.getElementById("voucherId").value = null;
-                this.getTotal(); nerHTML = `${discountView}đ`;
-                document.getElementByI
+                this.getTotal();
                 $('#errVoucher').toggleClass("d-block");
                 setTimeout(() => [$('#errVoucher').toggleClass("d-block")], 2000);
             } else {
