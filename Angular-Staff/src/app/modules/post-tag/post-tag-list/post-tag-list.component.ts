@@ -69,6 +69,21 @@ export class PostTagListComponent extends AbstractCRUDComponent<PostTagMeta> {
     return new PostTagMeta();
   }
 
+  onStatusChange(item: PostTagMeta, index: number, enable: boolean) {
+    let methodAsync = null;
+    let titleMsg: string = 'Phát hành';
+    if (enable) {
+      methodAsync = this.service.enable(item.id);
+    } else {
+      methodAsync = this.service.disable(item.id);
+      titleMsg = 'Lưu kho';
+    }
+    methodAsync.subscribe((res: PostTagMeta) => {
+      this.service.toastSuccessfully(titleMsg);
+    }, () => this.service.toastFailed(titleMsg));
+    this.load();
+  }
+
   createPostTag() {
     let modalOptions = Object.assign(this.defaultModalOptions(), this.getCreateModalComponentOptions());
     const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, modalOptions);

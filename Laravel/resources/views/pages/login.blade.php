@@ -26,8 +26,8 @@
             </div>
             @csrf
             <div class="mt-3" style="text-align: center">
-                <span style="color: #d3d3d3">Bạn chưa có tài khoản? <a href="/sign-up">Đăng ký</a></span>
-                <a class="d-block mt-2" href="/retrieval">Quên mật khẩu ?</a>
+                <span style="color: #d3d3d3">Bạn chưa có tài khoản ? <a href="/sign-up">Đăng ký</a></span>
+                <a class="d-block mt-2" href="/retrieval">Quên mật khẩu</a>
             </div>
         </form>
     </div>

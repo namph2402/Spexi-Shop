@@ -69,6 +69,21 @@ export class ProductTagListComponent extends AbstractCRUDComponent<ProductTagMet
     return new ProductTagMeta();
   }
 
+  onStatusChange(item: ProductTagMeta, index: number, enable: boolean) {
+    let methodAsync = null;
+    let titleMsg: string = 'Phát hành';
+    if (enable) {
+      methodAsync = this.service.enable(item.id);
+    } else {
+      methodAsync = this.service.disable(item.id);
+      titleMsg = 'Lưu kho';
+    }
+    methodAsync.subscribe((res: ProductTagMeta) => {
+      this.service.toastSuccessfully(titleMsg);
+    }, () => this.service.toastFailed(titleMsg));
+    this.load();
+  }
+
   createProductTag() {
     let modalOptions = Object.assign(this.defaultModalOptions(), this.getCreateModalComponentOptions());
     const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, modalOptions);

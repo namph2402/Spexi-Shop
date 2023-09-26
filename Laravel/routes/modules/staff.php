@@ -101,6 +101,8 @@ Route::group(['middleware' => ['auth.staff']], function () {
     // Product tag
     Route::resource('product_tags', 'ProductTagController');
     Route::group(['prefix' => 'product_tags/{id}'], function () {
+        Route::post('enable', 'ProductTagController@enable');
+        Route::post('disable', 'ProductTagController@disable');
         Route::post('up', 'ProductTagController@up');
         Route::post('down', 'ProductTagController@down');
         Route::post('attach_tags', 'ProductTagController@attachTags');
@@ -180,6 +182,8 @@ Route::group(['middleware' => ['auth.staff']], function () {
     //Post tag
     Route::resource('post_tags', 'PostTagController');
     Route::group(['prefix' => 'post_tags/{id}'], function () {
+        Route::post('enable', 'PostTagController@enable');
+        Route::post('disable', 'PostTagController@disable');
         Route::post('up', 'PostTagController@up');
         Route::post('down', 'PostTagController@down');
         Route::post('attach_tags', 'PostTagController@attachTags');

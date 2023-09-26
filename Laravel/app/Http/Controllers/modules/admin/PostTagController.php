@@ -154,6 +154,45 @@ class PostTagController extends RestController
         }
     }
 
+
+    public function enable($id)
+    {
+        $model = $this->repository->findById($id);
+        if (empty($model)) {
+            return $this->errorNotFound();
+        }
+
+        try {
+            DB::beginTransaction();
+            $model = $this->repository->update($id, ['status' => true]);
+            DB::commit();
+            return $this->success($model);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function disable($id)
+    {
+        $model = $this->repository->findById($id);
+        if (empty($model)) {
+            return $this->errorNotFound();
+        }
+
+        try {
+            DB::beginTransaction();
+            $model = $this->repository->update($id, ['status' => false]);
+            DB::commit();
+            return $this->success($model);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return $this->error($e->getMessage());
+        }
+    }
+
     public function up($id)
     {
         $model = $this->repository->findById($id);
@@ -199,7 +238,7 @@ class PostTagController extends RestController
         try {
             DB::beginTransaction();
             $order = $model->order;
-$model = $this->repository->update($id,[
+            $model = $this->repository->update($id,[
                 'order' => $swapModel->order
             ]);
             $swapModel = $this->repository->update($swapModel->id,[

@@ -24,7 +24,7 @@ class ProductTagController extends RestController
 
     public function detail(Request $request, $slug)
     {
-        $tag = $this->repository->find([WhereClause::query('slug', $slug)]);
+        $tag = $this->repository->find([WhereClause::query('slug', $slug), WhereClause::query('status', 1)]);
         if (empty($tag)) {
             return $this->errorNotFoundView();
         }

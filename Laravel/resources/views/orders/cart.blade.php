@@ -15,7 +15,7 @@
     </div>
     <div class="container-fluid">
         @if (count($cart->items) > 0)
-            <form action="/checkout" method="GET" id="checkout">
+            <form action="/checkout" method="GET" id="checkout" class="row px-xl-5">
                 <div class="col-lg-12 table-responsive mb-5">
                     <table class="table table-light table-borderless table-hover text-center mb-0">
                         <thead class="thead-dark">
@@ -33,7 +33,14 @@
                         <tbody class="align-middle">
                             @foreach ($cart->items as $item)
                                 <tr>
-                                    <td><input type="checkbox" class="cart-item" value="{{ $item->id }}"></td>
+                                    <td class="text-center">
+                                        {{-- <input type="checkbox" class="cart-item" value="{{ $item->id }}"> --}}
+
+                                        <div class="custom-control custom-radio custom-control-inline m-0" style="margin-left: 10px !important">
+                                            <input type="checkbox" class="cart-item custom-control-input" id="{{ $item->id }}" value="{{ $item->id }}">
+                                            <label class="custom-control-label" for="{{ $item->id }}"></label>
+                                        </div>
+                                    </td>
                                     <td><img src="{{ $item->product->image }}" style="width: 50px;"></td>
                                     <td class="text-left">
                                         <a href="{{ $item->product->full_path }}" class="text-truncate">{{ $item->product->name }}</a>
