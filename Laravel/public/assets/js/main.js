@@ -141,7 +141,6 @@
                 const name = 'amountItem' + `${cartId}`;
                 document.getElementById(name).innerHTML = `${amount}đ`;
                 document.getElementById("totalAmount").innerHTML = `${totalAmount}đ`;
-                console.log(data)
             }
         })
         a.parent().parent().find('input').val(newVal);
