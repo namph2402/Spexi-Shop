@@ -130,6 +130,7 @@
                 newVal = 0;
             }
         }
+        a.parent().parent().find('input').val(newVal);
 
         Checkout.getInstance().updateQuantity(cartId, newVal, (data) => {
             if (data.length == 0) {
@@ -143,7 +144,6 @@
                 document.getElementById("totalAmount").innerHTML = `${totalAmount}đ`;
             }
         })
-        a.parent().parent().find('input').val(newVal);
     });
 
     $('#formSearch').on('submit', function (e) {

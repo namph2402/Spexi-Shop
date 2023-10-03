@@ -34,8 +34,6 @@
                             @foreach ($cart->items as $item)
                                 <tr>
                                     <td class="text-center">
-                                        {{-- <input type="checkbox" class="cart-item" value="{{ $item->id }}"> --}}
-
                                         <div class="custom-control custom-radio custom-control-inline m-0" style="margin-left: 10px !important">
                                             <input type="checkbox" class="cart-item custom-control-input" id="{{ $item->id }}" value="{{ $item->id }}">
                                             <label class="custom-control-label" for="{{ $item->id }}"></label>
