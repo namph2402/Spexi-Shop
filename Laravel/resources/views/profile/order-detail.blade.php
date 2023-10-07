@@ -38,7 +38,7 @@
                             </li>
 
                             <li>Ngày tạo đơn: {{ $order->created_at }}</li>
-                            <table class="table table-bordered mt-2" style="background:white">
+                            <table class="table table-primary table-bordered mt-2" style="background:white">
                                 <thead>
                                     <tr>
                                         <th class="text-center w-10 p-2">Ảnh</th>

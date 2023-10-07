@@ -24,23 +24,23 @@
     };
     toast();
 
-    var sendCode = function () {
-        let remainTimeout = 40;
-        if ($('#timeCode').length > 0) {
-            setInterval(() => {
-                remainTimeout--;
-                if (remainTimeout > 0) {
-                    document.getElementById("timeSecond").innerHTML = remainTimeout + 's';
-                } else if (remainTimeout == 0) {
-                    document.querySelector("#timeCode").remove();
-                    document.getElementById("sendCode").style.display = 'block';
-                }
-            }, 1000);
-        }
-    };
-    sendCode();
-
     $(document).ready(function () {
+        var sendCode = function () {
+            let remainTimeout = 40;
+            if ($('#timeCode').length > 0) {
+                setInterval(() => {
+                    remainTimeout--;
+                    if (remainTimeout > 0) {
+                        document.getElementById("timeSecond").innerHTML = remainTimeout + 's';
+                    } else if (remainTimeout == 0) {
+                        document.querySelector("#timeCode").remove();
+                        document.getElementById("sendCode").style.display = 'block';
+                    }
+                }, 1000);
+            }
+        };
+        sendCode();
+
         function toggleNavbarMethod() {
             if ($(window).width() > 992) {
                 $('.navbar .dropdown').on('mouseover', function () {
@@ -54,142 +54,140 @@
         }
         toggleNavbarMethod();
         $(window).resize(toggleNavbarMethod);
-    });
 
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 100) {
-            $('.back-to-top').fadeIn('slow');
-        } else {
-            $('.back-to-top').fadeOut('slow');
-        }
-    });
-
-    $('.back-to-top').click(function () {
-        $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');
-        return false;
-    });
-
-    $('.vendor-carousel').owlCarousel({
-        loop: true,
-        margin: 29,
-        nav: false,
-        autoplay: true,
-        smartSpeed: 1000,
-        responsive: {
-            0: {
-                items: 2
-            },
-            576: {
-                items: 3
-            },
-            768: {
-                items: 4
-            },
-            992: {
-                items: 5
-            },
-            1200: {
-                items: 6
-            }
-        }
-    });
-
-    $('.related-carousel').owlCarousel({
-        loop: true,
-        margin: 29,
-        nav: false,
-        autoplay: true,
-        smartSpeed: 1000,
-        responsive: {
-            0: {
-                items: 1
-            },
-            576: {
-                items: 2
-            },
-            768: {
-                items: 3
-            },
-            992: {
-                items: 4
-            }
-        }
-    });
-
-    $('.quantity a').on('click', function () {
-        var a = $(this);
-        var oldValue = a.parent().parent().find('input').val();
-        var cartId = a.parent().parent().parent().parent().find('input').val();
-
-        if (a.hasClass('btn-plus')) {
-            var newVal = parseFloat(oldValue) + 1;
-        } else {
-            if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 100) {
+                $('.back-to-top').fadeIn('slow');
             } else {
-                newVal = 0;
+                $('.back-to-top').fadeOut('slow');
             }
-        }
-        a.parent().parent().find('input').val(newVal);
+        });
 
-        Checkout.getInstance().updateQuantity(cartId, newVal, (data) => {
-            if (data.length == 0) {
-                location.reload();
+        $('.back-to-top').click(function () {
+            $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');
+            return false;
+        });
+
+        $('.vendor-carousel').owlCarousel({
+            loop: true,
+            margin: 29,
+            nav: false,
+            autoplay: true,
+            smartSpeed: 1000,
+            responsive: {
+                0: {
+                    items: 2
+                },
+                576: {
+                    items: 3
+                },
+                768: {
+                    items: 4
+                },
+                992: {
+                    items: 5
+                },
+                1200: {
+                    items: 6
+                }
+            }
+        });
+
+        $('.related-carousel').owlCarousel({
+            loop: true,
+            margin: 29,
+            nav: false,
+            autoplay: true,
+            smartSpeed: 1000,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                576: {
+                    items: 2
+                },
+                768: {
+                    items: 3
+                },
+                992: {
+                    items: 4
+                }
+            }
+        });
+
+        $('.quantity a').on('click', function () {
+            var a = $(this);
+            var oldValue = a.parent().parent().find('input').val();
+            var cartId = a.parent().parent().parent().parent().find('input').val();
+
+            if (a.hasClass('btn-plus')) {
+                var newVal = parseFloat(oldValue) + 1;
             } else {
-                const VND = new Intl.NumberFormat('vi-VN', { tyle: 'currency', currency: 'VND', });
-                const amount = VND.format(data.amount);
-                const totalAmount = VND.format(data.totalAmount);
-                const name = 'amountItem' + `${cartId}`;
-                document.getElementById(name).innerHTML = `${amount}đ`;
-                document.getElementById("totalAmount").innerHTML = `${totalAmount}đ`;
+                if (oldValue > 0) {
+                    var newVal = parseFloat(oldValue) - 1;
+                } else {
+                    newVal = 0;
+                }
             }
-        })
-    });
+            a.parent().parent().find('input').val(newVal);
 
-    $('#formSearch').on('submit', function (e) {
-        var v = $('input[name=search]', '#formSearch').val();
-        if (v.trim().length == 0) {
-            e.preventDefault();
-        }
-    });
+            Checkout.getInstance().updateQuantity(cartId, newVal, (data) => {
+                if (data.length == 0) {
+                    location.reload();
+                } else {
+                    const VND = new Intl.NumberFormat('vi-VN', { tyle: 'currency', currency: 'VND', });
+                    const amount = VND.format(data.amount);
+                    const totalAmount = VND.format(data.totalAmount);
+                    const name = 'amountItem' + `${cartId}`;
+                    document.getElementById(name).innerHTML = `${amount}đ`;
+                    document.getElementById("totalAmount").innerHTML = `${totalAmount}đ`;
+                }
+            })
+        });
 
-    $('#formSearchPost').on('submit', function (e) {
-        var v = $('input[name=search]', '#formSearchPost').val();
-        if (v.trim().length == 0) {
-            e.preventDefault();
-        }
-    });
+        $('#formSearch').on('submit', function (e) {
+            var v = $('input[name=search]', '#formSearch').val();
+            if (v.trim().length == 0) {
+                e.preventDefault();
+            }
+        });
 
-    $('#formEmail').on('submit', function (e) {
-        var v = $('input[name=email]', '#formEmail').val();
-        if (v.trim().length == 0) {
-            e.preventDefault();
-        }
-    });
+        $('#formSearchPost').on('submit', function (e) {
+            var v = $('input[name=search]', '#formSearchPost').val();
+            if (v.trim().length == 0) {
+                e.preventDefault();
+            }
+        });
 
-    $('#formComment').on('submit', function (e) {
-        var v = $('input[name=rating]', '#formComment').val();
-        var p = $('input[name=content]', '#formComment').val();
-        if (v.trim().length == 0 || p.trim().length == 0) {
-            e.preventDefault();
-        }
-    });
+        $('#formEmail').on('submit', function (e) {
+            var v = $('input[name=email]', '#formEmail').val();
+            if (v.trim().length == 0) {
+                e.preventDefault();
+            }
+        });
 
-    $('#capcha').on('submit', function (e) {
-        var u = $('input[name=code]', '#capcha').val();
-        if (u.trim().length == 0) {
-            e.preventDefault();
-        }
-    });
+        $('#formComment').on('submit', function (e) {
+            var v = $('input[name=rating]', '#formComment').val();
+            var p = $('input[name=content]', '#formComment').val();
+            if (v.trim().length == 0 || p.trim().length == 0) {
+                e.preventDefault();
+            }
+        });
 
-    $('#retrieval').on('submit', function (e) {
-        var u = $('input[name=user]', '#retrieval').val();
-        if (u.trim().length == 0) {
-            e.preventDefault();
-        }
-    });
+        $('#capcha').on('submit', function (e) {
+            var u = $('input[name=code]', '#capcha').val();
+            if (u.trim().length == 0) {
+                e.preventDefault();
+            }
+        });
 
-    $(document).ready(function () {
+        $('#retrieval').on('submit', function (e) {
+            var u = $('input[name=user]', '#retrieval').val();
+            if (u.trim().length == 0) {
+                e.preventDefault();
+            }
+        });
+
         $('#formDetail').on('submit', function (e) {
             var s = $('input[name=size_id]:checked', '#formDetail').val();
             var c = $('input[name=color_id]:checked', '#formDetail').val();
@@ -198,9 +196,7 @@
                 e.preventDefault();
             }
         })
-    });
 
-    $(document).ready(function () {
         $('#checkout').on('submit', function (e) {
             var arrItem = [];
             var checkbox = document.getElementsByClassName('cart-item');
@@ -216,9 +212,7 @@
                 document.getElementById('item').value = arrItem;
             }
         })
-    });
 
-    $(document).ready(function () {
         $('#formSearchP').on('submit', function (e) {
             var arrItemColor = [];
             var arrItemSize = [];
@@ -241,9 +235,7 @@
                 document.getElementById('size').value = arrItemSize;
             }
         })
-    });
 
-    $(document).ready(function () {
         $('#eye').click(function () {
             $(this).toggleClass('open');
             $(this).children('i').toggleClass('fa-eye-slash fa-eye');
@@ -263,9 +255,7 @@
                 $(this).prev().attr('type', 'password');
             }
         });
-    });
 
-    $(document).ready(function () {
         let rangeInput = document.querySelectorAll('.range-input input');
         if (rangeInput.length > 0) {
             let rangeText = document.querySelectorAll('.range-text div');
@@ -318,7 +308,7 @@
                 })
             })
         }
-    })
+    });
 
     document.addEventListener('DOMContentLoaded', function () {
         Validator({

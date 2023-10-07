@@ -14,7 +14,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12 py-4 mb-3" style="background: white">
-                <table class="table table-bordered" style="background:white">
+                <table class="table table-primary table-bordered" style="background:white">
                     <thead>
                         <tr>
                             <th style="text-align: center; width: 15%">Mã đơn</th>
