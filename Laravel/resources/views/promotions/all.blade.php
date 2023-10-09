@@ -60,6 +60,9 @@
         </div>
 
         <div class="row px-xl-5">
+            <div class="col-md-1 btn-filter d-none">
+                <button class="btn btn-primary float-right" onclick="changeForm()">Lọc</button>
+            </div>
             <form action="{{ Request::url() }}" class="col-lg-3 col-md-4 mb-3 formSearchP wow fadeIn" data-wow-delay="0.1s" id="formSearchP">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Lọc theo giá</span></h5>
                 <div class="search-price mb-30">
@@ -112,7 +115,7 @@
                     </div>
                 </div>
                 <div class="search-variant mb-30">
-                    <div class="search-color">
+                    <div class="search-tag">
                         <h5 class="section-title position-relative text-uppercase mb-3">
                             <span class="bg-secondary pr-3">Tag liên quan</span>
                         </h5>

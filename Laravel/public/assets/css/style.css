@@ -11731,7 +11731,21 @@ h6 {
     overflow: hidden;
 }
 
+@media (min-width: 769px) {
+    .formSearchP {
+        display: block !important;
+    }
+}
+
 @media (max-width: 768px) {
+    .btn-filter {
+        display: block !important;
+    }
+
+    .formSearchP {
+        display: none;
+    }
+
     .formSearchP .section-title {
         padding-bottom: 10px;
     }
@@ -11758,11 +11772,16 @@ h6 {
         margin-bottom: 10px;
     }
 
+    .search-tag {
+        width: 100%;
+    };
+
     .search-color,
     .search-size {
         width: 50%;
     }
 
+    .search-tag,
     .search-color h5,
     .search-size h5 {
         padding-top: 10px;

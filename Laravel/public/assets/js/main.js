@@ -576,6 +576,16 @@ Validator.isConfirmed = function (selector, getConfirmValue, message) {
     }
 }
 
+function changeForm() {
+    var form = document.getElementById('formSearchP');
+    console.log(form.style.display);
+    if(form.style.display == 'block') {
+        form.style.display = 'none';
+    } else {
+        form.style.display = 'block';
+    }
+}
+
 function sendCapcha(url) {
     const email = document.getElementById('emailCapcha').value;
     const href = `/send-capcha?email=${email}`
