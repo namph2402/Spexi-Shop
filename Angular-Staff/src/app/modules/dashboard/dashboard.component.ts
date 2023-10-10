@@ -3,9 +3,8 @@ import {AbstractCRUDComponent} from '../../core/crud';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {BsModalService, ModalOptions} from 'ngx-bootstrap';
 import {DashboardService} from './dashboard.service';
-import {Chart} from 'chart.js';
-import {DateTimeUtil, ExcelHelper, FieldForm, ObjectUtil} from '../../core';
-import moment = require('moment');
+import {FieldForm, ObjectUtil} from '../../core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-dashboard',

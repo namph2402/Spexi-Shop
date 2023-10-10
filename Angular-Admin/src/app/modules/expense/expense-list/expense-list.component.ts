@@ -8,7 +8,7 @@ import {ExpenseCreateComponent} from '../expense-create/expense-create.component
 import {ExpenseEditComponent} from '../expense-edit/expense-edit.component';
 import {ObjectUtil} from '../../../core/utils';
 import {FieldForm, ModalResult} from '../../../core/common';
-import moment = require('moment');
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-expense',
