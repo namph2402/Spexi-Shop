@@ -352,7 +352,7 @@
             @foreach ($posts as $p)
                 <div class="col-lg-3 col-md-4 col-sm-6 pb-1 product wow fadeInUp" data-wow-delay="0.1s">
                     <div class="product-item bg-light mb-4">
-                        <div class="product-img position-relative overflow-hidden">
+                        <div class="product-img position-relative overflow-hidden post-img-new">
                             <img class="img-fluid w-100 post-img-index" data-src="{{ $p->image }}" src="{{ $p->image }}" alt="{{ $p->name }}" style="height: 250px; object-fit: cover;">
                         </div>
                         <div class="product-text text-center py-3">

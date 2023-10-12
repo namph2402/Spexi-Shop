@@ -11731,6 +11731,16 @@ h6 {
     overflow: hidden;
 }
 
+.post-img-new {
+    height: 240px;
+}
+
+.btn-cancel {
+    width: 70px;
+    border-radius: 5px;
+    margin: 10px auto;
+}
+
 @media (min-width: 769px) {
     .formSearchP {
         display: block !important;

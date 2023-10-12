@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['prefix' => 'order'], function () {
         Route::get('', 'UserProfileController@order');
+        Route::get('cancel/{id}', 'UserProfileController@orderCancel');
         Route::get('detail/{id}', 'UserProfileController@orderDetail');
     });
 

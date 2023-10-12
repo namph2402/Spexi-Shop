@@ -4,6 +4,7 @@ namespace App\Http\Controllers\web;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
+use App\Models\Order;
 use App\Repository\UserProfileRepositoryInterface;
 use App\Repository\OrderRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
@@ -125,6 +126,24 @@ class UserProfileController extends RestController
         $clauses = [WhereClause::query('user_id', Auth::user()->id)];
         $orders = $this->orderRepository->paginate(10, $clauses, 'created_at:desc', ['details.product']);
         return view('profile.order', compact('orders'));
+    }
+
+    public function orderCancel($id)
+    {
+        $order = $this->orderRepository->findById($id, ['user', 'details.product']);
+        if (empty($order) || $order->user_id != Auth::user()->id) {
+            return $this->errorNotFoundView();
+        }
+
+        if ($order->order_status == 'Lên đơn' || $order->order_status == 'Xác nhận' || $order->order_status == 'Chuẩn bị hàng') {
+            $this->orderRepository->update($id, [
+                'order_status' => Order::$HUY_DON,
+            ]);
+            return redirect()->back()->with('msg_success', 'Hủy đơn hàng thành công');
+        } else {
+            return $this->errorView('Không thể hủy đơn hàng');
+        }
+
     }
 
     public function orderDetail(Request $request, $id)

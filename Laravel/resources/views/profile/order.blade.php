@@ -52,7 +52,12 @@
                             </td>
                             <th style="text-align: center; padding: 10px 0 0">
                                 {{ number_format($item->total_amount, 0, '.', '.') }} đ</th>
-                            <td style="text-align: center; padding: 10px 0 0">{{ $item->order_status }}</td>
+                            <td style="text-align: center; padding: 10px 0 0">
+                                {{ $item->order_status }}
+                                @if ($item->order_status == 'Lên đơn' || $item->order_status == 'Xác nhận' || $item->order_status == 'Chuẩn bị hàng')
+                                <a class="btn btn-sm btn-danger d-block btn-cancel" href="order/cancel/{{$item->id}}">Hủy đơn</a>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
