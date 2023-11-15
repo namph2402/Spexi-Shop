@@ -1,20 +1,21 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {BsModalRef} from 'ngx-bootstrap';
-import {ProvinceService} from '../province.service';
-import {ProvinceMeta} from '../province.meta';
 import {AbstractModalComponent, FieldForm} from '../../../core';
+import {ShippingFeeService} from '../shipping-fee.service';
+import {ShippingFeeMeta} from '../shipping-fee.meta';
+import {ProvinceService} from '../../province/province.service';
 
 @Component({
-  selector: 'app-province-import',
-  templateUrl: './province-import.component.html',
-  styleUrls: ['./province-import.component.css'],
-  providers: [ProvinceService]
+  selector: 'app-shipping-fee-import',
+  templateUrl: './shipping-fee-import.component.html',
+  styleUrls: ['./shipping-fee-import.component.css'],
+  providers: [ShippingFeeService, ProvinceService]
 })
-export class ProvinceImportComponent extends AbstractModalComponent<ProvinceMeta> {
+export class ShippingFeeImportComponent extends AbstractModalComponent<ShippingFeeMeta> {
 
   constructor(
-    service: ProvinceService,
+    service: ShippingFeeService,
     modal: BsModalRef,
     builder: FormBuilder,
   ) {

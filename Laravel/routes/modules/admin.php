@@ -248,8 +248,8 @@ Route::group(['middleware' => ['auth.admin']], function () {
     });
 
     // Shipping fee
-    Route::get('provinces/truncate', 'ProvinceController@truncate');
-    Route::post('provinces/import', 'ProvinceController@import');
+    Route::post('shipping_fees/import', 'ShippingFeeController@import');
+    Route::get('shipping_fees/truncate', 'ShippingFeeController@truncate');
     Route::resource('provinces', 'ProvinceController');
     Route::resource('districts', 'DistrictController');
     Route::resource('wards', 'WardController');

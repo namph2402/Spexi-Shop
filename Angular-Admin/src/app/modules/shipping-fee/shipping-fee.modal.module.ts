@@ -5,9 +5,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
 import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown';
 import {CKEditorModule} from 'ng2-ckeditor';
-import {ShippingFeeCreateComponent} from './shipping-fee-create/shipping-fee-create.component';
 import {ShippingFeeEditComponent} from './shipping-fee-edit/shipping-fee-edit.component';
 import {UiSwitchModule} from 'ngx-toggle-switch';
+import { ShippingFeeImportComponent } from './shipping-fee-import/shipping-fee-import.component';
 
 @NgModule({
   imports: [
@@ -24,13 +24,13 @@ import {UiSwitchModule} from 'ngx-toggle-switch';
     AngularMultiSelectModule,
   ],
   declarations: [
-    ShippingFeeCreateComponent, ShippingFeeEditComponent,
+    ShippingFeeEditComponent, ShippingFeeImportComponent
   ],
   entryComponents: [
-    ShippingFeeCreateComponent, ShippingFeeEditComponent,
+    ShippingFeeEditComponent, ShippingFeeImportComponent
   ],
   exports: [
-    ShippingFeeCreateComponent, ShippingFeeEditComponent,
+    ShippingFeeEditComponent, ShippingFeeImportComponent
   ]
 })
 export class ShippingFeeModalModule {

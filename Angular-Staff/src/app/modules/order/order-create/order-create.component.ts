@@ -126,7 +126,7 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
     super.onFormChanged();
     this.formGroup.controls['customer_phone'].valueChanges.debounceTime(1000).subscribe((value: string) => {
       if (value && value.length == 10) {
-        this.customerService.loadByParams({ phone: value }).subscribe((customers: CustomerMeta[]) => {
+        this.customerService.loadByParams({ phoneOrder: value }).subscribe((customers: CustomerMeta[]) => {
           if (customers.length > 0) {
             let c: CustomerMeta = customers[0];
             let provinceObj = this.fields[3].data.filter(v => v.name == c.province);

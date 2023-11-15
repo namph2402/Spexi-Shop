@@ -153,20 +153,9 @@ export const APP_FEATURES = [
         link: '/order-ships'
       },
       {
-        name: 'Địa chỉ vận chuyển',
-        icon: 'fa fa-map',
-        children: [
-          {
-            name: 'Địa chỉ',
-            icon: 'fa fa-map-marker',
-            link: '/provinces'
-          },
-          {
-            name: 'Phí vận chuyển',
+        name: 'Phí vận chuyển',
             icon: 'fa fa-motorcycle',
             link: '/shipping_fees'
-          },
-        ]
       },
     ]
   },

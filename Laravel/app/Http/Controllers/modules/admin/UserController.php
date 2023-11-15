@@ -42,6 +42,10 @@ class UserController extends RestController
             ]));
         }
 
+        if ($request->has('phoneOrder')) {
+            array_push($clauses, WhereClause::query('phone', $request->phoneOrder));
+        }
+
         if ($request->has('status')) {
             $status = $request->status;
             array_push($clauses, WhereClause::queryRelationHas('account', function ($q) use ($status) {

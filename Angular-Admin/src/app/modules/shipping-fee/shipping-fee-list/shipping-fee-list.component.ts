@@ -4,13 +4,13 @@ import {BsModalService, ModalOptions} from 'ngx-bootstrap';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ShippingFeeMeta} from '../shipping-fee.meta';
 import {ShippingFeeService} from '../shipping-fee.service';
-import {ShippingFeeCreateComponent} from '../shipping-fee-create/shipping-fee-create.component';
 import {ShippingFeeEditComponent} from '../shipping-fee-edit/shipping-fee-edit.component';
 import {FieldForm, ModalResult} from '../../../core/common';
 import {ProvinceService} from '../../province/province.service';
 import {DistrictService} from '../../district/district.service';
 import {WardService} from '../../ward/ward.service';
 import {ObjectUtil} from '../../../core';
+import { ShippingFeeImportComponent } from '../shipping-fee-import/shipping-fee-import.component';
 
 @Component({
   selector: 'app-shipping-fee',
@@ -43,7 +43,7 @@ export class ShippingFeeListComponent extends AbstractCRUDComponent<ShippingFeeM
   }
 
   getCreateModalComponent(): any {
-    return ShippingFeeCreateComponent;
+    return null;
   }
 
   getEditModalComponent(): any {
@@ -110,17 +110,22 @@ export class ShippingFeeListComponent extends AbstractCRUDComponent<ShippingFeeM
     });
   }
 
-  createShippingFee() {
-    let modalOptions = Object.assign(this.defaultModalOptions(), this.getCreateModalComponentOptions());
-    const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, modalOptions);
-    const modalRef = this.modalService.show(this.getCreateModalComponent(), config);
-    let modal: AbstractModalComponent<ShippingFeeMeta> = <AbstractModalComponent<ShippingFeeMeta>>modalRef.content;
-    modal.setModel(this.initNewModel());
-    modal.onHidden.subscribe((result: ModalResult<ShippingFeeMeta>) => {
+  import() {
+    const config = {ignoreBackdropClick: true};
+    const modalRef = this.modalService.show(ShippingFeeImportComponent, config);
+    let modal: AbstractModalComponent<any> = <AbstractModalComponent<any>>modalRef.content;
+    let sub = modal.onHidden.subscribe((result: ModalResult<any>) => {
       if (result.success) {
         this.load();
       }
     });
+  }
+
+  truncate() {
+    (<ShippingFeeService>this.service).truncate().subscribe(res => {
+      this.service.toastSuccessfully('Xóa bỏ');
+      this.load();
+    }, () => this.service.toastFailedEdited());
   }
 
   editShippingFee(item) {

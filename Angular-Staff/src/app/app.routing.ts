@@ -97,10 +97,6 @@ export const MODULES_ROUTING = [
     loadChildren: 'app/modules/expense/expense.module#ExpenseModule'
   },
   {
-    path: 'provinces',
-    loadChildren: 'app/modules/province/province.module#ProvinceModule'
-  },
-  {
     path: 'payment-transactions',
     loadChildren: 'app/modules/payment-transaction/payment-transaction.module#PaymentTransactionModule'
   },

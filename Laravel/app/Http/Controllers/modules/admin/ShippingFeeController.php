@@ -9,6 +9,7 @@ use App\Repository\ProvinceRepositoryInterface;
 use App\Repository\ShippingFeeRepositoryInterface;
 use App\Repository\WardRepositoryInterface;
 use Illuminate\Http\Request;
+use App\Utils\OfficeUtil;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -59,51 +60,89 @@ class ShippingFeeController extends RestController
         return $this->success($data);
     }
 
-
-    public function store(Request $request)
+    public function import(Request $request)
     {
-        $clauses = [];
-
+        set_time_limit(0);
         $validator = $this->validateRequest($request, [
-            'province_id' => 'required|numeric',
-            'district_id' => 'required|numeric',
-            'ward_id' => 'required|numeric',
-            'fee' => 'required|numeric',
+            'file' => 'required',
         ]);
         if ($validator) {
             return $this->errorClient($validator);
         }
 
-        if ($request->has('ward_id')) {
-            array_push($clauses, WhereClause::query('ward_id', $request->ward_id));
+        $file = $request->file('file');
+        if ($file->getClientOriginalExtension() != 'xlsx') {
+            return $this->errorClient('Không đúng định dạng file .xlsx');
         }
 
-        if ($request->has('district_id')) {
-            array_push($clauses, WhereClause::query('district_id', $request->district_id));
+        $newData = OfficeUtil::readXLSX($file->getRealPath(), 0, 2, 'A', -1, 'C');
+
+        if (!empty($newData)) {
+            try {
+                DB::beginTransaction();
+                foreach ($newData as $row) {
+                    $provinceValue = trim($row[0]);
+                    $districtValue = trim($row[1]);
+                    $wardValue = trim($row[2]);
+
+                    if($provinceValue == null || $districtValue == null || $wardValue == null) {
+                        continue;
+                    }
+
+                    $province = $this->provinceRepository->find([WhereClause::query('name', $provinceValue)]);
+                    if(!$province) {
+                        $province = $this->provinceRepository->create([
+                            'name' => $provinceValue
+                        ]);
+                    }
+
+                    $district = $this->districtRepository->find([WhereClause::query('province_id', $province->id), WhereClause::query('name', $districtValue)]);
+                    if(!$district) {
+                        $district = $this->districtRepository->create([
+                            'province_id' => $province->id,
+                            'name' => $districtValue
+                        ]);
+                    }
+
+                    $ward = $this->wardRepository->find([WhereClause::query('province_id', $province->id), WhereClause::query('district_id', $district->id), WhereClause::query('name', $wardValue)]);
+                    if(!$ward) {
+                        $ward = $this->wardRepository->create([
+                            'province_id' => $province->id,
+                            'district_id' => $district->id,
+                            'name' => $wardValue
+                        ]);
+                    }
+
+                    $fee = $this->repository->find([WhereClause::query('province_id', $province->id), WhereClause::query('district_id', $district->id), WhereClause::query('ward_id', $ward->id)]);
+                    if(!$fee) {
+                        $fee = $this->repository->create([
+                            'province_id' => $province->id,
+                            'district_id' => $district->id,
+                            'ward_id' => $ward->id,
+                            'fee' => 30000
+                        ]);
+                    }
+                }
+                DB::commit();
+                return $this->success([]);
+            } catch (\Exception $e) {
+                Log::error($e);
+                DB::rollBack();
+                return $this->error($e->getMessage());
+            }
+            sleep(0.5);
         }
+    }
 
-        if ($request->has('province_id')) {
-            array_push($clauses, WhereClause::query('province_id', $request->province_id));
-        }
-
-        $attributes = $request->only([
-            'province_id',
-            'district_id',
-            'ward_id',
-            'fee'
-        ]);
-
-        $model = $this->repository->find($clauses);
-
+    public function truncate() {
         try {
             DB::beginTransaction();
-            if (empty($model)) {
-                $item = $this->repository->create($attributes);
-            } else {
-                $item = $this->repository->update($model->id, $attributes);
-            }
+            $this->provinceRepository->truncate();
+            $this->districtRepository->truncate();
+            $this->wardRepository->truncate();
+            $this->repository->truncate();
             DB::commit();
-            return $this->success($item);
+            return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();
@@ -124,7 +163,7 @@ class ShippingFeeController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
-        
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $request->only(['fee']));
