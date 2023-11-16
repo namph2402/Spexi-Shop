@@ -238,6 +238,7 @@ class OrderShipController extends RestController
                 $this->orderRepository->update($model->order->id,
                 [
                     'order_status' => 'Hoàn thành',
+                    'payment_status' => 1,
                     'is_completed' => 1
                 ]);
             }
