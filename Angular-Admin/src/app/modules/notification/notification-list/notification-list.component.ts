@@ -32,7 +32,7 @@ export class NotificationListComponent extends AbstractCRUDComponent<Notificatio
   }
 
   getTitle(): string {
-    return 'Quản lý khách hàng';
+    return 'Quản lý thông báo';
   }
 
   getCreateModalComponent(): any {

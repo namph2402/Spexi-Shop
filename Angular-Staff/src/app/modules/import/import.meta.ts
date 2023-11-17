@@ -6,6 +6,7 @@ export class ImportMeta {
   creator_id: number;
   creator_name: string;
   description: string;
-  created_at: string;
+  total_amount: number;
+  date_created: string;
   details: ImportDetailMeta;
 }

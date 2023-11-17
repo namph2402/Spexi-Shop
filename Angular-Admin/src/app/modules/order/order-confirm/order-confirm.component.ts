@@ -45,8 +45,8 @@ export class OrderConfirmComponent extends AbstractModalComponent<OrderMeta> {
   confirm() {
     let item: any = ObjectUtil.combineValue(this.model, this.formGroup.value);
     (<OrderService>this.service).confirm(item).subscribe(res => {
-      this.service.toastSuccessfully('Hủy');
+      this.service.toastSuccessfully('Xác nhận');
       this.close(res);
-    }, () => this.service.toastFailed('Hủy'));
+    }, () => this.service.toastFailed('Xác nhận'));
   }
 }

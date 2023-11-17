@@ -31,20 +31,9 @@ export const APP_FEATURES = [
           ]
         },
         {
-          name: 'Quản lý giao dịch',
-          icon: 'fa fa-money',
-          children: [
-            {
-              name: 'Giao dịch thanh toán',
-              icon: 'fa fa-handshake-o',
-              link: '/payment-transactions'
-            },
-            {
-              name: 'Giao dịch chi tiêu',
-              icon: 'fa fa-money',
-              link: '/expenses'
-            }
-          ]
+          name: 'Giao dịch thanh toán',
+          icon: 'fa fa-handshake-o',
+          link: '/payment-transactions'
         },
       ]
   },

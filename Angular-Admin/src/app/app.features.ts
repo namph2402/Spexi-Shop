@@ -48,11 +48,6 @@ export const APP_FEATURES = [
               name: 'Giao dịch thanh toán',
               icon: 'fa fa-handshake-o',
               link: '/payment-transactions'
-            },
-            {
-              name: 'Giao dịch chi tiêu',
-              icon: 'fa fa-money',
-              link: '/expenses'
             }
           ]
         },
