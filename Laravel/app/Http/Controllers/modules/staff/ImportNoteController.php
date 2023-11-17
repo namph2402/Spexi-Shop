@@ -20,14 +20,18 @@ class ImportNoteController extends RestController
         $clauses = [];
         $with = ['details'];
         $withCount = [];
-        $orderBy = $request->input('orderBy','created_at:desc');
+        $orderBy = $request->input('orderBy','date_created:desc');
+
+        $month = $request->input('month', date("m"));
+        $year = $request->input('year', date("Y"));
 
         if ($request->has('search')) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('name', $request->search), WhereClause::queryLike('creator_name', $request->search)]));
         }
 
-        if ($request->has('date')) {
-            array_push($clauses, WhereClause::queryDate('created_at', $request->date));
+        if ($request->has('month') || $request->has('year')) {
+            array_push($clauses, WhereClause::queryMonth('date_created', $month));
+            array_push($clauses, WhereClause::queryYear('date_created', $year));
         }
 
         if ($limit) {

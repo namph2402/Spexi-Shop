@@ -33,7 +33,7 @@ export class PostCategoryListComponent extends AbstractCRUDComponent<PostCategor
   }
 
   getTitle(): string {
-    return 'Quản lý danh mục bài viết';
+    return 'Quản lý danh mục bài đăng';
   }
 
   getCreateModalComponent(): any {

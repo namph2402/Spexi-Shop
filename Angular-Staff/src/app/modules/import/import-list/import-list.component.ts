@@ -16,12 +16,23 @@ import { ImportDetailMeta } from '../import-detail.meta';
 })
 export class ImportListComponent extends AbstractCRUDComponent<ImportMeta> {
 
+  year: any = [];
+
   constructor(
     service: ImportService,
     modal: BsModalService,
     builder: FormBuilder,
   ) {
     super(service, modal, builder);
+    for (let i = 2100; i > 1900; i--) {
+      i
+      let data = {
+        'name' : i ,
+        'value' : i
+      }
+      this.year.push(data)
+    }
+    this.searchControls[2].data = this.year;
   }
 
   onInit(): void {
@@ -54,14 +65,65 @@ export class ImportListComponent extends AbstractCRUDComponent<ImportMeta> {
   buildSearchForm(): FormGroup {
     return this.formBuilder.group({
       search: new FormControl(null),
-      date: new FormControl(null),
+      month: new FormControl(null),
+      year: new FormControl(null),
     });
   }
 
   initSearchForm(): FieldForm[] {
     return [
       FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa'),
-      FieldForm.createDateInput('Tìm kiếm ngày nhập', 'date', 'Chọn một')
+      FieldForm.createSelect('Tìm kiếm tháng', 'month', 'Tháng', [
+        {
+          name:'Tháng 1',
+          value:'01',
+        },
+        {
+          name:'Tháng 2',
+          value:'02',
+        },
+        {
+          name:'Tháng 3',
+          value:'03',
+        },
+        {
+          name:'Tháng 4',
+          value:'04',
+        },
+        {
+          name:'Tháng 5',
+          value:'05',
+        },
+        {
+          name:'Tháng 6',
+          value:'06',
+        },
+        {
+          name:'Tháng 7',
+          value:'07',
+        },
+        {
+          name:'Tháng 8',
+          value:'08',
+        },
+        {
+          name:'Tháng 9',
+          value:'09',
+        },
+        {
+          name:'Tháng 10',
+          value:'10',
+        },
+        {
+          name:'Tháng 11',
+          value:'11',
+        },
+        {
+          name:'Tháng 12',
+          value:'12',
+        },
+      ]),
+      FieldForm.createSelect('Tìm kiếm năm', 'year', 'Năm', []),
     ];
   }
 
