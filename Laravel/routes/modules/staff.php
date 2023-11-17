@@ -38,9 +38,6 @@ Route::group(['middleware' => ['auth.staff']], function () {
     // Transaction
     Route::resource('payment_transactions', 'PaymentTransactionController');
 
-    // Expense
-    Route::resource('expenses', 'ExpenseController');
-
     // User
     Route::resource('users', 'UserController');
     Route::group(['prefix' => 'users/{id}'], function () {

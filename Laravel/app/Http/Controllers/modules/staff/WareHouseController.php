@@ -259,10 +259,20 @@ class WarehouseController extends RestController
             }
             try {
                 DB::beginTransaction();
+                $total_amount = 0;
+
+                foreach ($newData as $row) {
+                    $priceValue = intval($row[3]);
+                    $quantityValue = intval($row[8]);
+                    $total_amount += $priceValue * $quantityValue;
+
+                }
+
                 $import = $this->importRepository->create([
                     'name' => $request->name,
                     'creator_id' => $user->id,
                     'creator_name' => $user->fullname,
+                    'total_amount' => $total_amount,
                     'description' => $request->note
                 ]);
 

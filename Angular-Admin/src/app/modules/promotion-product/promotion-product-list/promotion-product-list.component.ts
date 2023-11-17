@@ -7,7 +7,7 @@ import {PromotionProductEditComponent} from '../promotion-product-edit/promotion
 import {PromotionProductService} from '../promotion-product.service';
 import {PromotionProductMeta} from '../promotion-product.meta';
 import {ObjectUtil} from '../../../core/utils';
-import {FieldForm, ModalResult} from '../../../core/common';
+import {AppPagination, FieldForm, ModalResult} from '../../../core/common';
 import {ProductCategoryService} from '../../product-category/product-category.service';
 import {ProductMeta} from '../../product/product.meta';
 
@@ -83,15 +83,21 @@ export class PromotionProductListComponent extends AbstractCRUDModalComponent<Pr
     this.load();
   }
 
-  public load() {
+  load(): void {
     this.promotion = this.relatedModel.type;
-    let param: any = ObjectUtil.combineValue({}, this.searchForm.value, true);
-    (<PromotionProductService>this.service).loadProduct(this.relatedModel.id, param).subscribe((res: PromotionProductMeta[]) => {
-        this.list = res;
-      }, () => {
-        this.list = [];
-      }
-    );
+    let param: any = ObjectUtil.combineValue({
+      limit: this.pagination.itemsPerPage,
+      page: this.pagination.currentPage,
+    }, this.searchForm.value, true);
+    (<PromotionProductService>this.service).loadProduct(this.relatedModel.id, param).subscribe((res: any) => {
+      this.nextPage = this.pagination.currentPage;
+      this.list = res.data;
+      this.pagination.set(res);
+    }, () => {
+      this.list = [];
+      this.pagination = new AppPagination();
+      this.nextPage = this.pagination.currentPage;
+    });
   }
 
   createPromotionProduct() {

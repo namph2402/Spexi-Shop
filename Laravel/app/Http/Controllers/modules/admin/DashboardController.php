@@ -4,7 +4,7 @@ namespace App\Http\Controllers\modules\admin;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
-use App\Repository\ExpenseRepositoryInterface;
+use App\Repository\ImportNoteRepositoryInterface;
 use App\Repository\OrderRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
 use App\Repository\WarehouseRepositoryInterface;
@@ -17,18 +17,18 @@ class DashboardController extends RestController
 {
     protected $userRepository;
     protected $warehouseRepository;
-    protected $expenseRepository;
+    protected $importRepository;
 
     public function __construct(
-        OrderRepositoryInterface     $repository,
-        UserRepositoryInterface      $userRepository,
-        WarehouseRepositoryInterface $warehouseRepository,
-        ExpenseRepositoryInterface   $expenseRepository
+        OrderRepositoryInterface      $repository,
+        UserRepositoryInterface       $userRepository,
+        WarehouseRepositoryInterface  $warehouseRepository,
+        ImportNoteRepositoryInterface $importRepository
     ) {
         parent::__construct($repository);
         $this->userRepository = $userRepository;
         $this->warehouseRepository = $warehouseRepository;
-        $this->expenseRepository = $expenseRepository;
+        $this->importRepository = $importRepository;
     }
 
     public function index(Request $request)
@@ -54,8 +54,8 @@ class DashboardController extends RestController
             WhereClause::queryYear('date_created', $year),
             WhereClause::query('order_status', "Hoàn thành")
         ]);
-        $total_amount_new =  DB::table('orders')->whereOrderStatus('Hoàn thành')->whereMonth('date_created', '=', $month)->whereYear('date_created', '=', $year)->sum('total_amount');
-        $expense_new =  DB::table('expenses')->whereStatus('1')->whereMonth('date_created', '=', $month)->whereYear('date_created', '=', $year)->sum('amount');
+        $total_amount_new = DB::table('orders')->whereOrderStatus('Hoàn thành')->whereMonth('date_created', '=', $month)->whereYear('date_created', '=', $year)->sum('total_amount');
+        $expense_new = DB::table('importing_notes')->whereMonth('date_created', '=', $month)->whereYear('date_created', '=', $year)->sum('total_amount');
 
         // Đơn hàng tháng cũ
         if ($month == 1) {
@@ -64,16 +64,16 @@ class DashboardController extends RestController
                 WhereClause::queryYear('date_created', $year - 1),
                 WhereClause::query('order_status', "Hoàn thành")
             ]);
-            $total_amount_old =  DB::table('orders')->whereOrderStatus('Hoàn thành')->whereMonth('date_created', '=', 12)->whereYear('date_created', '=', $year - 1)->sum('total_amount');
-            $expense_old =  DB::table('expenses')->whereStatus('1')->whereMonth('date_created', '=', 12)->whereYear('date_created', '=', $year - 1)->sum('amount');
+            $total_amount_old = DB::table('orders')->whereOrderStatus('Hoàn thành')->whereMonth('date_created', '=', 12)->whereYear('date_created', '=', $year - 1)->sum('total_amount');
+            $expense_old = DB::table('importing_notes')->whereMonth('date_created', '=', 12)->whereYear('date_created', '=', $year - 1)->sum('total_amount');
         } else {
             $orderOlds = $this->repository->get([
                 WhereClause::queryMonth('date_created', $month - 1),
                 WhereClause::queryYear('date_created', $year),
                 WhereClause::query('order_status', "Hoàn thành")
             ]);
-            $total_amount_old =  DB::table('orders')->whereOrderStatus('Hoàn thành')->whereMonth('date_created', '=', $month - 1)->whereYear('date_created', '=', $year)->sum('total_amount');
-            $expense_old =  DB::table('expenses')->whereStatus('1')->whereMonth('date_created', '=', $month - 1)->whereYear('date_created', '=', $year)->sum('amount');
+            $total_amount_old = DB::table('orders')->whereOrderStatus('Hoàn thành')->whereMonth('date_created', '=', $month - 1)->whereYear('date_created', '=', $year)->sum('total_amount');
+            $expense_old = DB::table('importing_notes')->whereMonth('date_created', '=', $month - 1)->whereYear('date_created', '=', $year)->sum('total_amount');
         }
 
         // Tính chênh lệch tháng
@@ -109,9 +109,10 @@ class DashboardController extends RestController
 
         // Biểu đồ đơn hàng + doanh thu trong năm
         $orderYears = $this->repository->get([WhereClause::queryYear('date_created', $year), WhereClause::query('order_status', "Hoàn thành")]);
-        $total_amount_year =  DB::table('orders')->whereOrderStatus('Hoàn thành')->whereYear('date_created', '=', $year)->sum('total_amount');
-        $expenseYears = $this->expenseRepository->get([WhereClause::queryYear('date_created', $year), WhereClause::query('status', "1")]);
-        $expense_year =  DB::table('expenses')->whereStatus('1')->whereYear('date_created', '=', $year)->sum('amount');
+        $total_amount_year = DB::table('orders')->whereOrderStatus('Hoàn thành')->whereYear('date_created', '=', $year)->sum('total_amount');
+        $expenseYears = $this->importRepository->get([WhereClause::queryYear('date_created', $year)]);
+        $expense_year = DB::table('importing_notes')->whereYear('date_created', '=', $year)->sum('total_amount');
+
         if (count($orderYears) > 0) {
             for ($i = 1; $i <= 12; $i++) {
                 $amount_unit = 0;
@@ -130,17 +131,17 @@ class DashboardController extends RestController
                 array_push($tablePercent, $percent);
             }
         }
+
         if (count($expenseYears) > 0) {
             for ($i = 1; $i <= 12; $i++) {
                 $amount_unit = 0;
-                $expenseUnit = $this->expenseRepository->get([
+                $expenseUnit = $this->importRepository->get([
                     WhereClause::queryMonth('date_created', $i),
-                    WhereClause::queryYear('date_created', $year),
-                    WhereClause::query('status', "1")
+                    WhereClause::queryYear('date_created', $year)
                 ]);
                 if (count($expenseUnit) > 0) {
                     foreach ($expenseUnit as $e) {
-                        $amount_unit += $e->amount;
+                        $amount_unit += $e->total_amount;
                     }
                 }
                 $percent = round((($amount_unit / $expense_year)) * 100, 2);
@@ -227,71 +228,72 @@ class DashboardController extends RestController
         $year = $request->input('year', date("Y"));
 
         $xlsx = [
-            "Đơn hàng năm " . $year => [['Tháng', 'Số lượng đơn hàng', 'Tỉ lệ (%)', 'Doanh thu đơn hàng', 'Tỉ lệ (%)']],
+            "Dữ liệu năm " . $year => [['Tháng', 'Số lượng đơn hàng', 'Doanh thu đơn hàng', 'Chi phí nhập hàng']],
             "Đơn hàng tháng " . $month => [['Mã đơn', 'Tên người nhận', 'Số điện thoại nhận', 'Địa chỉ nhận hàng', 'Tổng đơn', 'Phí ship', 'Giảm giá', 'Tổng thanh toán', 'Loại thanh toán', 'Thanh toán', 'Trạng thái đơn hàng']],
-            "Chi tiêu tháng " . $month => [['Tên giao dịch', 'Người tạo', 'Ngày tạo', 'Mô tả', 'Số tiền', 'Trạng thái']],
+            "Nhập hàng tháng " . $month => [['Tên giao dịch', 'Người tạo', 'Ngày tạo','Số tiền', 'Mô tả']],
             "Sản phẩm bán chạy tháng " . $month => [['Mã sản phẩm', 'Tên sản phẩm', 'Giá bán', 'Số lượng bán']],
             "Sản phẩm sắp hết" => [['Mã sản phẩm', 'Tên sản phẩm', 'Giá bán', 'Size', 'Màu', 'Số lượng còn lại']]
         ];
 
         // Đơn hàng + doanh thu năm
         $orderYear = $this->repository->get([WhereClause::queryYear('date_created', $year), WhereClause::query('order_status', "Hoàn thành")]);
-        $totalYear =  DB::table('orders')->whereOrderStatus('Hoàn thành')->whereYear('date_created', '=', $year)->sum('total_amount');
-        $expense = $this->expenseRepository->get([WhereClause::queryMonth('date_created', $month), WhereClause::queryYear('date_created', $year)]);
-        $expenseTotal =  DB::table('expenses')->whereMonth('date_created', '=', $month)->whereYear('date_created', '=', $year)->sum('amount');
+        $totalYear = DB::table('orders')->whereOrderStatus('Hoàn thành')->whereYear('date_created', '=', $year)->sum('total_amount');
+        $expenseYear = DB::table('importing_notes')->whereYear('date_created', '=', $year)->sum('total_amount');
 
-        if (count($orderYear) > 0) {
-            for ($i = 1; $i <= 12; $i++) {
-                $amount_unit = 0;
-                $orderUnit = $this->repository->get([WhereClause::queryMonth('date_created', $i), WhereClause::queryYear('date_created', $year), WhereClause::query('order_status', "Hoàn thành")]);
-                if (count($orderUnit) > 0) {
-                    foreach ($orderUnit as $o) {
-                        $amount_unit += $o->total_amount;
-                    }
+        for ($i = 1; $i <= 12; $i++) {
+            $amount_unit = 0;
+            $expense_unit = 0;
+            $orderUnit = $this->repository->get([WhereClause::queryMonth('date_created', $i), WhereClause::queryYear('date_created', $year), WhereClause::query('order_status', "Hoàn thành")]);
+            $expenseUnit = $this->importRepository->get([WhereClause::queryMonth('date_created', $i), WhereClause::queryYear('date_created', $year)]);
+
+            if (count($orderUnit) > 0) {
+                foreach ($orderUnit as $o) {
+                    $amount_unit += $o->total_amount;
                 }
-                $percentOrder = round((count($orderUnit) / count($orderYear)) * 100, 2);
-                $percentTotal = round((($amount_unit / $totalYear)) * 100, 2);
-
-                array_push($xlsx["Đơn hàng năm " . $year], [
-                    'Tháng ' . $i,
-                    count($orderUnit),
-                    $percentOrder,
-                    $amount_unit,
-                    $percentTotal
-                ]);
             }
-            array_push($xlsx["Đơn hàng năm " . $year], [
-                'Cả năm',
-                count($orderYear),
-                '100',
-                $totalYear,
-                '100'
+
+            if (count($expenseUnit) > 0) {
+                foreach ($expenseUnit as $e) {
+                    $expense_unit += $e->total_amount;
+                }
+            }
+
+            array_push($xlsx["Dữ liệu năm " . $year], [
+                'Tháng ' . $i,
+                count($orderUnit),
+                $amount_unit,
+                $expense_unit,
             ]);
         }
 
+        array_push($xlsx["Dữ liệu năm " . $year], [
+            'Cả năm',
+            count($orderYear),
+            $totalYear,
+            $expenseYear,
+        ]);
+
+        //  Nhập hàng thàng
+        $expense = $this->importRepository->get([WhereClause::queryMonth('date_created', $month), WhereClause::queryYear('date_created', $year)]);
+        $expenseTotal = DB::table('importing_notes')->whereMonth('date_created', '=', $month)->whereYear('date_created', '=', $year)->sum('total_amount');
+
         if(count($expense) > 0) {
             foreach($expense as $e) {
-                if($e->status == 0) {
-                    $status = "Chưa duyệt";
-                } else {
-                    $status = "Đã duyệt";
-                }
-                array_push($xlsx["Chi tiêu tháng " . $month],[
+                array_push($xlsx["Nhập hàng tháng " . $month],[
                     $e->name,
                     $e->creator_name,
                     $e->date_created,
+                    $e->total_amount,
                     $e->description,
-                    $e->amount,
-                    $status
                 ]);
             };
 
-            array_push($xlsx["Chi tiêu tháng " . $month],[
-                "",
+            array_push($xlsx["Nhập hàng tháng " . $month],[
                 "",
                 "",
                 "Tổng tiền",
                 $expenseTotal,
+                "",
                 ""
             ]);
         }

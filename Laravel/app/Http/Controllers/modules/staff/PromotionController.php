@@ -331,13 +331,17 @@ class PromotionController extends RestController
                 }
                 $this->repository->attach($model, $item['id']);
 
-                if ($model->type == Promotion::$DONG_GIA && $model->status == 1 && $item['price'] > $model->discount_same) {
-                    $this->productRepository->update($item['id'], ['sale_price' => $model->discount_same]);
-                }
+                if($model->status == 1) {
+                    if ($model->type == Promotion::$DONG_GIA && $item['price'] > $model->discount_same) {
+                        $this->productRepository->update($item['id'], ['sale_price' => $model->discount_same]);
+                    }
 
-                if ($model->type == Promotion::$GIAM_SAN_PHAM && $model->status == 1 && $item['price'] > $model->discount_value) {
-                    $sale_price = $item['price'] - (($item['price'] * $model->discount_percent) / 100) - $model->discount_value;
-                    $this->productRepository->update($item['id'], ['sale_price' => $sale_price]);
+                    if ($model->type == Promotion::$GIAM_SAN_PHAM && $item['price'] > $model->discount_value) {
+                        $sale_price = $item['price'] - (($item['price'] * $model->discount_percent) / 100) - $model->discount_value;
+                        $this->productRepository->update($item['id'], ['sale_price' => $sale_price]);
+                    }
+                } else {
+                    $this->productRepository->update($item['id'], ['sale_price' => $item['price']]);
                 }
             }
             DB::commit();

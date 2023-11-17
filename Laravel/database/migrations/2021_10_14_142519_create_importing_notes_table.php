@@ -18,7 +18,9 @@ class CreateImportingNotesTable extends Migration
             $table->string('name');
             $table->integer('creator_id')->index();
             $table->string('creator_name')->index();
+            $table->double('total_amount', 20, 2);
             $table->text('description')->nullable();
+            $table->dateTime('date_created');
             $table->timestamps();
         });
     }
