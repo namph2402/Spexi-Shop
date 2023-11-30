@@ -12,7 +12,7 @@ declare var $: any;
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  bodyClasses: string[] = ['skin-yellow-light', 'sidebar-mini'];
+  bodyClasses: string[] = ['skin-yellow-light', 'sidebar-mini', 'sidebar-collapse'];
   body: HTMLBodyElement = document.getElementsByTagName('body')[0];
   title: string;
   sub: any;

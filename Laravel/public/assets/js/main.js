@@ -115,6 +115,23 @@
             }
         });
 
+        $('.quantityDetail a').on('click', function () {
+            var a = $(this);
+            var oldValue = a.parent().parent().find('input').val();
+
+            if (a.hasClass('btn-plus')) {
+                var newVal = parseFloat(oldValue) + 1;
+            } else {
+                if (oldValue > 0) {
+                    var newVal = parseFloat(oldValue) - 1;
+                } else {
+                    newVal = 0;
+                }
+            }
+            a.parent().parent().find('input').val(newVal);
+            onDetailChange();
+        });
+
         $('.quantity a').on('click', function () {
             var a = $(this);
             var oldValue = a.parent().parent().find('input').val();
@@ -139,8 +156,8 @@
                     const amount = VND.format(data.amount);
                     const totalAmount = VND.format(data.totalAmount);
                     const name = 'amountItem' + `${cartId}`;
-                    document.getElementById(name).innerHTML = `${amount}đ`;
-                    document.getElementById("totalAmount").innerHTML = `${totalAmount}đ`;
+                    document.getElementById(name).innerHTML = `${amount} đ`;
+                    document.getElementById("totalAmount").innerHTML = `${totalAmount} đ`;
                 }
             })
         });
@@ -187,15 +204,6 @@
                 e.preventDefault();
             }
         });
-
-        $('#formDetail').on('submit', function (e) {
-            var s = $('input[name=size_id]:checked', '#formDetail').val();
-            var c = $('input[name=color_id]:checked', '#formDetail').val();
-            if (s == undefined || c == undefined) {
-                $('#errText').toggleClass("d-block");
-                e.preventDefault();
-            }
-        })
 
         $('#checkout').on('submit', function (e) {
             var arrItem = [];
@@ -576,9 +584,34 @@ Validator.isConfirmed = function (selector, getConfirmValue, message) {
     }
 }
 
+function onDetailChange() {
+    var a = $('input[name=quantity]', '#formDetail').val();
+    var s = $('input[name=size_id]:checked', '#formDetail').val();
+    var c = $('input[name=color_id]:checked', '#formDetail').val();
+
+    console.log(a);
+    if (s == undefined || c == undefined) {
+        document.getElementById('btnDetail').disabled = true;
+    } else {
+        Checkout.getInstance().getWarehouse(1, s, c, (data) => {
+            if(data['quantity'] == 0) {
+                document.getElementById('errText').innerText = "Hết hàng trong kho";
+                document.getElementById('btnDetail').disabled = true;
+            } else {
+                if(data['quantity'] < a) {
+                    document.getElementById('errText').innerText = "Không đủ hàng";
+                    document.getElementById('btnDetail').disabled = true;
+                } else {
+                    document.getElementById('errText').innerText = "";
+                    document.getElementById('btnDetail').disabled = false;
+                }
+            }
+        })
+    }
+}
+
 function changeForm() {
     var form = document.getElementById('formSearchP');
-    console.log(form.style.display);
     if(form.style.display == 'block') {
         form.style.display = 'none';
     } else {
@@ -622,13 +655,13 @@ function getFee(status) {
         Checkout.getInstance().getShipFee(provinceId, districtId, wardId, (data) => {
             const VND = new Intl.NumberFormat('vi-VN', { tyle: 'currency', currency: 'VND', });
             const shipping_fee = VND.format(data.fee);
-            document.getElementById("shippingFeeView").innerHTML = `${shipping_fee}đ`;
+            document.getElementById("shippingFeeView").innerHTML = `${shipping_fee} đ`;
             document.getElementById("shipping_fee").value = `${data['fee']}`;
         })
     } else {
         const VND = new Intl.NumberFormat('vi-VN', { tyle: 'currency', currency: 'VND', });
         const shipping_fee = VND.format('0');
-        document.getElementById("shippingFeeView").innerHTML = `${shipping_fee}đ`;
+        document.getElementById("shippingFeeView").innerHTML = `${shipping_fee} đ`;
         document.getElementById("shipping_fee").value = `0`;
     }
     this.getTotal();
@@ -649,9 +682,9 @@ function applyVoucher() {
                 const shipView = VND.format(dataShip);
                 const discountView = VND.format(dataDiscount);
                 document.getElementById("amountDiscount").value = `${amount}`;
-                document.getElementById("shippingFeeView").innerHTML = `${shipView}đ`;
+                document.getElementById("shippingFeeView").innerHTML = `${shipView} đ`;
                 document.getElementById("shipping_fee").value = `${dataShip}`;
-                document.getElementById("discountView").innerHTML = `${discountView}đ`;
+                document.getElementById("discountView").innerHTML = `${discountView} đ`;
                 document.getElementById("discount").value = `${dataDiscount}`;
                 document.getElementById("voucherId").value = null;
                 this.getTotal();
@@ -666,7 +699,7 @@ function applyVoucher() {
                         const amountNew = amount - totalDiscount;
                         const discountView = VND.format(totalDiscount);
                         document.getElementById("amountDiscount").value = `${amountNew}`;
-                        document.getElementById("discountView").innerHTML = `${discountView}đ`;
+                        document.getElementById("discountView").innerHTML = `${discountView} đ`;
                         document.getElementById("discount").value = `${totalDiscount}`;
                         this.getTotal();
                     }
@@ -675,9 +708,9 @@ function applyVoucher() {
                     const shipView = VND.format(dataShip);
                     const discountView = VND.format(dataDiscount);
                     document.getElementById("amountDiscount").value = `${amount}`;
-                    document.getElementById("shippingFeeView").innerHTML = `${shipView}đ`;
+                    document.getElementById("shippingFeeView").innerHTML = `${shipView} đ`;
                     document.getElementById("shipping_fee").value = `${dataShip}`;
-                    document.getElementById("discountView").innerHTML = `${discountView}đ`;
+                    document.getElementById("discountView").innerHTML = `${discountView} đ`;
                     document.getElementById("discount").value = `${dataDiscount}`;
                     document.getElementById("voucherId").value = null;
                     this.getTotal();
@@ -690,9 +723,9 @@ function applyVoucher() {
         const shipView = VND.format(dataShip);
         const discountView = VND.format(dataDiscount);
         document.getElementById("amountDiscount").value = `${amount}`;
-        document.getElementById("shippingFeeView").innerHTML = `${shipView}đ`;
+        document.getElementById("shippingFeeView").innerHTML = `${shipView} đ`;
         document.getElementById("shipping_fee").value = `${dataShip}`;
-        document.getElementById("discountView").innerHTML = `${discountView}đ`;
+        document.getElementById("discountView").innerHTML = `${discountView} đ`;
         document.getElementById("discount").value = `${dataDiscount}`;
         document.getElementById("voucherId").value = null;
         this.getTotal();
@@ -706,7 +739,7 @@ function getTotal() {
     const total = amount + shippingFee;
     const totalView = VND.format(total);
     document.getElementById("total_amount").value = `${total}`;
-    document.getElementById("totalAmountView").innerHTML = `${totalView}đ`;
+    document.getElementById("totalAmountView").innerHTML = `${totalView} đ`;
 }
 
 Array.prototype.forEach.call(document.querySelectorAll('.inputfile'), function (input) {

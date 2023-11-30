@@ -12,7 +12,7 @@ import {ProductMeta} from '../product/product.meta';
 export class PromotionService extends AbstractCRUDService<PromotionMeta> {
 
   constructor(http: HttpClient, toaster: ToasterService, title: TitleService) {
-    super(http, title, toaster, 'chương trình khuyến mại', 'promotions');
+    super(http, title, toaster, 'khuyến mãi', 'promotions');
   }
 
   assignProducts(id: number, ids: number[]): Observable<ProductMeta> {

@@ -11114,6 +11114,12 @@ h6 {
     display: none;
 }
 
+.err-text-detail {
+    position: absolute;
+    color: #ff4a4a;
+    top: -20px;
+}
+
 .err-cart {
     position: absolute;
     color: #ff4a4a;
@@ -11918,7 +11924,7 @@ h6 {
 .search-price {
     background: white;
     height: 100px;
-    padding: 10px;
+    padding: 30px;
     display: flex;
     align-items: center;
 }

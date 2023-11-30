@@ -55,7 +55,7 @@
                             <strong class="text-dark mr-3">Size :</strong>
                             @foreach ($sizePs as $key=>$s)
                                 <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" class="custom-control-input" id="{{ $s->name }}" value="{{ $s->id }}" name="size_id">
+                                    <input type="radio" class="custom-control-input" id="{{ $s->name }}" value="{{ $s->id }}" name="size_id" onchange="onDetailChange()">
                                     <label class="custom-control-label" for="{{ $s->name }}">{{ $s->name }}</label>
                                 </div>
                             @endforeach
@@ -64,30 +64,29 @@
                             <strong class="text-dark mr-3">Màu :</strong>
                             @foreach ($colorPs as $key=>$c)
                                 <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" class="custom-control-input" id="{{ $c->name }}" value="{{ $c->id }}" name="color_id">
+                                    <input type="radio" class="custom-control-input" id="{{ $c->name }}" value="{{ $c->id }}" name="color_id" onchange="onDetailChange()">
                                     <label class="custom-control-label" for="{{ $c->name }}">{{ $c->name }}</label>
                                 </div>
                             @endforeach
                         </div>
                         <div class="d-flex align-items-center mb-2 pt-3 form-detail">
-                            <div class="input-group quantity mr-3" style="width: 130px;">
+                            <div class="input-group quantityDetail mr-3" style="width: 130px;">
                                 <div class="input-group-btn">
                                     <a class="btn btn-primary btn-minus">
                                         <i class="fa fa-minus"></i>
                                     </a>
                                 </div>
-                                <input type="number" class="form-control bg-secondary border-0 text-center" name="quantity"
-                                    value="1">
+                                <input type="number" class="form-control bg-secondary border-0 text-center" name="quantity" value="1" onchange="onDetailChange()">
                                 <div class="input-group-btn">
                                     <a class="btn btn-primary btn-plus">
                                         <i class="fa fa-plus"></i>
                                     </a>
                                 </div>
                             </div>
-                            <button class="btn btn-primary px-3" type="submit"><i class="fa fa-shopping-cart mr-1"></i>
+                            <button id="btnDetail" class="btn btn-primary px-3" type="submit" disabled><i class="fa fa-shopping-cart mr-1"></i>
                                 Thêm vào giỏ
                             </button>
-                            <span id="errText" class="err-text d-none">Vui lòng chọn size và màu</span>
+                            <span id="errText" class="err-text-detail">Vui lòng chọn size và màu</span>
                         </div>
                         <input type="text" hidden name="product_id" value="{{ $product->id }}">
                         @csrf

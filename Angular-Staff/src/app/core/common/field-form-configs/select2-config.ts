@@ -23,7 +23,7 @@ export class Select2Config extends Object {
       searchPlaceholderText: 'Tìm kiếm',
       labelKey: 'name',
       primaryKey: 'id',
-      searchBy: ['name'],
+      searchBy: ['name','code'],
     };
   }
 

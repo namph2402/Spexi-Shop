@@ -137,7 +137,7 @@ export const APP_FEATURES = [
         link: '/vouchers'
       },
       {
-        name: 'Chương trình khuyến mãi',
+        name: 'Khuyến mãi',
         icon: 'fa fa-bullhorn',
         link: '/promotions'
       }

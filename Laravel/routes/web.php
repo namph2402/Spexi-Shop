@@ -47,6 +47,8 @@ Route::get('/districts/{id}', 'ShipController@getDistricts');
 Route::get('/wards/{id}', 'ShipController@getWards');
 Route::get('/getFee', 'ShipController@getFee');
 
+Route::get('/getWarehouse', 'WarehouseController@getWarehouse');
+
 Route::get('/huong-dan-chon-size', 'HomeController@size');
 Route::get('/chinh-sach-bao-mat', 'HomeController@privacy');
 Route::get('/chinh-sach-mua-hang', 'HomeController@purchase');
