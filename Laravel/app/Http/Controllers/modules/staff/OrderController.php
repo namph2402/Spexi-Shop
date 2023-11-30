@@ -119,6 +119,7 @@ class OrderController extends RestController
             'total_amount',
             'voucher_id',
             'payment_status',
+            'type'
         ]);
 
         $customer = $this->userRepository->find([WhereClause::query('phone', $request->customer_phone)]);
@@ -130,13 +131,8 @@ class OrderController extends RestController
 
         $attributes['code'] = $code;
         $attributes['date_created'] = date('Y-m-d');
-        $attributes['order_status'] = Order::$LEN_DON;
-
-        if ($request->payment_status == 0) {
-            $attributes['cod_fee'] = $request->total_amount;
-        } else {
-            $attributes['cod_fee'] = 0;
-        }
+        $attributes['order_status'] = Order::$HOAN_THANH;
+        $attributes['is_completed'] = 1;
 
         $products = json_decode($request->product, true);
         if(empty($products)) {

@@ -90,7 +90,8 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
       discount: new FormControl(null),
       total_amount: new FormControl(null),
       payment_type: new FormControl(null, Validators.required),
-      payment_status: new FormControl(null, Validators.required),
+      payment_status: new FormControl(null),
+      type: new FormControl(null),
     });
   }
 
@@ -106,16 +107,6 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
       FieldForm.createSingleSelect2('Sản phẩm', 'product', 'Chọn một', 'loadAllProducts'),
       FieldForm.createSingleSelect2('Mã giảm giá', 'voucher_list', 'Chọn một', 'loadVouchers'),
       FieldForm.createSelect('Hình thức thanh toán', 'payment_type', 'Chọn một', 'loadPayments'),
-      FieldForm.createSelect('Trạng thái thanh toán', 'payment_status', '', [
-        {
-          name: "Chưa thanh toán",
-          value: "0"
-        },
-        {
-          name: "Đã thanh toán",
-          value: "1"
-        }
-      ]),
     ];
   }
 
@@ -297,6 +288,8 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
       item.province = this.getFormValue('province')[0].name;
       item.district = this.getFormValue('district')[0].name;
       item.ward = this.getFormValue('ward')[0].name;
+      item.payment_status = 1;
+      item.type = 1
       item.product = JSON.stringify(this.arrProduct);
       this.service.store(item).subscribe(res => {
         this.service.toastSuccessfullyCreated();
