@@ -111,40 +111,35 @@
                                     <p class="d-block m-0">
                                         <small class="item-x">x</small>{{ $item->quantity }}
                                     </p>
-                                    <p class="d-block">{{ number_format($item->amount, 0, '.', '.') }} đ</p>
+                                    <p class="d-block">{{ number_format($item->product->sale_price * $item->quantity, 0, '.', '.') }} đ</p>
                                 </div>
                             </div>
                         @endforeach
-                        <input type="text" hidden name="items" value="{{ $itemC }}">
-                        <input type="text" hidden id="dataShip" value="{{ $dataItem['shipFee'] }}">
-                        <input type="text" hidden id="dataDiscount" value="{{ $dataItem['discount'] }}">
                     </div>
+
                     <div class="border-bottom pt-4 pb-2">
                         <div class="d-flex justify-content-between mb-3">
-                            <h6>Tổng tiền</h6>
-                            <h6 id="amountView">{{ number_format($dataItem['total'], 0, '.', '.') }} đ</h6>
-                            <input type="number" hidden name="amount" id="amount" value="{{ $dataItem['total'] }}">
-                            <input type="number" hidden name="amountDiscount" id="amountDiscount" value="{{ $dataItem['total'] }}">
+                            <h6>Thành tiền</h6>
+                            <h6>{{ number_format($dataItem['total'], 0, '.', '.') }} đ</h6>
                         </div>
+
                         <div class="d-flex justify-content-between mb-3">
                             <h6 class="font-weight-medium">Phí vận chuyển</h6>
-                            <h6 class="font-weight-medium" id="shippingFeeView">
-                                {{ number_format($dataItem['shipFee'], 0, '.', '.') }} đ</h6>
-                            <input type="number" hidden name="shipping_fee" id="shipping_fee"
-                                value="{{ $dataItem['shipFee'] }}">
+                            <h6 class="font-weight-medium" id="shippingFeeView">{{ number_format($dataItem['shipFee'], 0, '.', '.') }} đ</h6>
                         </div>
+
                         <div class="d-flex justify-content-between mb-3">
                             <h6 class="font-weight-medium">Giảm giá</h6>
-                            <h6 class="font-weight-medium" id="discountView">
-                                {{ number_format($dataItem['discount'], 0, '.', '.') }} đ</h6>
-                            <input type="number" hidden name="discount" id="discount" value="{{ $dataItem['discount'] }}">
+                            <h6 class="font-weight-medium" id="discountView"> {{ number_format($dataItem['discount'], 0, '.', '.') }} đ</h6>
                         </div>
+
                         @if (!empty($promotion))
                             <span class="d-block test promotion-text mb-3">Khuyến mãi: {{$promotion->name}} khi đơn hàng từ {{ number_format($promotion->min_order_value, 0, '.', '.') }} đ</span>
                             <input type="text" id="promotion" value="{{$promotion->type}}" hidden>
                         @else
                             <input type="text" id="promotion" value="0" hidden>
                         @endif
+
                         <div class="form-voucher-checkout">
                             <div class="input-group"
                                 style="border: 1px solid rgb(203, 203, 203);border-radius: 5px;overflow: hidden;">
@@ -152,20 +147,17 @@
                                     placeholder="Mã giảm giá">
                                 <input type="number" hidden name="voucherId" id="voucherId">
                                 <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary" id="btnVoucher"
-                                        onclick="applyVoucher()">Áp dụng
-                                    </button>
+                                    <button type="button" class="btn btn-primary" id="btnVoucher" onclick="applyVoucher()">Áp dụng</button>
                                 </div>
                             </div>
                             <small class="err-voucher" id="errVoucher">Mã giảm giá không đúng</small>
                         </div>
+
                     </div>
                     <div class="pt-2">
                         <div class="d-flex justify-content-between mt-2">
                             <h5>Tổng thanh toán</h5>
                             <h5 id="totalAmountView">{{ number_format($dataItem['totalAll'], 0, '.', '.') }} đ</h5>
-                            <input type="number" hidden name="total_amount" id="total_amount"
-                                value="{{ $dataItem['totalAll'] }}">
                         </div>
                     </div>
                 </div>
@@ -186,6 +178,15 @@
                     </div>
                 </div>
             </div>
+
+            <input type="text" hidden name="items" value="{{ $itemC }}">
+            <input type="number" hidden id="dataShip" value="{{ $dataItem['shipFee'] }}">
+            <input type="number" hidden id="dataDiscount" value="{{ $dataItem['discount'] }}">
+            <input type="number" hidden id="amountDiscount" value="{{ $dataItem['total'] - $dataItem['discount'] }}">
+            <input type="number" hidden name="amount" id="amount" value="{{ $dataItem['total'] }}">
+            <input type="number" hidden name="shipping_fee" id="shipping_fee" value="{{ $dataItem['shipFee'] }}">
+            <input type="number" hidden name="total_amount" id="total_amount" value="{{ $dataItem['totalAll'] }}">
+            <input type="number" hidden name="discount" id="discount" value="{{ $dataItem['discount'] }}">
             @csrf
         </form>
     </div>

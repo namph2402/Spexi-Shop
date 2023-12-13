@@ -19,7 +19,6 @@ class CreateCartItemsTable extends Migration
             $table->bigInteger('product_id')->index();
             $table->bigInteger('warehouse_id')->index();
             $table->integer('quantity')->default(1);
-            $table->double('amount', 20, 0)->default(0);
             $table->timestamps();
         });
     }

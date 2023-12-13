@@ -223,7 +223,7 @@ class ProductController extends RestController
         try {
             DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
-            $this->repository->delete($id, ['article', 'images', 'warehouses']);
+            $this->repository->delete($id, ['article', 'images', 'warehouses', 'cartItem']);
             DB::commit();
             FileStorageUtil::deleteFiles($image);
             return $this->success($model);

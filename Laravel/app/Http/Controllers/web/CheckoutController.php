@@ -87,7 +87,7 @@ class CheckoutController extends RestController
         $with = ['product', 'warehouse.size', 'warehouse.color'];
         $provinces = $this->provinceRepository->get([]);
         $profile = $this->profileRepository->find([WhereClause::query('user_id', Auth::user()->id)]);
-        $itemCheckout = $this->itemRepository->get($clauses, null, $with);
+        $itemCheckout = $this->itemRepository->get($clauses, null, ['product']);
 
         if(!$request->has('item') || count($itemCheckout) <= 0) {
             return redirect('/cart');
@@ -111,7 +111,7 @@ class CheckoutController extends RestController
         $payment = $this->paymentMethodRepository->get([WhereClause::query('status', 1)],'id:asc');
 
         foreach ($itemCheckout as $item) {
-            $total += $item->amount;
+            $total += $item->quantity * $item->product->sale_price;
         }
 
         $promotion = $this->promotionRepository->find(
@@ -132,6 +132,7 @@ class CheckoutController extends RestController
         }
 
         $totalAll = $total + $shipFee - $discount;
+
         $dataItem = [
             'total' => $total,
             'shipFee' => $shipFee,
@@ -159,6 +160,7 @@ class CheckoutController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $items = explode(",", $request->items);
         $clauses = [WhereClause::queryIn('id', $items)];
         $with = ['product', 'warehouse.size', 'warehouse.color'];
@@ -176,10 +178,12 @@ class CheckoutController extends RestController
             'discount',
             'payment_type'
         ]);
+
         $code = 'DH' . Str::random(8);
         while (Order::query()->where('code', $code)->exists()) {
             $code = 'DH' . Str::random(8);
         }
+
         $attributes['code'] = $code;
         $attributes['user_id'] = Auth::user()->id;
         $attributes['province'] = $province->name;
@@ -206,7 +210,7 @@ class CheckoutController extends RestController
                 $attributeDetails['color'] = $item->warehouse->color->name;
                 $attributeDetails['unit_price'] = $item->product->sale_price;
                 $attributeDetails['quantity'] = $item->quantity;
-                $attributeDetails['amount'] = $item->amount;
+                $attributeDetails['amount'] = $item->product->sale_price * $item->quantity;
                 $detail = $this->detailRepository->create($attributeDetails);
                 if ($detail) {
                     $this->itemRepository->delete($item->id);

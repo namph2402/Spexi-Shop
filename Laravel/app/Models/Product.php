@@ -73,4 +73,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Promotion::class, 'promotion_product_mapping');
     }
+
+    public function cartItem()
+    {
+        return $this->hasMany(CartItem::class);
+    }
 }

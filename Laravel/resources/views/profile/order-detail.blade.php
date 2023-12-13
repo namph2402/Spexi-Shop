@@ -30,7 +30,7 @@
                             <li>Mã đơn hàng: {{ $order->code }}</li>
                             <li>Trạng thái: {{ $order->order_status }}</li>
                             <li>Thanh toán:
-                                @if ($order->payment_type == 'manual')
+                                @if ($order->payment_type == 'CoD')
                                     Thanh toán khi nhận hàng
                                 @else
                                     Chuyển khoản

@@ -164,7 +164,7 @@ class WarehouseController extends RestController
 
         try {
             DB::beginTransaction();
-            $this->repository->delete($id);
+            $this->repository->delete($id, ['cartItem']);
             DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {

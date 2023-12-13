@@ -54,18 +54,16 @@ class CartController extends RestController
             'quantity'
         ]);
 
-        $product = $this->productRepository->findByID($request->product_id);
         $cart = $this->repository->find([WhereClause::query('user_id', Auth::user()->id)]);
 
-        $warehouse = $this->warehouseRepository->find([WhereClause::query('product_id', $request->product_id), WhereClause::query('size_id', $request->size_id), WhereClause::query('color_id', $request->color_id)]);
+        $warehouse = $this->warehouseRepository->find([WhereClause::query('product_id', $request->product_id), WhereClause::query('size_id', $request->size_id), WhereClause::query('color_id', $request->color_id), WhereClause::query('status',1)]);
         if(empty($warehouse)) {
             return $this->errorView('Kho hàng không đủ loại hàng này');
         }
 
         $attributes['cart_id'] = $cart->id;
         $attributes['warehouse_id'] = $warehouse->id;
-        $attributes['amount'] = $product->sale_price * $request->quantity;
-        
+
         $clause = [WhereClause::query('cart_id', $cart->id), WhereClause::query('product_id', $request->product_id), WhereClause::query('warehouse_id', $warehouse->id),];
         $test_item = $this->itemRepository->find($clause);
 
@@ -73,7 +71,6 @@ class CartController extends RestController
             DB::beginTransaction();
             if ($test_item) {
                 $attributes['quantity'] = $request->quantity + $test_item->quantity;
-                $attributes['amount'] = $attributes['quantity'] * $product->sale_price;
                 $this->itemRepository->update($test_item->id, $attributes);
             } else {
                 $this->itemRepository->create($attributes);
@@ -90,6 +87,7 @@ class CartController extends RestController
 
     public function updateItem(Request $request, $id)
     {
+
         $quantity = [];
         $totalAmount = 0;
         $item =  $this->itemRepository->findById($id, ['product']);
@@ -101,16 +99,17 @@ class CartController extends RestController
         if ($request->quantity > 0) {
             $data = $this->itemRepository->update($id, [
                 'quantity' => $request->quantity,
-                'amount' => $request->quantity * $item->product->sale_price,
             ]);
             $cart = $this->repository->find(WhereClause::query('cart_id', $item->cart_id), null, ['items']);
             foreach ($cart->items as $i) {
-                $totalAmount += $i->amount;
+                if($i->product && $i->warehouse) {
+                    $totalAmount += $data->quantity * $i->product->sale_price;
+                }
             }
             $quantity = [
                 'id' =>  $data->id,
                 'quantity' =>  $data->quantity,
-                'amount' =>  $data->amount,
+                'amount' => $data->quantity * $item->product->sale_price,
                 'totalAmount' => $totalAmount,
             ];
         } else {

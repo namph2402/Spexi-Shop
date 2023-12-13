@@ -32,6 +32,7 @@ class WarehouseController extends RestController
             WhereClause::query('product_id', $request->product_id),
             WhereClause::query('size_id', $request->size_id),
             WhereClause::query('color_id', $request->color_id),
+            WhereClause::query('status', 1)
         ]);
 
         if (empty($table)) {

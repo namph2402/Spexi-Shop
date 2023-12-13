@@ -586,14 +586,14 @@ Validator.isConfirmed = function (selector, getConfirmValue, message) {
 
 function onDetailChange() {
     var a = $('input[name=quantity]', '#formDetail').val();
+    var p = $('input[name=product_id]', '#formDetail').val();
     var s = $('input[name=size_id]:checked', '#formDetail').val();
     var c = $('input[name=color_id]:checked', '#formDetail').val();
 
-    console.log(a);
     if (s == undefined || c == undefined) {
         document.getElementById('btnDetail').disabled = true;
     } else {
-        Checkout.getInstance().getWarehouse(1, s, c, (data) => {
+        Checkout.getInstance().getWarehouse(p, s, c, (data) => {
             if(data['quantity'] == 0) {
                 document.getElementById('errText').innerText = "Hết hàng trong kho";
                 document.getElementById('btnDetail').disabled = true;
@@ -651,18 +651,21 @@ function getFee(status) {
     const districtId = document.getElementById('district_id').value;
     const wardId = document.getElementById('ward_id').value;
     const promotion = document.getElementById('promotion').value;
+    const shipView = document.getElementById("shippingFeeView");
+    const shipFee = document.getElementById("shipping_fee");
+
     if (status == 0 && promotion != 3) {
         Checkout.getInstance().getShipFee(provinceId, districtId, wardId, (data) => {
             const VND = new Intl.NumberFormat('vi-VN', { tyle: 'currency', currency: 'VND', });
             const shipping_fee = VND.format(data.fee);
-            document.getElementById("shippingFeeView").innerHTML = `${shipping_fee} đ`;
-            document.getElementById("shipping_fee").value = `${data['fee']}`;
+            shipView.innerHTML = `${shipping_fee} đ`;
+            shipFee.value = `${data['fee']}`;
         })
     } else {
         const VND = new Intl.NumberFormat('vi-VN', { tyle: 'currency', currency: 'VND', });
         const shipping_fee = VND.format('0');
-        document.getElementById("shippingFeeView").innerHTML = `${shipping_fee} đ`;
-        document.getElementById("shipping_fee").value = `0`;
+        shipView.innerHTML = `${shipping_fee} đ`;
+        shipFee.value = `0`;
     }
     this.getTotal();
 }
@@ -675,59 +678,47 @@ function applyVoucher() {
     const code = document.getElementById('voucher').value;
     const dataShip = +document.getElementById("dataShip").value;
     const dataDiscount = +document.getElementById("dataDiscount").value;
+    const shipView = VND.format(dataShip);
+    const discountView = VND.format(dataDiscount);
 
-    if (code.trim().length > 0) {
+    const voucherId = document.getElementById("voucherId");
+
+    if (code.trim().length > 0 && !voucherId.value) {
         Checkout.getInstance().getVoucher(code, (data) => {
-            if (data.length == 0) {
-                const shipView = VND.format(dataShip);
-                const discountView = VND.format(dataDiscount);
-                document.getElementById("amountDiscount").value = `${amount}`;
+            if (data && amount > data['min_order_value']) {
+                if (data['type'] == 2) {
+                    this.getFee(1);
+                } else {
+                    const totalDiscount = discount + (amount * data['discount_percent'] / 100) + data['discount_value']
+                    const amountNew = amount - totalDiscount;
+                    const discountView = VND.format(totalDiscount);
+                    document.getElementById("amountDiscount").value = `${amountNew}`;
+                    document.getElementById("discountView").innerHTML = `${discountView} đ`;
+                    document.getElementById("discount").value = `${totalDiscount}`;
+                    this.getTotal();
+                }
+                voucherId.value = `${data['id']}`;
+                document.getElementById("voucher").disabled = true;
+                document.getElementById("btnVoucher").hidden = true;
+            } else {
+                document.getElementById("amountDiscount").value = `${amount - dataDiscount}`;
                 document.getElementById("shippingFeeView").innerHTML = `${shipView} đ`;
                 document.getElementById("shipping_fee").value = `${dataShip}`;
                 document.getElementById("discountView").innerHTML = `${discountView} đ`;
                 document.getElementById("discount").value = `${dataDiscount}`;
-                document.getElementById("voucherId").value = null;
+                voucherId.value = null;
                 this.getTotal();
                 $('#errVoucher').toggleClass("d-block");
                 setTimeout(() => [$('#errVoucher').toggleClass("d-block")], 2000);
-            } else {
-                if (amount > data['min_order_value']) {
-                    if (data['type'] == 2) {
-                        this.getFee(1);
-                    } else {
-                        const totalDiscount = discount + (amount * data['discount_percent'] / 100) + data['discount_value']
-                        const amountNew = amount - totalDiscount;
-                        const discountView = VND.format(totalDiscount);
-                        document.getElementById("amountDiscount").value = `${amountNew}`;
-                        document.getElementById("discountView").innerHTML = `${discountView} đ`;
-                        document.getElementById("discount").value = `${totalDiscount}`;
-                        this.getTotal();
-                    }
-                    document.getElementById("voucherId").value = `${data['id']}`;
-                } else {
-                    const shipView = VND.format(dataShip);
-                    const discountView = VND.format(dataDiscount);
-                    document.getElementById("amountDiscount").value = `${amount}`;
-                    document.getElementById("shippingFeeView").innerHTML = `${shipView} đ`;
-                    document.getElementById("shipping_fee").value = `${dataShip}`;
-                    document.getElementById("discountView").innerHTML = `${discountView} đ`;
-                    document.getElementById("discount").value = `${dataDiscount}`;
-                    document.getElementById("voucherId").value = null;
-                    this.getTotal();
-                    $('#errVoucher').toggleClass("d-block");
-                    setTimeout(() => [$('#errVoucher').toggleClass("d-block"), document.getElementById("btnVoucher").disabled = false], 2000);
-                }
             }
         })
     } else {
-        const shipView = VND.format(dataShip);
-        const discountView = VND.format(dataDiscount);
-        document.getElementById("amountDiscount").value = `${amount}`;
+        document.getElementById("amountDiscount").value = `${amount - dataDiscount}`;
         document.getElementById("shippingFeeView").innerHTML = `${shipView} đ`;
         document.getElementById("shipping_fee").value = `${dataShip}`;
         document.getElementById("discountView").innerHTML = `${discountView} đ`;
         document.getElementById("discount").value = `${dataDiscount}`;
-        document.getElementById("voucherId").value = null;
+        voucherId.value = null;
         this.getTotal();
     }
 }
