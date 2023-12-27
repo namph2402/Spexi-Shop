@@ -132,94 +132,41 @@
             onDetailChange();
         });
 
-        $('.quantity a').on('click', function () {
-            var a = $(this);
-            var oldValue = a.parent().parent().find('input').val();
-            var cartId = a.parent().parent().parent().parent().find('input').val();
-
-            if (a.hasClass('btn-plus')) {
-                var newVal = parseFloat(oldValue) + 1;
-            } else {
-                if (oldValue > 0) {
-                    var newVal = parseFloat(oldValue) - 1;
-                } else {
-                    newVal = 0;
-                }
-            }
-            a.parent().parent().find('input').val(newVal);
-
-            Checkout.getInstance().updateQuantity(cartId, newVal, (data) => {
-                if (data.length == 0) {
-                    location.reload();
-                } else {
-                    const VND = new Intl.NumberFormat('vi-VN', { tyle: 'currency', currency: 'VND', });
-                    const amount = VND.format(data.amount);
-                    const totalAmount = VND.format(data.totalAmount);
-                    const name = 'amountItem' + `${cartId}`;
-                    document.getElementById(name).innerHTML = `${amount} đ`;
-                    document.getElementById("totalAmount").innerHTML = `${totalAmount} đ`;
-                }
-            })
-        });
-
         $('#formSearch').on('submit', function (e) {
-            var v = $('input[name=search]', '#formSearch').val();
-            if (v.trim().length == 0) {
+            if ($('input[name=search]', '#formSearch').val().trim().length == 0) {
                 e.preventDefault();
             }
         });
 
         $('#formSearchPost').on('submit', function (e) {
-            var v = $('input[name=search]', '#formSearchPost').val();
-            if (v.trim().length == 0) {
+            if ($('input[name=search]', '#formSearchPost').val().trim().length == 0) {
                 e.preventDefault();
             }
         });
 
         $('#formEmail').on('submit', function (e) {
-            var v = $('input[name=email]', '#formEmail').val();
-            if (v.trim().length == 0) {
+            if ($('input[name=email]', '#formEmail').val().trim().length == 0) {
                 e.preventDefault();
             }
         });
 
         $('#formComment').on('submit', function (e) {
-            var v = $('input[name=rating]', '#formComment').val();
-            var p = $('input[name=content]', '#formComment').val();
-            if (v.trim().length == 0 || p.trim().length == 0) {
+            if ($('input[name=rating]', '#formComment').val().trim().length == 0 || $('input[name=content]', '#formComment').val().trim().length == 0) {
                 e.preventDefault();
             }
         });
 
         $('#capcha').on('submit', function (e) {
-            var u = $('input[name=code]', '#capcha').val();
-            if (u.trim().length == 0) {
+            if ($('input[name=code]', '#capcha').val().trim().length == 0) {
                 e.preventDefault();
             }
         });
 
         $('#retrieval').on('submit', function (e) {
-            var u = $('input[name=user]', '#retrieval').val();
-            if (u.trim().length == 0) {
+            if ($('input[name=user]', '#retrieval').val().trim().length == 0) {
                 e.preventDefault();
             }
         });
-
-        $('#checkout').on('submit', function (e) {
-            var arrItem = [];
-            var checkbox = document.getElementsByClassName('cart-item');
-            for (var i = 0; i < checkbox.length; i++) {
-                if (checkbox[i].checked === true) {
-                    arrItem.push(checkbox[i].value);
-                }
-            }
-            if (arrItem.length == 0) {
-                $('#errText').toggleClass("d-block");
-                e.preventDefault();
-            } else {
-                document.getElementById('item').value = arrItem;
-            }
-        })
 
         $('#formSearchP').on('submit', function (e) {
             var arrItemColor = [];
@@ -227,18 +174,17 @@
             var colorBox = $('.colorItem:checkbox:checked');
             var sizeBox = $('.sizeItem:checkbox:checked');
             for (var i = 0; i < colorBox.length; i++) {
-                if (colorBox[i].checked === true) {
-                    arrItemColor.push(colorBox[i].value);
-                }
+                arrItemColor.push(colorBox[i].value);
             }
+
             for (var i = 0; i < sizeBox.length; i++) {
-                if (sizeBox[i].checked === true) {
                     arrItemSize.push(sizeBox[i].value);
-                }
             }
+
             if (arrItemColor.length > 0) {
                 document.getElementById('color').value = arrItemColor;
             }
+            
             if (arrItemSize.length > 0) {
                 document.getElementById('size').value = arrItemSize;
             }
@@ -389,7 +335,6 @@
 })(jQuery);
 
 const urlParams = new URLSearchParams(window.location.search);
-
 function setParamsPage(name, value) {
     urlParams.set(name, value);
     window.location.search = urlParams
@@ -672,7 +617,6 @@ function getFee(status) {
 
 function applyVoucher() {
     const VND = new Intl.NumberFormat('vi-VN', { tyle: 'currency', currency: 'VND', });
-
     const amount = +document.getElementById('amount').value;
     const discount = +document.getElementById('discount').value;
     const code = document.getElementById('voucher').value;
@@ -680,7 +624,6 @@ function applyVoucher() {
     const dataDiscount = +document.getElementById("dataDiscount").value;
     const shipView = VND.format(dataShip);
     const discountView = VND.format(dataDiscount);
-
     const voucherId = document.getElementById("voucherId");
 
     if (code.trim().length > 0 && !voucherId.value) {

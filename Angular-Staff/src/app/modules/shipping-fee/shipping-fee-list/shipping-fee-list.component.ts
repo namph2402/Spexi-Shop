@@ -57,7 +57,7 @@ export class ShippingFeeListComponent extends AbstractCRUDComponent<ShippingFeeM
   }
 
   loadAllProvinces() {
-    return this.provinceService.loadAll();
+    return this.provinceService.loadByParams({ ship: 1 });
   }
 
   loadDistricts(params: any) {

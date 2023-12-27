@@ -20,7 +20,13 @@
                     <table class="table table-light table-borderless table-hover text-center mb-0">
                         <thead class="thead-dark">
                             <tr>
-                                <th style="width:5%">#</th>
+                                <th style="width:5%">
+                                    <div class="custom-control custom-radio custom-control-inline m-0"
+                                        style="margin-left: 10px !important">
+                                        <input type="checkbox" class="custom-control-input" id="checkAll">
+                                        <label class="custom-control-label" for="checkAll"></label>
+                                    </div>
+                                </th>
                                 <th style="width:10%">Ảnh</th>
                                 <th style="width:35%">Sản phẩm</th>
                                 <th style="width:10%">Loại</th>
@@ -35,14 +41,19 @@
                                 @if ($item->product && $item->warehouse)
                                     <tr>
                                         <td class="text-center">
-                                            <div class="custom-control custom-radio custom-control-inline m-0" style="margin-left: 10px !important">
-                                                <input type="checkbox" class="cart-item custom-control-input" id="{{ $item->id }}" value="{{ $item->id }}">
+                                            <div class="custom-control custom-radio custom-control-inline m-0"
+                                                style="margin-left: 10px !important">
+                                                <input type="checkbox" class="cart-item custom-control-input"
+                                                    id="{{ $item->id }}" value="{{ $item->id }}">
                                                 <label class="custom-control-label" for="{{ $item->id }}"></label>
                                             </div>
                                         </td>
-                                        <td><img src="{{ $item->product->image }}" style="width: 50px;"></td>
+                                        <td>
+                                            <img src="{{ $item->product->image }}" style="width: 50px;">
+                                        </td>
                                         <td class="text-left">
-                                            <a href="{{ $item->product->full_path }}" class="text-truncate">{{ $item->product->name }}</a>
+                                            <a href="{{ $item->product->full_path }}"
+                                                class="text-truncate">{{ $item->product->name }}</a>
                                         </td>
                                         <td class="align-middle">
                                             {{ $item->warehouse->size->name }}, {{ $item->warehouse->color->name }}
@@ -67,7 +78,9 @@
                                             </div>
                                         </td>
                                         <td class="align-middle" id="amountItem{{ $item->id }}">
-                                            {{ number_format($item->product->sale_price * $item->quantity, 0, '.', '.') }} đ</td>
+                                            {{ number_format($item->product->sale_price * $item->quantity, 0, '.', '.') }}
+                                            đ
+                                        </td>
                                         <td class="align-middle">
                                             <a class="btn btn-sm btn-danger" style="width:30px;height:30px"
                                                 href="/cart/deleteItem/{{ $item->id }}">
@@ -80,7 +93,7 @@
                             @php
                                 $total_amount = 0;
                                 foreach ($cart->items as $item) {
-                                    if($item->product && $item->warehouse) {
+                                    if ($item->product && $item->warehouse) {
                                         $total_amount += $item->product->sale_price * $item->quantity;
                                     }
                                 }
@@ -90,7 +103,8 @@
                                     <span class="text-right d-block" style="font-size:20px">Tổng tiền</span>
                                 </td>
                                 <td colspan="2" class="text-left" style="font-weight:700;">
-                                    <span class="ml-2" id="totalAmount" style="font-size:20px">{{ number_format($total_amount, 0, '.', '.') }} đ</span>
+                                    <span class="ml-2" id="totalAmount"
+                                        style="font-size:20px">{{ number_format($total_amount, 0, '.', '.') }} đ</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -116,4 +130,96 @@
             </div>
         @endif
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            // CheckAll
+            $('#checkAll').click(function(event) {
+                if (this.checked) {
+                    $('.cart-item').each(function() {
+                        this.checked = true;
+                    });
+                } else {
+                    $('.cart-item').each(function() {
+                        this.checked = false;
+                    });
+                }
+            });
+
+            // CheckItem
+            $('.cart-item').click(function(event) {
+                checked = $(".cart-item:checked")
+                check = $(".cart-item")
+
+                if (checked.length == check.length) {
+                    document.getElementById('checkAll').checked = true;
+                } else {
+                    document.getElementById('checkAll').checked = false;
+                }
+            });
+
+            // Checkout
+            $('#checkout').on('submit', function(e) {
+                var arrItem = [];
+                var checkbox = document.getElementsByClassName('cart-item');
+                for (var i = 0; i < checkbox.length; i++) {
+                    if (checkbox[i].checked === true) {
+                        arrItem.push(checkbox[i].value);
+                    }
+                }
+                if (arrItem.length == 0) {
+                    $('#errText').toggleClass("d-block");
+                    e.preventDefault();
+                } else {
+                    document.getElementById('item').value = arrItem;
+                }
+            });
+
+            // UpdateItem
+            $('.quantity a').on('click', function() {
+                var a = $(this);
+                var oldValue = a.parent().parent().find('input').val();
+                var cartId = a.parent().parent().parent().parent().find('input').val();
+
+                if (a.hasClass('btn-plus')) {
+                    var newVal = parseFloat(oldValue) + 1;
+                } else {
+                    if (oldValue > 0) {
+                        var newVal = parseFloat(oldValue) - 1;
+                    } else {
+                        newVal = 0;
+                    }
+                }
+                a.parent().parent().find('input').val(newVal);
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    url: "{{ route('cart.updateItem') }}",
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        id: cartId,
+                        quantity: newVal
+                    },
+                    success: function(data) {
+                        if (data['data'].length == 0) {
+                            location.reload();
+                        } else {
+                            const VND = new Intl.NumberFormat('vi-VN', {
+                                tyle: 'currency',
+                                currency: 'VND',
+                            });
+                            const amount = VND.format(data['data'].amount);
+                            const totalAmount = VND.format(data['data'].totalAmount);
+                            const name = 'amountItem' + `${cartId}`;
+                            document.getElementById(name).innerHTML = `${amount} đ`;
+                            document.getElementById("totalAmount").innerHTML = `${totalAmount} đ`;
+                        }
+                    }
+                });
+            });
+        })
+    </script>
 @endsection

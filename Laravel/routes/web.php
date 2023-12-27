@@ -79,7 +79,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'cart'], function () {
         Route::get('', 'CartController@index');
         Route::post('addItem', 'CartController@addItem');
-        Route::get('updateItem/{id}', 'CartController@updateItem');
+        Route::post('updateItem', 'CartController@updateItem')->name('cart.updateItem');
         Route::get('deleteItem/{id}', 'CartController@deleteItem');
     });
 

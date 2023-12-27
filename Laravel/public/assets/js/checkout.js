@@ -45,13 +45,6 @@ const Checkout = (function () {
                 });
             },
 
-            updateQuantity(id, quantity, onLoaded) {
-                const url = `/cart/updateItem/${id}?quantity=${quantity}`;
-                loadAjax(url, (data) => {
-                    onLoaded(data);
-                });
-            },
-
             getWarehouse(productId, sizeId, colorId, onLoaded) {
                 const url = `/getWarehouse?product_id=${productId}&size_id=${sizeId}&color_id=${colorId}`;
                 loadAjax(url, (data) => {

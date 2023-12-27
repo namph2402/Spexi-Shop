@@ -36,7 +36,7 @@ class ProductController extends RestController
 
     public function index(Request $request)
     {
-        $limit = 9;
+        $limit = 6;
         $clause = [WhereClause::query('status', 1)];
         $arrColor = [];
         $arrSize = [];

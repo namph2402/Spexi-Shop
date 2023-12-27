@@ -85,27 +85,29 @@ class CartController extends RestController
     }
 
 
-    public function updateItem(Request $request, $id)
+    public function updateItem(Request $request)
     {
-
         $quantity = [];
         $totalAmount = 0;
-        $item =  $this->itemRepository->findById($id, ['product']);
+        $item =  $this->itemRepository->findById($request->id, ['product']);
 
         if (empty($item)) {
             return $this->errorNotFoundView();
         }
 
         if ($request->quantity > 0) {
-            $data = $this->itemRepository->update($id, [
+            $data = $this->itemRepository->update($request->id, [
                 'quantity' => $request->quantity,
             ]);
+
             $cart = $this->repository->find(WhereClause::query('cart_id', $item->cart_id), null, ['items']);
+
             foreach ($cart->items as $i) {
                 if($i->product && $i->warehouse) {
-                    $totalAmount += $data->quantity * $i->product->sale_price;
+                    $totalAmount += ($i->quantity * $i->product->sale_price);
                 }
             }
+
             $quantity = [
                 'id' =>  $data->id,
                 'quantity' =>  $data->quantity,
@@ -113,7 +115,7 @@ class CartController extends RestController
                 'totalAmount' => $totalAmount,
             ];
         } else {
-            $this->itemRepository->delete($id);
+            $this->itemRepository->delete($request->id);
         }
         return $this->success($quantity);
     }

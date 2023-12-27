@@ -53,7 +53,7 @@
         <div class="row px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
                 <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse"
-                    href="#navbar-vertical" style="height: 50px; padding: 0 30px;">
+                    href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
                     <h6 class="text-dark m-0"><i class="fa fa-bars mr-2"></i>Danh mục</h6>
                     <i class="fa fa-angle-down text-dark"></i>
                 </a>

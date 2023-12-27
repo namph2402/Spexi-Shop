@@ -34,7 +34,7 @@ export class OrderListComponent extends AbstractCRUDComponent<OrderMeta> {
   }
 
   getTitle(): string {
-    return 'Đơn hàng của tôi';
+    return 'Đơn hàng';
   }
 
   getCreateModalComponent(): any {
