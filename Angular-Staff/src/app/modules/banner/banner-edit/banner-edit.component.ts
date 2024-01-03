@@ -32,9 +32,9 @@ export class BannerEditComponent extends AbstractModalComponent<BannerMeta> {
   buildForm(): FormGroup {
     return this.formBuilder.group({
       name: new FormControl(null, [Validators.required, Validators.maxLength(255), Validators.pattern('[^ ].*$')]),
-      summary: new FormControl(null, [Validators.maxLength(255), Validators.pattern('[^ ].*$')]),
+      summary: new FormControl('', [Validators.maxLength(255), Validators.pattern('[^ ].*$')]),
       image: new FormControl(null, Validators.required),
-      href: new FormControl(null, [Validators.maxLength(255), Validators.pattern('[^ ].*$')]),
+      href: new FormControl('', [Validators.maxLength(255), Validators.pattern('[^ ].*$')]),
     });
   }
 

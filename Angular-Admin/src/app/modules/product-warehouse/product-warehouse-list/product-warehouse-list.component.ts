@@ -84,12 +84,12 @@ export class ProductWarehouseListComponent extends AbstractCRUDModalComponent<Pr
 
   onStatusChange(item: ProductWarehouseMeta, index: number, enable: boolean) {
     let methodAsync = null;
-    let titleMsg: string = 'Phát hành';
+    let titleMsg: string = 'Đã bật';
     if (enable) {
       methodAsync = this.service.enable(item.id);
     } else {
       methodAsync = this.service.disable(item.id);
-      titleMsg = 'Lưu kho';
+      titleMsg = 'Đã tắt';
     }
     methodAsync.subscribe((res: ProductWarehouseMeta) => {
       this.service.toastSuccessfully(titleMsg);

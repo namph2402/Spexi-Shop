@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\modules\admin;
+namespace App\Http\Controllers\modules\staff;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
@@ -299,7 +299,7 @@ class PostController extends RestController
             $posts = $this->repository->get([WhereClause::queryRelationHas('tags', function ($q) use ($tagId) {
                 $q->where('id', $tagId);
             })]);
-            
+
             if (count($posts) > 0) {
                 foreach ($posts as $post) {
                     array_push($postClauses, $post->id);

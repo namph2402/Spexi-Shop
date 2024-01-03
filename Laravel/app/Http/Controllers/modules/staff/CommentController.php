@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\modules\admin;
+namespace App\Http\Controllers\modules\staff;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
