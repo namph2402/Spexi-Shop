@@ -89,7 +89,6 @@ class PromotionController extends RestController
             return $this->errorClient('Thời gian hết hạn không đúng');
         }
 
-
         try {
             DB::beginTransaction();
             $model = $this->repository->create($attributes);
@@ -108,7 +107,6 @@ class PromotionController extends RestController
     public function update(Request $request, $id)
     {
         $model = $this->repository->findById($id);
-
         $image_old = $model->image;
 
         $validator = $this->validateRequest($request, [
@@ -182,6 +180,10 @@ class PromotionController extends RestController
     {
         try {
             DB::beginTransaction();
+            $this->productRepository->bulkUpdate([
+                WhereClause::queryRelationHas('promotions', function ($q) use ($id) {
+                $q->where('id', $id);
+            })],['sale_price' => DB::raw('`price`')]);
             $this->repository->delete($id,['mapping']);
             DB::commit();
             return $this->success([]);
@@ -195,20 +197,25 @@ class PromotionController extends RestController
     public function enable($id)
     {
         $model = $this->repository->findById($id, ['products']);
+        $arrProduct = [];
 
         if (strtotime($model->expired_date) < strtotime("now")) {
             return $this->errorClient('Thời gian hết hạn không đúng');
         }
+
         if (count($model->products) > 0) {
             foreach ($model->products as $item) {
-                if ($model->type == Promotion::$DONG_GIA && $item->price > $model->discount_same) {
-                    $this->productRepository->update($item->id, ['sale_price' => $model->discount_same]);
-                }
+                array_push($arrProduct, $item->id);
+            }
 
-                if ($model->type == Promotion::$GIAM_SAN_PHAM && $item->price > $model->discount_value) {
-                    $sale_price = $item->price - (($item->price * $model->discount_percent) / 100) - $model->discount_value;
-                    $this->productRepository->update($item['id'], ['sale_price' => $sale_price]);
-                }
+            if ($model->type == Promotion::$DONG_GIA && $item->price > $model->discount_same) {
+                $this->productRepository->bulkUpdate([WhereClause::queryIn('id', $arrProduct)],
+                    ['sale_price' => $model->discount_same]);
+            }
+
+            if ($model->type == Promotion::$GIAM_SAN_PHAM && $item->price > $model->discount_value) {
+                $this->productRepository->bulkUpdate([WhereClause::queryIn('id', $arrProduct)],
+                    ['sale_price' => DB::raw('`price` - '.$model->discount_value.' - `price` / 100 * '.$model->discount_percent)]);
             }
         }
 
@@ -227,11 +234,14 @@ class PromotionController extends RestController
     public function disable($id)
     {
         $model = $this->repository->findById($id, ['products']);
-
+        $arrProduct = [];
         if (count($model->products) > 0) {
             foreach ($model->products as $item) {
-                $this->productRepository->update($item->id, ['sale_price' => $item->price]);
+                array_push($arrProduct, $item->id);
             }
+            $this->productRepository->bulkUpdate([WhereClause::queryIn('id', $arrProduct)],
+                ['sale_price' => DB::raw('`price`')]
+            );
         }
 
         try {

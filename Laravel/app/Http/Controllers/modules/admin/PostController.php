@@ -177,7 +177,7 @@ class PostController extends RestController
         try {
             DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
-            $this->repository->delete($id, ['article']);
+            $this->repository->delete($id, ['article', 'relateds']);
             DB::commit();
             FileStorageUtil::deleteFiles($image);
             return $this->success($model);
