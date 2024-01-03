@@ -63,7 +63,7 @@ class WarehouseController extends RestController
         if ($request->has('search')) {
             $search = $request->search;
             array_push($clauses, WhereClause::orQuery([
-                WhereClause::queryLike('code', $request->search),
+                WhereClause::queryLike('code', $search),
                 WhereClause::queryRelationHas('product', function ($q) use ($search) {
                         $q->where('name', 'like', '%'.$search.'%');
                 })
@@ -123,14 +123,9 @@ class WarehouseController extends RestController
 
     public function update(Request $request, $id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $validator = $this->validateRequest($request, [
             'weight' => 'nullable|numeric',
-            'quantity' => 'nullable|max:255'
+            'quantity' => 'nullable|numeric'
         ]);
         if ($validator) {
             return $this->errorClient($validator);
@@ -139,7 +134,7 @@ class WarehouseController extends RestController
         $attributes['weight'] = $request->input('weight', 0);
         $attributes['quantity'] = $request->input('quantity', 0);
 
-        if($attributes['quantity'] <=0 ) {
+        if($attributes['quantity'] <= 0 ) {
             $attributes['status'] = 0;
         }
 
@@ -157,14 +152,9 @@ class WarehouseController extends RestController
 
     public function destroy($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
-            $this->repository->delete($id);
+            $this->repository->delete($id, ['cartItem']);
             DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
@@ -177,9 +167,7 @@ class WarehouseController extends RestController
     public function enable($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
+
         if($model->quantity <= 0) {
             return $this->errorClient('Sản phẩm đã hết hàng');
         }
@@ -198,11 +186,6 @@ class WarehouseController extends RestController
 
     public function disable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
@@ -241,22 +224,7 @@ class WarehouseController extends RestController
             foreach ($all as $c) {
                 $dict_products[$c->code] = $c;
             }
-            foreach ($newData as $key => $row) {
-                $i = $key + 1;
-                $categoryValue = trim($row[0]);
-                $codeValue = trim($row[1]);
-                $nameValue = trim($row[2]);
-                $priceValue = intval($row[3]);
-                $codeVariantValue = trim($row[4]);
-                $sizeValue = trim($row[5]);
-                $colorValue = trim($row[6]);
-                $weightValue = trim($row[7]);
-                $quantityValue = intval($row[8]);
 
-                if (empty($categoryValue) || empty($codeValue) || empty($nameValue) || empty($codeVariantValue) || empty($sizeValue) || empty($colorValue)) {
-                    return $this->errorClient('Lỗi dữ liệu dòng ' . $i);
-                }
-            }
             try {
                 DB::beginTransaction();
                 $total_amount = 0;
@@ -277,7 +245,7 @@ class WarehouseController extends RestController
                 ]);
 
                 if($import) {
-                    foreach ($newData as $row) {
+                    foreach ($newData as $key => $row) {
                         $categoryValue = trim($row[0]);
                         $codeValue = trim($row[1]);
                         $nameValue = trim($row[2]);
@@ -288,6 +256,12 @@ class WarehouseController extends RestController
                         $weightValue = doubleval($row[7]);
                         $quantityValue = intval($row[8]);
 
+                        if (empty($categoryValue) || empty($codeValue) || empty($nameValue) || empty($codeVariantValue) || empty($sizeValue) || empty($colorValue)) {
+                            Log::error('Lỗi dữ liệu dòng ' . $key+1);
+                            continue;
+                        }
+
+                        // Tạo biến thể
                         $size = $this->sizeRepository->find([WhereClause::query('name', $sizeValue)]);
                         if (empty($size)) {
                             $size = $this->sizeRepository->create(['name' => $sizeValue]);
@@ -298,11 +272,12 @@ class WarehouseController extends RestController
                         }
 
                         if (!array_key_exists($codeValue, $dict_products)) {
+                            // Tạo danh mục
                             $category = $this->categoryRepository->find([WhereClause::query('name', $categoryValue)]);
                             if (empty($category)) {
                                 $orderCategory = 0;
                                 $lastItem = $this->categoryRepository->find([], 'order:desc');
-                                if (!empty($lastItem)) {
+                                if ($lastItem) {
                                     $orderCategory = $lastItem->order + 1;
                                 }
                                 $category = $this->categoryRepository->create([
@@ -312,12 +287,12 @@ class WarehouseController extends RestController
                                 ]);
                             }
 
+                            // Tạo sản phẩm mới
                             $orderProduct = 0;
                             $lastItem = $this->productRepository->find([], 'order:desc');
-                            if (!empty($lastItem)) {
+                            if ($lastItem) {
                                 $orderProduct = $lastItem->order + 1;
                             }
-
                             $product = $this->productRepository->create([
                                 'code' => $codeValue,
                                 'category_id' => $category->id,
@@ -330,6 +305,7 @@ class WarehouseController extends RestController
                                 'image' => '',
                             ]);
 
+                            // Tạo kho
                             $warehouse = $this->repository->create([
                                 'product_id' => $product->id,
                                 'code' => $codeVariantValue,
@@ -354,6 +330,7 @@ class WarehouseController extends RestController
                                     'quantity' => $warehouse->quantity + $quantityValue
                                 ]);
                             } else {
+                                // Tạo kho
                                 $warehouse = $this->repository->create([
                                     'product_id' => $product->id,
                                     'code' => $codeVariantValue,

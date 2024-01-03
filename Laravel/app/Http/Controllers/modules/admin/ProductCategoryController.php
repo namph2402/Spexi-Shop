@@ -70,7 +70,7 @@ class ProductCategoryController extends RestController
     public function store(Request $request)
     {
         $validator = $this->validateRequest($request, [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:product_categories',
         ]);
         if ($validator) {
             return $this->errorClient($validator);
@@ -81,6 +81,7 @@ class ProductCategoryController extends RestController
             'parent_id',
         ]);
         $attributes['slug'] = Str::slug($attributes['name']);
+
         if ($request->hasFile('image')) {
             $image = FileStorageUtil::putFile('product_category_image', $request->file('image'));
             $attributes['image'] = $image;
@@ -89,11 +90,6 @@ class ProductCategoryController extends RestController
         $lastItem = $this->repository->find([], 'order:desc');
         if ($lastItem) {
             $attributes['order'] = $lastItem->order + 1;
-        }
-
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name'))]);
-        if ($test_name) {
-            return $this->errorHad($request->input('name'));
         }
 
         try {
@@ -121,7 +117,7 @@ class ProductCategoryController extends RestController
         $image_old = $model->image;
 
         $validator = $this->validateRequest($request, [
-            'name' => 'nullable|max:255',
+            'name' => 'nullable|max:255|unique:product_categories,name,' . $id,
         ]);
         if ($validator) {
             return $this->errorClient($validator);
@@ -132,11 +128,6 @@ class ProductCategoryController extends RestController
             'parent_id'
         ]);
         $attributes['slug'] = Str::slug($attributes['name']);
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name')), WhereClause::queryDiff('id', $model->id)]);
-
-        if ($test_name) {
-            return $this->errorHad($request->input('name'));
-        }
 
         if (count($model->childrens) > 0 && $request->parent_id > 0) {
             return $this->errorClient('Danh mục này đang là danh mục cha');
@@ -170,10 +161,7 @@ class ProductCategoryController extends RestController
 
     public function destroy($id)
     {
-        $model = $this->repository->findById($id, [], 'childrens');
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
+        $model = $this->repository->findById($id);
 
         try {
             DB::beginTransaction();
@@ -191,9 +179,6 @@ class ProductCategoryController extends RestController
     public function up($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
         if (empty($swapModel)) {
@@ -221,9 +206,6 @@ class ProductCategoryController extends RestController
     public function down($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
         if (empty($swapModel)) {

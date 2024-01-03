@@ -34,7 +34,7 @@ class ArticleController extends RestController
             'articleable_type',
             'content'
         ]);
-        $attributes['author_name'] = $user->fullname;
+        $attributes['author_name'] = $user->name;
 
         try {
             DB::beginTransaction();
@@ -50,11 +50,6 @@ class ArticleController extends RestController
 
     public function update(Request $request, $id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $validator = $this->validateRequest($request, [
             'content' => 'nullable',
         ]);

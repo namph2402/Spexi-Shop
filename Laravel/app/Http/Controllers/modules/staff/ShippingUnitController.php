@@ -3,24 +3,13 @@
 namespace App\Http\Controllers\modules\staff;
 
 use App\Http\Controllers\RestController;
-use App\Repository\ShippingServiceRepositoryInterface;
-use App\Repository\ShippingStoreRepositoryInterface;
 use App\Repository\ShippingUnitRepositoryInterface;
 use Illuminate\Http\Request;
 
 class ShippingUnitController extends RestController
 {
-    protected $shippingStore;
-    protected $shippingService;
-
-    public function __construct(
-        ShippingUnitRepositoryInterface $repository,
-        ShippingStoreRepositoryInterface $shippingStore,
-        ShippingServiceRepositoryInterface $shippingService
-    ) {
+    public function __construct(ShippingUnitRepositoryInterface $repository) {
         parent::__construct($repository);
-        $this->shippingStore = $shippingStore;
-        $this->shippingService = $shippingService;
     }
 
     public function index(Request $request)

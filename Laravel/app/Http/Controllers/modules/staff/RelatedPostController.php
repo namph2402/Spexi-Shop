@@ -59,6 +59,7 @@ class RelatedPostController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
+
         $attributes = $request->only([
             'post_id',
             'related_id'
@@ -84,9 +85,6 @@ class RelatedPostController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         try {
             DB::beginTransaction();
@@ -104,9 +102,6 @@ class RelatedPostController extends RestController
     public function up($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
         if (empty($swapModel)) {
@@ -134,9 +129,7 @@ class RelatedPostController extends RestController
     public function down($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
+
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');

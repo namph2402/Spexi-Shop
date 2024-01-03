@@ -5,20 +5,13 @@ namespace App\Http\Controllers\modules\staff;
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
 use App\Repository\BannerGroupRepositoryInterface;
-use App\Repository\BannerRepositoryInterface;
-use App\Utils\FileStorageUtil;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class BannerGroupController extends RestController
 {
-    protected $bannerRepository;
-
-    public function __construct(BannerGroupRepositoryInterface $repository, BannerRepositoryInterface $bannerRepository)
+    public function __construct(BannerGroupRepositoryInterface $repository)
     {
         parent::__construct($repository);
-        $this->bannerRepository = $bannerRepository;
     }
 
     public function index(Request $request)

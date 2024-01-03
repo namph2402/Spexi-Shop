@@ -59,7 +59,7 @@ class RelatedProductController extends RestController
         if ($validator) {
             return $this->errorClient($validator);
         }
-        
+
         $attributes = $request->only([
             'product_id',
             'related_id'
@@ -105,9 +105,7 @@ class RelatedProductController extends RestController
     public function up($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
+
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
@@ -134,9 +132,7 @@ class RelatedProductController extends RestController
     public function down($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
+
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');

@@ -60,7 +60,7 @@ class PromotionController extends RestController
     public function store(Request $request)
     {
         $validator = $this->validateRequest($request, [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:promotions',
             'type' => 'required|numeric',
             'expired_date' => 'required|date'
         ]);
@@ -73,6 +73,8 @@ class PromotionController extends RestController
             'expired_date',
             'type',
         ]);
+
+        $attributes['status'] = $request->status ? 1 : 0;
         $attributes['slug'] = Str::slug($attributes['name']);
         $attributes['discount_value'] = $request->input('discount_value', 0);
         $attributes['discount_percent'] = $request->input('discount_percent', 0);
@@ -87,14 +89,6 @@ class PromotionController extends RestController
             return $this->errorClient('Thời gian hết hạn không đúng');
         }
 
-        if ($request->status == false) {
-            $attributes['status'] = 0;
-        }
-
-        $test_name = $this->repository->find([WhereClause::query('name', $request->name)]);
-        if ($test_name) {
-            return $this->errorClient('Chương trình khuyến mãi đã tồn tại');
-        }
 
         try {
             DB::beginTransaction();
@@ -114,14 +108,10 @@ class PromotionController extends RestController
     public function update(Request $request, $id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $image_old = $model->image;
 
         $validator = $this->validateRequest($request, [
-            'name' => 'nullable|max:255',
+            'name' => 'nullable|max:255|unique:promotions,name,' . $id,
             'expired_date' => 'nullable|date'
         ]);
         if ($validator) {
@@ -134,13 +124,7 @@ class PromotionController extends RestController
             'type',
         ]);
 
-        if ($request->status == 'true') {
-            $attributes['status'] = 1;
-        }
-        if ($request->status == 'false') {
-            $attributes['status'] = 0;
-        }
-
+        $attributes['status'] = $request->status ? 1 : 0;
         $attributes['discount_same'] = $request->input('discount_same', 0);
         $attributes['min_order_value'] = $request->input('min_order_value', 0);
         $attributes['discount_value'] = $request->input('discount_value', 0);
@@ -154,15 +138,9 @@ class PromotionController extends RestController
             return $this->errorClient('Thời gian hết hạn không đúng');
         }
 
-        $test_name = $this->repository->find([WhereClause::queryDiff('id', $model->id), WhereClause::query('name', $request->name)]);
-        if ($test_name) {
-            return $this->errorClient('Chương trình khuyến mãi đã tồn tại');
-        }
-
         try {
             DB::beginTransaction();
             $promotion = $this->repository->update($id, $attributes);
-            DB::commit();
             if ($promotion) {
                 if ($promotion->type == Promotion::$DONG_GIA && $promotion->status == 1) {
                     $this->productRepository->bulkUpdate([
@@ -184,6 +162,7 @@ class PromotionController extends RestController
                         ]);
                 }
             }
+            DB::commit();
             if ($request->file('image') != '') {
                 FileStorageUtil::deleteFiles($image_old);
             }
@@ -200,11 +179,6 @@ class PromotionController extends RestController
 
     public function destroy($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $this->repository->delete($id,['mapping']);
@@ -220,9 +194,7 @@ class PromotionController extends RestController
     public function enable($id)
     {
         $model = $this->repository->findById($id, ['products']);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
+
         if (strtotime($model->expired_date) < strtotime("now")) {
             return $this->errorClient('Thời gian hết hạn không đúng');
         }
@@ -254,9 +226,7 @@ class PromotionController extends RestController
     public function disable($id)
     {
         $model = $this->repository->findById($id, ['products']);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
+
         if (count($model->products) > 0) {
             foreach ($model->products as $item) {
                 $this->productRepository->update($item->id, ['sale_price' => $item->price]);
@@ -277,11 +247,6 @@ class PromotionController extends RestController
 
     public function loadProduct($id, Request $request)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $limit = $request->input('limit', null);
         $clauses = [];
         $with = ['promotions'];
@@ -311,9 +276,6 @@ class PromotionController extends RestController
     public function attachProducts($id, Request $request)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $validator = $this->validateRequest($request, [
             'items' => 'required',
@@ -356,15 +318,12 @@ class PromotionController extends RestController
     public function detachProducts($id, Request $request)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $product = $this->productRepository->findById($request->product_id);
 
         try {
             DB::beginTransaction();
-            $this->repository->detach($model, $product->id);
+            $this->repository->detach($model, $request->product_id);
             $this->productRepository->update($request->product_id, ['sale_price' => $product->price]);
             DB::commit();
             return $this->success($model);
@@ -388,11 +347,6 @@ class PromotionController extends RestController
         ]);
         if ($validator) {
             return $this->errorClient($validator);
-        }
-
-        $product = $this->productRepository->findById($request->id);
-        if (empty($product)) {
-            return $this->errorNotFound();
         }
 
         try {

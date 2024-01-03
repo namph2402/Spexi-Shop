@@ -52,13 +52,12 @@ class PromotionController extends RestController
         $orderBy = 'order:asc';
         $with = [];
 
-        array_push($clause, WhereClause::queryRelationHas('promotions', function ($q) use ($arrSize) {
+        array_push($clause, WhereClause::queryRelationHas('promotions', function ($q) {
             $q->whereIn('type', ['1','2']);
         }));
 
         if ($request->has('color') && $request->color != 'All') {
-            $colors = explode(",", $request->color);
-            foreach ($colors as $color) {
+            foreach (explode(",", $request->color) as $color) {
                 array_push($arrColor, $color);
             }
             array_push($clause, WhereClause::queryRelationHas('warehouses', function ($q) use ($arrColor) {
@@ -67,8 +66,7 @@ class PromotionController extends RestController
         }
 
         if ($request->has('size') && $request->size != 'All') {
-            $sizes = explode(",", $request->size);
-            foreach ($sizes as $size) {
+            foreach (explode(",", $request->size) as $size) {
                 array_push($arrSize, $size);
             }
             array_push($clause, WhereClause::queryRelationHas('warehouses', function ($q) use ($arrSize) {

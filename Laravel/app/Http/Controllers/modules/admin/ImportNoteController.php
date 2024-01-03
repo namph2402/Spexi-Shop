@@ -46,11 +46,6 @@ class ImportNoteController extends RestController
 
     public function destroy($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $this->repository->delete($id, ['details']);

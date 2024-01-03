@@ -63,11 +63,6 @@ class UserController extends RestController
 
     public function destroy($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $this->repository->delete($id, ['account']);
@@ -83,9 +78,6 @@ class UserController extends RestController
     public function enable($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         try {
             DB::beginTransaction();
@@ -102,9 +94,6 @@ class UserController extends RestController
     public function disable($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         try {
             DB::beginTransaction();

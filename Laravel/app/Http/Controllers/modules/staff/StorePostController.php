@@ -39,7 +39,7 @@ class StorePostController extends RestController
     public function store(Request $request)
     {
         $validator = $this->validateRequest($request, [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:store_posts,name',
             'content' => 'required',
         ]);
         if ($validator) {
@@ -50,11 +50,6 @@ class StorePostController extends RestController
             'name',
             'content',
         ]);
-
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name'))]);
-        if ($test_name) {
-            return $this->errorHad($request->input('name'));
-        }
 
         try {
             DB::beginTransaction();
@@ -70,13 +65,8 @@ class StorePostController extends RestController
 
     public function update(Request $request, $id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $validator = $this->validateRequest($request, [
-            'name' => 'nullable|max:255',
+            'name' => 'nullable|max:255|unique:store_posts,name,' . $id,
             'content' => 'nullable',
         ]);
         if ($validator) {
@@ -87,11 +77,6 @@ class StorePostController extends RestController
             'name',
             'content',
         ]);
-
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name')), WhereClause::queryDiff('id', $model->id)]);
-        if ($test_name) {
-            return $this->errorHad($request->input('name'));
-        }
 
         try {
             DB::beginTransaction();
@@ -107,11 +92,6 @@ class StorePostController extends RestController
 
     public function destroy($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $this->repository->delete($id);

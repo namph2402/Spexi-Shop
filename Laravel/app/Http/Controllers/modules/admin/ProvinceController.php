@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class ProvinceController extends Controller
 {
-
     public function index(Request $request)
     {
         $data = new Province;

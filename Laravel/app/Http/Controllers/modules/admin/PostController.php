@@ -29,7 +29,7 @@ class PostController extends RestController
     {
         $limit = $request->input('limit', null);
         $clauses = [];
-        $with = ['category', 'article', 'tags'];
+        $with = ['category', 'article'];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'order:asc');
 
@@ -68,7 +68,7 @@ class PostController extends RestController
         $validator = $this->validateRequest($request, [
             'category_id' => 'required|numeric',
             'category_slug' => 'required|max:255',
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:posts',
             'image' => 'required',
             'content' => 'required',
         ]);
@@ -91,11 +91,6 @@ class PostController extends RestController
         $lastItem = $this->repository->find([], 'order:desc');
         if ($lastItem) {
             $attributes['order'] = $lastItem->order + 1;
-        }
-
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name'))]);
-        if ($test_name) {
-            return $this->errorHad($request->input('name'));
         }
 
         try {
@@ -131,7 +126,7 @@ class PostController extends RestController
         $validator = $this->validateRequest($request, [
             'category_id' => 'nullable|numeric',
             'category_slug' => 'nullable|max:255',
-            'name' => 'nullable|max:255',
+            'name' => 'nullable|max:255|unique:posts,name,' . $id,
             'image' => 'nullable',
             'content' => 'nullable',
         ]);
@@ -152,11 +147,6 @@ class PostController extends RestController
         }
 
         $attributes['slug'] = Str::slug($attributes['name']);
-
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name')), WhereClause::queryDiff('id', $model->id)]);
-        if ($test_name) {
-            return $this->errorHad($request->input('name'));
-        }
 
         try {
             DB::beginTransaction();
@@ -182,10 +172,6 @@ class PostController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $image = $model->image;
 
         try {
@@ -204,11 +190,6 @@ class PostController extends RestController
 
     public function enable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -223,11 +204,6 @@ class PostController extends RestController
 
     public function disable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
@@ -243,9 +219,6 @@ class PostController extends RestController
     public function up($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
         if (empty($swapModel)) {
@@ -255,10 +228,10 @@ class PostController extends RestController
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update($id,[
+            $model = $this->repository->update($id, [
                 'order' => $swapModel->order
             ]);
-            $swapModel = $this->repository->update($swapModel->id,[
+            $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
             DB::commit();
@@ -273,9 +246,6 @@ class PostController extends RestController
     public function down($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
         if (empty($swapModel)) {
@@ -285,10 +255,10 @@ class PostController extends RestController
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update($id,[
+            $model = $this->repository->update($id, [
                 'order' => $swapModel->order
             ]);
-            $swapModel = $this->repository->update($swapModel->id,[
+            $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
             DB::commit();
@@ -300,7 +270,8 @@ class PostController extends RestController
         }
     }
 
-    public function loadTag(Request $request) {
+    public function loadTag(Request $request)
+    {
         $limit = $request->input('limit', null);
         $clauses = [];
         $with = [];
@@ -348,9 +319,6 @@ class PostController extends RestController
     public function attachTags($id, Request $request)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         try {
             DB::beginTransaction();
@@ -369,15 +337,10 @@ class PostController extends RestController
     public function detachTags($id, Request $request)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
-        $tagId = $request->tag_ids;
 
         try {
             DB::beginTransaction();
-            $this->repository->detach($model, $tagId);
+            $this->repository->detach($model, $request->tag_ids);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -386,5 +349,4 @@ class PostController extends RestController
             return $this->errorClient($e->getMessage());
         }
     }
-
 }

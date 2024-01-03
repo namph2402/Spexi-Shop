@@ -50,11 +50,6 @@ class ArticleController extends RestController
 
     public function update(Request $request, $id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $validator = $this->validateRequest($request, [
             'content' => 'nullable',
         ]);
@@ -67,7 +62,7 @@ class ArticleController extends RestController
             'articleable_id',
             'content'
         ]);
-        
+
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);

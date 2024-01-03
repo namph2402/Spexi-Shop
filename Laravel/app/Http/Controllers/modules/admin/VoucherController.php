@@ -48,7 +48,7 @@ class VoucherController extends RestController
     {
         $validator = $this->validateRequest($request, [
             'name' => 'required|max:255',
-            'code' => 'required|max:20',
+            'code' => 'required|max:20|unique:vouchers',
             'type' => 'required|numeric',
             'quantity' => 'required|numeric',
             'expired_date' => 'required|date',
@@ -69,14 +69,10 @@ class VoucherController extends RestController
             'status',
             'min_order_value'
         ]);
+
         $attributes['remain_quantity'] = $request->quantity;
         $attributes['discount_value'] = $request->input('discount_value', 0);
         $attributes['discount_percent'] = $request->input('discount_percent', 0);
-
-        $name_test = $this->repository->find([WhereClause::query('code', $request->code)]);
-        if ($name_test) {
-            return $this->errorClient('Mã voucher đã tồn tại');
-        }
 
         if (strtotime($request->expired_date) < strtotime("now")) {
             return $this->errorClient('Thời gian hết hạn không đúng');
@@ -103,7 +99,7 @@ class VoucherController extends RestController
 
         $validator = $this->validateRequest($request, [
             'name' => 'nullable|max:255',
-            'code' => 'nullable|max:20',
+            'code' => 'nullable|max:20|unique:vouchers,code,' . $id,
             'quantity' => 'nullable|numeric',
             'expired_date' => 'nullable|date',
             'type' => 'nullable|numeric',
@@ -133,11 +129,6 @@ class VoucherController extends RestController
         $attributes['discount_value'] = $request->input('discount_value', 0);
         $attributes['discount_percent'] = $request->input('discount_percent', 0);
 
-        $name_test = $this->repository->find([WhereClause::query('code', $request->code), WhereClause::queryDiff('id', $id)]);
-        if ($name_test) {
-            return $this->errorClient('Mã voucher đã tồn tại');
-        }
-
         if (strtotime($request->expired_date) < strtotime("now")) {
             return $this->errorClient('Thời gian hết hạn không đúng');
         }
@@ -156,11 +147,6 @@ class VoucherController extends RestController
 
     public function destroy($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $this->repository->delete($id);
@@ -176,9 +162,6 @@ class VoucherController extends RestController
     public function enable($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         if (strtotime($model->expired_date) < strtotime("now")) {
             return $this->errorClient('Thời gian hết hạn không đúng');
@@ -198,11 +181,6 @@ class VoucherController extends RestController
 
     public function disable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);

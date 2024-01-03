@@ -29,9 +29,9 @@ class PaymentTransactionController extends RestController
         if ($request->has('search')) {
             $search = $request->search;
             array_push($clauses, WhereClause::orQuery([
-                WhereClause::queryLike('name', $request->search),
-                WhereClause::queryLike('order_code', $request->search),
-                WhereClause::queryLike('creator_name', $request->search),
+                WhereClause::queryLike('name', $search),
+                WhereClause::queryLike('order_code', $search),
+                WhereClause::queryLike('creator_name', $search),
                 WhereClause::queryRelationHas('order', function ($q) use ($search) {
                     $q->where('customer_phone', 'like', '%'.$search.'%');
                 })
@@ -56,11 +56,6 @@ class PaymentTransactionController extends RestController
 
     public function destroy($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $this->repository->delete($id);

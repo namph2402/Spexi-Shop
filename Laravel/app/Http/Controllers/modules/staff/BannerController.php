@@ -9,7 +9,6 @@ use App\Utils\FileStorageUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 
 class BannerController extends RestController
 {
@@ -28,13 +27,12 @@ class BannerController extends RestController
     {
         $createdImages = [];
 
-        $validator = Validator::make($request->all(), [
+        $validator = $this->validateRequest($request, [
             'group_id' => 'required|numeric',
             'name' => 'required|max:255',
             'image' => 'required'
         ]);
-
-        if ($validator->fails()) {
+        if ($validator) {
             return $this->errorClient($validator);
         }
 
@@ -72,13 +70,6 @@ class BannerController extends RestController
     {
         $createdImages = [];
 
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
-        $image_old = $model->image;
-
         $validator = $this->validateRequest($request, [
             'name' => 'nullable|max:255',
             'image' => 'nullable',
@@ -87,6 +78,8 @@ class BannerController extends RestController
             return $this->errorClient($validator);
         }
 
+        $model = $this->repository->findById($id);
+        $image_old = $model->image;
         $attributes = $request->only([
             'name',
             'href',
@@ -94,27 +87,17 @@ class BannerController extends RestController
             'summary'
         ]);
 
-        if($request->href == 'null') {
-            $attributes['href'] = null;
-        }
-
-        if($request->summary == 'null') {
-            $attributes['summary'] = null;
-        }
-
         if ($request->file('image') != '') {
             $image = FileStorageUtil::putFile('banners', $request->file('image'));
             $attributes['image'] = $image;
             array_push($createdImages, $image);
+            FileStorageUtil::deleteFiles($image_old);
         }
 
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
             DB::commit();
-            if ($request->file('image') != '') {
-                FileStorageUtil::deleteFiles($image_old);
-            }
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
@@ -126,10 +109,6 @@ class BannerController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $image = $model->image;
 
         try {
@@ -138,7 +117,7 @@ class BannerController extends RestController
             $this->repository->delete($model);
             DB::commit();
             FileStorageUtil::deleteFiles($image);
-            return $this->success($model);
+            return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();
@@ -148,11 +127,6 @@ class BannerController extends RestController
 
     public function enable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -167,11 +141,6 @@ class BannerController extends RestController
 
     public function disable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
@@ -187,9 +156,6 @@ class BannerController extends RestController
     public function up($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<'), WhereClause::query('group_id', $model->group_id)], 'order:desc');
         if (empty($swapModel)) {
@@ -199,10 +165,10 @@ class BannerController extends RestController
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update($id,[
+            $model = $this->repository->update($id, [
                 'order' => $swapModel->order
             ]);
-            $swapModel = $this->repository->update($swapModel->id,[
+            $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
             DB::commit();
@@ -217,9 +183,6 @@ class BannerController extends RestController
     public function down($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>'), WhereClause::query('group_id', $model->group_id)], 'order:asc');
         if (empty($swapModel)) {
@@ -229,10 +192,10 @@ class BannerController extends RestController
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update($id,[
+            $model = $this->repository->update($id, [
                 'order' => $swapModel->order
             ]);
-            $swapModel = $this->repository->update($swapModel->id,[
+            $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
             DB::commit();

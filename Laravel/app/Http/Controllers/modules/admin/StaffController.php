@@ -53,7 +53,7 @@ class StaffController extends RestController
     public function store(Request $request)
     {
         $validator = $this->validateRequest($request, [
-            'username' => 'required|max:255',
+            'username' => 'required|max:255|unique:staff',
             'fullname' => 'required|max:255',
             'phone' => 'required|numeric',
             'dob' => 'required|max:255',
@@ -81,12 +81,7 @@ class StaffController extends RestController
 
         $attributes['password'] = Hash::make('123456a@');
         $attributes['remember_token'] = Str::random(100);
-
-        if($request->gender == 0) {
-            $attributes['avatar'] = 'http://localhost:8000/assets/img/private/man.webp';
-        } else {
-            $attributes['avatar'] = 'http://localhost:8000/assets/img/private/woman.webp';
-        };
+        $attributes['avatar'] = $request->gender ? env('APP_URL') . '/assets/img/private/woman.webp' : env('APP_URL') . '/assets/img/private/man.webp';
 
         $test_name = $this->repository->find([WhereClause::query('username', $request->input('username'))]);
         if ($test_name) {
@@ -137,11 +132,7 @@ class StaffController extends RestController
             'bank_number',
         ]);
 
-        if($request->gender == 0) {
-            $attributes['avatar'] = 'http://localhost:8000/assets/img/private/man.webp';
-        } else {
-            $attributes['avatar'] = 'http://localhost:8000/assets/img/private/woman.webp';
-        };
+        $attributes['avatar'] = $request->gender ? 'http://localhost:8000/assets/img/private/woman.webp' : 'http://localhost:8000/assets/img/private/man.webp';
 
         try {
             DB::beginTransaction();
@@ -157,11 +148,6 @@ class StaffController extends RestController
 
     public function destroy($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $this->repository->delete($id);
@@ -176,11 +162,6 @@ class StaffController extends RestController
 
     public function enable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -195,11 +176,6 @@ class StaffController extends RestController
 
     public function disable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
@@ -214,14 +190,9 @@ class StaffController extends RestController
 
     public function repassword($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-        
         try {
             DB::beginTransaction();
-            $model = $this->repository->update($id,[
+            $model = $this->repository->update($id, [
                 'password' => Hash::make('123456a@'),
                 'remember_token' => Str::random(100),
             ]);
@@ -233,5 +204,4 @@ class StaffController extends RestController
             return $this->error($e->getMessage());
         }
     }
-
 }

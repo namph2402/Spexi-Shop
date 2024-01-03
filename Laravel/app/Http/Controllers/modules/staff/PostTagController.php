@@ -34,6 +34,7 @@ class PostTagController extends RestController
         }
 
         if ($request->has('post_id')) {
+            $with = [];
             $postId = $request->post_id;
             array_push($clauses, WhereClause::queryRelationHas('posts', function ($q) use ($postId) {
                 $q->where('id', $postId);
@@ -41,6 +42,7 @@ class PostTagController extends RestController
         }
 
         if ($request->has('post_id_add')) {
+            $with = [];
             $postIdAdd = $request->post_id_add;
             $tags = $this->repository->get([WhereClause::queryRelationHas('posts', function ($q) use ($postIdAdd) {
                 $q->where('id', $postIdAdd);
@@ -64,25 +66,18 @@ class PostTagController extends RestController
     public function store(Request $request)
     {
         $validator = $this->validateRequest($request, [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:post_tags'
         ]);
         if ($validator) {
             return $this->errorClient($validator);
         }
 
-        $attributes = $request->only([
-            'name',
-        ]);
+        $attributes['name'] = $request->name;
         $attributes['slug'] = Str::slug($attributes['name']);
 
         $lastItem = $this->repository->find([], 'order:desc');
         if ($lastItem) {
             $attributes['order'] = $lastItem->order + 1;
-        }
-
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name'))]);
-        if ($test_name) {
-            return $this->errorHad($request->input('name'));
         }
 
         try {
@@ -105,21 +100,14 @@ class PostTagController extends RestController
         }
 
         $validator = $this->validateRequest($request, [
-            'name' => 'nullable|max:255',
+            'name' => 'nullable|max:255|unique:post_tags,name,' . $id
         ]);
         if ($validator) {
             return $this->errorClient($validator);
         }
 
-        $attributes = $request->only([
-            'name',
-        ]);
+        $attributes['name'] = $request->name;
         $attributes['slug'] = Str::slug($attributes['name']);
-
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name')), WhereClause::queryDiff('id', $model->id)]);
-        if ($test_name) {
-            return $this->errorHad($request->input('name'));
-        }
 
         try {
             DB::beginTransaction();
@@ -136,9 +124,6 @@ class PostTagController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         try {
             DB::beginTransaction();
@@ -157,9 +142,6 @@ class PostTagController extends RestController
     public function enable($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         try {
             DB::beginTransaction();
@@ -175,11 +157,6 @@ class PostTagController extends RestController
 
     public function disable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
@@ -195,9 +172,6 @@ class PostTagController extends RestController
     public function up($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
         if (empty($swapModel)) {
@@ -207,10 +181,10 @@ class PostTagController extends RestController
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update($id,[
+            $model = $this->repository->update($id, [
                 'order' => $swapModel->order
             ]);
-            $swapModel = $this->repository->update($swapModel->id,[
+            $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
             DB::commit();
@@ -225,9 +199,6 @@ class PostTagController extends RestController
     public function down($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
         if (empty($swapModel)) {
@@ -237,10 +208,10 @@ class PostTagController extends RestController
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update($id,[
+            $model = $this->repository->update($id, [
                 'order' => $swapModel->order
             ]);
-            $swapModel = $this->repository->update($swapModel->id,[
+            $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
             DB::commit();
@@ -276,15 +247,10 @@ class PostTagController extends RestController
     public function detachTags($id, Request $request)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
-        $postId = $request->post_ids;
 
         try {
             DB::beginTransaction();
-            $this->repository->detach($model, $postId);
+            $this->repository->detach($model, $request->post_ids);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -293,5 +259,4 @@ class PostTagController extends RestController
             return $this->errorClient($e->getMessage());
         }
     }
-
 }

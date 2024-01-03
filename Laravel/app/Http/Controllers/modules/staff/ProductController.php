@@ -45,8 +45,7 @@ class ProductController extends RestController
         WarehouseRepositoryInterface        $warehouseRepository,
         ImportNoteRepositoryInterface       $importRepository,
         ImportNoteDetailRepositoryInterface $importDetailRepository
-    )
-    {
+    ) {
         parent::__construct($repository);
         $this->repository = $repository;
         $this->tagRepository = $tagRepository;
@@ -101,7 +100,7 @@ class ProductController extends RestController
         $validator = $this->validateRequest($request, [
             'category_id' => 'required|numeric',
             'category_slug' => 'required|max:255',
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:products',
             'code' => 'required|max:255',
             'image' => 'required',
             'price' => 'required|numeric',
@@ -131,11 +130,6 @@ class ProductController extends RestController
             $attributes['order'] = $lastItem->order + 1;
         }
 
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name'))]);
-        if ($test_name) {
-            return $this->errorHad($request->input('name'));
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->create($attributes);
@@ -162,7 +156,7 @@ class ProductController extends RestController
 
         $validator = $this->validateRequest($request, [
             'category_id' => 'nullable|numeric',
-            'name' => 'nullable|max:255',
+            'name' => 'nullable|max:255|unique:products,name,' . $id,
             'code' => 'nullable|max:255',
             'price' => 'nullable|numeric',
         ]);
@@ -188,11 +182,6 @@ class ProductController extends RestController
         $attributes['sale_price'] = $request->price;
         $attributes['slug'] = Str::slug($attributes['name']);
 
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name')), WhereClause::queryDiff('id', $model->id)]);
-        if ($test_name) {
-            return $this->errorHad($request->input('name'));
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
@@ -214,16 +203,12 @@ class ProductController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $image = $model->image;
 
         try {
             DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
-            $this->repository->delete($id, ['article', 'images', 'warehouses']);
+            $this->repository->delete($id, ['article', 'images', 'warehouses', 'cartItem']);
             DB::commit();
             FileStorageUtil::deleteFiles($image);
             return $this->success($model);
@@ -236,11 +221,6 @@ class ProductController extends RestController
 
     public function enable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -255,11 +235,6 @@ class ProductController extends RestController
 
     public function disable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
@@ -275,9 +250,6 @@ class ProductController extends RestController
     public function up($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
         if (empty($swapModel)) {
@@ -287,10 +259,10 @@ class ProductController extends RestController
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update($id,[
+            $model = $this->repository->update($id, [
                 'order' => $swapModel->order
             ]);
-            $swapModel = $this->repository->update($swapModel->id,[
+            $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
             DB::commit();
@@ -305,9 +277,7 @@ class ProductController extends RestController
     public function down($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
+
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');
@@ -316,10 +286,10 @@ class ProductController extends RestController
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update($id,[
+            $model = $this->repository->update($id, [
                 'order' => $swapModel->order
             ]);
-            $swapModel = $this->repository->update($swapModel->id,[
+            $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
             DB::commit();
@@ -331,7 +301,8 @@ class ProductController extends RestController
         }
     }
 
-    public function loadTag(Request $request) {
+    public function loadTag(Request $request)
+    {
         $limit = $request->input('limit', null);
         $clauses = [];
         $with = [];
@@ -400,13 +371,10 @@ class ProductController extends RestController
     public function detachTags($id, Request $request)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-        $tagId = $request->tag_ids;
+
         try {
             DB::beginTransaction();
-            $this->repository->detach($model, $tagId);
+            $this->repository->detach($model, $request->tag_ids);
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -481,22 +449,7 @@ class ProductController extends RestController
             foreach ($all as $c) {
                 $dict_products[$c->code] = $c;
             }
-            foreach ($newData as $key => $row) {
-                $i = $key + 1;
-                $categoryValue = trim($row[0]);
-                $codeValue = trim($row[1]);
-                $nameValue = trim($row[2]);
-                $priceValue = intval($row[3]);
-                $codeVariantValue = trim($row[4]);
-                $sizeValue = trim($row[5]);
-                $colorValue = trim($row[6]);
-                $weightValue = trim($row[7]);
-                $quantityValue = intval($row[8]);
 
-                if (empty($categoryValue) || empty($codeValue) || empty($nameValue) || empty($codeVariantValue) || empty($sizeValue) || empty($colorValue)) {
-                    return $this->errorClient('Lỗi dữ liệu dòng ' . $i);
-                }
-            }
             try {
                 DB::beginTransaction();
                 $total_amount = 0;
@@ -505,7 +458,6 @@ class ProductController extends RestController
                     $priceValue = intval($row[3]);
                     $quantityValue = intval($row[8]);
                     $total_amount += $priceValue * $quantityValue;
-
                 }
 
                 $import = $this->importRepository->create([
@@ -516,8 +468,8 @@ class ProductController extends RestController
                     'description' => $request->note
                 ]);
 
-                if($import) {
-                    foreach ($newData as $row) {
+                if ($import) {
+                    foreach ($newData as $key => $row) {
                         $categoryValue = trim($row[0]);
                         $codeValue = trim($row[1]);
                         $nameValue = trim($row[2]);
@@ -527,6 +479,11 @@ class ProductController extends RestController
                         $colorValue = trim($row[6]);
                         $weightValue = doubleval($row[7]);
                         $quantityValue = intval($row[8]);
+
+                        if (empty($categoryValue) || empty($codeValue) || empty($nameValue) || empty($codeVariantValue) || empty($sizeValue) || empty($colorValue)) {
+                            Log::error('Lỗi dữ liệu dòng ' . $key + 1);
+                            continue;
+                        }
 
                         // Tạo biến thể
                         $size = $this->sizeRepository->find([WhereClause::query('name', $sizeValue)]);
@@ -560,6 +517,7 @@ class ProductController extends RestController
                             if (!empty($lastItem)) {
                                 $orderProduct = $lastItem->order + 1;
                             }
+
                             $product = $this->repository->create([
                                 'code' => $codeValue,
                                 'category_id' => $category->id,
@@ -642,7 +600,7 @@ class ProductController extends RestController
             'Kho hàng' => [['Mã', 'Tên SP', 'Size', 'Màu', 'Giá nhập', 'Giá bán', 'Số lượng', 'Ghi chú']]
         ];
 
-        $data = $this->warehouseRepository->get([],'code:asc',['product','size','color']);
+        $data = $this->warehouseRepository->get([], 'code:asc', ['product', 'size', 'color']);
 
         foreach ($data as $row) {
             array_push($xlsx['Kho hàng'], [

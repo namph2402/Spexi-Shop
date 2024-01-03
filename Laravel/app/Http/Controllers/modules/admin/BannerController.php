@@ -70,11 +70,6 @@ class BannerController extends RestController
     {
         $createdImages = [];
 
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $validator = $this->validateRequest($request, [
             'name' => 'nullable|max:255',
             'image' => 'nullable',
@@ -83,6 +78,7 @@ class BannerController extends RestController
             return $this->errorClient($validator);
         }
 
+        $model = $this->repository->findById($id);
         $image_old = $model->image;
         $attributes = $request->only([
             'name',
@@ -90,14 +86,6 @@ class BannerController extends RestController
             'alt',
             'summary'
         ]);
-
-        if($request->href == 'null') {
-            $attributes['href'] = null;
-        }
-
-        if($request->summary == 'null') {
-            $attributes['summary'] = null;
-        }
 
         if ($request->file('image') != '') {
             $image = FileStorageUtil::putFile('banners', $request->file('image'));
@@ -121,10 +109,6 @@ class BannerController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $image = $model->image;
 
         try {
@@ -133,7 +117,7 @@ class BannerController extends RestController
             $this->repository->delete($model);
             DB::commit();
             FileStorageUtil::deleteFiles($image);
-            return $this->success($model);
+            return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();
@@ -143,11 +127,6 @@ class BannerController extends RestController
 
     public function enable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -162,11 +141,6 @@ class BannerController extends RestController
 
     public function disable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
@@ -182,9 +156,6 @@ class BannerController extends RestController
     public function up($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<'), WhereClause::query('group_id', $model->group_id)], 'order:desc');
         if (empty($swapModel)) {
@@ -194,10 +165,10 @@ class BannerController extends RestController
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update($id,[
+            $model = $this->repository->update($id, [
                 'order' => $swapModel->order
             ]);
-            $swapModel = $this->repository->update($swapModel->id,[
+            $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
             DB::commit();
@@ -212,9 +183,6 @@ class BannerController extends RestController
     public function down($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>'), WhereClause::query('group_id', $model->group_id)], 'order:asc');
         if (empty($swapModel)) {
@@ -224,10 +192,10 @@ class BannerController extends RestController
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update($id,[
+            $model = $this->repository->update($id, [
                 'order' => $swapModel->order
             ]);
-            $swapModel = $this->repository->update($swapModel->id,[
+            $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
             DB::commit();

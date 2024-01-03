@@ -44,25 +44,18 @@ class PostCategoryController extends RestController
     public function store(Request $request)
     {
         $validator = $this->validateRequest($request, [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:post_categories',
         ]);
         if ($validator) {
             return $this->errorClient($validator);
         }
 
-        $attributes = $request->only([
-            'name',
-        ]);
+        $attributes['name'] = $request->name;
         $attributes['slug'] = Str::slug($attributes['name']);
 
         $lastItem = $this->repository->find([], 'order:desc');
         if ($lastItem) {
             $attributes['order'] = $lastItem->order + 1;
-        }
-
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name'))]);
-        if ($test_name) {
-            return $this->errorHad($request->input('name'));
         }
 
         try {
@@ -79,35 +72,23 @@ class PostCategoryController extends RestController
 
     public function update(Request $request, $id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $validator = $this->validateRequest($request, [
-            'name' => 'nullable|max:255',
+            'name' => 'nullable|max:255|unique:post_categories,name,' . $id,
         ]);
         if ($validator) {
             return $this->errorClient($validator);
         }
 
-        $attributes = $request->only([
-            'name'
-        ]);
+        $attributes['name'] = $request->name;
         $attributes['slug'] = Str::slug($attributes['name']);
-
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name')), WhereClause::queryDiff('id', $model->id)]);
-        if ($test_name) {
-            return $this->errorHad($request->input('name'));
-        }
 
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             $this->postRepository->bulkUpdate([WhereClause::query('category_id', $id)], [
                 'category_slug' => $attributes['slug']
             ]);
+            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
@@ -119,9 +100,6 @@ class PostCategoryController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         try {
             DB::beginTransaction();
@@ -139,12 +117,8 @@ class PostCategoryController extends RestController
     public function up($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
-
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
         }
@@ -170,9 +144,6 @@ class PostCategoryController extends RestController
     public function down($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
         if (empty($swapModel)) {

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\modules\admin;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
-use App\Models\Menu;
 use App\Repository\MenuRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -42,7 +41,7 @@ class MenuController extends RestController
     {
         $validator = $this->validateRequest($request, [
             'group_id' => 'required|numeric',
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:menus',
             'url' => 'required|max:255',
         ]);
         if ($validator) {
@@ -53,18 +52,12 @@ class MenuController extends RestController
             'group_id',
             'name',
             'parent_id',
-            'url',
-            'icon'
+            'url'
         ]);
 
         $lastItem = $this->repository->find([WhereClause::query('group_id', $request->group_id)], 'order:desc');
         if ($lastItem) {
             $attributes['order'] = $lastItem->order + 1;
-        }
-
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name')), WhereClause::query('group_id', $request->group_id)]);
-        if ($test_name) {
-            return $this->errorHad($request->input('name'));
         }
 
         if ($request->input('name') == 'Trang chủ') {
@@ -85,14 +78,9 @@ class MenuController extends RestController
 
     public function update(Request $request, $id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $validator = $this->validateRequest($request, [
             'group_id' => 'nullable|numeric',
-            'name' => 'nullable|max:255',
+            'name' => 'nullable|max:255|unique:menus,name,' . $id,
             'url' => 'nullable|max:255',
         ]);
         if ($validator) {
@@ -103,14 +91,8 @@ class MenuController extends RestController
             'group_id',
             'name',
             'parent_id',
-            'url',
-            'icon'
+            'url'
         ]);
-
-        $test_name = $this->repository->find([WhereClause::query('name', $request->input('name')), WhereClause::query('group_id', $request->group_id), WhereClause::queryDiff('id', $model->id)]);
-        if ($test_name) {
-            return $this->errorHad($request->input('name'));
-        }
 
         if ($request->input('name') == 'Trang chủ') {
             $attributes['url'] = null;
@@ -131,16 +113,13 @@ class MenuController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         try {
             DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>'), WhereClause::query('group_id', $model->group_id)], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($model);
             DB::commit();
-            return $this->success($model);
+            return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();
@@ -151,9 +130,6 @@ class MenuController extends RestController
     public function up($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<'), WhereClause::query('group_id', $model->group_id)], 'order:desc');
         if (empty($swapModel)) {
@@ -163,10 +139,10 @@ class MenuController extends RestController
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update($id,[
+            $model = $this->repository->update($id, [
                 'order' => $swapModel->order
             ]);
-            $swapModel = $this->repository->update($swapModel->id,[
+            $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
             DB::commit();
@@ -181,9 +157,6 @@ class MenuController extends RestController
     public function down($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
 
         $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>'), WhereClause::query('group_id', $model->group_id)], 'order:asc');
         if (empty($swapModel)) {
@@ -193,10 +166,10 @@ class MenuController extends RestController
         try {
             DB::beginTransaction();
             $order = $model->order;
-            $model = $this->repository->update($id,[
+            $model = $this->repository->update($id, [
                 'order' => $swapModel->order
             ]);
-            $swapModel = $this->repository->update($swapModel->id,[
+            $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
             DB::commit();

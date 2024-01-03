@@ -17,7 +17,6 @@ use App\Utils\GiaoHangUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 
 class OrderShipController extends RestController
 {
@@ -48,7 +47,7 @@ class OrderShipController extends RestController
     {
         $limit = $request->input('limit', null);
         $clauses = [WhereClause::queryDiff('order_status', Order::$LEN_DON), WhereClause::queryDiff('order_status', Order::$XAC_NHAN)];
-        $with = ['details.product','shipping.unit'];
+        $with = ['details','shipping.unit'];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'updated_at:desc');
 
@@ -87,14 +86,14 @@ class OrderShipController extends RestController
     {
         $successOrders = [];
 
-        $validator = Validator::make($request->all(), [
+        $validator = $this->validateRequest($request, [
             'order_ids' => 'required',
             'unit_id' => 'required|numeric',
             'store_id' => 'required|numeric',
             'service_id' => 'required|numeric',
         ]);
-        if ($validator->fails()) {
-            return $this->error($validator->errors());
+        if ($validator) {
+            return $this->errorClient($validator);
         }
 
         $orderIds = preg_split('/,/', $request->order_ids);
@@ -184,10 +183,6 @@ class OrderShipController extends RestController
     public function show($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorClient('Đơn hàng không tồn tạ 21i');
-        }
-
         $ghu = new GiaoHangUtil($model);
         $info = $ghu->getOrder($model);
         return $this->success($info);
@@ -195,11 +190,6 @@ class OrderShipController extends RestController
 
     public function shipping($id)
     {
-        $model = $this->repository->findById($id ,['order']);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, [
@@ -207,8 +197,7 @@ class OrderShipController extends RestController
                 'status_id' => 4,
             ]);
             if($model) {
-                $this->orderRepository->update($model->order->id,
-                [
+                $this->orderRepository->update($model->order_id,[
                     'order_status' => 'Đang giao'
                 ]);
             }
@@ -223,11 +212,6 @@ class OrderShipController extends RestController
 
     public function complete($id)
     {
-        $model = $this->repository->findById($id ,['order']);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, [
@@ -235,8 +219,7 @@ class OrderShipController extends RestController
                 'status_id' => 7,
             ]);
             if($model) {
-                $this->orderRepository->update($model->order->id,
-                [
+                $this->orderRepository->update($model->order_id,[
                     'order_status' => 'Hoàn thành',
                     'payment_status' => 1,
                     'is_completed' => 1
@@ -257,7 +240,9 @@ class OrderShipController extends RestController
         if (empty($orderIdsStr)) {
             return $this->error('Không có đơn hàng nào');
         }
+        
         $orderIds = preg_split('/,/', $orderIdsStr);
+
         $models = $this->orderRepository->get([WhereClause::queryIn('id',$orderIds)], null, ['shipping']);
         if (empty($models)) {
             return $this->error('Đối tượng không tồn tại');
@@ -294,11 +279,6 @@ class OrderShipController extends RestController
 
     public function note($id, Request $request)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $attributes['note'] = $request->note;
         $attributes['status'] = OrderShip::$GIAO_LAI;
         $attributes['status_id'] = 5;

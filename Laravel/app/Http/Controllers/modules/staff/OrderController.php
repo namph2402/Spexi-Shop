@@ -18,7 +18,6 @@ use App\Utils\GiaoHangUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class OrderController extends RestController
@@ -31,13 +30,13 @@ class OrderController extends RestController
     protected $transactionRepository;
 
     public function __construct(
-        OrderRepositoryInterface              $repository,
-        ProductRepositoryInterface            $productRepository,
-        OrderDetailRepositoryInterface        $detailRepository,
-        VoucherRepositoryInterface            $voucherRepository,
-        UserProfileRepositoryInterface        $userRepository,
-        PaymentTransactionRepositoryInterface $transactionRepository,
-        WarehouseRepositoryInterface          $warehouseRepository
+        OrderRepositoryInterface       $repository,
+        ProductRepositoryInterface     $productRepository,
+        OrderDetailRepositoryInterface $detailRepository,
+        VoucherRepositoryInterface     $voucherRepository,
+        UserProfileRepositoryInterface $userRepository,
+        WarehouseRepositoryInterface   $warehouseRepository,
+        PaymentTransactionRepositoryInterface $transactionRepository
     ) {
         parent::__construct($repository);
         $this->productRepository = $productRepository;
@@ -82,7 +81,7 @@ class OrderController extends RestController
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = $this->validateRequest($request, [
             'customer_name' => 'required',
             'customer_phone' => 'required',
             'customer_address' => 'required',
@@ -95,8 +94,8 @@ class OrderController extends RestController
             'total_amount' => 'required|numeric',
             'payment_type' => 'required'
         ]);
-        if ($validator->fails()) {
-            return $this->error($validator->errors());
+        if ($validator) {
+            return $this->errorClient($validator);
         }
 
         $code = 'DH' . Str::random(8);
@@ -181,7 +180,7 @@ class OrderController extends RestController
             return $this->errorClient('Không thể sửa đơn hàng');
         }
 
-        $validator = Validator::make($request->all(), [
+        $validator = $this->validateRequest($request, [
             'customer_name' => 'nullable',
             'customer_phone' => 'nullable',
             'customer_address' => 'nullable',
@@ -194,8 +193,8 @@ class OrderController extends RestController
             'total_amount' => 'nullable|numeric',
             'payment_type' => 'nullable'
         ]);
-        if ($validator->fails()) {
-            return $this->error($validator->errors());
+        if ($validator) {
+            return $this->errorClient($validator);
         }
 
         $attributes = $request->only([

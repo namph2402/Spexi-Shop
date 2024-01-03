@@ -36,46 +36,11 @@ class CommentController extends RestController
         return $this->success($data);
     }
 
-    public function store(Request $request)
-    {
-        $validator = $this->validateRequest($request, [
-            'article_id' => 'required|numeric',
-            'author' => 'required|max:255',
-            'content' => 'required|max:255',
-        ]);
-        if ($validator) {
-            return $this->errorClient($validator);
-        }
-
-        $attributes = $request->only([
-            'article_id',
-            'author',
-            'content',
-            'rating',
-        ]);
-
-        try {
-            DB::beginTransaction();
-            $model = $this->repository->create($attributes);
-            DB::commit();
-            return $this->success($model);
-        } catch (\Exception $e) {
-            Log::error($e);
-            DB::rollBack();
-            return $this->error($e->getMessage());
-        }
-    }
-
     public function update(Request $request, $id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $validator = $this->validateRequest($request, [
             'content' => 'nullable|max:255',
-            'rating' => 'nullable|max:255',
+            'rating' => 'nullable',
         ]);
         if ($validator) {
             return $this->errorClient($validator);
@@ -100,11 +65,6 @@ class CommentController extends RestController
 
     public function destroy($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $this->repository->delete($id);
@@ -119,11 +79,6 @@ class CommentController extends RestController
 
     public function enable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
@@ -138,11 +93,6 @@ class CommentController extends RestController
 
     public function disable($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
@@ -154,5 +104,4 @@ class CommentController extends RestController
             return $this->error($e->getMessage());
         }
     }
-
 }

@@ -20,4 +20,3 @@ class ProvinceController extends Controller
         return $this->success($data);
     }
 }
-

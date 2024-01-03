@@ -48,7 +48,7 @@ class ShippingUnitController extends RestController
     public function store(Request $request)
     {
         $validator = $this->validateRequest($request, [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:shipping_units',
             'username' => 'required|max:255',
             'password' => 'required|max:255',
             'token' => 'required|max:255',
@@ -81,11 +81,6 @@ class ShippingUnitController extends RestController
             }
         }
 
-        $name_test = $this->repository->find([WhereClause::query('name', $request->input('name'))]);
-        if ($name_test) {
-            return $this->errorClient('Đối tác đã tồn tại');
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->create($attributes);
@@ -100,11 +95,6 @@ class ShippingUnitController extends RestController
 
     public function update(Request $request, $id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $validator = $this->validateRequest($request, [
             'username' => 'nullable|max:255',
             'password' => 'nullable|max:255',
@@ -136,16 +126,11 @@ class ShippingUnitController extends RestController
 
     public function destroy($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->error('Not found');
-        }
-
         try {
             DB::beginTransaction();
-            $model = $this->repository->delete($id, ['shipping_strores', 'shipping_services']);
+            $this->repository->delete($id, ['shipping_strores', 'shipping_services']);
             DB::commit();
-            return $this->success($model);
+            return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();

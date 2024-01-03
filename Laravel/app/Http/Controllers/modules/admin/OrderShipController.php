@@ -47,7 +47,7 @@ class OrderShipController extends RestController
     {
         $limit = $request->input('limit', null);
         $clauses = [WhereClause::queryDiff('order_status', Order::$LEN_DON), WhereClause::queryDiff('order_status', Order::$XAC_NHAN)];
-        $with = ['details.product','shipping.unit'];
+        $with = ['details','shipping.unit'];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'updated_at:desc');
 
@@ -183,10 +183,6 @@ class OrderShipController extends RestController
     public function show($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorClient('Đơn hàng không tồn tại');
-        }
-
         $ghu = new GiaoHangUtil($model);
         $info = $ghu->getOrder($model);
         return $this->success($info);
@@ -194,11 +190,6 @@ class OrderShipController extends RestController
 
     public function shipping($id)
     {
-        $model = $this->repository->findById($id ,['order']);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, [
@@ -206,7 +197,7 @@ class OrderShipController extends RestController
                 'status_id' => 4,
             ]);
             if($model) {
-                $this->orderRepository->update($model->order->id,[
+                $this->orderRepository->update($model->order_id,[
                     'order_status' => 'Đang giao'
                 ]);
             }
@@ -221,11 +212,6 @@ class OrderShipController extends RestController
 
     public function complete($id)
     {
-        $model = $this->repository->findById($id ,['order']);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, [
@@ -233,7 +219,7 @@ class OrderShipController extends RestController
                 'status_id' => 7,
             ]);
             if($model) {
-                $this->orderRepository->update($model->order->id,[
+                $this->orderRepository->update($model->order_id,[
                     'order_status' => 'Hoàn thành',
                     'payment_status' => 1,
                     'is_completed' => 1
@@ -293,11 +279,6 @@ class OrderShipController extends RestController
 
     public function note($id, Request $request)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $attributes['note'] = $request->note;
         $attributes['status'] = OrderShip::$GIAO_LAI;
         $attributes['status_id'] = 5;
