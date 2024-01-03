@@ -12,7 +12,7 @@ export class AppPagination {
     this.currentPage = 1;
     this.numPages = 0;
     this.maxSize = 4;
-    this.itemsPerPage = 10;
+    this.itemsPerPage = 20;
   }
 
   set(output: PaginationOutput<any>) {
