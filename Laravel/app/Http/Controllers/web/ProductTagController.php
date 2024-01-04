@@ -43,20 +43,14 @@ class ProductTagController extends RestController
         })];
 
         if ($request->has('color') && $request->color != 'All') {
-            $colors = explode(",", $request->color);
-            foreach ($colors as $color) {
-                array_push($arrColor, $color);
-            }
+            $arrColor = explode(",", $request->color);
             array_push($clause, WhereClause::queryRelationHas('warehouses', function ($q) use ($arrColor) {
                 $q->whereIn('color_id', $arrColor);
             }));
         }
 
         if ($request->has('size') && $request->size != 'All') {
-            $sizes = explode(",", $request->size);
-            foreach ($sizes as $size) {
-                array_push($arrSize, $size);
-            }
+            $arrSize = explode(",", $request->size);
             array_push($clause, WhereClause::queryRelationHas('warehouses', function ($q) use ($arrSize) {
                 $q->whereIn('size_id', $arrSize);
             }));
