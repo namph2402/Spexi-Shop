@@ -25,7 +25,7 @@ class RestController extends Controller implements RestApiController
         'in' => ':attribute phải là 1 trong các giá trị :values',
         'email' => ':attribute không đúng định dạng',
         'exists' => ':attribute không tồn tại',
-        'mimetypes' => ':attribute không đúng định dạng',
+        'mimes' => ':attribute không đúng định dạng',
         'integer' => ':attribute chỉ gồm số',
     ];
 

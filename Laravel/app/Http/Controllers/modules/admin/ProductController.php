@@ -102,7 +102,7 @@ class ProductController extends RestController
             'category_slug' => 'required|max:255',
             'name' => 'required|max:255|unique:products',
             'code' => 'required|max:255',
-            'image' => 'required',
+            'image' => 'required|mimes:jpeg,png,jpg,gif',
             'price' => 'required|numeric',
         ]);
         if ($validator) {
@@ -437,7 +437,7 @@ class ProductController extends RestController
         }
 
         $file = $request->file('file');
-        if ($file->getClientOriginalExtension() != 'xlsx') {
+        if ($file->getClientOriginalExtension() != '') {
             return $this->errorClient('Không đúng định dạng file .xlsx');
         }
 

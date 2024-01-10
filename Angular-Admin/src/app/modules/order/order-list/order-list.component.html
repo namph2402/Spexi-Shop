@@ -176,7 +176,7 @@
               <i aria-hidden="true" class="fa fa-check"></i>
             </button>
             <!-- Sửa + hủy -->
-            <div style="display: block" *ngIf="item.order_status == 'Lên đơn' || item.order_status == 'Xác nhận' || item.order_status == 'Chuẩn bị hàng' || item.order_status == 'Đang giao'">
+            <div style="display: block" *ngIf="item.order_status == 'Lên đơn' || item.order_status == 'Xác nhận' || item.order_status == 'Chuẩn bị hàng'">
               <button *ngIf="item.order_status != 'Đang giao'" (click)="editOrder(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px;">
                 <i class="fa fa-pencil-square-o"></i>
               </button>

@@ -37,8 +37,7 @@ class WarehouseController extends RestController
         ProductCategoryRepositoryInterface $categoryRepository,
         ImportNoteRepositoryInterface       $importRepository,
         ImportNoteDetailRepositoryInterface $importDetailRepository
-    )
-    {
+    ) {
         parent::__construct($repository);
         $this->productRepository = $productRepository;
         $this->sizeRepository = $sizeRepository;
@@ -65,7 +64,7 @@ class WarehouseController extends RestController
             array_push($clauses, WhereClause::orQuery([
                 WhereClause::queryLike('code', $search),
                 WhereClause::queryRelationHas('product', function ($q) use ($search) {
-                        $q->where('name', 'like', '%'.$search.'%');
+                    $q->where('name', 'like', '%' . $search . '%');
                 })
             ]));
         }
@@ -94,29 +93,30 @@ class WarehouseController extends RestController
         ]);
 
         $product = $this->productRepository->findById($request->product_id);
-        foreach ($request->sizeArr as $s) {
-            $size = $this->sizeRepository->findById($s);
-            foreach ($request->colorArr as $c) {
-                $color = $this->colorRepository->findById($c);
-                $attributes['code'] = strtoupper(Str::slug($product->code . '-' . $size->name . '-' . $color->name));
-                $attributes['size_id'] = $s;
-                $attributes['color_id'] = $c;
-                $attributes['weight'] = "0.2";
-                $attributes['status'] = "0";
-                $test_name = $this->repository->find([WhereClause::query('product_id', $request->product_id), WhereClause::query('size_id', $s), WhereClause::query('color_id', $c)]);
-                if ($test_name) {
-                    continue;
-                } else {
-                    try {
-                        DB::beginTransaction();
+        try {
+            DB::beginTransaction();
+            foreach ($request->sizeArr as $s) {
+                $size = $this->sizeRepository->findById($s);
+                foreach ($request->colorArr as $c) {
+                    $color = $this->colorRepository->findById($c);
+                    $attributes['code'] = strtoupper(Str::slug($product->code . '-' . $size->name . '-' . $color->name));
+                    $attributes['size_id'] = $s;
+                    $attributes['color_id'] = $c;
+                    $attributes['weight'] = "0.2";
+                    $attributes['status'] = "0";
+                    $test_name = $this->repository->find([WhereClause::query('product_id', $request->product_id), WhereClause::query('size_id', $s), WhereClause::query('color_id', $c)]);
+                    if ($test_name) {
+                        continue;
+                    } else {
+
                         $this->repository->create($attributes);
-                        DB::commit();
-                    } catch (\Exception $e) {
-                        Log::error($e);
-                        DB::rollBack();
                     }
                 }
             }
+            DB::commit();
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
         }
         return $this->success([]);
     }
@@ -134,7 +134,7 @@ class WarehouseController extends RestController
         $attributes['weight'] = $request->input('weight', 0);
         $attributes['quantity'] = $request->input('quantity', 0);
 
-        if($attributes['quantity'] <= 0 ) {
+        if ($attributes['quantity'] <= 0) {
             $attributes['status'] = 0;
         }
 
@@ -168,7 +168,7 @@ class WarehouseController extends RestController
     {
         $model = $this->repository->findById($id);
 
-        if($model->quantity <= 0) {
+        if ($model->quantity <= 0) {
             return $this->errorClient('Sản phẩm đã hết hàng');
         }
 
@@ -233,7 +233,6 @@ class WarehouseController extends RestController
                     $priceValue = intval($row[3]);
                     $quantityValue = intval($row[8]);
                     $total_amount += $priceValue * $quantityValue;
-
                 }
 
                 $import = $this->importRepository->create([
@@ -244,7 +243,7 @@ class WarehouseController extends RestController
                     'description' => $request->note
                 ]);
 
-                if($import) {
+                if ($import) {
                     foreach ($newData as $key => $row) {
                         $categoryValue = trim($row[0]);
                         $codeValue = trim($row[1]);
@@ -257,7 +256,7 @@ class WarehouseController extends RestController
                         $quantityValue = intval($row[8]);
 
                         if (empty($categoryValue) || empty($codeValue) || empty($nameValue) || empty($codeVariantValue) || empty($sizeValue) || empty($colorValue)) {
-                            Log::error('Lỗi dữ liệu dòng ' . $key+1);
+                            Log::error('Lỗi dữ liệu dòng ' . $key + 1);
                             continue;
                         }
 
@@ -355,10 +354,11 @@ class WarehouseController extends RestController
                             'quantity' => $quantityValue,
                             'weight' => $weightValue,
                         ]);
-                        DB::commit();
+
                         $dict_products[$product->code] = $product;
                     }
                 }
+                DB::commit();
                 return $this->success([]);
             } catch (\Exception $e) {
                 Log::error($e);
@@ -375,7 +375,7 @@ class WarehouseController extends RestController
             'Kho hàng' => [['Mã', 'Tên SP', 'Size', 'Màu', 'Giá nhập', 'Giá bán', 'Số lượng', 'Ghi chú']]
         ];
 
-        $data = $this->repository->get([],'code:asc',['product','size','color']);
+        $data = $this->repository->get([], 'code:asc', ['product', 'size', 'color']);
 
         foreach ($data as $row) {
             array_push($xlsx['Kho hàng'], [
