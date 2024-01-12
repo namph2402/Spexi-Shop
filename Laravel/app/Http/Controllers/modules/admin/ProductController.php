@@ -437,7 +437,7 @@ class ProductController extends RestController
         }
 
         $file = $request->file('file');
-        if ($file->getClientOriginalExtension() != '') {
+        if ($file->getClientOriginalExtension() != 'xlsx') {
             return $this->errorClient('Không đúng định dạng file .xlsx');
         }
 
@@ -465,6 +465,7 @@ class ProductController extends RestController
                     'creator_id' => $user->id,
                     'creator_name' => $user->name,
                     'total_amount' => $total_amount,
+                    'date_created' => Date("Y-m-d H:m:s"),
                     'description' => $request->note
                 ]);
 

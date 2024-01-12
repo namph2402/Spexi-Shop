@@ -239,6 +239,7 @@ class WarehouseController extends RestController
                     'name' => $request->name,
                     'creator_id' => $user->id,
                     'creator_name' => $user->name,
+                    'date_created' => Date("Y-m-d H:m:s"),
                     'total_amount' => $total_amount,
                     'description' => $request->note
                 ]);
