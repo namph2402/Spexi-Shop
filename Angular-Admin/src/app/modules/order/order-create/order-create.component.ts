@@ -12,9 +12,6 @@ import { VoucherMeta } from '../../voucher/voucher.meta';
 import { ProvinceMeta } from '../../province/province.meta';
 import { DistrictMeta } from '../../district/district.meta';
 import { ProvinceService } from '../../province/province.service';
-import { WardMeta } from '../../ward/ward.meta';
-import { ShippingFeeMeta } from '../../shipping-fee/shipping-fee.meta';
-import { ShippingFeeService } from '../../shipping-fee/shipping-fee.service';
 import { CustomerService } from '../../customer/customer.service';
 import { CustomerMeta } from '../../customer/customer.meta';
 import { PaymentMethodService } from '../../payment-method/payment-method.service';
@@ -23,13 +20,12 @@ import { PaymentMethodService } from '../../payment-method/payment-method.servic
   selector: 'app-order-create',
   templateUrl: './order-create.component.html',
   styleUrls: ['./order-create.component.css'],
-  providers: [CustomerService, OrderService, VoucherService, ProductService, ProvinceService, ShippingFeeService, PaymentMethodService]
+  providers: [CustomerService, OrderService, VoucherService, ProductService, ProvinceService, PaymentMethodService]
 })
 export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
 
   amount: number = 0;
   shipFee: number = 0;
-  shipFeeOld: number = 0;
   discount: number = 0;
   totalAmount: number = 0;
 
@@ -44,7 +40,6 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
     private productService: ProductService,
     private voucherService: VoucherService,
     private provinceService: ProvinceService,
-    private shipFeeService: ShippingFeeService,
     private customerService: CustomerService,
     private paymentervice: PaymentMethodService
   ) {
@@ -84,8 +79,7 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
       customer_request: new FormControl(null, Validators.maxLength(255)),
       product: new FormControl(null, Validators.required),
       shipping_fee: new FormControl(null, [Validators.required, Validators.min(0)]),
-      voucher_id: new FormControl(null),
-      voucher_list: new FormControl(null),
+      voucher_id: new FormControl(0),
       amount: new FormControl(null),
       discount: new FormControl(null),
       total_amount: new FormControl(null),
@@ -105,7 +99,6 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
       FieldForm.createSingleSelect2('Xã/Phường', 'ward', '', []),
       FieldForm.createTextArea('Yêu cầu của khách hàng', 'customer_request', 'Nhập kí tự', 5),
       FieldForm.createSingleSelect2('Sản phẩm', 'product', 'Chọn một', 'loadAllProducts'),
-      FieldForm.createSingleSelect2('Mã giảm giá', 'voucher_list', 'Chọn một', 'loadVouchers'),
       FieldForm.createSelect('Hình thức thanh toán', 'payment_type', 'Chọn một', 'loadPayments'),
     ];
   }
@@ -138,15 +131,6 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
               ward: wardObj
             };
             Object.keys(dataForm).forEach(v => this.setFormValueByKey(v, dataForm[v], { emitEvent: false }));
-            if (wardObj.length > 0) {
-              this.shipFeeService.loadByParams({ ward_id: wardObj[0].id }).subscribe((shipFees: ShippingFeeMeta[]) => {
-                if (shipFees.length > 0) {
-                  let s: ShippingFeeMeta = shipFees[0];
-                  this.shipFee = this.shipFeeOld = s.fee;
-                  this.updateCart();
-                }
-              });
-            }
           }
         });
       }
@@ -165,25 +149,6 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
         this.formGroup.controls['ward'].setValue(null);
         this.fields[5].data = value[0].wards;
       }
-    });
-    this.formGroup.controls['ward'].valueChanges.subscribe((value: WardMeta[]) => {
-      if (value && value.length > 0) {
-        this.shipFeeService.loadByParams({ ward_id: value[0].id }).subscribe((shipFees: ShippingFeeMeta[]) => {
-          if (shipFees.length > 0) {
-            let s: ShippingFeeMeta = shipFees[0];
-            this.shipFee = this.shipFeeOld = s.fee;
-            this.updateCart();
-          }
-        });
-      }
-    });
-    this.formGroup.controls['voucher_list'].valueChanges.subscribe(value => {
-      if (value && value.length > 0) {
-        this.voucher = value;
-      } else {
-        this.voucher = []
-      }
-      this.updateCart();
     });
   }
 
@@ -217,32 +182,6 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
     this.arrProduct.map(v => v.unit_price * v.quantity).forEach(v => {
       this.amount = this.amount + v;
     });
-    this.checkVoucher();
-  }
-
-  checkVoucher() {
-    this.discount = 0;
-    this.shipFee = this.shipFeeOld;
-    this.formGroup.controls['voucher_id'].setValue(null);
-    if (this.voucher.length > 0) {
-      let v: VoucherMeta = this.voucher[0];
-      if (Date.parse(v.expired_date) > Date.now()) {
-        if (this.amount < v.min_order_value) {
-          this.service.toastError('Không đủ điều kiện áp dụng');
-        } else {
-          if (v.type == 2) {
-            this.shipFee = 0;
-          } else {
-            if (this.amount <= v.discount_value) {
-              this.discount = this.amount;
-            } else {
-              this.discount = (this.amount * v.discount_percent / 100) + v.discount_value;
-            }
-          }
-          this.formGroup.controls['voucher_id'].setValue(v.id);
-        }
-      }
-    }
     this.checkout();
   }
 

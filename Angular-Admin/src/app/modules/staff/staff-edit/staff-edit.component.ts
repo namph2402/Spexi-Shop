@@ -63,10 +63,6 @@ export class StaffEditComponent extends AbstractModalComponent<StaffMeta> {
       FieldForm.createNumberInput('Lương', 'wage', 'Nhập số lương'),
       FieldForm.createSelect('Chức vụ', 'position', 'Chọn một', [
         {
-          name: 'Quản lý',
-          value: 'Quản lý'
-        },
-        {
           name: 'Nhân viên',
           value: 'Nhân viên'
         },

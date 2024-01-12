@@ -146,23 +146,15 @@
         </table>
 
         <div style="display: flex;">
-          <div [ngClass]="{'has-error':!formGroup.controls[fields[9].formControl].valid}" class="form-group col-md-6"
+          <div [ngClass]="{'has-error':!formGroup.controls[fields[8].formControl].valid}" class="form-group col-md-6"
             style="padding-left: 0;">
-            <label [for]="fields[9].formControl">
-              {{fields[9].label}}
-            </label>
-            <select [formControlName]="fields[9].formControl" [id]="fields[9].formControl"
-              [name]="fields[9].formControl" class="form-control">
-              <option *ngFor="let option of fields[9].data" [value]="option['name']">{{option['name']}}</option>
-            </select>
-          </div>
-          <div class="form-group col-md-6" style="padding-right: 0;">
             <label [for]="fields[8].formControl">
               {{fields[8].label}}
             </label>
-            <angular2-multiselect [data]="fields[8].data" [formControlName]="fields[8].formControl"
-              [id]="fields[8].formControl" [settings]="fields[8].config">
-            </angular2-multiselect>
+            <select [formControlName]="fields[8].formControl" [id]="fields[8].formControl"
+              [name]="fields[8].formControl" class="form-control">
+              <option *ngFor="let option of fields[8].data" [value]="option['name']">{{option['name']}}</option>
+            </select>
           </div>
         </div>
       </div>
