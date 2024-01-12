@@ -102,6 +102,9 @@ class BannerController extends RestController
         } catch (\Exception $e) {
             Log::error($e);
             DB::rollBack();
+            if ($request->file('image') != '') {
+                FileStorageUtil::deleteFiles($image);
+            }
             return $this->error($e->getMessage());
         }
     }

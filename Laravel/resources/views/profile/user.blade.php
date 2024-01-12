@@ -126,7 +126,7 @@
                             style="border-radius: 50%; width:200px; height:200px; border: 1px solid #c9c9c9">
                     </div>
                     <div class="d-flex justify-content-center mt-4">
-                        <input type="file" name="file" id="file" class="inputfile" />
+                        <input type="file" name="file" id="file" accept=".jpg, .png" class="inputfile" />
                         <label class="p-1 pr-3 pl-3" for="file" style="color: #3D464D">Tải ảnh</label>
                     </div>
                 </div>
