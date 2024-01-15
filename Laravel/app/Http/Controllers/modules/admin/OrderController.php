@@ -338,6 +338,27 @@ class OrderController extends RestController
         }
     }
 
+    public function prepare($id)
+    {
+        $model = $this->repository->findById($id);
+        if (empty($model)) {
+            return $this->errorNotFound();
+        }
+
+        $attributes['order_status'] = Order::$CHUAN_BI_HANG;
+
+        try {
+            DB::beginTransaction();
+            $model = $this->repository->update($id, $attributes);
+            DB::commit();
+            return $this->success($model);
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+            return $this->error($e->getMessage());
+        }
+    }
+
     public function cancel($id, Request $request)
     {
         $model = $this->repository->findById($id,['shipping']);

@@ -60,7 +60,7 @@ class GiaoHangTuGiaoUtil extends GiaoHangAbstractUtil
 
     public function cancelOrder(OrderShip $order)
     {
-        $model = OrderShip::where('id', $order->id)->update(
+        $model = OrderShip::whereId($order->id)->update(
             ['status' =>'Hủy đơn'],
             ['status_id' => 0]
         );

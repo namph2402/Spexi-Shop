@@ -54,6 +54,7 @@ class PromotionController extends RestController
 
         array_push($clause, WhereClause::queryRelationHas('promotions', function ($q) {
             $q->whereIn('type', ['1','2']);
+            $q->whereStatus(1);
         }));
 
         if ($request->has('color') && $request->color != 'All') {

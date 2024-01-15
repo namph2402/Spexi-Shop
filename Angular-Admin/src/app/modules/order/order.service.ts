@@ -28,6 +28,11 @@ export class OrderService extends AbstractCRUDService<OrderMeta> {
       .pipe(catchError(this.handleErrorRequest.bind(this)), map(res => res['data']));
   }
 
+  prepare(id: number) {
+    return this.http.get<DataResponse<any>>(`${this.urlRestAPI}/${id}/prepare`, {params: {}})
+      .pipe(catchError(this.handleErrorRequest.bind(this)), map(res => res['data']));
+  }
+
   return(id: number) {
     return this.http.get<DataResponse<any>>(`${this.urlRestAPI}/${id}/return`, {params: {}})
       .pipe(catchError(this.handleErrorRequest.bind(this)), map(res => res['data']));

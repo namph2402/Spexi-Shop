@@ -210,6 +210,7 @@ Route::group(['middleware' => ['auth.staff']], function () {
     Route::group(['prefix' => 'orders/{id}'], function () {
         Route::post('confirm', 'OrderController@confirm');
         Route::post('cancel', 'OrderController@cancel');
+        Route::get('prepare', 'OrderController@prepare');
         Route::post('refund', 'OrderController@refund');
         Route::get('return', 'OrderController@return');
         Route::get('returned', 'OrderController@returned');

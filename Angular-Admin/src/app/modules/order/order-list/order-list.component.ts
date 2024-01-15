@@ -166,6 +166,13 @@ export class OrderListComponent extends AbstractCRUDComponent<OrderMeta> {
     });
   }
 
+  prepare(item: OrderMeta) {
+    (<OrderService>this.service).prepare(item.id).subscribe(res => {
+      this.service.toastSuccessfully('Chuẩn bị hàng');
+      this.load();
+    }, () => this.service.toastFailedEdited());
+  }
+
   return(item: OrderMeta) {
     (<OrderService>this.service).return(item.id).subscribe(res => {
       this.service.toastSuccessfully('Hoàn hàng');

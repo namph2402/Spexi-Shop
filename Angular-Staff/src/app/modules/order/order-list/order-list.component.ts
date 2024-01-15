@@ -154,6 +154,13 @@ export class OrderListComponent extends AbstractCRUDComponent<OrderMeta> {
     });
   }
 
+  prepare(item: OrderMeta) {
+    (<OrderService>this.service).prepare(item.id).subscribe(res => {
+      this.service.toastSuccessfully('Chuẩn bị hàng');
+      this.load();
+    }, () => this.service.toastFailedEdited());
+  }
+
   refund(item: OrderMeta) {
     const modalRef = this.modalService.show(OrderRefundComponent, {ignoreBackdropClick: true, 'class': 'modal-lg'});
     const modal: AbstractModalComponent<OrderMeta> = <AbstractModalComponent<OrderMeta>>modalRef.content;

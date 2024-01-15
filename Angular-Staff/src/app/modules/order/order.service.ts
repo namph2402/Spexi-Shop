@@ -23,6 +23,11 @@ export class OrderService extends AbstractCRUDService<OrderMeta> {
       .pipe(catchError(this.handleErrorRequest.bind(this)), map(res => res['data']));
   }
 
+  prepare(id: number) {
+    return this.http.get<DataResponse<any>>(`${this.urlRestAPI}/${id}/prepare`, {params: {}})
+      .pipe(catchError(this.handleErrorRequest.bind(this)), map(res => res['data']));
+  }
+
   refund(item: OrderMeta): Observable<OrderMeta> {
     return this.http.post<DataResponse<OrderMeta>>(`${this.urlRestAPI}/${item['id']}/refund`, item)
       .pipe(catchError(this.handleErrorRequest.bind(this)), map(res => res['data']));

@@ -126,6 +126,12 @@ class GiaoHangTietKiemUtil extends GiaoHangAbstractUtil
             ->returnResponseObject()
             ->post();
         if ($curl->status == 200) {
+
+            OrderShip::whereCode($order->code)->update(
+                ['status' =>'Hủy đơn'],
+                ['status_id' => 0]
+            );
+
             if ($curl->content->success == 1 || $curl->content->message == 'Đơn hàng đã ở trạng thái hủy') {
                 return true;
             }

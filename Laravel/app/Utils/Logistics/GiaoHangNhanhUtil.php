@@ -80,7 +80,7 @@ class GiaoHangNhanhUtil extends GiaoHangAbstractUtil
                 'quantity' => $d->quantity,
             ]);
         }
-        $data['weight'] = $total_weight;
+        $data['weight'] = ceil($total_weight);
 
         $curl = Curl::to($this->endpoint . '/v2/shipping-order/create')
             ->withHeaders([
@@ -125,6 +125,12 @@ class GiaoHangNhanhUtil extends GiaoHangAbstractUtil
             ->returnResponseObject()
             ->post();
         if ($curl->status == 200) {
+
+            OrderShip::whereCode($order->code)->update(
+                ['status' =>'Hủy đơn'],
+                ['status_id' => 0]
+            );
+
             if ($curl->content->code == 200) {
                 return $curl->content->data[0]->result;
             } else {
