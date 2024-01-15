@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@index')->name('home.index');
 
 Route::get('/sign-in', 'AccountController@index')->name('login');
 Route::post('/sign-in', 'AccountController@checkLogin');

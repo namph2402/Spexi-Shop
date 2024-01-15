@@ -33,6 +33,9 @@ class AccountController extends RestController
 
     public function index(Request $request)
     {
+        if(Auth::user()) {
+            return redirect()->route('home.index');
+        }
         return view('pages.login');
     }
 
@@ -61,6 +64,9 @@ class AccountController extends RestController
 
     public function signup()
     {
+        if(Auth::user()) {
+            return redirect()->route('home.index');
+        }
         return view('pages.signup');
     }
 
@@ -157,6 +163,9 @@ class AccountController extends RestController
 
     public function retrieval()
     {
+        if(Auth::user()) {
+            return redirect()->route('home.index');
+        }
         return view('pages.retrieval');
     }
 
@@ -183,6 +192,9 @@ class AccountController extends RestController
 
     public function logout(Request $request): RedirectResponse
     {
+        if(Auth::user()) {
+            return redirect()->route('home.index');
+        }
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
