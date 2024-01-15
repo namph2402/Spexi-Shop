@@ -193,7 +193,7 @@ class ShippingUnitController extends RestController
                 $services = $giaohangnhanhUtils->getServices();
 
                 foreach ($stores as $item) {
-                    if (!$this->shippingStore->find([WhereClause::query('partner_id', $item['partner_id'])])) {
+                    if ($item['data']['status'] == 1 && !$this->shippingStore->find([WhereClause::query('partner_id', $item['partner_id'])])) {
                         $attributes['unit_id'] = $item['unit_id'];
                         $attributes['name'] = $item['name'];
                         $attributes['partner_id'] = $item['partner_id'];
