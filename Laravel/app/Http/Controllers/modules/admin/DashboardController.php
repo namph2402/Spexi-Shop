@@ -336,7 +336,7 @@ class DashboardController extends RestController
         }
 
         // Sản phẩm sắp hết
-        $productOffs = $this->warehouseRepository->get([WhereClause::query('quantity', '50', '<='), WhereClause::query('status', '1')], 'quantity:asc', ['product', 'size', 'color']);
+        $productOffs = $this->warehouseRepository->get([WhereClause::query('quantity', '30', '<='), WhereClause::query('status', '1')], 'quantity:asc', ['product', 'size', 'color']);
         foreach ($productOffs as $p) {
             array_push($xlsx["Sản phẩm sắp hết"], [
                 $p->code,

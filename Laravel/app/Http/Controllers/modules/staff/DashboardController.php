@@ -33,7 +33,7 @@ class DashboardController extends RestController
         }
 
         // Sản phẩm sắp hết
-        $products = $this->warehouseRepository->paginate(10, [WhereClause::query('quantity', '50', '<='),WhereClause::query('status', '1')], 'quantity:asc', ['product', 'size', 'color']);
+        $products = $this->warehouseRepository->paginate(10, [WhereClause::query('quantity', '30', '<='),WhereClause::query('status', '1')], 'quantity:asc', ['product', 'size', 'color']);
         foreach ($products as $p) {
             array_push($tableProduct, $p);
         }
