@@ -7,6 +7,7 @@ import {ImportService} from '../import.service';
 import {FieldForm, ModalResult} from '../../../core/common';
 import { ImportDetailListComponent } from '../import-detail-list/import-detail-list.component';
 import { ImportDetailMeta } from '../import-detail.meta';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-import',
@@ -24,7 +25,8 @@ export class ImportListComponent extends AbstractCRUDComponent<ImportMeta> {
     builder: FormBuilder,
   ) {
     super(service, modal, builder);
-    for (let i = 2100; i > 1900; i--) {
+    let year = Number(moment(new Date().getTime()).format('YYYY'));
+    for (let i = year; i >= 2000; i--) {
       i
       let data = {
         'name' : i ,
