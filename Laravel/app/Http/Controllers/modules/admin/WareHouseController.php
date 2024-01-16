@@ -4,6 +4,7 @@ namespace App\Http\Controllers\modules\admin;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
+use App\Models\CartItem;
 use App\Models\Product;
 use App\Repository\ImportNoteDetailRepositoryInterface;
 use App\Repository\ImportNoteRepositoryInterface;
@@ -189,6 +190,7 @@ class WarehouseController extends RestController
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
+            CartItem::whereWarehouseId($id)->delete();
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {

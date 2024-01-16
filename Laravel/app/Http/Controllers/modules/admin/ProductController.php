@@ -4,6 +4,7 @@ namespace App\Http\Controllers\modules\admin;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
+use App\Models\CartItem;
 use App\Models\Product;
 use App\Repository\ImportNoteDetailRepositoryInterface;
 use App\Repository\ImportNoteRepositoryInterface;
@@ -238,6 +239,7 @@ class ProductController extends RestController
         try {
             DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
+            CartItem::whereProductId($id)->delete();
             DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
@@ -581,10 +583,10 @@ class ProductController extends RestController
                             'quantity' => $quantityValue,
                             'weight' => $weightValue,
                         ]);
-                        DB::commit();
                         $dict_products[$product->code] = $product;
                     }
                 }
+                DB::commit();
                 return $this->success([]);
             } catch (\Exception $e) {
                 Log::error($e);

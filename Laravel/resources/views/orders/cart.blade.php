@@ -38,7 +38,6 @@
                         </thead>
                         <tbody class="align-middle">
                             @foreach ($cart->items as $item)
-                                @if ($item->product && $item->warehouse)
                                     <tr>
                                         <td class="text-center">
                                             <div class="custom-control custom-radio custom-control-inline m-0"
@@ -88,14 +87,11 @@
                                             </a>
                                         </td>
                                     </tr>
-                                @endif
                             @endforeach
                             @php
                                 $total_amount = 0;
                                 foreach ($cart->items as $item) {
-                                    if ($item->product && $item->warehouse) {
                                         $total_amount += $item->product->sale_price * $item->quantity;
-                                    }
                                 }
                             @endphp
                             <tr>

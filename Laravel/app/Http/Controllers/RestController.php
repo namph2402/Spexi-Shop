@@ -104,11 +104,6 @@ class RestController extends Controller implements RestApiController
         return $this->notSupport();
     }
 
-    /**
-     * @param Request $request
-     * @param $validatorRules
-     * @return null|string
-     */
     public function validateRequest(Request $request, $validatorRules)
     {
         $validator = Validator::make($request->all(), $validatorRules, $this->validatorMessages);
@@ -119,11 +114,6 @@ class RestController extends Controller implements RestApiController
         return null;
     }
 
-    /**
-     * @param array $array
-     * @param $validatorRules
-     * @return null|string
-     */
     public function validateArray(array $array, $validatorRules)
     {
         $validator = Validator::make($array, $validatorRules, $this->validatorMessages);

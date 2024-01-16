@@ -18,30 +18,19 @@ class FormDataController extends RestController
 
     public function store(Request $request)
     {
-        $validator = $this->validateRequest($request, [
-            'email' => 'required|email',
-        ]);
-        if ($validator) {
-            return $this->errorClient($validator);
-        }
-
-        $attributes['value'] = $request->email;
-
         $test_email = $this->repository->find([WhereClause::query('value', $request->email)]);
         if ($test_email) {
             return $this->successViewBack('Email của bạn đã được thêm');
         }
 
         try {
-            DB::beginTransaction();
-            $this->repository->create($attributes);
-            DB::commit();
+            $this->repository->create([
+                'email' => $request->email
+            ]);
             return $this->successViewBack('Đăng ký thông tin thành công');
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->errorView('Đăng ký thông tin thất bại');
         }
     }
-
 }

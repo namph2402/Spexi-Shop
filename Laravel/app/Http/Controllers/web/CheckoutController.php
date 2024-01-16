@@ -144,23 +144,6 @@ class CheckoutController extends RestController
 
     public function store(Request $request)
     {
-        $validator = $this->validateRequest($request, [
-            'customer_name' => 'required|max:255',
-            'customer_phone' => 'required|numeric',
-            'customer_address' => 'required|max:255',
-            'province_id' => 'required|numeric',
-            'district_id' => 'required|numeric',
-            'ward_id' => 'required|numeric',
-            'amount' => 'required|numeric',
-            'shipping_fee' => 'required|numeric',
-            'total_amount' => 'required|numeric',
-            'payment_type' => 'required|max:255',
-            'items' => 'required',
-        ]);
-        if ($validator) {
-            return $this->errorClient($validator);
-        }
-
         $items = explode(",", $request->items);
         $clauses = [WhereClause::queryIn('id', $items)];
         $with = ['product', 'warehouse.size', 'warehouse.color'];

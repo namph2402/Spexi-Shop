@@ -11,8 +11,6 @@ class Cart extends Model
 
     public function items()
     {
-        return $this->hasMany(CartItem::class)->whereHas('product', function($q) {
-            $q->whereStatus(1);
-        });;
+        return $this->hasMany(CartItem::class);
     }
 }
