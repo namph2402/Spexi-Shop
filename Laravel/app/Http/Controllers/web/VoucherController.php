@@ -18,10 +18,7 @@ class VoucherController extends RestController
     {
         $date = Date("Y-m-d");
         $clauses = [WhereClause::query('status',1), WhereClause::query('private',0), WhereClause::queryDate('expired_date', $date, '>=')];
-        $with = [];
-        $withCount = [];
-        $orderBy = 'id:desc';
-        $vouchers = $this->repository->paginate(10, $clauses, $orderBy, $with, $withCount);
+        $vouchers = $this->repository->paginate(10, $clauses);
         return view('profile.voucher', compact('vouchers'));
     }
 
@@ -36,7 +33,7 @@ class VoucherController extends RestController
 
         $arrVoucher = [];
 
-        if ($data != null) {
+        if ($data) {
             $arrVoucher = [
                 'id' => $data->id,
                 'type' => $data->type,
@@ -45,7 +42,7 @@ class VoucherController extends RestController
                 'discount_percent' => $data->discount_percent
             ];
         }
-        
+
         return $this->success($arrVoucher);
     }
 }

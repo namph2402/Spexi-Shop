@@ -14,8 +14,6 @@ use App\Repository\WardRepositoryInterface;
 use App\Utils\FileStorageUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 
 class UserProfileController extends RestController
@@ -71,17 +69,6 @@ class UserProfileController extends RestController
     public function store(Request $request)
     {
         $createdImages = [];
-        $validator = $this->validateRequest($request, [
-            'fullname' => 'required|max:255',
-            'phone' => 'required|numeric',
-            'address' => 'required|max:255',
-            'province_id' => 'required|numeric',
-            'district_id' => 'required|numeric',
-            'ward_id' => 'required|numeric',
-        ]);
-        if ($validator) {
-            return $this->errorView($validator);
-        }
 
         $attributes = $request->only([
             'fullname',
@@ -95,10 +82,6 @@ class UserProfileController extends RestController
         $district = $this->districtRepository->findById($request->district_id);
         $ward = $this->wardRepository->findById($request->ward_id);
 
-        if(!$province || !$district || !$ward) {
-            return $this->errorView('Địa chỉ không đúng');
-        }
-
         $attributes['province'] = $province->name;
         $attributes['district'] = $district->name;
         $attributes['ward'] = $ward->name;
@@ -110,13 +93,9 @@ class UserProfileController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('user_id', Auth::user()->id)], $attributes);
-            DB::commit();
             return $this->successView('/profile','Cập nhật thông tin thành công');
         } catch (\Exception $e) {
-            Log::error($e);
-            DB::rollBack();
             return $this->errorView('Cập nhật thông tin thất bại');
         }
     }
@@ -124,31 +103,31 @@ class UserProfileController extends RestController
     public function order(Request $request)
     {
         $clauses = [WhereClause::query('user_id', Auth::user()->id)];
-        $orders = $this->orderRepository->paginate(10, $clauses, 'created_at:desc', ['details.product']);
+        $orders = $this->orderRepository->paginate(10, $clauses, 'created_at:desc', ['details']);
         return view('profile.order', compact('orders'));
     }
 
     public function orderCancel($id)
     {
-        $order = $this->orderRepository->findById($id, ['user', 'details.product']);
+        $order = $this->orderRepository->findById($id, ['user', 'details']);
         if (empty($order) || $order->user_id != Auth::user()->id) {
             return $this->errorNotFoundView();
         }
 
-        if ($order->order_status == 'Lên đơn' || $order->order_status == 'Xác nhận' || $order->order_status == 'Chuẩn bị hàng') {
+        if ($order->order_status == 'Lên đơn') {
             $this->orderRepository->update($id, [
                 'order_status' => Order::$HUY_DON,
             ]);
             return redirect()->back()->with('msg_success', 'Hủy đơn hàng thành công');
-        } else {
-            return $this->errorView('Không thể hủy đơn hàng');
         }
 
+        return $this->errorView('Không thể hủy đơn hàng');
     }
 
     public function orderDetail(Request $request, $id)
     {
-        $order = $this->orderRepository->findById($id, ['user', 'details.product']);
+        $order = $this->orderRepository->findById($id, ['user', 'details']);
+
         if (empty($order) || $order->user_id != Auth::user()->id) {
             return $this->errorNotFoundView();
         }
@@ -164,20 +143,11 @@ class UserProfileController extends RestController
 
     public function updatePassword(Request $request)
     {
-        $validator = $this->validateRequest($request, [
-            'oldPassword' => 'required|min:6',
-            'password' => 'required|min:6'
-        ]);
-        if ($validator) {
-            return $this->errorClient($validator);
-        }
-
-        $user = $this->userRepository->findById(Auth::user()->id);
-        if (!Hash::check($request->oldPassword, $user->password)) {
+        if (!Hash::check($request->oldPassword, Auth::user()->password)) {
             return redirect()->back()->with('msg_error','Mật khẩu không đúng');
         }
 
-        $user = $this->userRepository->update(Auth::user()->id, [
+        $this->userRepository->update(Auth::user()->id, [
             'password' =>  Hash::make($request->password)
         ]);
 

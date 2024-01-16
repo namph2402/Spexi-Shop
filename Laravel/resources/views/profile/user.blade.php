@@ -3,7 +3,8 @@
     Thông tin tài khoản
 @endsection
 @section('content-child')
-    <form action="/profile/update-profile" id="updateProfile" method="post" enctype="multipart/form-data" class="col-lg-9 wow fadeIn" data-wow-delay="0.1s">
+    <form action="/profile/update-profile" id="updateProfile" method="post" enctype="multipart/form-data"
+        class="col-lg-9 wow fadeIn" data-wow-delay="0.1s">
         <div class="row">
             <div class="col-12 p-0">
                 <nav class="breadcrumb bg-light mb-3">
@@ -30,12 +31,14 @@
                     <div class="d-flex">
                         <div class="col-md-6 form-group">
                             <label class="pb-1">Tên khách hàng</label>
-                            <input class="form-control" type="text" id="fullname" name="fullname" placeholder="Nhập tên" value="{{ $profile->fullname }}">
+                            <input class="form-control" type="text" id="fullname" name="fullname" placeholder="Nhập tên"
+                                value="{{ $profile->fullname }}">
                             <small class="error-message"></small>
                         </div>
                         <div class="col-md-6 form-group">
                             <label class="pb-1">Số điện thoại</label>
-                            <input class="form-control" type="number" id="phone" name="phone" placeholder="Nhập số điện thoại" value="{{ $profile->phone }}">
+                            <input class="form-control" type="number" id="phone" name="phone"
+                                placeholder="Nhập số điện thoại" value="{{ $profile->phone }}">
                             <small class="error-message"></small>
                         </div>
                     </div>
@@ -57,9 +60,11 @@
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <select class="custom-select" name="district_id" id="district_id" onchange="onDistrictIdChange()">
+                                <select class="custom-select" name="district_id" id="district_id"
+                                    onchange="onDistrictIdChange()">
                                     @if ($districtUser != null)
-                                        <option selected hidden value="{{ $districtUser->id }}">{{ $districtUser->name }}</option>
+                                        <option selected hidden value="{{ $districtUser->id }}">{{ $districtUser->name }}
+                                        </option>
                                     @else
                                         <option selected hidden disabled value="">Quận/huyện</option>
                                     @endif
@@ -89,7 +94,8 @@
                     </div>
                     <div class="form-group col-md-12">
                         <label class="pb-1">Địa chỉ chi tiết</label>
-                        <input class="form-control" type="text" id="address" name="address" placeholder="Địa chỉ" value="{{ $profile->address }}">
+                        <input class="form-control" type="text" id="address" name="address" placeholder="Địa chỉ"
+                            value="{{ $profile->address }}">
                         <small class="error-message"></small>
                     </div>
                     <div class="form-group col-md-12">
@@ -134,7 +140,9 @@
         </div>
         @csrf
     </form>
+@endsection
 
+@section('scripts')
     <script>
         const input = document.getElementById('file');
         const image = document.getElementById('img-preview');

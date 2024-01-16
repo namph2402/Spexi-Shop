@@ -76,7 +76,7 @@
                                         <i class="fa fa-minus"></i>
                                     </a>
                                 </div>
-                                <input type="number" class="form-control bg-secondary border-0 text-center" name="quantity" value="1" onchange="onDetailChange()">
+                                <input type="number" class="form-control bg-secondary border-0 text-center" oninput="this.value = Math.abs(this.value)" name="quantity" value="1" onchange="onDetailChange()" >
                                 <div class="input-group-btn">
                                     <a class="btn btn-primary btn-plus">
                                         <i class="fa fa-plus"></i>

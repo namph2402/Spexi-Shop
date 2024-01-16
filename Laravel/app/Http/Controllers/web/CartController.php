@@ -46,13 +46,18 @@ class CartController extends RestController
             'quantity' => 'required|numeric',
         ]);
         if ($validator) {
-            return $this->errorClient($validator);
+            return $this->errorView($validator);
         }
 
         $attributes = $request->only([
             'product_id',
-            'quantity'
         ]);
+
+        if($request->quantity > 0) {
+            $attributes['quantity'] = $request->quantity;
+        } else {
+            $attributes['quantity'] = 1;
+        }
 
         $cart = $this->repository->find([WhereClause::query('user_id', Auth::user()->id)]);
 
@@ -90,10 +95,6 @@ class CartController extends RestController
         $quantity = [];
         $totalAmount = 0;
         $item =  $this->itemRepository->findById($request->id, ['product']);
-
-        if (empty($item)) {
-            return $this->errorNotFoundView();
-        }
 
         if ($request->quantity > 0) {
             $data = $this->itemRepository->update($request->id, [

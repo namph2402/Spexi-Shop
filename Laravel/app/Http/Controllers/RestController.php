@@ -14,9 +14,9 @@ class RestController extends Controller implements RestApiController
     protected $validatorMessages = [
         'required' => ':attribute không được để trống',
         'max' => ':attribute không được vượt quá 255 ký tự',
+        'min' => ':attribute không nhỏ hơn :min',
         'numeric' => ':attribute phải là số',
         'url' => ':attribute không đúng định dạng URL',
-        'mimes' => ':attribute phải là file ảnh',
         'boolean' => ':attribute không đúng định dạng',
         'alpha' => ':attribute chỉ gồm chữ',
         'alpha_dash' => ':attribute chỉ gồm chữ hoặc (.) hoặc (_)',

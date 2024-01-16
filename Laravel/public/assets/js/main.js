@@ -122,10 +122,10 @@
             if (a.hasClass('btn-plus')) {
                 var newVal = parseFloat(oldValue) + 1;
             } else {
-                if (oldValue > 0) {
+                if (oldValue > 1) {
                     var newVal = parseFloat(oldValue) - 1;
                 } else {
-                    newVal = 0;
+                    newVal = 1;
                 }
             }
             a.parent().parent().find('input').val(newVal);
@@ -184,7 +184,7 @@
             if (arrItemColor.length > 0) {
                 document.getElementById('color').value = arrItemColor;
             }
-            
+
             if (arrItemSize.length > 0) {
                 document.getElementById('size').value = arrItemSize;
             }
@@ -571,10 +571,9 @@ function sendCapcha(url) {
 }
 
 function onProvinceIdChange() {
-    const provinceId = document.getElementById('province_id').value;
-    Checkout.getInstance().loadAllDistricts(provinceId, (data) => {
-        document.getElementById("district_id").innerHTML = "<option selected hidden disabled value=\"\">Quận/huyện</option>";
-        document.getElementById("ward_id").innerHTML = `<option selected hidden disabled value="">Xã/phường</option>`;
+    document.getElementById("district_id").innerHTML = "<option selected hidden disabled value=\"\">Quận/huyện</option>";
+    document.getElementById("ward_id").innerHTML = `<option selected hidden disabled value="">Xã/phường</option>`;
+    Checkout.getInstance().loadAllDistricts(document.getElementById('province_id').value, (data) => {
         for (let i = 0; i < data.length; i++) {
             document.getElementById("district_id").innerHTML += `<option value="${data[i]['id']}">${data[i]['name']}</option>`
         }
@@ -582,9 +581,8 @@ function onProvinceIdChange() {
 }
 
 function onDistrictIdChange() {
-    const districtId = document.getElementById('district_id').value;
-    Checkout.getInstance().loadAllWards(districtId, (data) => {
-        document.getElementById("ward_id").innerHTML = `<option selected hidden disabled value="">Xã/phường</option>`;
+    document.getElementById("ward_id").innerHTML = `<option selected hidden disabled value="">Xã/phường</option>`;
+    Checkout.getInstance().loadAllWards(document.getElementById('district_id').value, (data) => {
         for (let i = 0; i < data.length; i++) {
             document.getElementById("ward_id").innerHTML += `<option value="${data[i]['id']}">${data[i]['name']}</option>`
         }
@@ -675,19 +673,3 @@ function getTotal() {
     document.getElementById("total_amount").value = `${total}`;
     document.getElementById("totalAmountView").innerHTML = `${totalView} đ`;
 }
-
-Array.prototype.forEach.call(document.querySelectorAll('.inputfile'), function (input) {
-    var label = input.nextElementSibling,
-        labelVal = label.innerHTML;
-    input.addEventListener('change', function (e) {
-        var fileName = '';
-        if (this.files && this.files.length > 1)
-            fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length);
-        else
-            fileName = e.target.value.split('\\').pop();
-        if (fileName)
-            label.querySelector('span').innerHTML = fileName;
-        else
-            label.innerHTML = labelVal;
-    });
-});

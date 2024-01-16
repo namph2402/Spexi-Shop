@@ -19,15 +19,6 @@ class WarehouseController extends RestController
 
     public function getWarehouse(Request $request)
     {
-        $validator = $this->validateRequest($request, [
-            'product_id' => 'required|numeric',
-            'size_id' => 'required|numeric',
-            'color_id' => 'required|numeric',
-        ]);
-        if ($validator) {
-            return $this->errorClient($validator);
-        }
-
         $table = $this->repository->find([
             WhereClause::query('product_id', $request->product_id),
             WhereClause::query('size_id', $request->size_id),
@@ -35,10 +26,6 @@ class WarehouseController extends RestController
             WhereClause::query('status', 1)
         ]);
 
-        if (empty($table)) {
-            return $this->success(['quantity' => 0]);
-        } else {
-            return $this->success(['quantity' => $table->quantity]);
-        }
+        return $this->success(['quantity' => $table ? $table->quantity : 0]);
     }
 }
