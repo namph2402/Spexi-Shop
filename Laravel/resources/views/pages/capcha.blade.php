@@ -13,11 +13,11 @@
             </div>
             <div class="account-group form-capcha mb-4">
                 <i class="fas fa-user"></i>
-                <input type="number" name="code" class="account-input" placeholder="Nhập mã"
-                       value="{{ old('code') }}" inputmode="numeric">
+                <input type="number" name="code" class="account-input" placeholder="Nhập mã" value="{{ old('code') }}"
+                    inputmode="numeric">
                 <input type="email" name="email" id="emailCapcha" value="{{ $email }}" hidden>
                 @if (isset($msg))
-                <span class="err-text d-block" style="top: 35px">{{$msg}}</span>
+                    <span class="err-text d-block" style="top: 35px">{{ $msg }}</span>
                 @endif
             </div>
             <div style="text-align: center">
@@ -26,9 +26,10 @@
             @csrf
             <div class="mt-3" style="text-align: center">
                 @php
-                $url = config('app.url')
+                    $url = config('app.url');
                 @endphp
-                <span class="d-flex justify-content-center" id="timeCode" style="color: #d3d3d3">Gửi lại mã xác nhận sau <p class="ml-1" id="timeSecond">40s</p></span>
+                <span class="d-flex justify-content-center" id="timeCode" style="color: #d3d3d3">Gửi lại mã xác nhận sau <p
+                        class="ml-1" id="timeSecond">40s</p></span>
                 <a id="sendCode" class="btn-send" onclick="sendCapcha('{!! $url !!}')">Gửi lại mã xác nhận</a>
             </div>
         </form>

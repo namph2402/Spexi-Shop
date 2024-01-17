@@ -3,7 +3,7 @@
     {{ $post->name }}
 @endsection
 @section('url')
-    {{ $url = config('app.url').'/posts'}}
+    {{ $url = config('app.url') . '/posts' }}
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -110,7 +110,8 @@
                         <div class="blog-list">
                             @foreach ($post->relateds as $r)
                                 <div class="blog-item">
-                                    <img class="blog-item-img w-100" data-src="{{ $r->post->image }}" src="{{ $r->post->image }}" alt="{{ $r->post->name }}" style="object-fit: cover;">
+                                    <img class="blog-item-img w-100" data-src="{{ $r->post->image }}"
+                                        src="{{ $r->post->image }}" alt="{{ $r->post->name }}" style="object-fit: cover;">
                                     <div class="blog-item-info">
                                         <a href="{{ $r->post->full_path }}"
                                             class="blog-item-title">{{ $r->post->name }}</a>
@@ -124,7 +125,9 @@
                             <div class="blog-list">
                                 @foreach ($categoryPost as $c)
                                     <div class="blog-item">
-                                        <img class="blog-item-img w-100" data-src="{{ $c->image }}" src="{{ $c->image }}" alt="{{ $c->name }}" style="object-fit: cover;">
+                                        <img class="blog-item-img w-100" data-src="{{ $c->image }}"
+                                            src="{{ $c->image }}" alt="{{ $c->name }}"
+                                            style="object-fit: cover;">
                                         <div class="blog-item-info">
                                             <a href="{{ $c->full_path }}"
                                                 class="blog-item-title">{{ $c->name }}</a>

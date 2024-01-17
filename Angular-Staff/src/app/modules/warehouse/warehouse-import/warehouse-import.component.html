@@ -10,16 +10,19 @@
       <form [formGroup]="formGroup" novalidate>
         <div class="form-group" [ngClass]="{ 'has-error': !formGroup.controls['name'].valid }">
           <label for="name">Tên phiếu nhập</label>
-          <input formControlName="name" id="name" name="name" placeholder="Nhập tên" type="text" class="form-control"/>
+          <input formControlName="name" id="name" name="name" placeholder="Nhập tên" type="text" class="form-control" />
         </div>
-        <div class="custom-file margin-bottom form-group" [ngClass]="{ 'has-error': !formGroup.controls['file'].valid }">
+        <div class="custom-file margin-bottom form-group"
+          [ngClass]="{ 'has-error': !formGroup.controls['file'].valid }">
           <label class="custom-file-label" for="inputGroupFile01">Chọn file</label>
-          <input (change)="onFileUploadChange($event)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" aria-describedby="inputGroupFileAddon01"
-          class="custom-file-input" id="inputGroupFile01" type="file">
+          <input (change)="onFileUploadChange($event)"
+            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            aria-describedby="inputGroupFileAddon01" class="custom-file-input" id="inputGroupFile01" type="file">
         </div>
         <div class="form-group" [ngClass]="{ 'has-error': !formGroup.controls['note'].valid }">
           <label for="note">Ghi chú</label>
-          <textarea formControlName="note" id="note" name="note" placeholder="Nhập chi chú" rows="5" class="form-control"></textarea>
+          <textarea formControlName="note" id="note" name="note" placeholder="Nhập chi chú" rows="5"
+            class="form-control"></textarea>
         </div>
       </form>
     </div>

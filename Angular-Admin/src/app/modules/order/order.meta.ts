@@ -1,5 +1,5 @@
 import {OrderDetailMeta} from '../order-detail/order-detail.meta';
-import { OrderShipMeta } from '../order-ship/order-ship.meta';
+import {OrderShipMeta} from '../order-ship/order-ship.meta';
 import {VoucherMeta} from '../voucher/voucher.meta';
 
 export class OrderMeta {

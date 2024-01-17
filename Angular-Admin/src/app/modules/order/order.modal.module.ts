@@ -7,9 +7,9 @@ import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown';
 import {MomentModule} from 'ngx-moment';
 import {OrderCreateComponent} from './order-create/order-create.component';
 import {OrderEditComponent} from './order-edit/order-edit.component';
-import { OrderCancelComponent } from './order-cancel/order-cancel.component';
-import { OrderConfirmComponent } from './order-confirm/order-confirm.component';
-import { OrderRefundComponent } from './order-refund/order-refund.component';
+import {OrderCancelComponent} from './order-cancel/order-cancel.component';
+import {OrderConfirmComponent} from './order-confirm/order-confirm.component';
+import {OrderRefundComponent} from './order-refund/order-refund.component';
 
 @NgModule({
   imports: [

@@ -2,28 +2,28 @@
   <div class="panel-heading">
     <div class="row">
       <div class="col-xs-12">
-        <form [formGroup]="searchForm" (ngSubmit)="load()">
-          <div class="form-group col-md-6" *ngFor="let f of searchControls">
+        <form (ngSubmit)="load()" [formGroup]="searchForm">
+          <div *ngFor="let f of searchControls" class="form-group col-md-6">
             <ng-template [ngIf]="f.type == 'input'">
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
-              <input [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl" class="form-control"
-                [placeholder]="f.placeHolder" [type]="f.typeof" />
+              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control" />
             </ng-template>
             <ng-template [ngIf]="f.type == 'textarea'">
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
-              <textarea [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
-                class="form-control" [placeholder]="f.placeHolder">
+              <textarea [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                [placeholder]="f.placeHolder" class="form-control">
               </textarea>
             </ng-template>
             <ng-template [ngIf]="f.type == 'checkbox'">
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" [id]="f.formControl" [name]="f.formControl"
-                    [formControlName]="f.formControl" />
+                  <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                    type="checkbox" />
                   {{ f.label }}
                 </label>
               </div>
@@ -32,7 +32,7 @@
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
-              <select [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl"
+              <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
                 class="form-control">
                 <option *ngFor="let option of f.data" [value]="option['id']">
                   {{ option["name"] }}
@@ -43,19 +43,19 @@
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
-              <angular2-multiselect [id]="f.formControl" [formControlName]="f.formControl" [data]="f.data"
+              <angular2-multiselect [data]="f.data" [formControlName]="f.formControl" [id]="f.formControl"
                 [settings]="f.config">
               </angular2-multiselect>
             </ng-template>
           </div>
           <div class="col-md-12">
             <button class="btn btn-default" type="submit">Tìm kiếm</button>
-            <button class="btn btn-default" type="button" (click)="removeFilter()">Xóa lọc</button>
+            <button (click)="removeFilter()" class="btn btn-default" type="button">Xóa lọc</button>
           </div>
         </form>
       </div>
       <div class="col-xs-12">
-        <button type="button" class="btn btn-primary pull-right" (click)="createShippingUnit()">
+        <button (click)="createShippingUnit()" class="btn btn-primary pull-right" type="button">
           <i class="fa fa-plus" style="margin-right: 5px;"></i> Thêm mới
         </button>
       </div>
@@ -74,18 +74,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="odd" *ngFor="let item of list; let i = index">
+        <tr *ngFor="let item of list; let i = index" class="odd">
           <td class="text-center">{{ i + 1 }}</td>
           <td>{{ item.name }}</td>
           <td>{{ item.username }}</td>
           <td>
             <div *ngIf="item.shipping_strores != null">
-              <div class="list-config" *ngFor="let value of item.shipping_strores">
+              <div *ngFor="let value of item.shipping_strores" class="list-config">
                 <p style="width: 90%;">{{ value.name }}</p>
-                <button class="btn btn-danger text-center btn-config" type="button" mwlConfirmationPopover
-                  popoverTitle="Xóa" popoverMessage="Bạn thực sự muốn xóa?" placement="top"
-                  confirmText="Yes <i class='fa fa-check'></i>" cancelText="No <i class='fa fa-remove'></i>"
-                  (confirm)="removeStore(value)">
+                <button (confirm)="removeStore(value)" cancelText="No <i class='fa fa-remove'></i>"
+                  class="btn btn-danger text-center btn-config" confirmText="Yes <i class='fa fa-check'></i>"
+                  mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
+                  type="button">
                   <i class="fa fa-remove" style="margin: auto"></i>
                 </button>
               </div>
@@ -93,36 +93,37 @@
           </td>
           <td>
             <div *ngIf="item.shipping_services != null">
-              <div class="list-config" *ngFor="let value of item.shipping_services">
+              <div *ngFor="let value of item.shipping_services" class="list-config">
                 <p style="width: 90%; margin-right: 10px">{{ value.name }}</p>
-                <button class="btn btn-danger text-center btn-config" type="button" mwlConfirmationPopover
-                  popoverTitle="Xóa" popoverMessage="Bạn thực sự muốn xóa?" placement="top"
-                  confirmText="Yes <i class='fa fa-check'></i>" cancelText="No <i class='fa fa-remove'></i>"
-                  (confirm)="removeService(value)">
+                <button (confirm)="removeService(value)" cancelText="No <i class='fa fa-remove'></i>"
+                  class="btn btn-danger text-center btn-config" confirmText="Yes <i class='fa fa-check'></i>"
+                  mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
+                  type="button">
                   <i class="fa fa-remove" style="margin: auto"></i>
                 </button>
               </div>
             </div>
           </td>
           <td class="text-center">
-            <button *ngIf="item.name != 'Tự giao'" type="button" style="width: 30px; height: 30px; padding: 0;" class="btn btn-info"
-              (click)="sync(item)">
-              <i class="fa fa-refresh" aria-hidden="true"></i>
+            <button (click)="sync(item)" *ngIf="item.name != 'Tự giao'" class="btn btn-info"
+              style="width: 30px; height: 30px; padding: 0;" type="button">
+              <i aria-hidden="true" class="fa fa-refresh"></i>
             </button>
-            <button *ngIf="item.name == 'Tự giao'" type="button" style="width: 30px; height: 30px; padding: 0;" class="btn btn-info"
-              (click)="addUnitPartner()">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            <button (click)="addUnitPartner()" *ngIf="item.name == 'Tự giao'" class="btn btn-info"
+              style="width: 30px; height: 30px; padding: 0;" type="button">
+              <i aria-hidden="true" class="fa fa-plus-circle"></i>
             </button>
-            <button *ngIf="
+            <button (click)="editShippingUnit(item)" *ngIf="
                 item.shipping_services == '' ||
                 item.shipping_strores == '' ||
-                item.name == 'Tự giao'"
-                (click)="editShippingUnit(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
+                item.name == 'Tự giao'" class="btn btn-default btn-sm" style="width: 30px; height: 30px; padding: 0;"
+              type="button">
               <i class="fa fa-pencil-square-o"></i>
             </button>
-            <button type="button" class="btn btn-danger" mwlConfirmationPopover popoverTitle="Xóa"
-              popoverMessage="Bạn thực sự muốn xóa?" placement="top" confirmText="Yes <i class='fa fa-check'></i>"
-              cancelText="No <i class='fa fa-remove'></i>" (confirm)="remove(item, i)" style="width: 30px; height: 30px; padding: 0;">
+            <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger"
+              confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover placement="top"
+              popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa" style="width: 30px; height: 30px; padding: 0;"
+              type="button">
               <i class="fa fa-remove"></i>
             </button>
           </td>

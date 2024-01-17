@@ -82,8 +82,9 @@
           <img *ngIf="item.image" [alt]="item.name" [src]="item.image" class="img-thumb" width="100px" />
         </td>
         <td>
-          <a [href]="item.full_path" target="_blank" style="font-size: 15px; color: black">{{ item.name }}
-            <button class="btn btn-default btn-xs" type="button" style="width: 15px; height: 15px; padding: 1px; margin-left: 3px;">
+          <a [href]="item.full_path" style="font-size: 15px; color: black" target="_blank">{{ item.name }}
+            <button class="btn btn-default btn-xs" style="width: 15px; height: 15px; padding: 1px; margin-left: 3px;"
+              type="button">
               <i class="fa fa-external-link" style="display: block;"></i>
             </button>
           </a>
@@ -125,18 +126,20 @@
         </td>
         <td class="text-center">
           <button (click)="viewProduct(item, i)" *ngIf="item.type != 3 && item.type != 4" class="btn btn-default btn-sm"
-            type="button" style="width: 30px; height: 30px; padding: 0;">
+            style="width: 30px; height: 30px; padding: 0;" type="button">
             <i aria-hidden="true" class="fa fa-check"></i>
           </button>
-          <button *ngIf="item.type == 3 || item.type == 4" class="btn btn-default btn-sm" disabled type="button" style="width: 30px; height: 30px; padding: 0;">
+          <button *ngIf="item.type == 3 || item.type == 4" class="btn btn-default btn-sm" disabled
+            style="width: 30px; height: 30px; padding: 0;" type="button">
             <i aria-hidden="true" class="fa fa-ban"></i>
           </button>
-          <button (click)="editPromotion(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
+          <button (click)="editPromotion(item)" class="btn btn-default btn-sm"
+            style="width: 30px; height: 30px; padding: 0;" type="button">
             <i class="fa fa-pencil-square-o"></i>
           </button>
           <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm"
             confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover placement="top"
-            popoverMessage="Bạn thực sự muốn xóa?" type="button" style="width: 30px; height: 30px; padding: 0;">
+            popoverMessage="Bạn thực sự muốn xóa?" style="width: 30px; height: 30px; padding: 0;" type="button">
             <i class="fa fa-remove"></i>
           </button>
         </td>

@@ -3,8 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {ToasterService} from 'angular2-toaster';
 import {OrderMeta} from './order.meta';
 import {AbstractCRUDService, DataResponse, TitleService} from '../../core';
-import { Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 
 @Injectable()
 export class OrderService extends AbstractCRUDService<OrderMeta> {

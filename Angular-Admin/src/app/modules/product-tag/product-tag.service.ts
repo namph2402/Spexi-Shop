@@ -4,9 +4,9 @@ import {AbstractCRUDService} from '../../core/crud';
 import {ToasterService} from 'angular2-toaster';
 import {TitleService} from '../../core/services';
 import {ProductTagMeta} from './product-tag.meta';
-import { catchError, map } from 'rxjs/operators';
-import { DataResponse } from '../../core';
-import { Observable } from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
+import {DataResponse} from '../../core';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class ProductTagService extends AbstractCRUDService<ProductTagMeta> {

@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { AbstractModalComponent } from '../../../core/crud';
-import { VoucherMeta } from '../voucher.meta';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BsModalRef } from 'ngx-bootstrap';
-import { VoucherService } from '../voucher.service';
-import { FieldForm } from '../../../core/common';
+import {Component} from '@angular/core';
+import {AbstractModalComponent} from '../../../core/crud';
+import {VoucherMeta} from '../voucher.meta';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {BsModalRef} from 'ngx-bootstrap';
+import {VoucherService} from '../voucher.service';
+import {FieldForm} from '../../../core/common';
 
 @Component({
   selector: 'app-voucher-create',
@@ -32,15 +32,15 @@ export class VoucherCreateComponent extends AbstractModalComponent<VoucherMeta> 
 
   buildForm(): FormGroup {
     return this.formBuilder.group({
-      name: new FormControl(null, [Validators.required, Validators.maxLength(255), Validators.pattern('[^ ].*$')]),
-      code: new FormControl(null, [Validators.required, Validators.maxLength(30), Validators.pattern('^(?=.*[A-Z0-9]+)[A-Z0-9]*$')]),
-      type: new FormControl(null, Validators.required),
-      quantity: new FormControl(null, [Validators.required, Validators.min(1), Validators.maxLength(10), Validators.pattern('^(?=.*[0-9]+)[0-9]*$')]),
-      min_order_value: new FormControl(null, [Validators.required, Validators.min(1), Validators.maxLength(10), Validators.pattern('^(?=.*[0-9]+)[0-9]*$')]),
-      expired_date: new FormControl(null, Validators.required),
-      private: new FormControl(0),
-      status: new FormControl(0),
-    }
+        name: new FormControl(null, [Validators.required, Validators.maxLength(255), Validators.pattern('[^ ].*$')]),
+        code: new FormControl(null, [Validators.required, Validators.maxLength(30), Validators.pattern('^(?=.*[A-Z0-9]+)[A-Z0-9]*$')]),
+        type: new FormControl(null, Validators.required),
+        quantity: new FormControl(null, [Validators.required, Validators.min(1), Validators.maxLength(10), Validators.pattern('^(?=.*[0-9]+)[0-9]*$')]),
+        min_order_value: new FormControl(null, [Validators.required, Validators.min(1), Validators.maxLength(10), Validators.pattern('^(?=.*[0-9]+)[0-9]*$')]),
+        expired_date: new FormControl(null, Validators.required),
+        private: new FormControl(0),
+        status: new FormControl(0),
+      }
     );
   }
 
@@ -73,7 +73,8 @@ export class VoucherCreateComponent extends AbstractModalComponent<VoucherMeta> 
     this.formGroup.controls['type'].valueChanges.subscribe(value => {
       if (this.fields.length > 8) {
         this.fields.splice(8);
-      } if (value) {
+      }
+      if (value) {
         if (value == 1) {
           let fileForm = FieldForm.createSelect('Loại giá trị', 'value', 'Chọn một', [
             {

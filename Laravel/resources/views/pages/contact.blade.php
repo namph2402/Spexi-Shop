@@ -25,9 +25,8 @@
             </div>
             <div class="col-lg-4 mb-5">
                 <div class="bg-light p-20 mb-30">
-                    <iframe style="width: 100%; height: 400px;"
-                        src="{{ $data['Map'] }}"
-                        frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                    <iframe style="width: 100%; height: 400px;" src="{{ $data['Map'] }}" frameborder="0" style="border:0;"
+                        allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
                 </div>
                 <div class="bg-light p-30 mb-3">
                     <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>{{ $data['Address'] }}</p>

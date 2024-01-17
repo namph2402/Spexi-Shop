@@ -22,7 +22,7 @@ import {ProductWarehouseMeta} from '../../product-warehouse/product-warehouse.me
 import {ProductImportComponent} from '../product-import/product-import.component';
 import {ProductRelatedListComponent} from '../../product-related/product-related-list/product-related-list.component';
 import {ProductRelatedMeta} from '../../product-related/product-related.meta';
-import { ProductTagAssignListComponent } from '../product-tag-assign-list/product-tag-assign-list.component';
+import {ProductTagAssignListComponent} from '../product-tag-assign-list/product-tag-assign-list.component';
 
 @Component({
   selector: 'app-product',

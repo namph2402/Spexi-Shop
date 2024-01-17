@@ -27,8 +27,7 @@
           <ng-template [ngIf]="f.type == 'checkbox'">
             <div class="checkbox">
               <label>
-                <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                  type="checkbox" />
+                <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" type="checkbox" />
                 {{ f.label }}
               </label>
             </div>
@@ -37,8 +36,7 @@
             <label [for]="f.formControl">
               {{ f.label }}
             </label>
-            <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-              class="form-control">
+            <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" class="form-control">
               <option *ngFor="let option of f.data" [value]="option['id']">
                 {{ option["name"] }}
               </option>
@@ -59,24 +57,25 @@
     <div class="col-xs-12">
       <table class="table table-bordered table-hover">
         <thead>
-        <tr>
-          <th style="width: 10%;">#</th>
-          <th style="width: 70%;">Tên bài đăng</th>
-          <th style="width: 20%;">Thao tác</th>
-        </tr>
+          <tr>
+            <th style="width: 10%;">#</th>
+            <th style="width: 70%;">Tên bài đăng</th>
+            <th style="width: 20%;">Thao tác</th>
+          </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let item of list;let i = index" class="odd">
-          <td class="text-center">{{i + 1}}</td>
-          <td>{{item.name}}</td>
-          <td class="text-center">
-            <button (confirm)="detach(item.id)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
-                    mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?"
-                    popoverTitle="Xóa" type="button" style="width: 30px; height: 30px; padding: 0;">
-              <i class="fa fa-remove"></i>
-            </button>
-          </td>
-        </tr>
+          <tr *ngFor="let item of list;let i = index" class="odd">
+            <td class="text-center">{{i + 1}}</td>
+            <td>{{item.name}}</td>
+            <td class="text-center">
+              <button (confirm)="detach(item.id)" cancelText="No <i class='fa fa-remove'></i>"
+                class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
+                placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa" type="button"
+                style="width: 30px; height: 30px; padding: 0;">
+                <i class="fa fa-remove"></i>
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -86,9 +85,8 @@
   <div class="row">
     <div class="col-xs-6">
       <pagination (numPages)="pagination.numPages = $event" (pageChanged)="pageChanged($event)"
-                  [(ngModel)]="pagination.currentPage" [boundaryLinks]="true"
-                  [itemsPerPage]="pagination.itemsPerPage" [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems"
-                  class="pagination-sm"></pagination>
+        [(ngModel)]="pagination.currentPage" [boundaryLinks]="true" [itemsPerPage]="pagination.itemsPerPage"
+        [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems" class="pagination-sm"></pagination>
     </div>
     <div class="col-xs-6">
       <div class="box-go-to">

@@ -36,7 +36,8 @@
                                             @foreach ($item->details as $key => $d)
                                                 <tr>
                                                     <td style="width:20%">
-                                                        <img class="w-100" data-src="{{ $d->product->image }}" src="{{ $d->product->image }}" alt="{{ $d->product_name }}">
+                                                        <img class="w-100" data-src="{{ $d->product->image }}"
+                                                            src="{{ $d->product->image }}" alt="{{ $d->product_name }}">
                                                     </td>
                                                     <td style="width:60%">
                                                         <span class="text-product">{{ $d->product_name }}</span>
@@ -55,7 +56,8 @@
                             <td style="text-align: center; padding: 10px 0 0">
                                 {{ $item->order_status }}
                                 @if ($item->order_status == 'Lên đơn' || $item->order_status == 'Xác nhận' || $item->order_status == 'Chuẩn bị hàng')
-                                <a class="btn btn-sm btn-danger d-block btn-cancel" href="order/cancel/{{$item->id}}">Hủy đơn</a>
+                                    <a class="btn btn-sm btn-danger d-block btn-cancel"
+                                        href="order/cancel/{{ $item->id }}">Hủy đơn</a>
                                 @endif
                             </td>
                         </tr>

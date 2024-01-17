@@ -3,12 +3,15 @@
     <div class="row" style=" display: flex; justify-content: center;">
       <div class="col-xs-6">
         <form (ngSubmit)="updatePassword()" [formGroup]="searchForm">
-          <div *ngFor="let f of searchControls" class="form-group col-md-12" [ngClass]="{ 'has-error': !searchForm.controls[f.formControl].valid && !searchForm.controls[f.formControl].disabled}">
+          <div *ngFor="let f of searchControls"
+            [ngClass]="{ 'has-error': !searchForm.controls[f.formControl].valid && !searchForm.controls[f.formControl].disabled}"
+            class="form-group col-md-12">
             <label [for]="f.formControl">{{ f.label }}</label>
-            <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control"/>
+            <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+              [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control" />
           </div>
           <div class="col-md-12 text-center">
-            <button class="btn btn-primary" [disabled]="searchForm.invalid" type="submit">Đổi mật khẩu</button>
+            <button [disabled]="searchForm.invalid" class="btn btn-primary" type="submit">Đổi mật khẩu</button>
             <button (click)="rePassword()" class="btn btn-default" type="button">Cập nhật lại</button>
           </div>
         </form>

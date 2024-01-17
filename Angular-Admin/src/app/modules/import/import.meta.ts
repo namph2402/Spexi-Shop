@@ -1,4 +1,4 @@
-import { ImportDetailMeta } from "./import-detail.meta";
+import {ImportDetailMeta} from './import-detail.meta';
 
 export class ImportMeta {
   id: number;

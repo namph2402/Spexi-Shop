@@ -7,7 +7,7 @@ import {AngularMultiSelectModule} from 'angular2-multiselect-dropdown';
 import {CKEditorModule} from 'ng2-ckeditor';
 import {ShippingFeeEditComponent} from './shipping-fee-edit/shipping-fee-edit.component';
 import {UiSwitchModule} from 'ngx-toggle-switch';
-import { ShippingFeeImportComponent } from './shipping-fee-import/shipping-fee-import.component';
+import {ShippingFeeImportComponent} from './shipping-fee-import/shipping-fee-import.component';
 
 @NgModule({
   imports: [

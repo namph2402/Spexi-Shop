@@ -9,7 +9,7 @@
     <div class="col-xs-12">
       <form [formGroup]="formGroup" novalidate>
         <div *ngFor="let f of fields" [ngClass]="{ 'has-error': !formGroup.controls[f.formControl].valid }"
-             class="form-group">
+          class="form-group">
           <ng-template [ngIf]="f.type == 'input'">
             <label [for]="f.formControl">
               {{ f.label }}
@@ -22,16 +22,14 @@
               </span>
             </label>
             <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                   [placeholder]="f.placeHolder"
-                   [type]="f.typeof" class="form-control"/>
+              [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control" />
           </ng-template>
           <ng-template [ngIf]="f.type == 'textarea'">
             <label [for]="f.formControl">
               {{ f.label }}
             </label>
             <textarea [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                      [placeholder]="f.placeHolder"
-                      [rows]="5" class="form-control">
+              [placeholder]="f.placeHolder" [rows]="5" class="form-control">
             </textarea>
           </ng-template>
           <ng-template [ngIf]="f.type == 'file'">
@@ -41,12 +39,12 @@
             <input (change)="
                 f.config['onFileChange'](formGroup, f.formControl, $event)
               " [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
-                   accept="{{ f.config['accept'] }}" class="form-control" type="file"/>
+              accept="{{ f.config['accept'] }}" class="form-control" type="file" />
           </ng-template>
           <ng-template [ngIf]="f.type == 'checkbox'">
             <div class="checkbox">
               <label>
-                <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" type="checkbox"/>
+                <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" type="checkbox" />
                 {{ f.label }}
               </label>
             </div>
@@ -67,7 +65,7 @@
             </label>
             <div class="form-group">
               <angular2-multiselect [data]="f.data" [formControlName]="f.formControl" [id]="f.formControl"
-                                    [settings]="f.config">
+                [settings]="f.config">
               </angular2-multiselect>
             </div>
           </ng-template>
@@ -84,6 +82,7 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button (click)="editWithImage()" [disabled]="formGroup.invalid" class="btn btn-primary" type="button">Chỉnh sửa</button>
+  <button (click)="editWithImage()" [disabled]="formGroup.invalid" class="btn btn-primary" type="button">Chỉnh sửa
+  </button>
   <button (click)="dismiss()" class="btn btn-default" type="button"><i class="fa fa-remov"></i> Hủy bỏ</button>
 </div>

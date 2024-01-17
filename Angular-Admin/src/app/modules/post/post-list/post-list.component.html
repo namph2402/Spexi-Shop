@@ -8,22 +8,22 @@
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
-              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
-                     [type]="f.typeof" class="form-control"/>
+              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control" />
             </ng-template>
             <ng-template [ngIf]="f.type == 'textarea'">
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
               <textarea [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                        [placeholder]="f.placeHolder" class="form-control">
+                [placeholder]="f.placeHolder" class="form-control">
               </textarea>
             </ng-template>
             <ng-template [ngIf]="f.type == 'checkbox'">
               <div class="checkbox">
                 <label>
                   <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                         type="checkbox"/>
+                    type="checkbox" />
                   {{ f.label }}
                 </label>
               </div>
@@ -33,7 +33,7 @@
                 {{ f.label }}
               </label>
               <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                      class="form-control">
+                class="form-control">
                 <option *ngFor="let option of f.data" [value]="option['id']">
                   {{ option["name"] }}
                 </option>
@@ -44,7 +44,7 @@
                 {{ f.label }}
               </label>
               <angular2-multiselect [data]="f.data" [formControlName]="f.formControl" [id]="f.formControl"
-                                    [settings]="f.config">
+                [settings]="f.config">
               </angular2-multiselect>
             </ng-template>
           </div>
@@ -64,64 +64,68 @@
   <div class="panel-body no-padding">
     <table class="table table-bordered table-hover">
       <thead>
-      <tr>
-        <th style="width: 10%;">#</th>
-        <th style="width: 35%;">Bài viết</th>
-        <th style="width: 15%;">Ảnh</th>
-        <th style="width: 15%;">Danh mục</th>
-        <th style="width: 10%;">Trạng thái</th>
-        <th style="width: 15%;">Thao tác</th>
-      </tr>
+        <tr>
+          <th style="width: 10%;">#</th>
+          <th style="width: 35%;">Bài viết</th>
+          <th style="width: 15%;">Ảnh</th>
+          <th style="width: 15%;">Danh mục</th>
+          <th style="width: 10%;">Trạng thái</th>
+          <th style="width: 15%;">Thao tác</th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let item of list; let i = index" class="odd">
-        <td class="text-center">{{i + 1}}</td>
-        <td>
-          <p style="font-size: 15px;"> {{ item.name }}</p>
-          <p>{{item.created_at | date: 'yyyy-MM-dd HH:mm:ss'}}</p>
-          <a [href]="item.full_path" target="_blank" title="Xem bài viết">
-            <button class="btn btn-default btn-xs" type="button">
-              <i class="fa fa-external-link"></i>
+        <tr *ngFor="let item of list; let i = index" class="odd">
+          <td class="text-center">{{i + 1}}</td>
+          <td>
+            <p style="font-size: 15px;"> {{ item.name }}</p>
+            <p>{{item.created_at | date: 'yyyy-MM-dd HH:mm:ss'}}</p>
+            <a [href]="item.full_path" target="_blank" title="Xem bài viết">
+              <button class="btn btn-default btn-xs" type="button">
+                <i class="fa fa-external-link"></i>
+              </button>
+            </a>
+            <button (click)="showComment(item)" class="btn btn-xs btn-default" title="Bình luận">
+              <i class="fa fa-comments-o"></i>
             </button>
-          </a>
-          <button class="btn btn-xs btn-default" title="Bình luận" (click)="showComment(item)">
-            <i class="fa fa-comments-o"></i>
-          </button>
-          <button class="btn btn-default btn-xs" title="Tag" (click)="showTags(item)">
-            <i class="fa fa-tag"></i>
-          </button>
-          <button class="btn btn-default btn-xs" title="Bài viết liên quan" (click)="showRelated(item)">
-            <i aria-hidden="true" class="fa fa-registered"></i>
-          </button>
-        </td>
-        <td class="text-center">
-          <img *ngIf="item.image" [alt]="item.name" [src]="item.image" class="img-thumb" width="100px"/>
-        </td>
-        <td>
-          {{ item.category ? item.category.name : "Không xác định" }}
-        </td>
-        <td class="text-center">
-          <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 0"></ui-switch>
-          <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 1"
-                     [checked]="item.status"></ui-switch>
-        </td>
-        <td class="text-center">
-                    <button (click)="upOrder(item ,i)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
-            <i class="fa fa-arrow-up"></i>
-          </button>
-          <button (confirm)="downOrder(item,i)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
-            <i class="fa fa-arrow-down"></i>
-          </button>
-          <button (click)="editPost(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
-            <i class="fa fa-pencil-square-o"></i>
-          </button>
-          <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
-                  mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
-                  style="width: 30px; height: 30px; padding: 0;" type="button">
-            <i aria-hidden="true" class="fa fa-remove"></i>
-          </button>
-        </td>
-      </tr>
+            <button (click)="showTags(item)" class="btn btn-default btn-xs" title="Tag">
+              <i class="fa fa-tag"></i>
+            </button>
+            <button (click)="showRelated(item)" class="btn btn-default btn-xs" title="Bài viết liên quan">
+              <i aria-hidden="true" class="fa fa-registered"></i>
+            </button>
+          </td>
+          <td class="text-center">
+            <img *ngIf="item.image" [alt]="item.name" [src]="item.image" class="img-thumb" width="100px" />
+          </td>
+          <td>
+            {{ item.category ? item.category.name : "Không xác định" }}
+          </td>
+          <td class="text-center">
+            <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 0"></ui-switch>
+            <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 1"
+              [checked]="item.status"></ui-switch>
+          </td>
+          <td class="text-center">
+            <button (click)="upOrder(item)" class="btn btn-default btn-sm"
+              style="width: 30px; height: 30px; padding: 0;" type="button">
+              <i class="fa fa-arrow-up"></i>
+            </button>
+            <button (click)="downOrder(item)" class="btn btn-default btn-sm"
+              style="width: 30px; height: 30px; padding: 0;" type="button">
+              <i class="fa fa-arrow-down"></i>
+            </button>
+            <button (click)="editPost(item)" class="btn btn-default btn-sm"
+              style="width: 30px; height: 30px; padding: 0;" type="button">
+              <i class="fa fa-pencil-square-o"></i>
+            </button>
+            <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>"
+              class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
+              placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
+              style="width: 30px; height: 30px; padding: 0;" type="button">
+              <i aria-hidden="true" class="fa fa-remove"></i>
+            </button>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -129,15 +133,14 @@
     <div class="row">
       <div class="col-xs-6">
         <pagination (numPages)="pagination.numPages = $event" (pageChanged)="pageChanged($event)"
-                    [(ngModel)]="pagination.currentPage" [boundaryLinks]="true"
-                    [itemsPerPage]="pagination.itemsPerPage"
-                    [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems" class="pagination-sm"></pagination>
+          [(ngModel)]="pagination.currentPage" [boundaryLinks]="true" [itemsPerPage]="pagination.itemsPerPage"
+          [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems" class="pagination-sm"></pagination>
       </div>
       <div class="col-xs-6">
         <div class="box-go-to">
-          <input [(ngModel)]="nextPage" class="col-xs-2" type="number"/>
+          <input [(ngModel)]="nextPage" class="col-xs-2" type="number" />
           <span class="col-xs-1">/</span>
-          <input [(ngModel)]="pagination.numPages" class="col-xs-2" disabled type="text"/>
+          <input [(ngModel)]="pagination.numPages" class="col-xs-2" disabled type="text" />
           <div class="col-xs-4">
             <button (click)="goToPageNumber()">Đến</button>
           </div>

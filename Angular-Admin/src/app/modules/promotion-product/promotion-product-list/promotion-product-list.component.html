@@ -14,15 +14,15 @@
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
-              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
-                     [type]="f.typeof" class="form-control"/>
+              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control" />
             </ng-template>
             <ng-template [ngIf]="f.type == 'select'">
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
               <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                      class="form-control">
+                class="form-control">
                 <option *ngFor="let option of f.data" [value]="option['id']">
                   {{ option["name"] }}
                 </option>
@@ -36,7 +36,8 @@
         </form>
       </div>
       <div class="col-xs-12" style="margin-bottom: 10px;">
-        <button (click)="createPromotionProduct()" class="btn btn-primary pull-right" type="button">Thêm sản phẩm</button>
+        <button (click)="createPromotionProduct()" class="btn btn-primary pull-right" type="button">Thêm sản
+          phẩm</button>
       </div>
     </div>
   </div>
@@ -57,7 +58,7 @@
         <tr class="odd">
           <td class="text-center">{{i + 1}}</td>
           <td class="text-center">
-            <img [alt]="item.name" [src]="item.image" class="img-thumb" width="100px"/>
+            <img [alt]="item.name" [src]="item.image" class="img-thumb" width="100px" />
           </td>
           <td>
             <label style="margin-left:20px">{{item.name}}</label>
@@ -65,14 +66,17 @@
           <td style="text-align: right;">{{item.price|number:'1.0-0'}}</td>
           <td style="text-align: right;">{{item.sale_price|number:'1.0-0'}}</td>
           <td style="text-align: right;">
-            <p>{{100 - (item.sale_price / item.price * 100)|number:'1.0-0'}} %</p></td>
+            <p>{{100 - (item.sale_price / item.price * 100)|number:'1.0-0'}} %</p>
+          </td>
           <td class="text-center">
-            <button (click)="editPromotionProduct(item)" *ngIf="promotion == 1" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
+            <button (click)="editPromotionProduct(item)" *ngIf="promotion == 1" class="btn btn-default btn-sm"
+              type="button" style="width: 30px; height: 30px; padding: 0;">
               <i class="fa fa-pencil-square-o"></i>
             </button>
-            <button (confirm)="removeProduct(item)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
-                    mwlConfirmationPopover placement="top"
-                    popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa sản phẩm" type="button" style="width: 30px; height: 30px; padding: 0;">
+            <button (confirm)="removeProduct(item)" cancelText="No <i class='fa fa-remove'></i>"
+              class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
+              placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa sản phẩm" type="button"
+              style="width: 30px; height: 30px; padding: 0;">
               <i aria-hidden="true" class="fa fa-remove"></i>
             </button>
           </td>
@@ -84,15 +88,14 @@
     <div class="row">
       <div class="col-xs-6">
         <pagination (numPages)="pagination.numPages = $event" (pageChanged)="pageChanged($event)"
-                    [(ngModel)]="pagination.currentPage" [boundaryLinks]="true"
-                    [itemsPerPage]="pagination.itemsPerPage"
-                    [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems" class="pagination-sm"></pagination>
+          [(ngModel)]="pagination.currentPage" [boundaryLinks]="true" [itemsPerPage]="pagination.itemsPerPage"
+          [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems" class="pagination-sm"></pagination>
       </div>
       <div class="col-xs-6">
         <div class="box-go-to">
-          <input [(ngModel)]="nextPage" class="col-xs-2" type="number"/>
+          <input [(ngModel)]="nextPage" class="col-xs-2" type="number" />
           <span class="col-xs-1">/</span>
-          <input [(ngModel)]="pagination.numPages" class="col-xs-2" disabled type="text"/>
+          <input [(ngModel)]="pagination.numPages" class="col-xs-2" disabled type="text" />
           <div class="col-xs-4">
             <button (click)="goToPageNumber()">Đến</button>
           </div>

@@ -1,21 +1,21 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BsModalRef } from 'ngx-bootstrap';
-import { OrderService } from '../order.service';
-import { OrderMeta } from '../order.meta';
-import { ProvinceMeta } from '../../province/province.meta';
-import { DistrictMeta } from '../../district/district.meta';
-import { AbstractModalComponent, FieldForm, ObjectUtil } from '../../../core';
-import { VoucherService } from '../../voucher/voucher.service';
-import { ProductService } from '../../product/product.service';
-import { CartItemMeta } from '../cart-item.meta';
-import { ProductMeta } from '../../product/product.meta';
-import { VoucherMeta } from '../../voucher/voucher.meta';
-import { ProvinceService } from '../../province/province.service';
-import { WardMeta } from '../../ward/ward.meta';
-import { ShippingFeeMeta } from '../../shipping-fee/shipping-fee.meta';
-import { ShippingFeeService } from '../../shipping-fee/shipping-fee.service';
-import { PaymentMethodService } from '../../payment-method/payment-method.service';
+import {Component} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {BsModalRef} from 'ngx-bootstrap';
+import {OrderService} from '../order.service';
+import {OrderMeta} from '../order.meta';
+import {ProvinceMeta} from '../../province/province.meta';
+import {DistrictMeta} from '../../district/district.meta';
+import {AbstractModalComponent, FieldForm, ObjectUtil} from '../../../core';
+import {VoucherService} from '../../voucher/voucher.service';
+import {ProductService} from '../../product/product.service';
+import {CartItemMeta} from '../cart-item.meta';
+import {ProductMeta} from '../../product/product.meta';
+import {VoucherMeta} from '../../voucher/voucher.meta';
+import {ProvinceService} from '../../province/province.service';
+import {WardMeta} from '../../ward/ward.meta';
+import {ShippingFeeMeta} from '../../shipping-fee/shipping-fee.meta';
+import {ShippingFeeService} from '../../shipping-fee/shipping-fee.service';
+import {PaymentMethodService} from '../../payment-method/payment-method.service';
 
 @Component({
   selector: 'app-order-edit',
@@ -57,11 +57,11 @@ export class OrderEditComponent extends AbstractModalComponent<OrderMeta> {
   }
 
   loadVouchers() {
-    return this.voucherService.loadByParams({ status: 1 });
+    return this.voucherService.loadByParams({status: 1});
   }
 
   loadPayments() {
-    return this.paymentervice.loadByParams({ status: 1 });
+    return this.paymentervice.loadByParams({status: 1});
   }
 
   loadAllProvinces() {
@@ -69,7 +69,7 @@ export class OrderEditComponent extends AbstractModalComponent<OrderMeta> {
   }
 
   loadAllProducts() {
-    return this.productService.loadByParams({ status: 1, order: 1 });
+    return this.productService.loadByParams({status: 1, order: 1});
   }
 
 
@@ -108,12 +108,12 @@ export class OrderEditComponent extends AbstractModalComponent<OrderMeta> {
       FieldForm.createSelect('Hình thức thanh toán', 'payment_type', 'Chọn một', 'loadPayments'),
       FieldForm.createSelect('Trạng thái thanh toán', 'payment_status', '', [
         {
-          name: "Chưa thanh toán",
-          value: "0"
+          name: 'Chưa thanh toán',
+          value: '0'
         },
         {
-          name: "Đã thanh toán",
-          value: "1"
+          name: 'Đã thanh toán',
+          value: '1'
         }
       ]),
     ];
@@ -175,7 +175,7 @@ export class OrderEditComponent extends AbstractModalComponent<OrderMeta> {
     });
     this.formGroup.controls['ward'].valueChanges.subscribe((value: WardMeta[]) => {
       if (value && value.length > 0) {
-        this.shipFeeService.loadByParams({ ward_id: value[0].id }).subscribe((shipFees: ShippingFeeMeta[]) => {
+        this.shipFeeService.loadByParams({ward_id: value[0].id}).subscribe((shipFees: ShippingFeeMeta[]) => {
           if (shipFees.length > 0) {
             let s: ShippingFeeMeta = shipFees[0];
             this.shipFee = this.shipFeeOld = s.fee;
@@ -188,7 +188,7 @@ export class OrderEditComponent extends AbstractModalComponent<OrderMeta> {
       if (value && value.length > 0) {
         this.voucherI = value;
       } else {
-        this.voucherI = []
+        this.voucherI = [];
       }
       this.updateCart();
     });
@@ -258,7 +258,7 @@ export class OrderEditComponent extends AbstractModalComponent<OrderMeta> {
     if (amountT < 0) {
       amountT = 0;
     }
-    this.totalAmount = amountT + this.shipFee
+    this.totalAmount = amountT + this.shipFee;
     this.formGroup.controls['amount'].setValue(this.amount);
     this.formGroup.controls['shipping_fee'].setValue(this.shipFee);
     this.formGroup.controls['discount'].setValue(this.discount);
@@ -278,15 +278,15 @@ export class OrderEditComponent extends AbstractModalComponent<OrderMeta> {
     for (let i of this.arrProduct) {
       const list: any = i.product.warehouses;
       if (i.quantity == 0 || i.warehouse_id == 0) {
-        this.service.toastError("Cần nhập đủ thông tin sản phẩm");
+        this.service.toastError('Cần nhập đủ thông tin sản phẩm');
         status = 1;
-        break
+        break;
       } else {
         const t = list.filter(w => w.id == i.warehouse_id);
         if (t[0].quantity < i.quantity) {
-          this.service.toastError("Sản phẩm " + i.product.code + " không đủ hàng");
+          this.service.toastError('Sản phẩm ' + i.product.code + ' không đủ hàng');
           status = 1;
-          break
+          break;
         }
       }
     }
@@ -296,7 +296,7 @@ export class OrderEditComponent extends AbstractModalComponent<OrderMeta> {
       item.district = this.getFormValue('district')[0].name;
       item.ward = this.getFormValue('ward')[0].name;
       item.product = JSON.stringify(this.arrProduct);
-      item.voucher_id = this.voucherId ;
+      item.voucher_id = this.voucherId;
       this.service.update(item).subscribe(res => {
         this.service.toastSuccessfullyEdited();
         this.close(res);

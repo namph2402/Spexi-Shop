@@ -64,11 +64,11 @@ export class WarehouseListComponent extends AbstractCRUDComponent<WarehouseMeta>
       FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa'),
       FieldForm.createSelect('Tìm kiếm trạng thái', 'status', 'Chọn một', [
         {
-          name:'Hoạt động',
+          name: 'Hoạt động',
           value: '1'
         },
         {
-          name:'Không hoạt động',
+          name: 'Không hoạt động',
           value: '0'
         },
       ]),

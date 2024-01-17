@@ -116,23 +116,23 @@
                     <tr>
                         <td class="col-50 text-center">
                             <p style="display:flex; height: 63px">
-                                <img alt="Company Logo" style="margin: auto; width: 120px;" src="{{ $dataStoreOrder['logo'] }}">
+                                <img alt="Company Logo" style="margin: auto; width: 120px;"
+                                    src="{{ $dataStoreOrder['logo'] }}">
                             </p>
                             <h2>{{ $dataStoreOrder['name'] ?? 'Chưa cấu hình' }}</h2>
                         </td>
                         <td class="col-50 text-center">
                             <p style="display:flex; height: 63px">
-                                <img alt="Logistics Logo" style="margin: auto; width: 120px;" src="{{ $order->shipping->unit->logo}}">
+                                <img alt="Logistics Logo" style="margin: auto; width: 120px;"
+                                    src="{{ $order->shipping->unit->logo }}">
                             </p>
                             <h2>{{ $order->shipping->unit->name }}</h2>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2" class="text-center">
-                            <svg class="barcode"
-                                jsbarcode-format="{{ $dataStoreOrder['barcodeType'] }}"
-                                jsbarcode-value="{{ $order->shipping->code }}"
-                                jsbarcode-textmargin="0"
+                            <svg class="barcode" jsbarcode-format="{{ $dataStoreOrder['barcodeType'] }}"
+                                jsbarcode-value="{{ $order->shipping->code }}" jsbarcode-textmargin="0"
                                 jsbarcode-fontoptions="bold">
                             </svg>
                         </td>

@@ -7,7 +7,7 @@ import {AppPagination, FieldForm, ModalResult} from '../../../core/common';
 import {ProductTagItemCreateComponent} from '../product-tag-item-create/product-tag-item-create.component';
 import {ProductTagMeta} from '../product-tag.meta';
 import {ProductService} from '../../product/product.service';
-import { ObjectUtil } from '../../../core';
+import {ObjectUtil} from '../../../core';
 
 @Component({
   selector: 'app-product-tag-item-list',

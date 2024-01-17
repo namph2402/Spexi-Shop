@@ -7,7 +7,7 @@ import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
 import {RouterModule, Routes} from '@angular/router';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {PostTagModalModule} from './post-tag.modal.module';
-import { UiSwitchModule } from 'ngx-toggle-switch';
+import {UiSwitchModule} from 'ngx-toggle-switch';
 
 const routing: Routes = [
   {

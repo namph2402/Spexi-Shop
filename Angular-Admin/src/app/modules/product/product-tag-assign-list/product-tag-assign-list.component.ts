@@ -6,8 +6,8 @@ import {ProductService} from '../../product/product.service';
 import {AppPagination, FieldForm, ModalResult} from '../../../core/common';
 import {ProductTagAssignCreateComponent} from '../product-tag-assign-create/product-tag-assign-create.component';
 import {ProductMeta} from '../../product/product.meta';
-import { ProductTagService } from '../../product-tag/product-tag.service';
-import { ProductTagMeta } from '../../product-tag/product-tag.meta';
+import {ProductTagService} from '../../product-tag/product-tag.service';
+import {ProductTagMeta} from '../../product-tag/product-tag.meta';
 
 @Component({
   selector: 'app-product-tag-assign-list',

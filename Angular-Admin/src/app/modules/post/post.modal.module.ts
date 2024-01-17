@@ -9,10 +9,10 @@ import {PostCreateComponent} from './post-create/post-create.component';
 import {PostEditComponent} from './post-edit/post-edit.component';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {UiSwitchModule} from 'ngx-toggle-switch';
-import { ArticleCommentModule } from '../article-comment/article-comment.module';
-import { PostRelatedModule } from '../post-related/post-related.module';
-import { PostTagAssignListComponent } from './post-tag-assign-list/post-tag-assign-list.component';
-import { PostTagAssignCreateComponent } from './post-tag-assign-create/post-tag-assign-create.component';
+import {ArticleCommentModule} from '../article-comment/article-comment.module';
+import {PostRelatedModule} from '../post-related/post-related.module';
+import {PostTagAssignListComponent} from './post-tag-assign-list/post-tag-assign-list.component';
+import {PostTagAssignCreateComponent} from './post-tag-assign-create/post-tag-assign-create.component';
 
 @NgModule({
   imports: [

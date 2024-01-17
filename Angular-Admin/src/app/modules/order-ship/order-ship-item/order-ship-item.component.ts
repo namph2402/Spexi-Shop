@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
-import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { OrderMeta } from '../../order/order.meta';
-import { OrderShipMeta } from '../order-ship.meta';
-import { OrderShipCreateComponent } from '../order-ship-create/order-ship-create.component';
-import { OrderShipService } from '../order-ship.service';
-import { OrderShipCreateResultComponent } from '../order-ship-create-result/order-ship-create-result.component';
-import { AbstractCRUDModalComponent, AbstractModalComponent, AppPagination, FieldForm, ModalResult, ObjectUtil} from '../../../core';
+import {Component} from '@angular/core';
+import {BsModalRef, BsModalService, ModalOptions} from 'ngx-bootstrap';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {OrderMeta} from '../../order/order.meta';
+import {OrderShipMeta} from '../order-ship.meta';
+import {OrderShipCreateComponent} from '../order-ship-create/order-ship-create.component';
+import {OrderShipService} from '../order-ship.service';
+import {OrderShipCreateResultComponent} from '../order-ship-create-result/order-ship-create-result.component';
+import {AbstractCRUDModalComponent, AbstractModalComponent, AppPagination, FieldForm, ModalResult, ObjectUtil} from '../../../core';
 
 @Component({
   selector: 'app-order-ship-item',
@@ -47,11 +47,11 @@ export class OrderShipItemComponent extends AbstractCRUDModalComponent<OrderShip
   }
 
   getCreateModalComponentOptions(): ModalOptions {
-    return { class: 'modal-lg', ignoreBackdropClick: true, backdrop: 'static', keyboard: false };
+    return {class: 'modal-lg', ignoreBackdropClick: true, backdrop: 'static', keyboard: false};
   }
 
   getEditModalComponentOptions(): ModalOptions {
-    return { class: 'modal-lg' };
+    return {class: 'modal-lg'};
   }
 
   buildSearchForm(): FormGroup {
@@ -82,17 +82,17 @@ export class OrderShipItemComponent extends AbstractCRUDModalComponent<OrderShip
     let params: any = ObjectUtil.combineValue({
       limit: this.pagination.itemsPerPage,
       page: this.pagination.currentPage,
-      order_status: "Chuẩn bị hàng"
+      order_status: 'Chuẩn bị hàng'
     }, this.searchForm.value, true);
     this.service.loadByPage(params).subscribe(res => {
-      this.list = res.data;
-      this.pagination.set(res);
-      this.selectors = this.list.map(value => false);
-    }, () => {
-      this.list = [];
-      this.pagination = new AppPagination();
-      this.nextPage = this.pagination.currentPage;
-    }
+        this.list = res.data;
+        this.pagination.set(res);
+        this.selectors = this.list.map(value => false);
+      }, () => {
+        this.list = [];
+        this.pagination = new AppPagination();
+        this.nextPage = this.pagination.currentPage;
+      }
     );
   }
 
@@ -101,7 +101,7 @@ export class OrderShipItemComponent extends AbstractCRUDModalComponent<OrderShip
     const config = this.getCreateModalComponentOptions();
     const modalRef = this.modalService.show(OrderShipCreateComponent, config);
     let modal: AbstractModalComponent<any> = <AbstractModalComponent<any>>modalRef.content;
-    modal.setModel({ order_ids: ids.join(',') });
+    modal.setModel({order_ids: ids.join(',')});
     let sub = modal.onHidden.subscribe((result: ModalResult<OrderShipMeta>) => {
       if (result.success) {
         const modalRef2 = this.modalService.show(OrderShipCreateResultComponent, {

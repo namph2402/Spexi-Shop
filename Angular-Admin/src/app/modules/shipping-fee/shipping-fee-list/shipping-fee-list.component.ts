@@ -10,7 +10,7 @@ import {ProvinceService} from '../../province/province.service';
 import {DistrictService} from '../../district/district.service';
 import {WardService} from '../../ward/ward.service';
 import {ObjectUtil} from '../../../core';
-import { ShippingFeeImportComponent } from '../shipping-fee-import/shipping-fee-import.component';
+import {ShippingFeeImportComponent} from '../shipping-fee-import/shipping-fee-import.component';
 
 @Component({
   selector: 'app-shipping-fee',
@@ -59,7 +59,7 @@ export class ShippingFeeListComponent extends AbstractCRUDComponent<ShippingFeeM
   }
 
   loadAllProvinces() {
-    return this.provinceService.loadByParams({ ship: 1 });
+    return this.provinceService.loadByParams({ship: 1});
   }
 
   loadDistricts(params: any) {

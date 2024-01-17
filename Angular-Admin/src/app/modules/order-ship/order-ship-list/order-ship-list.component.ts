@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
-import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { OrderMeta } from '../../order/order.meta';
-import { OrderShipMeta } from '../order-ship.meta';
-import { OrderShipService } from '../order-ship.service';
-import { AbstractCRUDComponent, AbstractCRUDModalComponent, AbstractModalComponent, AppPagination, FieldForm, ModalResult, ObjectUtil} from '../../../core';
-import { OrderShipItemComponent } from '../order-ship-item/order-ship-item.component';
-import { OrderShipInfoComponent } from '../order-ship-info/order-ship-info.component';
-import { OrderShipNoteComponent } from '../order-ship-note/order-ship-note.component';
+import {Component} from '@angular/core';
+import {BsModalService, ModalOptions} from 'ngx-bootstrap';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {OrderMeta} from '../../order/order.meta';
+import {OrderShipMeta} from '../order-ship.meta';
+import {OrderShipService} from '../order-ship.service';
+import {AbstractCRUDComponent, AbstractCRUDModalComponent, AbstractModalComponent, FieldForm, ModalResult} from '../../../core';
+import {OrderShipItemComponent} from '../order-ship-item/order-ship-item.component';
+import {OrderShipInfoComponent} from '../order-ship-info/order-ship-info.component';
+import {OrderShipNoteComponent} from '../order-ship-note/order-ship-note.component';
 
 @Component({
   selector: 'app-order-ship-list',
@@ -45,11 +45,11 @@ export class OrderShipListComponent extends AbstractCRUDComponent<OrderShipMeta>
   }
 
   getCreateModalComponentOptions(): ModalOptions {
-    return { class: 'modal-lg' };
+    return {class: 'modal-lg'};
   }
 
   getEditModalComponentOptions(): ModalOptions {
-    return { class: 'modal-lg' };
+    return {class: 'modal-lg'};
   }
 
   buildSearchForm(): FormGroup {
@@ -67,28 +67,28 @@ export class OrderShipListComponent extends AbstractCRUDComponent<OrderShipMeta>
       FieldForm.createTextInput('Tìm kiếm theo khách hàng', 'search', 'Nhập từ khóa'),
       FieldForm.createSelect('Trạng thái đơn vận', 'ship_status', 'Chọn một', [
         {
-          name: "Điều phối giao hàng",
-          value: "Điều phối giao hàng"
+          name: 'Điều phối giao hàng',
+          value: 'Điều phối giao hàng'
         },
         {
-          name: "Đã tiếp nhận",
-          value: "Đã tiếp nhận"
+          name: 'Đã tiếp nhận',
+          value: 'Đã tiếp nhận'
         },
         {
-          name: "Đang giao",
-          value: "Đang giao"
+          name: 'Đang giao',
+          value: 'Đang giao'
         },
         {
-          name: "Giao lại",
-          value: "Giao lại"
+          name: 'Giao lại',
+          value: 'Giao lại'
         },
         {
-          name: "Hoàn thành",
-          value: "Hoàn thành"
+          name: 'Hoàn thành',
+          value: 'Hoàn thành'
         },
         {
-          name: "Hủy đơn",
-          value: "Hủy đơn"
+          name: 'Hủy đơn',
+          value: 'Hủy đơn'
         }
       ]),
       FieldForm.createDateInput('Ngày tạo', 'created_date', 'Chọn ngày'),

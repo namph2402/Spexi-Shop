@@ -8,7 +8,7 @@ import {ProductTagService} from '../product-tag.service';
 import {ProductTagMeta} from '../product-tag.meta';
 import {ProductTagCreateComponent} from '../product-tag-create/product-tag-create.component';
 import {ProductTagEditComponent} from '../product-tag-edit/product-tag-edit.component';
-import { ProductTagItemListComponent } from '../product-tag-item-list/product-tag-item-list.component';
+import {ProductTagItemListComponent} from '../product-tag-item-list/product-tag-item-list.component';
 
 @Component({
   selector: 'app-product-tag',

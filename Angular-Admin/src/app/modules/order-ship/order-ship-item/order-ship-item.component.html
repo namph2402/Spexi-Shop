@@ -72,8 +72,8 @@
       <thead>
         <tr>
           <th style="width: 10%">
-            <input (change)="selectAll()" [checked]="statusSelectAll" class="checkbox" style="margin: auto; width: 15px; height: 15px;"
-            type="checkbox">
+            <input (change)="selectAll()" [checked]="statusSelectAll" class="checkbox"
+              style="margin: auto; width: 15px; height: 15px;" type="checkbox">
           </th>
           <th style="width: 15%">Mã đơn hàng</th>
           <th style="width: 30%">Khách hàng</th>
@@ -99,8 +99,8 @@
             <textarea *ngIf="item.customer_request" [cols]="30" [rows]="5" [value]="item.customer_request" readonly
               style="min-width: 237px; max-width: 237px"></textarea>
             <label>
-              <textarea *ngIf="item.note" [cols]="30" [rows]="4" value="Ghi chú: {{item.note}}" readonly
-                style="min-width: 237px; max-width: 237px">
+              <textarea *ngIf="item.note" [cols]="30" [rows]="4" readonly style="min-width: 237px; max-width: 237px"
+                value="Ghi chú: {{item.note}}">
               </textarea>
             </label>
           </td>

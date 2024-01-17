@@ -30,7 +30,10 @@ export class StaffEditComponent extends AbstractModalComponent<StaffMeta> {
 
   buildForm(): FormGroup {
     return this.formBuilder.group({
-      username: new FormControl({value: null, disabled: true}, [Validators.required, Validators.maxLength(255), Validators.pattern('^(?=.*[a-z]+)[a-z0-9]*$')]),
+      username: new FormControl({
+        value: null,
+        disabled: true
+      }, [Validators.required, Validators.maxLength(255), Validators.pattern('^(?=.*[a-z]+)[a-z0-9]*$')]),
       fullname: new FormControl(null, [Validators.required, Validators.maxLength(255), Validators.pattern('[^ ].*$')]),
       phone: new FormControl(null, [Validators.required, Validators.maxLength(255), Validators.pattern('^(0)[0-9]{9}$')]),
       dob: new FormControl(null, [Validators.required, Validators.maxLength(255), Validators.pattern('[^ ].*$')]),

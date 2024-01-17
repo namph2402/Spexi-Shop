@@ -6,9 +6,9 @@ import {OrderService} from './../order.service';
 import {OrderCreateComponent} from './../order-create/order-create.component';
 import {OrderEditComponent} from './../order-edit/order-edit.component';
 import {AbstractCRUDComponent, AbstractModalComponent, FieldForm, ModalResult, ObjectUtil} from '../../../core';
-import { OrderCancelComponent } from '../order-cancel/order-cancel.component';
-import { OrderConfirmComponent } from '../order-confirm/order-confirm.component';
-import { OrderRefundComponent } from '../order-refund/order-refund.component';
+import {OrderCancelComponent} from '../order-cancel/order-cancel.component';
+import {OrderConfirmComponent} from '../order-confirm/order-confirm.component';
+import {OrderRefundComponent} from '../order-refund/order-refund.component';
 
 @Component({
   selector: 'app-order-list',
@@ -68,32 +68,32 @@ export class OrderListComponent extends AbstractCRUDComponent<OrderMeta> {
       FieldForm.createTextInput('Tìm kiếm theo khách hàng', 'search', 'Nhập từ khóa'),
       FieldForm.createSelect('Trạng thái đơn hàng', 'order_status', 'Chọn một', [
         {
-          name: "Lên đơn",
-          value: "Lên đơn"
+          name: 'Lên đơn',
+          value: 'Lên đơn'
         },
         {
-          name: "Xác nhận",
-          value: "Xác nhận"
+          name: 'Xác nhận',
+          value: 'Xác nhận'
         },
         {
-          name: "Chuẩn bị hàng",
-          value: "Chuẩn bị hàng"
+          name: 'Chuẩn bị hàng',
+          value: 'Chuẩn bị hàng'
         },
         {
-          name: "Đã chuẩn bị hàng",
-          value: "Đã chuẩn bị hàng"
+          name: 'Đã chuẩn bị hàng',
+          value: 'Đã chuẩn bị hàng'
         },
         {
-          name: "Đang giao",
-          value: "Đang giao"
+          name: 'Đang giao',
+          value: 'Đang giao'
         },
         {
-          name: "Hoàn thành",
-          value: "Hoàn thành"
+          name: 'Hoàn thành',
+          value: 'Hoàn thành'
         },
         {
-          name: "Hủy đơn",
-          value: "Hủy đơn"
+          name: 'Hủy đơn',
+          value: 'Hủy đơn'
         },
       ]),
       FieldForm.createDateInput('Ngày tạo', 'created_date', 'Chọn ngày'),

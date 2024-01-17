@@ -76,8 +76,7 @@
         <tr *ngFor="let item of list; let i = index" class="odd">
           <td class="text-center">
             <label style="display: block">{{ item.code }}</label>
-              <label class="label label-status" style="padding: 5px 10px"
-              [ngClass]="{
+            <label class="label label-status" style="padding: 5px 10px" [ngClass]="{
                 'label-3':item.order_status == 'Chuẩn bị hàng',
                 'label-4':item.order_status == 'Đã chuẩn bị hàng',
                 'label-5':item.order_status == 'Đang giao',
@@ -101,11 +100,11 @@
                 </label>
               </p>
               <p>
-                <label class="label label-default" style="padding: 5px 10px">{{item.shipping.unit ? item.shipping.unit.name : ''}}</label>
+                <label class="label label-default" style="padding: 5px 10px">{{item.shipping.unit ?
+                  item.shipping.unit.name : ''}}</label>
               </p>
               <p>
-                <label class="label" style="padding: 5px 10px"
-                [ngClass]="{
+                <label class="label" style="padding: 5px 10px" [ngClass]="{
                   'label-primary':item.shipping.status == 'Điều phối giao hàng',
                   'label-confirm':item.shipping.status == 'Đã tiếp nhận',
                   'label-info':item.shipping.status == 'Đang giao',
@@ -115,21 +114,23 @@
                 }">{{item.shipping.status}}</label>
               </p>
               <div style="margin-top: 10px;">
-                <button *ngIf="item.shipping.status == 'Điều phối giao hàng' || item.shipping.status == 'Giao lại'" type="button" class="btn btn-success margin-r-5" style="width: 30px; height: 30px; padding: 0;"
+                <button *ngIf="item.shipping.status == 'Điều phối giao hàng' || item.shipping.status == 'Giao lại'"
+                  type="button" class="btn btn-success margin-r-5" style="width: 30px; height: 30px; padding: 0;"
                   (click)="shipping(item.shipping)">
                   <i class="fa fa-truck"></i>
                 </button>
                 <ng-template [ngIf]="item.shipping.status == 'Đang giao'">
-                    <button type="button" class="btn btn-success margin-r-5" style="width: 30px; height: 30px; padding: 0;"
-                      (click)="complete(item.shipping)">
-                      <i class="fa fa-check"></i>
-                    </button>
-                    <button type="button" class="btn btn-warning margin-r-5" style="width: 30px; height: 30px; padding: 0;"
-                      (click)="note(item.shipping)">
-                      <i class="fa fa-refresh"></i>
-                    </button>
-                  </ng-template>
-                  <textarea *ngIf="item.shipping.note" [cols]="9" [rows]="3" [value]="item.shipping.note" readonly style="min-width: 146px; max-width: 146px; min-height: 107px; margin-top: 10px;"></textarea>
+                  <button type="button" class="btn btn-success margin-r-5"
+                    style="width: 30px; height: 30px; padding: 0;" (click)="complete(item.shipping)">
+                    <i class="fa fa-check"></i>
+                  </button>
+                  <button type="button" class="btn btn-warning margin-r-5"
+                    style="width: 30px; height: 30px; padding: 0;" (click)="note(item.shipping)">
+                    <i class="fa fa-refresh"></i>
+                  </button>
+                </ng-template>
+                <textarea *ngIf="item.shipping.note" [cols]="9" [rows]="3" [value]="item.shipping.note" readonly
+                  style="min-width: 146px; max-width: 146px; min-height: 107px; margin-top: 10px;"></textarea>
               </div>
             </div>
           </td>

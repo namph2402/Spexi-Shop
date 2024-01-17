@@ -1,8 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CustomerListComponent} from './customer-list/customer-list.component';
-import {CustomerCreateComponent} from './customer-create/customer-create.component';
-import {CustomerEditComponent} from './customer-edit/customer-edit.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ModalModule, PaginationModule, PopoverModule} from 'ngx-bootstrap';
 import {ConfirmationPopoverModule} from 'angular-confirmation-popover';
@@ -34,8 +32,8 @@ const routing: Routes = [
     UiSwitchModule,
     AngularMultiSelectModule,
   ],
-  declarations: [CustomerListComponent, CustomerCreateComponent, CustomerEditComponent],
-  entryComponents: [CustomerCreateComponent, CustomerEditComponent]
+  declarations: [CustomerListComponent],
+  entryComponents: []
 })
 export class CustomerModule {
 }

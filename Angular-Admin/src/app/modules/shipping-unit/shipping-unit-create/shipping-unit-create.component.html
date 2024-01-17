@@ -9,33 +9,31 @@
     <div class="col-xs-12">
       <form [formGroup]="formGroup" novalidate>
         <div class="form-group" *ngFor="let f of fields"
-             [ngClass]="{'has-error':!formGroup.controls[f.formControl].valid}">
+          [ngClass]="{'has-error':!formGroup.controls[f.formControl].valid}">
           <ng-template [ngIf]="f.type=='input'">
             <label [for]="f.formControl">
-              {{f.label}} <span
-              style="font-weight: normal" *ngIf="f.typeof == 'number'">
-              ( {{formGroup.controls[f.formControl].value|number:'1.0-0'}} )
-            </span>
+              {{f.label}} <span style="font-weight: normal" *ngIf="f.typeof == 'number'">
+                ( {{formGroup.controls[f.formControl].value|number:'1.0-0'}} )
+              </span>
             </label>
             <input [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl" class="form-control"
-                   [placeholder]="f.placeHolder" [type]="f.typeof">
+              [placeholder]="f.placeHolder" [type]="f.typeof">
           </ng-template>
           <ng-template [ngIf]="f.type=='textarea'">
             <label [for]="f.formControl">
               {{f.label}}
             </label>
             <textarea [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl" class="form-control"
-                      [placeholder]="f.placeHolder" [rows]="5">
+              [placeholder]="f.placeHolder" [rows]="5">
           </textarea>
           </ng-template>
           <ng-template [ngIf]="f.type=='file'">
             <label [for]="f.formControl">
               {{f.label}}
             </label>
-            <input [id]="f.formControl" [name]="f.formControl" class="form-control"
-                   [placeholder]="f.placeHolder" type="file"
-                   (change)="f.config['onFileChange'](formGroup,f.formControl,$event)"
-                   accept="{{f.config['accept']}}">
+            <input [id]="f.formControl" [name]="f.formControl" class="form-control" [placeholder]="f.placeHolder"
+              type="file" (change)="f.config['onFileChange'](formGroup,f.formControl,$event)"
+              accept="{{f.config['accept']}}">
           </ng-template>
           <ng-template [ngIf]="f.type=='checkbox'">
             <div class="checkbox">
@@ -57,16 +55,15 @@
             <label [for]="f.formControl">
               {{f.label}}
             </label>
-            <angular2-multiselect [id]="f.formControl" [formControlName]="f.formControl"
-                                  [data]="f.data" [settings]="f.config">
+            <angular2-multiselect [id]="f.formControl" [formControlName]="f.formControl" [data]="f.data"
+              [settings]="f.config">
             </angular2-multiselect>
           </ng-template>
           <ng-template [ngIf]="f.type=='html'">
             <label [for]="f.formControl">
               {{f.label}}
             </label>
-            <ckeditor [id]="f.formControl" [formControlName]="f.formControl"
-                      debounce="500">
+            <ckeditor [id]="f.formControl" [formControlName]="f.formControl" debounce="500">
             </ckeditor>
           </ng-template>
         </div>

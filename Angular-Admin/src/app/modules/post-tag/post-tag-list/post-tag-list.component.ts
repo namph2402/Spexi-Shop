@@ -122,4 +122,18 @@ export class PostTagListComponent extends AbstractCRUDComponent<PostTagMeta> {
     });
   }
 
+  upOrder(item: PostTagMeta) {
+    this.service.up(item.id).subscribe(res => {
+      this.service.toastSuccessfully('Tăng thứ tự');
+      this.load();
+    }, () => this.service.toastFailedEdited());
+  }
+
+  downOrder(item: PostTagMeta) {
+    this.service.down(item.id).subscribe(res => {
+      this.service.toastSuccessfully('Giảm thứ tự');
+      this.load();
+    }, () => this.service.toastFailedEdited());
+  }
+
 }

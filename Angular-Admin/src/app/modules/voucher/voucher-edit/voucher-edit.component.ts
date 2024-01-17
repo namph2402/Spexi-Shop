@@ -5,7 +5,6 @@ import {BsModalRef} from 'ngx-bootstrap';
 import {VoucherMeta} from '../voucher.meta';
 import {VoucherService} from '../voucher.service';
 import {FieldForm} from '../../../core/common';
-import {ObjectUtil} from '../../../core/utils';
 
 @Component({
   selector: 'app-voucher-edit',

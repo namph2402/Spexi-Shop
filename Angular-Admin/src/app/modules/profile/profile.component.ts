@@ -1,9 +1,9 @@
-import { Component } from "@angular/core";
-import { ProfileService } from "./profile.service";
-import { AbstractCRUDComponent, FieldForm, ObjectUtil, StorageUtil } from "../../core";
-import { ProfileMeta } from "./profile.meta";
-import { BsModalService, ModalOptions } from "ngx-bootstrap";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import {Component} from '@angular/core';
+import {ProfileService} from './profile.service';
+import {AbstractCRUDComponent, FieldForm, ObjectUtil, StorageUtil} from '../../core';
+import {ProfileMeta} from './profile.meta';
+import {BsModalService, ModalOptions} from 'ngx-bootstrap';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
@@ -78,8 +78,8 @@ export class ProfileComponent extends AbstractCRUDComponent<ProfileMeta> {
 
   updatePassword() {
     let data: any = ObjectUtil.combineValue({}, this.searchForm.value, true);
-    if(data.newPassword != data.rePassword) {
-      this.service.toastError("Mật khẩu không khớp");
+    if (data.newPassword != data.rePassword) {
+      this.service.toastError('Mật khẩu không khớp');
     } else {
       (<ProfileService>this.service).update(data).subscribe((res: ProfileMeta) => {
         this.service.toastSuccess('Đổi mật khẩu thành công');
@@ -89,10 +89,10 @@ export class ProfileComponent extends AbstractCRUDComponent<ProfileMeta> {
   }
 
   rePassword() {
-      (<ProfileService>this.service).repassword().subscribe((res: ProfileMeta) => {
-        this.service.toastSuccess('Lấy lại mật khẩu thành công');
-        this.searchForm.reset();
-      }, () => this.service.toastFailed('Lấy lại mật khẩu thất bại'));
+    (<ProfileService>this.service).repassword().subscribe((res: ProfileMeta) => {
+      this.service.toastSuccess('Lấy lại mật khẩu thành công');
+      this.searchForm.reset();
+    }, () => this.service.toastFailed('Lấy lại mật khẩu thất bại'));
   }
 
   reset() {

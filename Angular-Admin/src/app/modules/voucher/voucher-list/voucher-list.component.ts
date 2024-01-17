@@ -72,17 +72,18 @@ export class VoucherListComponent extends AbstractCRUDComponent<VoucherMeta> {
           name: 'Không hoạt động',
           value: 0
         },
-    ]),
-    FieldForm.createSelect('Loại voucher', 'type', 'Chọn một', [
-      {
-        name: 'Giảm giá đơn hàng',
-        value: 1
-      }, {
-        name: 'Free ship',
-        value: 2
-      }
-    ]),
-  ]}
+      ]),
+      FieldForm.createSelect('Loại voucher', 'type', 'Chọn một', [
+        {
+          name: 'Giảm giá đơn hàng',
+          value: 1
+        }, {
+          name: 'Free ship',
+          value: 2
+        }
+      ]),
+    ];
+  }
 
   initNewModel(): VoucherMeta {
     return new VoucherMeta();

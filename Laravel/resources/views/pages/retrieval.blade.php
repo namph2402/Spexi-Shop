@@ -10,7 +10,8 @@
             </div>
             <div class="account-group mb-4">
                 <i class="fas fa-user"></i>
-                <input type="text" name="user" class="account-input" placeholder="Email/Tên đăng nhập" value="{{ old('user') }}">
+                <input type="text" name="user" class="account-input" placeholder="Email/Tên đăng nhập"
+                    value="{{ old('user') }}">
             </div>
             <div style="text-align: center">
                 <button type="submit" class="btn btn-primary account-btn mt-3">Lấy mật khẩu</button>

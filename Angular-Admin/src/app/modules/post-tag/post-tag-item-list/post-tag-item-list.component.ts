@@ -7,7 +7,7 @@ import {AppPagination, FieldForm, ModalResult} from '../../../core/common';
 import {PostTagItemCreateComponent} from '../post-tag-item-create/post-tag-item-create.component';
 import {PostTagMeta} from '../post-tag.meta';
 import {PostService} from '../../post/post.service';
-import { ObjectUtil } from '../../../core';
+import {ObjectUtil} from '../../../core';
 
 @Component({
   selector: 'app-post-tag-item-list',

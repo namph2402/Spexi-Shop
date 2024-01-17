@@ -35,7 +35,7 @@
     </div>
     <div class="col-xs-12 margin-bottom">
       <button (click)="assign(listAvailableProducts, 1)" class="btn btn-primary pull-right"
-      [disabled]="listAvailableProducts == ''" type="button">Thêm tất cả</button>
+        [disabled]="listAvailableProducts == ''" type="button">Thêm tất cả</button>
     </div>
   </div>
   <div class="row">
@@ -73,7 +73,8 @@
               popoverTitle="Gắn sản phẩm" type="button" style="width: 30px; height: 30px; padding: 0;">
               <i aria-hidden="true" class="fa fa-plus">Thêm</i>
             </button>
-            <button (click)="assign(item, 2)" *ngIf="item.promotions[0] == null" class="btn btn-primary btn-sm" type="button">
+            <button (click)="assign(item, 2)" *ngIf="item.promotions[0] == null" class="btn btn-primary btn-sm"
+              type="button">
               <i aria-hidden="true" class="fa fa-plus"> Thêm</i>
             </button>
           </td>

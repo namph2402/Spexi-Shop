@@ -77,9 +77,9 @@
         <h3>Thông tin sản phẩm</h3>
         <div class="form-group" style="margin-bottom: 20px">
           <label>Chọn sản phẩm</label>
-          <angular2-multiselect [(ngModel)]="productList" [id]="fields[7].formControl"
-            [formControlName]="fields[7].formControl" [data]="fields[7].data" [settings]="fields[7].config"
-            (ngModelChange)="addProduct(productList)">
+          <angular2-multiselect (ngModelChange)="addProduct(productList)" [(ngModel)]="productList"
+            [data]="fields[7].data" [formControlName]="fields[7].formControl" [id]="fields[7].formControl"
+            [settings]="fields[7].config">
           </angular2-multiselect>
         </div>
 
@@ -105,8 +105,8 @@
                 <label>{{ item.product.code }}</label> - {{ item.product.name }}
               </td>
               <td>
-                <select [(ngModel)]="item.warehouse_id" [ngModelOptions]="{ standalone: true }" class="form-control"
-                   (ngModelChange)="checkArr(item.warehouse_id, i)">
+                <select (ngModelChange)="checkArr(item.warehouse_id, i)" [(ngModel)]="item.warehouse_id"
+                  [ngModelOptions]="{ standalone: true }" class="form-control">
                   <option disabled hidden selected value="0">Chọn loại</option>
                   <option *ngFor="let w of item.product.warehouses" [value]="w.id">
                     {{ w.size.name }} - {{ w.color.name }}
@@ -117,29 +117,29 @@
                 {{ item.unit_price | number : "1.0-0" }}
               </td>
               <td>
-                <input [(ngModel)]="item.quantity" [ngModelOptions]="{ standalone: true }"
-                  oninput="this.value = Math.abs(this.value)" type="number" value="1" (ngModelChange)="updateCart()"
-                  style="width: 100%; text-align: center" />
+                <input (ngModelChange)="updateCart()" [(ngModel)]="item.quantity"
+                  [ngModelOptions]="{ standalone: true }" oninput="this.value = Math.abs(this.value)"
+                  style="width: 100%; text-align: center" type="number" value="1" />
               </td>
               <td class="text-right">
                 {{ item.unit_price * item.quantity | number : "1.0-0" }}
               </td>
             </tr>
             <tr>
-              <th colspan="4" class="text-right">Tổng tiền</th>
-              <td colspan="2" class="text-right">{{ amount | number : "1.0-0" }}</td>
+              <th class="text-right" colspan="4">Tổng tiền</th>
+              <td class="text-right" colspan="2">{{ amount | number : "1.0-0" }}</td>
             </tr>
             <tr>
-              <th colspan="4" class="text-right">Phí ship</th>
-              <td colspan="2" class="text-right">{{ shipFee | number : "1.0-0" }}</td>
+              <th class="text-right" colspan="4">Phí ship</th>
+              <td class="text-right" colspan="2">{{ shipFee | number : "1.0-0" }}</td>
             </tr>
             <tr>
-              <th colspan="4" class="text-right">Giảm giá</th>
-              <td colspan="2" class="text-right">{{ discount | number : "1.0-0" }}</td>
+              <th class="text-right" colspan="4">Giảm giá</th>
+              <td class="text-right" colspan="2">{{ discount | number : "1.0-0" }}</td>
             </tr>
             <tr>
-              <th colspan="4" class="text-right">Tổng thanh toán</th>
-              <td colspan="2" class="text-right"><label>{{ totalAmount | number : "1.0-0" }}</label>
+              <th class="text-right" colspan="4">Tổng thanh toán</th>
+              <td class="text-right" colspan="2"><label>{{ totalAmount | number : "1.0-0" }}</label>
               </td>
             </tr>
           </tbody>
@@ -153,7 +153,8 @@
           </angular2-multiselect>
         </div>
         <div style="display: flex;">
-          <div [ngClass]="{'has-error':!formGroup.controls[fields[9].formControl].valid}" class="form-group col-md-6" style="padding-left: 0;">
+          <div [ngClass]="{'has-error':!formGroup.controls[fields[9].formControl].valid}" class="form-group col-md-6"
+            style="padding-left: 0;">
             <label [for]="fields[9].formControl">
               {{fields[9].label}}
             </label>
@@ -163,7 +164,8 @@
             </select>
           </div>
 
-          <div [ngClass]="{'has-error':!formGroup.controls[fields[10].formControl].valid}" class="form-group col-md-6" style="padding-right: 0;">
+          <div [ngClass]="{'has-error':!formGroup.controls[fields[10].formControl].valid}" class="form-group col-md-6"
+            style="padding-right: 0;">
             <label [for]="fields[10].formControl">
               {{fields[10].label}}
             </label>

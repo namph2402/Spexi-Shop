@@ -8,22 +8,22 @@
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
-              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
-                     [type]="f.typeof" class="form-control"/>
+              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control" />
             </ng-template>
             <ng-template [ngIf]="f.type == 'textarea'">
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
               <textarea [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                        [placeholder]="f.placeHolder" class="form-control">
+                [placeholder]="f.placeHolder" class="form-control">
               </textarea>
             </ng-template>
             <ng-template [ngIf]="f.type == 'checkbox'">
               <div class="checkbox">
                 <label>
                   <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                         type="checkbox"/>
+                    type="checkbox" />
                   {{ f.label }}
                 </label>
               </div>
@@ -33,7 +33,7 @@
                 {{ f.label }}
               </label>
               <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                      class="form-control">
+                class="form-control">
                 <option *ngFor="let option of f.data" [value]="option['id']">
                   {{ option["name"] }}
                 </option>
@@ -44,7 +44,7 @@
                 {{ f.label }}
               </label>
               <angular2-multiselect [data]="f.data" [formControlName]="f.formControl" [id]="f.formControl"
-                                    [settings]="f.config">
+                [settings]="f.config">
               </angular2-multiselect>
             </ng-template>
           </div>
@@ -64,104 +64,100 @@
   <div class="panel-body no-padding">
     <table class="table table-bordered table-hover">
       <thead>
-      <tr>
-        <th>Banner</th>
-      </tr>
+        <tr>
+          <th>Banner</th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let item of list;let i = index" class="odd">
-        <td>
-          <div class="panel-group">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col-xs-6">
-                    <h4 class="panel-title">
-                      <a data-toggle="collapse" href="#collapse{{i}}">{{item.name}} </a>
-                    </h4>
-                  </div>
-                  <div class="col-xs-6">
-                    <button (confirm)="remove(item,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm pull-right"
-                            confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover placement="top"
-                            popoverMessage="Bạn thực sự muốn xóa?"
-                            popoverTitle="Xóa"
-                            type="button" style="margin-left: 5px; width: 30px; height: 30px; padding: 0;">
-                      <i class="fa fa-remove"></i>
-                    </button>
-                    <button (click)="editGroup(item,i)" class="btn btn-default btn-sm pull-right"
-                            type="button" style="width: 30px; height: 30px; padding: 0;">
-                      <i class="fa fa-pencil-square-o"></i>
-                    </button>
+        <tr *ngFor="let item of list;let i = index" class="odd">
+          <td>
+            <div class="panel-group">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapse{{i}}">{{item.name}} </a>
+                      </h4>
+                    </div>
+                    <div class="col-xs-6">
+                      <button (confirm)="remove(item,i)" cancelText="No <i class='fa fa-remove'></i>"
+                        class="btn btn-danger btn-sm pull-right" confirmText="Yes <i class='fa fa-check'></i>"
+                        mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
+                        style="margin-left: 5px; width: 30px; height: 30px; padding: 0;" type="button">
+                        <i class="fa fa-remove"></i>
+                      </button>
+                      <button (click)="editGroup(item,i)" class="btn btn-default btn-sm pull-right"
+                        style="width: 30px; height: 30px; padding: 0;" type="button">
+                        <i class="fa fa-pencil-square-o"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="panel-collapse collapse" id="collapse{{i}}">
-                <div class="panel-body">
-                  <div class="row margin">
-                    <button (click)="createBanner(item)" class="btn btn-primary btn-sm pull-right"
-                            type="button"><i class="fa fa-plus-square"></i> Thêm dữ liệu
-                    </button>
+                <div class="panel-collapse collapse" id="collapse{{i}}">
+                  <div class="panel-body">
+                    <div class="row margin">
+                      <button (click)="createBanner(item)" class="btn btn-primary btn-sm pull-right" type="button"><i
+                          class="fa fa-plus-square"></i> Thêm dữ liệu
+                      </button>
+                    </div>
+                    <table class="table table-bordered table-hover" id="table">
+                      <thead>
+                        <tr>
+                          <th style="width: 10%;">#</th>
+                          <th style="width: 20%;">Ảnh</th>
+                          <th style="width: 20%;">Tên</th>
+                          <th style="width: 20%;">Đường dẫn</th>
+                          <th style="width: 10%;">Trạng thái</th>
+                          <th style="width: 20%;">Thao tác</th>
+                        </tr>
+                      </thead>
+                      <tr *ngFor="let ite of item.banners; let j=index">
+                        <td class="text-center">{{j + 1}}</td>
+                        <td class="text-center">
+                          <img [alt]="ite.alt" [src]="ite.image" class="thumb">
+                        </td>
+                        <td>
+                          <label>{{ite.name}}</label>
+                          <p>{{ite.summary}}</p>
+                        </td>
+                        <td>{{ite.href}}</td>
+                        <td class="text-center">
+                          <ui-switch (change)="onStatusChange(ite,i,$event)" *ngIf="ite.status == 0"></ui-switch>
+                          <ui-switch (change)="onStatusChange(ite,i,$event)" *ngIf="ite.status == 1"
+                            [checked]="ite.status"></ui-switch>
+                        </td>
+                        <td class="text-center">
+                          <button (click)="upOrder(ite)" class="btn btn-default btn-sm"
+                            style="width: 30px; height: 30px; padding: 0;" type="button">
+                            <i class="fa fa-arrow-up"></i>
+                          </button>
+                          <button (click)="downOrder(ite)" class="btn btn-default btn-sm"
+                            style="width: 30px; height: 30px; padding: 0;" type="button">
+                            <i class="fa fa-arrow-down"></i>
+                          </button>
+                          <button (click)="editBanner(ite)" class="btn btn-default btn-sm"
+                            style="width: 30px; height: 30px; padding: 0;" type="button">
+                            <i class="fa fa-pencil-square-o"></i>
+                          </button>
+                          <button (confirm)="removeBanner(ite)" cancelText="No <i class='fa fa-remove'></i>"
+                            class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
+                            mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?"
+                            popoverTitle="Xóa" style="width: 30px; height: 30px; padding: 0;" type="button">
+                            <i class="fa fa-remove"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </table>
                   </div>
-                  <table class="table table-bordered table-hover" id="table">
-                    <thead>
-                    <tr>
-                      <th style="width: 10%;">#</th>
-                      <th style="width: 20%;">Ảnh</th>
-                      <th style="width: 20%;">Tên</th>
-                      <th style="width: 20%;">Đường dẫn</th>
-                      <th style="width: 10%;">Trạng thái</th>
-                      <th style="width: 20%;">Thao tác</th>
-                    </tr>
-                    </thead>
-                    <tr *ngFor="let ite of item.banners; let j=index">
-                      <td class="text-center">{{j + 1}}</td>
-                      <td class="text-center">
-                        <img [alt]="ite.alt" [src]="ite.image" class="thumb">
-                      </td>
-                      <td>
-                        <label>{{ite.name}}</label>
-                        <p>{{ite.summary}}</p>
-                      </td>
-                      <td>{{ite.href}}</td>
-                      <td class="text-center">
-                        <ui-switch (change)="onStatusChange(ite,i,$event)" *ngIf="ite.status == 0"></ui-switch>
-                        <ui-switch (change)="onStatusChange(ite,i,$event)" *ngIf="ite.status == 1"
-                                   [checked]="ite.status"></ui-switch>
-                      </td>
-                      <td class="text-center">
-                        <button (confirm)="upOrder(ite)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-default btn-sm"
-                                confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
-                                placement="top" popoverMessage="Bạn thực sự muốn tăng thứ tự?"
-                                popoverTitle="Thay đổi thứ tự" type="button" style="width: 30px; height: 30px; padding: 0;">
-                          <i class="fa fa-arrow-up"></i>
-                        </button>
-                        <button (confirm)="downOrder(ite)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-default btn-sm"
-                                confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
-                                placement="top" popoverMessage="Bạn thực sự muốn giảm thứ tự?"
-                                popoverTitle="Thay đổi thứ tự" type="button" style="width: 30px; height: 30px; padding: 0;">
-                          <i class="fa fa-arrow-down"></i>
-                        </button>
-                        <button (click)="editBanner(ite)" class="btn btn-default btn-sm"
-                                type="button" style="width: 30px; height: 30px; padding: 0;">
-                          <i class="fa fa-pencil-square-o"></i>
-                        </button>
-                        <button (confirm)="removeBanner(ite)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
-                                mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?"
-                                popoverTitle="Xóa" type="button" style="width: 30px; height: 30px; padding: 0;">
-                          <i class="fa fa-remove"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </table>
+                  <a class="text-center" data-toggle="collapse" href="#collapse{{i}}"><label
+                      class="label label-default">Ẩn</label></a>
                 </div>
-                <a class="text-center" data-toggle="collapse" href="#collapse{{i}}"><label
-                  class="label label-default">Ẩn</label></a>
               </div>
             </div>
-          </div>
-        </td>
-      </tr>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -169,9 +165,8 @@
     <div class="row">
       <div class="col-xs-6">
         <pagination (numPages)="pagination.numPages = $event" (pageChanged)="pageChanged($event)"
-                    [(ngModel)]="pagination.currentPage" [boundaryLinks]="true"
-                    [itemsPerPage]="pagination.itemsPerPage"
-                    [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems" class="pagination-sm"></pagination>
+          [(ngModel)]="pagination.currentPage" [boundaryLinks]="true" [itemsPerPage]="pagination.itemsPerPage"
+          [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems" class="pagination-sm"></pagination>
       </div>
       <div class="col-xs-6">
         <div class="box-go-to">

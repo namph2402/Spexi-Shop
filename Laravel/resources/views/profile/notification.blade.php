@@ -17,10 +17,12 @@
                 <div class="p-2 pt-3">
                     <div class="row pl-4 pr-4">
                         @foreach ($notifications as $n)
-                            <div class="col-md-12 form-voucher-content pl-0 wow fadeInUp" data-wow-delay="0.1s" style="height: 90px">
+                            <div class="col-md-12 form-voucher-content pl-0 wow fadeInUp" data-wow-delay="0.1s"
+                                style="height: 90px">
                                 <div class="form-notification-img">
                                     @if ($n->type == 1)
-                                        <img class="w-100 h-100" src="http://localhost:8000/assets/img/icon/notification.webp">
+                                        <img class="w-100 h-100"
+                                            src="http://localhost:8000/assets/img/icon/notification.webp">
                                     @else
                                         <img class="w-100 h-100" src="http://localhost:8000/assets/img/icon/order.webp">
                                     @endif
@@ -28,7 +30,8 @@
                                 <div class="form-voucher-info pr-0">
                                     <a href="{{ $n->full_path }}" class="notification-title">{{ $n->name }}</a>
                                     <span class="notification-value">{!! $n->content !!}</span>
-                                    <span class="notification-value mt-2">{{ date_format($n->created_at, 'Y-m-d H:i:s') }}</span>
+                                    <span
+                                        class="notification-value mt-2">{{ date_format($n->created_at, 'Y-m-d H:i:s') }}</span>
                                 </div>
                             </div>
                         @endforeach

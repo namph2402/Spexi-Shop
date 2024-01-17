@@ -33,7 +33,8 @@
                         <p>Theo dõi để được cập nhật tin tức</p>
                         <form action="/form-data" id="formEmail" method="POST" class="footer-mail">
                             <div class="input-group">
-                                <input type="email" style="border-radius: 0;" class="form-control" name="email" placeholder="Email của bạn">
+                                <input type="email" style="border-radius: 0;" class="form-control" name="email"
+                                    placeholder="Email của bạn">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="submit">Đăng ký</button>
                                 </div>
@@ -41,10 +42,13 @@
                             @csrf
                         </form>
                         <div class="d-flex mt-3" class="footer-icon">
-                            <a class="btn btn-primary btn-square mr-2" href="{{ $data['Tiktok'] }}"><img style="width:15px" src="{{asset('assets/img/icon/tiktok.png')}}" alt=""></a>
+                            <a class="btn btn-primary btn-square mr-2" href="{{ $data['Tiktok'] }}"><img
+                                    style="width:15px" src="{{ asset('assets/img/icon/tiktok.png') }}"
+                                    alt=""></a>
                             <a class="btn btn-primary btn-square mr-2" href="{{ $data['Facebook'] }}"><i
                                     class="fab fa-facebook-f" style="color: black"></i></a>
-                            <a class="btn btn-primary btn-square" href="{{ $data['Instagram'] }}"><i class="fab fa-instagram" style="color: black"></i></a>
+                            <a class="btn btn-primary btn-square" href="{{ $data['Instagram'] }}"><i
+                                    class="fab fa-instagram" style="color: black"></i></a>
                         </div>
                         <div class="mt-4">
                             <a href="/huong-dan-chon-size" class="d-block policy">Hướng dẫn chọn size</a>

@@ -1,6 +1,6 @@
 <div class="modal-header bg-primary">
   <h4 class="modal-title pull-left">Chỉnh sửa đối tác</h4>
-  <button type="button" class="close pull-right" aria-label="Close" (click)="dismiss()">
+  <button (click)="dismiss()" aria-label="Close" class="close pull-right" type="button">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
@@ -8,39 +8,38 @@
   <div class="row">
     <div class="col-xs-12">
       <form [formGroup]="formGroup" novalidate>
-        <div class="form-group" *ngFor="let f of fields"
-             [ngClass]="{'has-error':!formGroup.controls[f.formControl].valid && !formGroup.controls[f.formControl].disabled}">
+        <div *ngFor="let f of fields"
+          [ngClass]="{'has-error':!formGroup.controls[f.formControl].valid && !formGroup.controls[f.formControl].disabled}"
+          class="form-group">
           <ng-template [ngIf]="f.type=='input'">
             <label [for]="f.formControl">
-              {{f.label}} <span
-              style="font-weight: normal" *ngIf="f.typeof == 'number'">
-              ( {{formGroup.controls[f.formControl].value|number:'1.0-0'}} )
-            </span>
+              {{f.label}} <span *ngIf="f.typeof == 'number'" style="font-weight: normal">
+                ( {{formGroup.controls[f.formControl].value|number:'1.0-0'}} )
+              </span>
             </label>
-            <input [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl" class="form-control"
-                   [placeholder]="f.placeHolder" [type]="f.typeof">
+            <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+              [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control">
           </ng-template>
           <ng-template [ngIf]="f.type=='textarea'">
             <label [for]="f.formControl">
               {{f.label}}
             </label>
-            <textarea [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl" class="form-control"
-                      [placeholder]="f.placeHolder" [rows]="5">
+            <textarea [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+              [placeholder]="f.placeHolder" [rows]="5" class="form-control">
           </textarea>
           </ng-template>
           <ng-template [ngIf]="f.type=='file'">
             <label [for]="f.formControl">
               {{f.label}}
             </label>
-            <input [id]="f.formControl" [name]="f.formControl" class="form-control"
-                   [placeholder]="f.placeHolder" type="file"
-                   (change)="f.config['onFileChange'](formGroup,f.formControl,$event)"
-                   accept="{{f.config['accept']}}">
+            <input (change)="f.config['onFileChange'](formGroup,f.formControl,$event)" [id]="f.formControl"
+              [name]="f.formControl" [placeholder]="f.placeHolder" accept="{{f.config['accept']}}" class="form-control"
+              type="file">
           </ng-template>
           <ng-template [ngIf]="f.type=='checkbox'">
             <div class="checkbox">
               <label>
-                <input type="checkbox" [id]="f.formControl" [name]="f.formControl" [formControlName]="f.formControl">
+                <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" type="checkbox">
                 {{f.label}}
               </label>
             </div>
@@ -49,7 +48,7 @@
             <label [for]="f.formControl">
               {{f.label}}
             </label>
-            <select [id]="f.formControl" [formControlName]="f.formControl" class="form-control">
+            <select [formControlName]="f.formControl" [id]="f.formControl" class="form-control">
               <option *ngFor="let option of f.data" [value]="option['id']">{{option['name']}}</option>
             </select>
           </ng-template>
@@ -57,16 +56,15 @@
             <label [for]="f.formControl">
               {{f.label}}
             </label>
-            <angular2-multiselect [id]="f.formControl" [formControlName]="f.formControl"
-                                  [data]="f.data" [settings]="f.config">
+            <angular2-multiselect [data]="f.data" [formControlName]="f.formControl" [id]="f.formControl"
+              [settings]="f.config">
             </angular2-multiselect>
           </ng-template>
           <ng-template [ngIf]="f.type=='html'">
             <label [for]="f.formControl">
               {{f.label}}
             </label>
-            <ckeditor [id]="f.formControl" [formControlName]="f.formControl"
-                      debounce="500">
+            <ckeditor [formControlName]="f.formControl" [id]="f.formControl" debounce="500">
             </ckeditor>
           </ng-template>
         </div>
@@ -75,6 +73,6 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-primary" [disabled]="!formGroup.valid" (click)="edit()">Chỉnh sửa</button>
-  <button type="button" class="btn btn-default" (click)="dismiss()">Hủy bỏ</button>
+  <button (click)="edit()" [disabled]="!formGroup.valid" class="btn btn-primary" type="button">Chỉnh sửa</button>
+  <button (click)="dismiss()" class="btn btn-default" type="button">Hủy bỏ</button>
 </div>

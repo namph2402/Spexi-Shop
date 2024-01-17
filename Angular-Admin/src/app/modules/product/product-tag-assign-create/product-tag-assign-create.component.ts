@@ -6,7 +6,7 @@ import {FieldForm} from '../../../core/common';
 import {ProductService} from '../../product/product.service';
 import {ProductMeta} from '../../product/product.meta';
 import {ObjectUtil} from '../../../core';
-import { ProductTagService } from '../../product-tag/product-tag.service';
+import {ProductTagService} from '../../product-tag/product-tag.service';
 
 @Component({
   selector: 'app-product-tag-assign-create',

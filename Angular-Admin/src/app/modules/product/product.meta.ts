@@ -1,6 +1,6 @@
 import {ArticleMeta} from '../article/article.meta';
 import {ProductCategoryMeta} from '../product-category/product-category.meta';
-import { ProductWarehouseMeta } from '../product-warehouse/product-warehouse.meta';
+import {ProductWarehouseMeta} from '../product-warehouse/product-warehouse.meta';
 import {PromotionMeta} from '../promotion/promotion.meta';
 
 export class ProductMeta {

@@ -3,8 +3,8 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {BsModalRef} from 'ngx-bootstrap';
 import {ShippingUnitService} from '../shipping-unit.service';
 import {ShippingUnitMeta} from '../shipping-unit.meta';
-import { AbstractModalComponent } from '../../../core/crud';
-import { FieldForm } from '../../../core/common';
+import {AbstractModalComponent} from '../../../core/crud';
+import {FieldForm} from '../../../core/common';
 
 @Component({
   selector: 'app-shipping-unit-edit',
@@ -13,6 +13,14 @@ import { FieldForm } from '../../../core/common';
   providers: [ShippingUnitService]
 })
 export class ShippingUnitEditComponent extends AbstractModalComponent<ShippingUnitMeta> {
+
+  constructor(
+    service: ShippingUnitService,
+    modal: BsModalRef,
+    builder: FormBuilder
+  ) {
+    super(service, modal, builder);
+  }
 
   onInit(): void {
   }
@@ -25,8 +33,8 @@ export class ShippingUnitEditComponent extends AbstractModalComponent<ShippingUn
       name: new FormControl({value: null, disabled: true}, Validators.required),
       username: new FormControl(null, [Validators.required, Validators.pattern('[^ ].*$')]),
       password: new FormControl(null, [Validators.required, Validators.pattern('[^ ].*$')]),
-      token: new FormControl(null,[Validators.required, Validators.pattern('[^ ].*$')]),
-      endpoint: new FormControl(null,[Validators.required, Validators.pattern('[^ ].*$')]),
+      token: new FormControl(null, [Validators.required, Validators.pattern('[^ ].*$')]),
+      endpoint: new FormControl(null, [Validators.required, Validators.pattern('[^ ].*$')]),
     });
   }
 
@@ -41,14 +49,6 @@ export class ShippingUnitEditComponent extends AbstractModalComponent<ShippingUn
   }
 
   loaded(): void {
-  }
-
-  constructor(
-    service: ShippingUnitService,
-    modal: BsModalRef,
-    builder: FormBuilder
-  ) {
-    super(service, modal, builder);
   }
 
 }

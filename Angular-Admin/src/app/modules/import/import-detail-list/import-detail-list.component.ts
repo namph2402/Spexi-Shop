@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {AbstractCRUDModalComponent} from '../../../core/crud';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {BsModalRef, BsModalService, ModalOptions} from 'ngx-bootstrap';
-import {AppPagination} from '../../../core/common';
 import {ImportService} from '../import.service';
 import {ImportMeta} from '../import.meta';
 

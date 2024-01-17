@@ -17,22 +17,26 @@
     <div class="container-fluid">
         <form action="/checkout/order" class="row px-xl-5" method="POST" id="formCheckout">
             <div class="col-lg-6">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Thông tin nhận hàng</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Thông tin
+                        nhận hàng</span></h5>
                 <div class="bg-light p-25 mb-4">
                     <div class="row">
                         <div class="col-md-12 form-group">
                             <label>Tên khách hàng *</label>
-                            <input class="form-control" type="text" id="customer_name" name="customer_name" placeholder="Nhập tên" value="{{ $profile->fullname }}">
+                            <input class="form-control" type="text" id="customer_name" name="customer_name"
+                                placeholder="Nhập tên" value="{{ $profile->fullname }}">
                             <small class="error-message"></small>
                         </div>
                         <div class="col-md-12 form-group">
                             <label>Số điện thoại *</label>
-                            <input class="form-control" type="number" id="customer_phone" name="customer_phone" placeholder="Nhập số điện thoại" value="{{ $profile->phone }}">
+                            <input class="form-control" type="number" id="customer_phone" name="customer_phone"
+                                placeholder="Nhập số điện thoại" value="{{ $profile->phone }}">
                             <small class="error-message"></small>
                         </div>
                         <div class="col-md-12 form-group">
                             <label>Tỉnh/Thành phố *</label>
-                            <select class="custom-select" id="province_id" name="province_id" onchange="onProvinceIdChange()">
+                            <select class="custom-select" id="province_id" name="province_id"
+                                onchange="onProvinceIdChange()">
                                 @if ($provinceUser != null)
                                     <option selected hidden value="{{ $provinceUser->id }}">{{ $provinceUser->name }}
                                     </option>
@@ -47,7 +51,8 @@
                         </div>
                         <div class="col-md-12 form-group">
                             <label>Quận/Huyện *</label>
-                            <select class="custom-select" id="district_id" name="district_id" onchange="onDistrictIdChange()">
+                            <select class="custom-select" id="district_id" name="district_id"
+                                onchange="onDistrictIdChange()">
                                 @if ($districtUser != null)
                                     <option selected hidden value="{{ $districtUser->id }}">{{ $districtUser->name }}
                                     </option>
@@ -80,7 +85,8 @@
                         </div>
                         <div class="col-md-12 form-group">
                             <label>Địa chỉ chi tiết *</label>
-                            <input class="form-control" type="text" id="customer_address" name="customer_address" placeholder="Nhập địa chỉ" value="{{ $profile->address }}">
+                            <input class="form-control" type="text" id="customer_address" name="customer_address"
+                                placeholder="Nhập địa chỉ" value="{{ $profile->address }}">
                             <small class="error-message"></small>
                         </div>
                         <div class="col-md-12 form-group">
@@ -105,13 +111,16 @@
                                 </div>
                                 <div class="name_product ml-3 mt-2">
                                     <p class="d-block item-checkout text-dark m-0">{{ $item->product->name }}</p>
-                                    <p class="d-block">{{ $item->warehouse->size->name }}, {{ $item->warehouse->color->name }}</p>
+                                    <p class="d-block">{{ $item->warehouse->size->name }},
+                                        {{ $item->warehouse->color->name }}</p>
                                 </div>
                                 <div class="d-block w-20 mt-2 mr-2 text-right">
                                     <p class="d-block m-0">
                                         <small class="item-x">x</small>{{ $item->quantity }}
                                     </p>
-                                    <p class="d-block">{{ number_format($item->product->sale_price * $item->quantity, 0, '.', '.') }} đ</p>
+                                    <p class="d-block">
+                                        {{ number_format($item->product->sale_price * $item->quantity, 0, '.', '.') }} đ
+                                    </p>
                                 </div>
                             </div>
                         @endforeach
@@ -125,17 +134,20 @@
 
                         <div class="d-flex justify-content-between mb-3">
                             <h6 class="font-weight-medium">Phí vận chuyển</h6>
-                            <h6 class="font-weight-medium" id="shippingFeeView">{{ number_format($dataItem['shipFee'], 0, '.', '.') }} đ</h6>
+                            <h6 class="font-weight-medium" id="shippingFeeView">
+                                {{ number_format($dataItem['shipFee'], 0, '.', '.') }} đ</h6>
                         </div>
 
                         <div class="d-flex justify-content-between mb-3">
                             <h6 class="font-weight-medium">Giảm giá</h6>
-                            <h6 class="font-weight-medium" id="discountView"> {{ number_format($dataItem['discount'], 0, '.', '.') }} đ</h6>
+                            <h6 class="font-weight-medium" id="discountView">
+                                {{ number_format($dataItem['discount'], 0, '.', '.') }} đ</h6>
                         </div>
 
                         @if (!empty($promotion))
-                            <span class="d-block test promotion-text mb-3">Khuyến mãi: {{$promotion->name}} khi đơn hàng từ {{ number_format($promotion->min_order_value, 0, '.', '.') }} đ</span>
-                            <input type="text" id="promotion" value="{{$promotion->type}}" hidden>
+                            <span class="d-block test promotion-text mb-3">Khuyến mãi: {{ $promotion->name }} khi đơn hàng
+                                từ {{ number_format($promotion->min_order_value, 0, '.', '.') }} đ</span>
+                            <input type="text" id="promotion" value="{{ $promotion->type }}" hidden>
                         @else
                             <input type="text" id="promotion" value="0" hidden>
                         @endif
@@ -147,7 +159,8 @@
                                     placeholder="Mã giảm giá">
                                 <input type="number" hidden name="voucherId" id="voucherId">
                                 <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary" id="btnVoucher" onclick="applyVoucher()">Áp dụng</button>
+                                    <button type="button" class="btn btn-primary" id="btnVoucher"
+                                        onclick="applyVoucher()">Áp dụng</button>
                                 </div>
                             </div>
                             <small class="err-voucher" id="errVoucher">Mã giảm giá không đúng</small>
@@ -162,18 +175,22 @@
                     </div>
                 </div>
                 <div class="mb-4">
-                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Thanh toán</span></h5>
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Thanh
+                            toán</span></h5>
                     <div class="bg-light p-30">
-                        @foreach ($payment as $key=>$m)
-                        <div class="form-group">
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment_type" value="{{ $m->name }}" id="{{ $m->name }}" @if($key == 0) checked @endif>
-                                <label class="custom-control-label" for="{{ $m->name }}">Thanh toán qua {{ $m->name }}</label>
+                        @foreach ($payment as $key => $m)
+                            <div class="form-group">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" name="payment_type"
+                                        value="{{ $m->name }}" id="{{ $m->name }}"
+                                        @if ($key == 0) checked @endif>
+                                    <label class="custom-control-label" for="{{ $m->name }}">Thanh toán qua
+                                        {{ $m->name }}</label>
+                                </div>
                             </div>
-                        </div>
                         @endforeach
-                        <button class="btn btn-block btn-primary font-weight-bold py-3 mt-4" id="btnOrder" type="submit"
-                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">Đặt hàng
+                        <button class="btn btn-block btn-primary font-weight-bold py-3 mt-4" id="btnOrder"
+                            type="submit" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Đặt hàng
                         </button>
                     </div>
                 </div>

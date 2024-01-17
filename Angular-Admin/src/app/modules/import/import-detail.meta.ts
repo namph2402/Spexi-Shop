@@ -1,4 +1,3 @@
-
 export class ImportDetailMeta {
   id: number;
   note_id: number;

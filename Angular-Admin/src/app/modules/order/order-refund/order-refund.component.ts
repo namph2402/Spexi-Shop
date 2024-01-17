@@ -44,7 +44,7 @@ export class OrderRefundComponent extends AbstractModalComponent<OrderMeta> {
   }
 
   loaded(): void {
-    let text =this.model.customer_name+" - "+this.model.customer_phone;
+    let text = this.model.customer_name + ' - ' + this.model.customer_phone;
     this.formGroup.controls['customer_namez'].setValue(text);
   }
 

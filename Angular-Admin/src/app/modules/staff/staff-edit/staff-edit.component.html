@@ -8,34 +8,33 @@
   <div class="row">
     <div class="col-xs-12">
       <form [formGroup]="formGroup" novalidate>
-        <div *ngFor="let f of fields" [ngClass]="{'has-error':!formGroup.controls[f.formControl].valid && !formGroup.controls[f.formControl].disabled}"
-             class="form-group">
+        <div *ngFor="let f of fields"
+          [ngClass]="{'has-error':!formGroup.controls[f.formControl].valid && !formGroup.controls[f.formControl].disabled}"
+          class="form-group">
           <ng-template [ngIf]="f.type=='input'">
             <label [for]="f.formControl">
-              {{f.label}} <span
-              *ngIf="f.typeof == 'number' && f.formControl == 'wage'" style="font-weight: normal">
-              ( {{formGroup.controls[f.formControl].value|number:'1.0-0'}} )
-            </span>
+              {{f.label}} <span *ngIf="f.typeof == 'number' && f.formControl == 'wage'" style="font-weight: normal">
+                ( {{formGroup.controls[f.formControl].value|number:'1.0-0'}} )
+              </span>
             </label>
-            <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
-                   [type]="f.typeof" class="form-control">
+            <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+              [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control">
           </ng-template>
           <ng-template [ngIf]="f.type=='textarea'">
             <label [for]="f.formControl">
               {{f.label}}
             </label>
-            <textarea [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
-                      [rows]="5" class="form-control">
+            <textarea [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+              [placeholder]="f.placeHolder" [rows]="5" class="form-control">
           </textarea>
           </ng-template>
           <ng-template [ngIf]="f.type=='file'">
             <label [for]="f.formControl">
               {{f.label}}
             </label>
-            <input (change)="f.config['onFileChange'](formGroup,f.formControl,$event)" [id]="f.formControl" [name]="f.formControl"
-                   [placeholder]="f.placeHolder" accept="{{f.config['accept']}}"
-                   class="form-control"
-                   type="file">
+            <input (change)="f.config['onFileChange'](formGroup,f.formControl,$event)" [id]="f.formControl"
+              [name]="f.formControl" [placeholder]="f.placeHolder" accept="{{f.config['accept']}}" class="form-control"
+              type="file">
           </ng-template>
           <ng-template [ngIf]="f.type=='checkbox'">
             <div class="checkbox">
@@ -57,16 +56,15 @@
             <label [for]="f.formControl">
               {{f.label}}
             </label>
-            <angular2-multiselect [data]="f.data" [formControlName]="f.formControl"
-                                  [id]="f.formControl" [settings]="f.config">
+            <angular2-multiselect [data]="f.data" [formControlName]="f.formControl" [id]="f.formControl"
+              [settings]="f.config">
             </angular2-multiselect>
           </ng-template>
           <ng-template [ngIf]="f.type=='html'">
             <label [for]="f.formControl">
               {{f.label}}
             </label>
-            <ckeditor [formControlName]="f.formControl" [id]="f.formControl"
-                      debounce="500">
+            <ckeditor [formControlName]="f.formControl" [id]="f.formControl" debounce="500">
             </ckeditor>
           </ng-template>
         </div>

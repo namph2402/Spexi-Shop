@@ -12,5 +12,5 @@ export class OrderShipMeta {
   note: string;
   is_printed: boolean;
   unit: ShippingUnitMeta;
-  type:number;
+  type: number;
 }

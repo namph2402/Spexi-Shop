@@ -1,13 +1,13 @@
 import {Component} from '@angular/core';
 import {AbstractCRUDModalComponent, AbstractModalComponent} from '../../../core/crud';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {BsModalRef, BsModalService, ModalOptions} from 'ngx-bootstrap';
 import {AppPagination, FieldForm, ModalResult} from '../../../core/common';
 import {PostRelatedService} from '../post-related.service';
 import {PostRelatedMeta} from '../post-related.meta';
 import {PostRelatedCreateComponent} from '../post-related-create/post-related-create.component';
-import { PostCategoryService } from '../../post-category/post-category.service';
-import { ObjectUtil } from '../../../core';
+import {PostCategoryService} from '../../post-category/post-category.service';
+import {ObjectUtil} from '../../../core';
 
 @Component({
   selector: 'app-post-related-list',
@@ -88,17 +88,17 @@ export class PostRelatedListComponent extends AbstractCRUDModalComponent<PostRel
   load(): void {
     let param: any = ObjectUtil.combineValue({}, this.searchForm.value, true);
     param['post_id'] = this.relatedModel.id,
-    param['limit'] = this.pagination.itemsPerPage,
-    param['page'] = this.pagination.currentPage,
-    this.service.loadByPage(param).subscribe((res: any) => {
-      this.nextPage = this.pagination.currentPage;
-      this.list = res.data;
-      this.pagination.set(res);
-    }, () => {
-      this.list = [];
-      this.pagination = new AppPagination();
-      this.nextPage = this.pagination.currentPage;
-    });
+      param['limit'] = this.pagination.itemsPerPage,
+      param['page'] = this.pagination.currentPage,
+      this.service.loadByPage(param).subscribe((res: any) => {
+        this.nextPage = this.pagination.currentPage;
+        this.list = res.data;
+        this.pagination.set(res);
+      }, () => {
+        this.list = [];
+        this.pagination = new AppPagination();
+        this.nextPage = this.pagination.currentPage;
+      });
   }
 
   upOrder(item: PostRelatedMeta) {

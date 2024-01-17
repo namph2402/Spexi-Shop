@@ -1,19 +1,19 @@
-import { Component } from '@angular/core';
-import { BsModalService, ModalOptions } from 'ngx-bootstrap';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ShippingUnitMeta } from '../shipping-unit.meta';
-import { ShippingUnitService } from '../shipping-unit.service';
-import { ShippingUnitCreateComponent } from '../shipping-unit-create/shipping-unit-create.component';
-import { ShippingUnitEditComponent } from '../shipping-unit-edit/shipping-unit-edit.component';
-import { AbstractCRUDComponent, AbstractModalComponent } from '../../../core/crud';
-import { FieldForm, ModalResult } from '../../../core/common';
-import { TitleService } from '../../../core/services';
-import { ObjectUtil } from '../../../core/utils';
-import { ShippingStoreMeta } from '../../shipping-store/shipping-store.meta';
-import { ShippingServiceMeta } from '../../shipping-service/shipping-service.meta';
-import { ShippingUnitPartnerComponent } from '../shipping-unit-partner/shipping-unit-partner.component';
-import { ShippingStoreService } from '../../shipping-store/shipping-store.service';
-import { ShippingServiceService } from '../../shipping-service/shipping-service.service';
+import {Component} from '@angular/core';
+import {BsModalService, ModalOptions} from 'ngx-bootstrap';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {ShippingUnitMeta} from '../shipping-unit.meta';
+import {ShippingUnitService} from '../shipping-unit.service';
+import {ShippingUnitCreateComponent} from '../shipping-unit-create/shipping-unit-create.component';
+import {ShippingUnitEditComponent} from '../shipping-unit-edit/shipping-unit-edit.component';
+import {AbstractCRUDComponent, AbstractModalComponent} from '../../../core/crud';
+import {FieldForm, ModalResult} from '../../../core/common';
+import {TitleService} from '../../../core/services';
+import {ObjectUtil} from '../../../core/utils';
+import {ShippingStoreMeta} from '../../shipping-store/shipping-store.meta';
+import {ShippingServiceMeta} from '../../shipping-service/shipping-service.meta';
+import {ShippingUnitPartnerComponent} from '../shipping-unit-partner/shipping-unit-partner.component';
+import {ShippingStoreService} from '../../shipping-store/shipping-store.service';
+import {ShippingServiceService} from '../../shipping-service/shipping-service.service';
 
 @Component({
   selector: 'app-shipping-unit-list',
@@ -26,6 +26,17 @@ export class ShippingUnitListComponent extends AbstractCRUDComponent<ShippingUni
 
   stores = new ShippingStoreMeta();
   services = new ShippingServiceMeta();
+
+  constructor(
+    service: ShippingUnitService,
+    modal: BsModalService,
+    title: TitleService,
+    builder: FormBuilder,
+    protected shippingServiceService: ShippingServiceService,
+    protected shippingStoreService: ShippingStoreService,
+  ) {
+    super(service, modal, builder,);
+  }
 
   onInit(): void {
     this.load();
@@ -70,20 +81,9 @@ export class ShippingUnitListComponent extends AbstractCRUDComponent<ShippingUni
     return new ShippingUnitMeta();
   }
 
-  constructor(
-    service: ShippingUnitService,
-    modal: BsModalService,
-    title: TitleService,
-    builder: FormBuilder,
-    protected shippingServiceService: ShippingServiceService,
-    protected shippingStoreService: ShippingStoreService,
-  ) {
-    super(service, modal, builder,);
-  }
-
   createShippingUnit() {
     let modalOptions = Object.assign(this.defaultModalOptions(), this.getCreateModalComponentOptions());
-    const config = ObjectUtil.combineValue({ ignoreBackdropClick: true }, modalOptions);
+    const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, modalOptions);
     const modalRef = this.modalService.show(this.getCreateModalComponent(), config);
     let modal: AbstractModalComponent<ShippingUnitMeta> = <AbstractModalComponent<ShippingUnitMeta>>modalRef.content;
     modal.setModel(this.initNewModel());
@@ -130,7 +130,7 @@ export class ShippingUnitListComponent extends AbstractCRUDComponent<ShippingUni
 
   addUnitPartner() {
     let modalOptions = Object.assign(this.defaultModalOptions(), this.getCreateModalComponentOptions());
-    const config = ObjectUtil.combineValue({ ignoreBackdropClick: true }, modalOptions);
+    const config = ObjectUtil.combineValue({ignoreBackdropClick: true}, modalOptions);
     const modalRef = this.modalService.show(ShippingUnitPartnerComponent, config);
     let modal: AbstractModalComponent<ShippingUnitMeta> = <AbstractModalComponent<ShippingUnitMeta>>modalRef.content;
     modal.setModel(this.initNewModel());

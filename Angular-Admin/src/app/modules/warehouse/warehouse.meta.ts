@@ -1,6 +1,6 @@
-import { ProductColorMeta } from "../product-color/product-color.meta";
-import { ProductSizeMeta } from "../product-size/product-size.meta";
-import { ProductMeta } from "../product/product.meta";
+import {ProductColorMeta} from '../product-color/product-color.meta';
+import {ProductSizeMeta} from '../product-size/product-size.meta';
+import {ProductMeta} from '../product/product.meta';
 
 export class WarehouseMeta {
   id: number;
@@ -11,7 +11,7 @@ export class WarehouseMeta {
   weight: number;
   quantity: number;
   use_quantity: number;
-  product: ProductMeta
+  product: ProductMeta;
   size: ProductSizeMeta;
-  color:ProductColorMeta
+  color: ProductColorMeta;
 }

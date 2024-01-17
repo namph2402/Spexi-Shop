@@ -3,7 +3,7 @@
     {{ $product->name }}
 @endsection
 @section('url')
-    {{ $url = config('app.url').'/products'}}
+    {{ $url = config('app.url') . '/products' }}
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -26,11 +26,13 @@
                         @foreach ($product->images as $key => $i)
                             @if ($key == 0)
                                 <div class="carousel-item active">
-                                    <img class="w-100 h-100" data-src="{{ $i->image }}" src="{{ $i->image }}" alt="{{ $product->name }}">
+                                    <img class="w-100 h-100" data-src="{{ $i->image }}" src="{{ $i->image }}"
+                                        alt="{{ $product->name }}">
                                 </div>
                             @else
                                 <div class="carousel-item">
-                                    <img class="w-100 h-100" data-src="{{ $i->image }}" src="{{ $i->image }}" alt="{{ $product->name }}">
+                                    <img class="w-100 h-100" data-src="{{ $i->image }}" src="{{ $i->image }}"
+                                        alt="{{ $product->name }}">
                                 </div>
                             @endif
                         @endforeach
@@ -53,19 +55,23 @@
                     <form action="/cart/addItem" method="post" id="formDetail" class="form mb-2 mt3">
                         <div class="d-flex mb-3">
                             <strong class="text-dark mr-3">Size :</strong>
-                            @foreach ($sizePs as $key=>$s)
+                            @foreach ($sizePs as $key => $s)
                                 <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" class="custom-control-input" id="{{ $s->name }}" value="{{ $s->id }}" name="size_id" onchange="onDetailChange()">
-                                    <label class="custom-control-label" for="{{ $s->name }}">{{ $s->name }}</label>
+                                    <input type="radio" class="custom-control-input" id="{{ $s->name }}"
+                                        value="{{ $s->id }}" name="size_id" onchange="onDetailChange()">
+                                    <label class="custom-control-label"
+                                        for="{{ $s->name }}">{{ $s->name }}</label>
                                 </div>
                             @endforeach
                         </div>
                         <div class="d-flex mb-4">
                             <strong class="text-dark mr-3">Màu :</strong>
-                            @foreach ($colorPs as $key=>$c)
+                            @foreach ($colorPs as $key => $c)
                                 <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" class="custom-control-input" id="{{ $c->name }}" value="{{ $c->id }}" name="color_id" onchange="onDetailChange()">
-                                    <label class="custom-control-label" for="{{ $c->name }}">{{ $c->name }}</label>
+                                    <input type="radio" class="custom-control-input" id="{{ $c->name }}"
+                                        value="{{ $c->id }}" name="color_id" onchange="onDetailChange()">
+                                    <label class="custom-control-label"
+                                        for="{{ $c->name }}">{{ $c->name }}</label>
                                 </div>
                             @endforeach
                         </div>
@@ -76,14 +82,17 @@
                                         <i class="fa fa-minus"></i>
                                     </a>
                                 </div>
-                                <input type="number" class="form-control bg-secondary border-0 text-center" oninput="this.value = Math.abs(this.value)" name="quantity" value="1" onchange="onDetailChange()" >
+                                <input type="number" class="form-control bg-secondary border-0 text-center"
+                                    oninput="this.value = Math.abs(this.value)" name="quantity" value="1"
+                                    onchange="onDetailChange()">
                                 <div class="input-group-btn">
                                     <a class="btn btn-primary btn-plus">
                                         <i class="fa fa-plus"></i>
                                     </a>
                                 </div>
                             </div>
-                            <button id="btnDetail" class="btn btn-primary px-3" type="submit" disabled><i class="fa fa-shopping-cart mr-1"></i>
+                            <button id="btnDetail" class="btn btn-primary px-3" type="submit" disabled><i
+                                    class="fa fa-shopping-cart mr-1"></i>
                                 Thêm vào giỏ
                             </button>
                             <span id="errText" class="err-text-detail">Vui lòng chọn size và màu</span>
@@ -146,33 +155,34 @@
                                     @endforeach
                                 </div>
                                 @if ($product->article != null)
-                                <form action="/comment" method="POST" class="col-md-6" id="formComment">
-                                    <h4 class="mb-4">Thêm đánh giá</h4>
-                                    <div class="d-flex my-3" style="align-items: center">
-                                        <p class="mb-0 mr-2">Đánh giá :</p>
-                                        <div class="text-primary rate">
-                                            <input type="radio" id="star5" name="rating" value="5"/>
-                                            <label for="star5" title="text">5 stars</label>
-                                            <input type="radio" id="star4" name="rating" value="4"/>
-                                            <label for="star4" title="text">4 stars</label>
-                                            <input type="radio" id="star3" name="rating" value="3"/>
-                                            <label for="star3" title="text">3 stars</label>
-                                            <input type="radio" id="star2" name="rating" value="2"/>
-                                            <label for="star2" title="text">2 stars</label>
-                                            <input type="radio" id="star1" name="rating" value="1"/>
-                                            <label for="star1" title="text">1 star</label>
+                                    <form action="/comment" method="POST" class="col-md-6" id="formComment">
+                                        <h4 class="mb-4">Thêm đánh giá</h4>
+                                        <div class="d-flex my-3" style="align-items: center">
+                                            <p class="mb-0 mr-2">Đánh giá :</p>
+                                            <div class="text-primary rate">
+                                                <input type="radio" id="star5" name="rating" value="5" />
+                                                <label for="star5" title="text">5 stars</label>
+                                                <input type="radio" id="star4" name="rating" value="4" />
+                                                <label for="star4" title="text">4 stars</label>
+                                                <input type="radio" id="star3" name="rating" value="3" />
+                                                <label for="star3" title="text">3 stars</label>
+                                                <input type="radio" id="star2" name="rating" value="2" />
+                                                <label for="star2" title="text">2 stars</label>
+                                                <input type="radio" id="star1" name="rating" value="1" />
+                                                <label for="star1" title="text">1 star</label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="message">Nội dung</label>
-                                        <textarea id="message" cols="30" rows="5" class="form-control" name="content"></textarea>
-                                    </div>
-                                    <input type="text" hidden name="article_id" value="{{ $product->article->id }}">
-                                    <div class="form-group mb-0">
-                                        <button type="submit" class="btn btn-primary px-3">Đánh giá</button>
-                                    </div>
-                                    @csrf
-                                </form>
+                                        <div class="form-group">
+                                            <label for="message">Nội dung</label>
+                                            <textarea id="message" cols="30" rows="5" class="form-control" name="content"></textarea>
+                                        </div>
+                                        <input type="text" hidden name="article_id"
+                                            value="{{ $product->article->id }}">
+                                        <div class="form-group mb-0">
+                                            <button type="submit" class="btn btn-primary px-3">Đánh giá</button>
+                                        </div>
+                                        @csrf
+                                    </form>
                                 @endif
                             </div>
                         </div>
@@ -193,184 +203,192 @@
                             @if ($r->product->status == 1)
                                 <div class="product-item bg-light wow fadeInUp" data-wow-delay="0.1s">
                                     <div class="product-img position-relative overflow-hidden">
-                                        <img class="img-fluid w-100" data-src="{{ $r->product->image }}" src="{{ $r->product->image }}" alt="{{ $r->product->name }}">
+                                        <img class="img-fluid w-100" data-src="{{ $r->product->image }}"
+                                            src="{{ $r->product->image }}" alt="{{ $r->product->name }}">
                                     </div>
                                     <div class="text-center py-3">
                                         <a class="h6 text-decoration-none text-truncate"
                                             href="{{ $r->product->full_path }}">{{ $r->product->name }}</a>
                                         <div class="d-flex align-items-center justify-content-center mt-2">
                                             @if ($r->product->sale_price == $r->product->price)
-                                                <h5 class="product-text-price price-sale">{{ number_format($r->product->price, 0, '.', '.') }}đ</h5>
+                                                <h5 class="product-text-price price-sale">
+                                                    {{ number_format($r->product->price, 0, '.', '.') }}đ</h5>
                                             @else
-                                                <h5 class="product-text-price price-sale">{{ number_format($r->product->sale_price, 0, '.', '.') }}đ</h5>
+                                                <h5 class="product-text-price price-sale">
+                                                    {{ number_format($r->product->sale_price, 0, '.', '.') }}đ</h5>
                                                 <h6 class="product-text-price text-muted ml-2">
                                                     <del>{{ number_format($r->product->price, 0, '.', '.') }}đ</del>
                                                 </h6>
                                             @endif
                                         </div>
                                         @php
-                                        $medium = 0;
-                                        $value = 0;
-                                        if (count($r->product->comments) > 0) {
-                                            $total = 0;
-                                            foreach ($r->product->comments as $c) {
-                                                $total += $c->rating;
+                                            $medium = 0;
+                                            $value = 0;
+                                            if (count($r->product->comments) > 0) {
+                                                $total = 0;
+                                                foreach ($r->product->comments as $c) {
+                                                    $total += $c->rating;
+                                                }
+                                                $medium = round($total / count($r->product->comments), 1);
                                             }
-                                            $medium = round($total / count($r->product->comments), 1);
-                                        }
-                                        if(count($r->product->warehouses) > 0) {
-                                            foreach ($r->product->warehouses as $w) {
-                                                $value += $w->use_quantity;
+                                            if (count($r->product->warehouses) > 0) {
+                                                foreach ($r->product->warehouses as $w) {
+                                                    $value += $w->use_quantity;
+                                                }
+                                                if ($value < 1000) {
+                                                    $quantity = $value;
+                                                } else {
+                                                    $quantity = round($value / 1000, 1) . 'K';
+                                                }
                                             }
-                                            if($value < 1000) {
-                                                $quantity = $value;
-                                            } else {
-                                                $quantity = round($value / 1000, 1)."K";
-                                            }
-                                        }
-                                    @endphp
-                                    @if ($medium > 0 || $value > 0)
-                                        <div class="rating-icon">
-                                            @if ($medium > 0)
-                                            <span class="rating-icon-value">
-                                                <small class="text-primary fas fa-star"></small>
-                                                <p class="rating-icon-number">{{$medium}}</p>
-                                            </span>
-                                            @endif
-                                            @if ($medium > 0 && $value > 0)
-                                            <span style="color: white; margin:0 3px">|</span>
-                                            @endif
-                                            @if ($value > 0)
-                                            <span class="rating-icon-value">
-                                                <p class="rating-icon-number">Đã bán: {{ $quantity }}</p>
-                                            </span>
-                                            @endif
-                                        </div>
-                                    @endif
+                                        @endphp
+                                        @if ($medium > 0 || $value > 0)
+                                            <div class="rating-icon">
+                                                @if ($medium > 0)
+                                                    <span class="rating-icon-value">
+                                                        <small class="text-primary fas fa-star"></small>
+                                                        <p class="rating-icon-number">{{ $medium }}</p>
+                                                    </span>
+                                                @endif
+                                                @if ($medium > 0 && $value > 0)
+                                                    <span style="color: white; margin:0 3px">|</span>
+                                                @endif
+                                                @if ($value > 0)
+                                                    <span class="rating-icon-value">
+                                                        <p class="rating-icon-number">Đã bán: {{ $quantity }}</p>
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        @endif
                                         @if ($r->product->sale_price < $r->product->price)
                                             @php
-                                                $precent = round(100 - ($r->product->sale_price / $r->product->price * 100));
+                                                $precent = round(100 - ($r->product->sale_price / $r->product->price) * 100);
                                             @endphp
                                             <div class="sale-icon">
-                                                <span class="sale-icon-value">-{{$precent}}%</span>
+                                                <span class="sale-icon-value">-{{ $precent }}%</span>
                                             </div>
                                         @elseif(count($r->product->tags) > 0)
                                             @foreach ($r->product->tags as $t)
                                                 @if ($t->name == 'Sản phẩm hot')
                                                     <div class="hot-icon">
-                                                        <img src="{{asset('assets/img/icon/hotico.svg')}}">
+                                                        <img src="{{ asset('assets/img/icon/hotico.svg') }}">
                                                     </div>
-                                                    @break
-                                                @elseif($t->name == 'Sản phẩm mới')
-                                                    <div class="new-icon">
-                                                        <span class="new-icon-value value-icon">NEW</span>
-                                                    </div>
-                                                    @break
-                                                @endif
-                                            @endforeach
-                                        @endif
-                                    </div>
-                                </div>
-                            @endif
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
-    @if (count($category) > 0)
-        <div class="container-fluid py-5">
-            <h3 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
-                <span class="bg-secondary pr-3 test">Sản phẩm cùng loại</span>
-            </h3>
-            <div class="row px-xl-5">
-                <div class="col">
-                    <div class="owl-carousel related-carousel">
-                        @foreach ($category as $c)
-                            <div class="product-item bg-light wow fadeInUp" data-wow-delay="0.1s">
-                                <div class="product-img position-relative overflow-hidden">
-                                    <img class="img-fluid w-100" data-src="{{ $c->image }}" src="{{ $c->image }}" alt="{{ $c->name }}">
-                                </div>
-                                <div class="text-center py-3">
-                                    <a class="h6 text-decoration-none text-truncate"
-                                        href="{{ $c->full_path }}">{{ $c->name }}</a>
-                                    <div class="d-flex align-items-center justify-content-center mt-2">
-                                        @if ($c->sale_price == $c->price)
-                                            <h5 class="product-text-price price-sale">{{ number_format($c->price, 0, '.', '.') }}đ</h5>
-                                        @else
-                                            <h5 class="product-text-price price-sale">{{ number_format($c->sale_price, 0, '.', '.') }}đ</h5>
-                                            <h6 class="product-text-price text-muted ml-2">
-                                                <del>{{ number_format($c->price, 0, '.', '.') }}đ</del>
-                                            </h6>
-                                        @endif
-                                    </div>
-                                    @php
-                                        $medium = 0;
-                                        $value = 0;
-                                        if (count($c->comments) > 0) {
-                                            $total = 0;
-                                            foreach ($c->comments as $cm) {
-                                                $total += $cm->rating;
-                                            }
-                                            $medium = round($total / count($c->comments), 1);
-                                        }
-                                        if(count($c->comments) < 0) {
-                                            foreach ($c->warehouses as $w) {
-                                                $value += $w->use_quantity;
-                                            }
-                                            if($value < 1000) {
-                                                $quantity = $value;
-                                            } else {
-                                                $quantity = round($value / 1000, 1)."K";
-                                            }
-                                        }
-                                    @endphp
-                                    @if ($medium > 0 || $value > 0)
-                                        <div class="rating-icon">
-                                            @if ($medium > 0)
-                                                <span class="rating-icon-value">
-                                                    <small class="text-primary fas fa-star"></small>
-                                                    <p class="rating-icon-number">{{$medium}}</p>
-                                            </span>
-                                            @endif
-                                            @if ($medium > 0 && $value > 0)
-                                                <span style="color: white; margin:0 3px">|</span>
-                                            @endif
-                                            @if ($value > 0)
-                                                <span class="rating-icon-value">
-                                                    <p class="rating-icon-number">Đã bán: {{ $quantity }}</p>
-                                                </span>
-                                            @endif
-                                        </div>
-                                    @endif
-                                    @if ($c->sale_price < $c->price)
-                                        @php
-                                            $precent = round(100 - ($c->sale_price / $c->price * 100));
-                                        @endphp
-                                        <div class="sale-icon">
-                                            <span class="sale-icon-value">-{{$precent}}%</span>
-                                        </div>
-                                    @elseif(count($c->tags) > 0)
-                                        @foreach ($c->tags as $t)
-                                            @if ($t->name == 'Sản phẩm hot')
-                                                <div class="hot-icon">
-                                                    <img src="{{asset('assets/img/icon/hotico.svg')}}">
-                                                </div>
                                                 @break
+
                                             @elseif($t->name == 'Sản phẩm mới')
                                                 <div class="new-icon">
                                                     <span class="new-icon-value value-icon">NEW</span>
                                                 </div>
-                                                @break
-                                            @endif
-                                        @endforeach
-                                    @endif
-                                </div>
+                                            @break
+                                        @endif
+                                    @endforeach
+                                @endif
                             </div>
-                        @endforeach
-                    </div>
-                </div>
+                        </div>
+                    @endif
+                @endforeach
             </div>
         </div>
-    @endif
+    </div>
+</div>
+@endif
+@if (count($category) > 0)
+<div class="container-fluid py-5">
+    <h3 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
+        <span class="bg-secondary pr-3 test">Sản phẩm cùng loại</span>
+    </h3>
+    <div class="row px-xl-5">
+        <div class="col">
+            <div class="owl-carousel related-carousel">
+                @foreach ($category as $c)
+                    <div class="product-item bg-light wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="product-img position-relative overflow-hidden">
+                            <img class="img-fluid w-100" data-src="{{ $c->image }}"
+                                src="{{ $c->image }}" alt="{{ $c->name }}">
+                        </div>
+                        <div class="text-center py-3">
+                            <a class="h6 text-decoration-none text-truncate"
+                                href="{{ $c->full_path }}">{{ $c->name }}</a>
+                            <div class="d-flex align-items-center justify-content-center mt-2">
+                                @if ($c->sale_price == $c->price)
+                                    <h5 class="product-text-price price-sale">
+                                        {{ number_format($c->price, 0, '.', '.') }}đ</h5>
+                                @else
+                                    <h5 class="product-text-price price-sale">
+                                        {{ number_format($c->sale_price, 0, '.', '.') }}đ</h5>
+                                    <h6 class="product-text-price text-muted ml-2">
+                                        <del>{{ number_format($c->price, 0, '.', '.') }}đ</del>
+                                    </h6>
+                                @endif
+                            </div>
+                            @php
+                                $medium = 0;
+                                $value = 0;
+                                if (count($c->comments) > 0) {
+                                    $total = 0;
+                                    foreach ($c->comments as $cm) {
+                                        $total += $cm->rating;
+                                    }
+                                    $medium = round($total / count($c->comments), 1);
+                                }
+                                if (count($c->comments) < 0) {
+                                    foreach ($c->warehouses as $w) {
+                                        $value += $w->use_quantity;
+                                    }
+                                    if ($value < 1000) {
+                                        $quantity = $value;
+                                    } else {
+                                        $quantity = round($value / 1000, 1) . 'K';
+                                    }
+                                }
+                            @endphp
+                            @if ($medium > 0 || $value > 0)
+                                <div class="rating-icon">
+                                    @if ($medium > 0)
+                                        <span class="rating-icon-value">
+                                            <small class="text-primary fas fa-star"></small>
+                                            <p class="rating-icon-number">{{ $medium }}</p>
+                                        </span>
+                                    @endif
+                                    @if ($medium > 0 && $value > 0)
+                                        <span style="color: white; margin:0 3px">|</span>
+                                    @endif
+                                    @if ($value > 0)
+                                        <span class="rating-icon-value">
+                                            <p class="rating-icon-number">Đã bán: {{ $quantity }}</p>
+                                        </span>
+                                    @endif
+                                </div>
+                            @endif
+                            @if ($c->sale_price < $c->price)
+                                @php
+                                    $precent = round(100 - ($c->sale_price / $c->price) * 100);
+                                @endphp
+                                <div class="sale-icon">
+                                    <span class="sale-icon-value">-{{ $precent }}%</span>
+                                </div>
+                            @elseif(count($c->tags) > 0)
+                                @foreach ($c->tags as $t)
+                                    @if ($t->name == 'Sản phẩm hot')
+                                        <div class="hot-icon">
+                                            <img src="{{ asset('assets/img/icon/hotico.svg') }}">
+                                        </div>
+                                    @break
+
+                                @elseif($t->name == 'Sản phẩm mới')
+                                    <div class="new-icon">
+                                        <span class="new-icon-value value-icon">NEW</span>
+                                    </div>
+                                @break
+                            @endif
+                        @endforeach
+                    @endif
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
+</div>
+</div>
+@endif
 @endsection

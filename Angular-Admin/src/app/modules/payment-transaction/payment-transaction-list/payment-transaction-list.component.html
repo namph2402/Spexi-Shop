@@ -8,22 +8,22 @@
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
-              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
-                     [type]="f.typeof" class="form-control"/>
+              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control" />
             </ng-template>
             <ng-template [ngIf]="f.type == 'textarea'">
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
               <textarea [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                        [placeholder]="f.placeHolder" class="form-control">
+                [placeholder]="f.placeHolder" class="form-control">
               </textarea>
             </ng-template>
             <ng-template [ngIf]="f.type == 'checkbox'">
               <div class="checkbox">
                 <label>
                   <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                         type="checkbox"/>
+                    type="checkbox" />
                   {{ f.label }}
                 </label>
               </div>
@@ -33,7 +33,7 @@
                 {{ f.label }}
               </label>
               <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                      class="form-control">
+                class="form-control">
                 <option *ngFor="let option of f.data" [value]="option['value']">
                   {{ option["name"] }}
                 </option>
@@ -44,7 +44,7 @@
                 {{ f.label }}
               </label>
               <angular2-multiselect [data]="f.data" [formControlName]="f.formControl" [id]="f.formControl"
-                                    [settings]="f.config">
+                [settings]="f.config">
               </angular2-multiselect>
             </ng-template>
           </div>
@@ -81,8 +81,7 @@
           <td>{{item.creator_name}}</td>
           <td class="text-right">{{item.amount | number : "1.0-0"}}</td>
           <td class="text-center">
-            <label class="label"
-            [ngClass]="{
+            <label class="label" [ngClass]="{
               'label-success':item.type == '0',
               'label-danger':item.type == '1'
             }">{{item.method}}</label>
@@ -93,9 +92,10 @@
             <label class="label label-danger" *ngIf="item.status == 'FAILED'">Giao dịch thất bại</label>
           </td>
           <td class="text-center">
-            <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm"
-              confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover placement="top"
-              popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa" style="width: 30px; height: 30px; padding: 0;" type="button">
+            <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>"
+              class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
+              placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
+              style="width: 30px; height: 30px; padding: 0;" type="button">
               <i aria-hidden="true" class="fa fa-remove"></i>
             </button>
           </td>
@@ -107,9 +107,8 @@
     <div class="row">
       <div class="col-xs-6">
         <pagination (numPages)="pagination.numPages = $event" (pageChanged)="pageChanged($event)"
-                    [(ngModel)]="pagination.currentPage" [boundaryLinks]="true"
-                    [itemsPerPage]="pagination.itemsPerPage"
-                    [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems" class="pagination-sm"></pagination>
+          [(ngModel)]="pagination.currentPage" [boundaryLinks]="true" [itemsPerPage]="pagination.itemsPerPage"
+          [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems" class="pagination-sm"></pagination>
       </div>
       <div class="col-xs-6">
         <div class="box-go-to">

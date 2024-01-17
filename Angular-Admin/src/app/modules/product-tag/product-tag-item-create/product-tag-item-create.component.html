@@ -27,8 +27,7 @@
           <ng-template [ngIf]="f.type == 'checkbox'">
             <div class="checkbox">
               <label>
-                <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                  type="checkbox" />
+                <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" type="checkbox" />
                 {{ f.label }}
               </label>
             </div>
@@ -37,8 +36,7 @@
             <label [for]="f.formControl">
               {{ f.label }}
             </label>
-            <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-              class="form-control">
+            <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" class="form-control">
               <option *ngFor="let option of f.data" [value]="option['id']">
                 {{ option["name"] }}
               </option>
@@ -52,7 +50,9 @@
       </form>
     </div>
     <div class="col-xs-6 col-xs-offset-6">
-      <button (click)="assignAll()" class="btn btn-primary pull-right" [disabled]="list == []" type="button">Gán tất cả</button>
+      <button (click)="assignAll()" [disabled]="list == []" class="btn btn-primary pull-right" type="button">Gán tất
+        cả
+      </button>
     </div>
   </div>
   <div class="row">
@@ -67,16 +67,16 @@
           </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let item of list;let i = index" class="odd">
-          <td class="text-center">{{i + 1}}</td>
-          <td class="text-center"><img [alt]="item.name" [src]="item.image" class="img-thumb" width="100px"/></td>
-          <td>{{item.name}}</td>
-          <td class="text-center">
-            <button (click)="assign(item)" class="btn btn-primary btn-sm" type="button">
-              <i aria-hidden="true" class="fa fa-plus"> Thêm</i>
-            </button>
-          </td>
-        </tr>
+          <tr *ngFor="let item of list;let i = index" class="odd">
+            <td class="text-center">{{i + 1}}</td>
+            <td class="text-center"><img [alt]="item.name" [src]="item.image" class="img-thumb" width="100px" /></td>
+            <td>{{item.name}}</td>
+            <td class="text-center">
+              <button (click)="assign(item)" class="btn btn-primary btn-sm" type="button">
+                <i aria-hidden="true" class="fa fa-plus"> Thêm</i>
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

@@ -76,8 +76,7 @@
         <tr *ngFor="let item of list; let i = index" class="odd">
           <td class="text-center">
             <label style="display: block">{{ item.code }}</label>
-            <label class="label label-status" style="padding: 5px 10px"
-            [ngClass]="{
+            <label class="label label-status" style="padding: 5px 10px" [ngClass]="{
               'label-1':item.order_status == 'Lên đơn',
               'label-2':item.order_status == 'Xác nhận',
               'label-3':item.order_status == 'Chuẩn bị hàng',
@@ -156,8 +155,7 @@
             </table>
           </td>
           <td class="text-center">
-            <label class="label"
-            [ngClass]="{
+            <label class="label" [ngClass]="{
               'label-primary':item.payment_type == 'CoD',
               'label-warning':item.payment_type == 'VNPay',
               'label-danger':item.payment_type == 'Momo'
@@ -167,7 +165,8 @@
             <label *ngIf="item.payment_status == 1" class="label label-success"
               style="padding: 10px; display: block; margin: 10px">Đã thanh toán</label>
             <label>
-              <textarea *ngIf="item.note" [cols]="30" [rows]="7" [value]="item.note" readonly style="min-width: 100px; max-width: 100px"></textarea>
+              <textarea *ngIf="item.note" [cols]="30" [rows]="7" [value]="item.note" readonly
+                style="min-width: 100px; max-width: 100px"></textarea>
             </label>
           </td>
           <td class="text-center">
@@ -176,42 +175,51 @@
               <i aria-hidden="true" class="fa fa-check"></i>
             </button>
             <!-- Sửa + hủy -->
-            <div style="display: block" *ngIf="item.order_status == 'Lên đơn' || item.order_status == 'Xác nhận' || item.order_status == 'Chuẩn bị hàng' || item.order_status == 'Đã chuẩn bị hàng' || item.order_status == 'Đang giao'">
-              <button *ngIf="item.order_status == 'Xác nhận'" (click)="prepare(item)" class="btn btn-info btn-sm" type="button" style="width: 30px; height: 30px;">
+            <div style="display: block"
+              *ngIf="item.order_status == 'Lên đơn' || item.order_status == 'Xác nhận' || item.order_status == 'Chuẩn bị hàng' || item.order_status == 'Đã chuẩn bị hàng' || item.order_status == 'Đang giao'">
+              <button *ngIf="item.order_status == 'Xác nhận'" (click)="prepare(item)" class="btn btn-info btn-sm"
+                type="button" style="width: 30px; height: 30px;">
                 <i aria-hidden="true" class="fa fa-check"></i>
               </button>
-              <button *ngIf="item.order_status != 'Đang giao'" (click)="editOrder(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px;">
+              <button *ngIf="item.order_status != 'Đang giao'" (click)="editOrder(item)" class="btn btn-default btn-sm"
+                type="button" style="width: 30px; height: 30px;">
                 <i class="fa fa-pencil-square-o"></i>
               </button>
-              <button *ngIf="item.order_status != 'Lên đơn'" (click)="cancel(item)" class="btn btn-danger btn-sm" type="button" style="width: 30px; height: 30px;">
+              <button *ngIf="item.order_status != 'Lên đơn'" (click)="cancel(item)" class="btn btn-danger btn-sm"
+                type="button" style="width: 30px; height: 30px;">
                 <i class="fa fa-remove"></i>
               </button>
-              <button *ngIf="item.order_status == 'Lên đơn' && item.payment_status == 0" class="btn btn-danger text-center btn-config" type="button" mwlConfirmationPopover
-                popoverTitle="Xóa" popoverMessage="Bạn thực sự muốn xóa ?" placement="top"
-                confirmText="Yes <i class='fa fa-check'></i>" cancelText="No <i class='fa fa-remove'></i>"
-                (confirm)="remove(item, i)" style="width: 30px; height: 30px; padding: 0;">
+              <button *ngIf="item.order_status == 'Lên đơn' && item.payment_status == 0"
+                class="btn btn-danger text-center btn-config" type="button" mwlConfirmationPopover popoverTitle="Xóa"
+                popoverMessage="Bạn thực sự muốn xóa ?" placement="top" confirmText="Yes <i class='fa fa-check'></i>"
+                cancelText="No <i class='fa fa-remove'></i>" (confirm)="remove(item, i)"
+                style="width: 30px; height: 30px; padding: 0;">
                 <i class="fa fa-remove" style="margin: auto"></i>
               </button>
             </div>
             <!-- Hoàn tiền -->
             <div style="display: block" *ngIf="!item.shipping">
-              <button *ngIf="item.order_status == 'Hủy đơn' && item.payment_status == 1" (click)="refund(item)" title="Hoàn tiền" class="btn btn-warning btn-sm" type="button">
+              <button *ngIf="item.order_status == 'Hủy đơn' && item.payment_status == 1" (click)="refund(item)"
+                title="Hoàn tiền" class="btn btn-warning btn-sm" type="button">
                 <i class="fa fa-money"></i>
               </button>
             </div>
             <!-- Hoàn hàng -->
             <div *ngIf="item.shipping">
-              <button *ngIf="item.order_status == 'Hủy đơn' || item.order_status == 'Hoàn thành'" (click)="return(item)" title="Hoàn hàng"  class="btn btn-info btn-sm" type="button">
+              <button *ngIf="item.order_status == 'Hủy đơn' || item.order_status == 'Hoàn thành'" (click)="return(item)"
+                title="Hoàn hàng" class="btn btn-info btn-sm" type="button">
                 <i class="fa fa-archive"></i>
               </button>
-              <button *ngIf="item.order_status == 'Hoàn hàng'" class="btn btn-primary text-center btn-config" type="button" mwlConfirmationPopover
-                popoverTitle="Đã hoàn hàng" popoverMessage="Xác nhận đã nhận hàng hoàn ?" placement="top"
+              <button *ngIf="item.order_status == 'Hoàn hàng'" class="btn btn-primary text-center btn-config"
+                type="button" mwlConfirmationPopover popoverTitle="Đã hoàn hàng"
+                popoverMessage="Xác nhận đã nhận hàng hoàn ?" placement="top"
                 confirmText="Yes <i class='fa fa-check'></i>" cancelText="No <i class='fa fa-remove'></i>"
                 (confirm)="returned(item, i)" style="width: 30px; height: 30px; padding: 0;">
                 <i class="fa fa-check" style="margin: auto"></i>
               </button>
               <ng-template [ngIf]="item.order_status == 'Đã hoàn hàng'">
-                <button  *ngIf="item.payment_status == 1 || item.is_completed == 1" (click)="refund(item)" class="btn btn-warning btn-sm" type="button">
+                <button *ngIf="item.payment_status == 1 || item.is_completed == 1" (click)="refund(item)"
+                  class="btn btn-warning btn-sm" type="button">
                   <i class="fa fa-money"></i>
                 </button>
               </ng-template>

@@ -79,28 +79,25 @@
           <td class="text-center">
             <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 0"></ui-switch>
             <ui-switch (change)="onStatusChange(item,i,$event)" *ngIf="item.status == 1"
-                       [checked]="item.status"></ui-switch>
+              [checked]="item.status"></ui-switch>
           </td>
           <td class="text-center">
-            <button (confirm)="upOrder(item)" cancelText="No <i class='fa fa-remove'></i>"
-              class="btn btn-default btn-sm" confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
-              placement="top" popoverMessage="Bạn thực sự muốn tăng thứ tự?" popoverTitle="Thay đổi thứ tự"
-              type="button" style="width: 30px; height: 30px; padding: 0;">
+            <button (click)="upOrder(item)" class="btn btn-default btn-sm" type="button"
+              style="width: 30px; height: 30px; padding: 0;">
               <i class="fa fa-arrow-up"></i>
             </button>
-            <button (confirm)="downOrder(item)" cancelText="No <i class='fa fa-remove'></i>"
-              class="btn btn-default btn-sm" confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
-              placement="top" popoverMessage="Bạn thực sự muốn giảm thứ tự?" popoverTitle="Thay đổi thứ tự"
-              type="button" style="width: 30px; height: 30px; padding: 0;">
+            <button (click)="downOrder(item)" class="btn btn-default btn-sm" type="button"
+              style="width: 30px; height: 30px; padding: 0;">
               <i class="fa fa-arrow-down"></i>
             </button>
-            <button (click)="editPostTag(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
+            <button (click)="editPostTag(item)" class="btn btn-default btn-sm" type="button"
+              style="width: 30px; height: 30px; padding: 0;">
               <i class="fa fa-pencil-square-o"></i>
             </button>
             <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>"
               class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
-              placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa" style="width: 30px; height: 30px; padding: 0;"
-              type="button">
+              placement="top" popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
+              style="width: 30px; height: 30px; padding: 0;" type="button">
               <i aria-hidden="true" class="fa fa-remove"></i>
             </button>
           </td>

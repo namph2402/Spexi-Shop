@@ -6,7 +6,7 @@ import {FieldForm} from '../../../core/common';
 import {PostService} from '../../post/post.service';
 import {PostMeta} from '../../post/post.meta';
 import {ObjectUtil} from '../../../core';
-import { PostTagService } from '../../post-tag/post-tag.service';
+import {PostTagService} from '../../post-tag/post-tag.service';
 
 @Component({
   selector: 'app-post-tag-assign-create',

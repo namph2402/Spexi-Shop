@@ -17,14 +17,16 @@
               ( {{formGroup.controls[f.formControl].value|number:'1.0-0'}} )
             </span>
             </label>
-            <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
+            <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                   [placeholder]="f.placeHolder"
                    [type]="f.typeof" class="form-control">
           </ng-template>
           <ng-template [ngIf]="f.type=='textarea'">
             <label [for]="f.formControl">
               {{f.label}}
             </label>
-            <textarea [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
+            <textarea [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                      [placeholder]="f.placeHolder"
                       [rows]="5" class="form-control">
           </textarea>
           </ng-template>
@@ -32,7 +34,8 @@
             <label [for]="f.formControl">
               {{f.label}}
             </label>
-            <input (change)="f.config['onFileChange'](formGroup,f.formControl,$event)" [id]="f.formControl" [name]="f.formControl"
+            <input (change)="f.config['onFileChange'](formGroup,f.formControl,$event)" [id]="f.formControl"
+                   [name]="f.formControl"
                    [placeholder]="f.placeHolder" accept="{{f.config['accept']}}"
                    class="form-control"
                    type="file">

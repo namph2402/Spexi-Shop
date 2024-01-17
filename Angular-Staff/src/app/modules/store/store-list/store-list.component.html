@@ -8,22 +8,22 @@
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
-              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
-                     [type]="f.typeof" class="form-control"/>
+              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control" />
             </ng-template>
             <ng-template [ngIf]="f.type == 'textarea'">
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
               <textarea [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                        [placeholder]="f.placeHolder" class="form-control">
+                [placeholder]="f.placeHolder" class="form-control">
               </textarea>
             </ng-template>
             <ng-template [ngIf]="f.type == 'checkbox'">
               <div class="checkbox">
                 <label>
                   <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                         type="checkbox"/>
+                    type="checkbox" />
                   {{ f.label }}
                 </label>
               </div>
@@ -33,7 +33,7 @@
                 {{ f.label }}
               </label>
               <select [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
-                      class="form-control">
+                class="form-control">
                 <option *ngFor="let option of f.data" [value]="option['id']">
                   {{ option["name"] }}
                 </option>
@@ -44,7 +44,7 @@
                 {{ f.label }}
               </label>
               <angular2-multiselect [data]="f.data" [formControlName]="f.formControl" [id]="f.formControl"
-                                    [settings]="f.config">
+                [settings]="f.config">
               </angular2-multiselect>
             </ng-template>
           </div>
@@ -58,27 +58,26 @@
   </div>
   <table class="table table-bordered table-hover">
     <thead>
-    <tr>
-      <th style="width: 10%;">#</th>
-      <th style="width: 45%;">Tên</th>
-      <th style="width: 45%;">Giá trị</th>
-    </tr>
+      <tr>
+        <th style="width: 10%;">#</th>
+        <th style="width: 45%;">Tên</th>
+        <th style="width: 45%;">Giá trị</th>
+      </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let item of list;let i = index" class="odd">
-      <td class="text-center">{{i + 1}}</td>
-      <td>{{item.name}}</td>
-      <td>{{item.value}}</td>
-    </tr>
+      <tr *ngFor="let item of list;let i = index" class="odd">
+        <td class="text-center">{{i + 1}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.value}}</td>
+      </tr>
     </tbody>
   </table>
   <div *ngIf="list.length > 0" class="panel-footer">
     <div class="row">
       <div class="col-xs-6">
         <pagination (numPages)="pagination.numPages = $event" (pageChanged)="pageChanged($event)"
-                    [(ngModel)]="pagination.currentPage" [boundaryLinks]="true"
-                    [itemsPerPage]="pagination.itemsPerPage" [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems"
-                    class="pagination-sm"></pagination>
+          [(ngModel)]="pagination.currentPage" [boundaryLinks]="true" [itemsPerPage]="pagination.itemsPerPage"
+          [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems" class="pagination-sm"></pagination>
       </div>
       <div class="col-xs-6">
         <div class="box-go-to">

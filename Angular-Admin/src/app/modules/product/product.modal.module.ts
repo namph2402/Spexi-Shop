@@ -16,8 +16,8 @@ import {ArticleCommentModule} from '../article-comment/article-comment.module';
 import {ProductWarehouseModule} from '../product-warehouse/product-warehouse.module';
 import {ProductImportComponent} from './product-import/product-import.component';
 import {ProductRelatedModule} from '../product-related/product-related.module';
-import { ProductTagAssignListComponent } from './product-tag-assign-list/product-tag-assign-list.component';
-import { ProductTagAssignCreateComponent } from './product-tag-assign-create/product-tag-assign-create.component';
+import {ProductTagAssignListComponent} from './product-tag-assign-list/product-tag-assign-list.component';
+import {ProductTagAssignCreateComponent} from './product-tag-assign-create/product-tag-assign-create.component';
 
 @NgModule({
   imports: [

@@ -8,8 +8,8 @@
               <label [for]="f.formControl">
                 {{ f.label }}
               </label>
-              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl" [placeholder]="f.placeHolder"
-                     [type]="f.typeof" class="form-control"/>
+              <input [formControlName]="f.formControl" [id]="f.formControl" [name]="f.formControl"
+                     [placeholder]="f.placeHolder" [type]="f.typeof" class="form-control"/>
             </ng-template>
             <ng-template [ngIf]="f.type == 'textarea'">
               <label [for]="f.formControl">
@@ -80,13 +80,15 @@
                   </h4>
                 </div>
                 <div class="col-xs-6">
-                  <button (confirm)="remove(item,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm pull-right" style="margin-left: 5px;"
-                          confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover placement="top"
-                          popoverMessage="Bạn thực sự muốn xóa?"
-                          popoverTitle="Xóa" type="button" style="margin-left: 5px; width: 30px; height: 30px; padding: 0;">
+                  <button (confirm)="remove(item,i)" cancelText="No <i class='fa fa-remove'></i>"
+                          class="btn btn-danger btn-sm pull-right" confirmText="Yes <i class='fa fa-check'></i>"
+                          mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?"
+                          popoverTitle="Xóa" style="margin-left: 5px;" style="margin-left: 5px; width: 30px; height: 30px; padding: 0;"
+                          type="button">
                     <i class="fa fa-remove"></i>
                   </button>
-                  <button (click)="editGroup(item,i)" class="btn btn-default btn-sm pull-right" type="button" style="width: 30px; height: 30px; padding: 0;">
+                  <button (click)="editGroup(item,i)" class="btn btn-default btn-sm pull-right" style="width: 30px; height: 30px; padding: 0;"
+                          type="button">
                     <i class="fa fa-pencil-square-o"></i>
                   </button>
                 </div>
@@ -121,25 +123,22 @@
                     <td class="text-center">
                       {{item.parent ? item.parent.name : "Không có"}}
                     <td class="text-center">
-                      <button (confirm)="upOrder(item ,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-default btn-sm"
-                              confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
-                              placement="top" popoverMessage="Bạn thực sự muốn tăng thứ tự?"
-                              popoverTitle="Thay đổi thứ tự" type="button" style="width: 30px; height: 30px; padding: 0;">
+                      <button (click)="upOrder(item)" class="btn btn-default btn-sm" style="width: 30px; height: 30px; padding: 0;"
+                              type="button">
                         <i class="fa fa-arrow-up"></i>
                       </button>
-                      <button (confirm)="downOrder(item,i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-default btn-sm"
-                              confirmText="Yes <i class='fa fa-check'></i>" mwlConfirmationPopover
-                              placement="top" popoverMessage="Bạn thực sự muốn giảm thứ tự?"
-                              popoverTitle="Thay đổi thứ tự" type="button" style="width: 30px; height: 30px; padding: 0;">
+                      <button (click)="downOrder(item)" class="btn btn-default btn-sm" style="width: 30px; height: 30px; padding: 0;"
+                              type="button">
                         <i class="fa fa-arrow-down"></i>
                       </button>
-                      <button (click)="editMenu(item,i,j)" class="btn btn-default" type="button" style="width: 30px; height: 30px; padding: 0;">
+                      <button (click)="editMenu(item,i,j)" class="btn btn-default" style="width: 30px; height: 30px; padding: 0;"
+                              type="button">
                         <i class="fa fa-pencil-square-o"></i>
                       </button>
-                      <button (confirm)="removeMenu(item,i,j)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
-                              mwlConfirmationPopover placement="top"
-                              popoverMessage="Bạn thực sự muốn xóa?" popoverTitle="Xóa"
-                              type="button" style="width: 30px; height: 30px; padding: 0;">
+                      <button (confirm)="removeMenu(item,i,j)" cancelText="No <i class='fa fa-remove'></i>"
+                              class="btn btn-danger btn-sm" confirmText="Yes <i class='fa fa-check'></i>"
+                              mwlConfirmationPopover placement="top" popoverMessage="Bạn thực sự muốn xóa?"
+                              popoverTitle="Xóa" style="width: 30px; height: 30px; padding: 0;" type="button">
                         <i class="fa fa-remove"></i>
                       </button>
                   </tr>
@@ -159,9 +158,9 @@
     <div class="row">
       <div class="col-xs-6">
         <pagination (numPages)="pagination.numPages = $event" (pageChanged)="pageChanged($event)"
-                    [(ngModel)]="pagination.currentPage" [boundaryLinks]="true"
-                    [itemsPerPage]="pagination.itemsPerPage"
-                    [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems" class="pagination-sm"></pagination>
+                    [(ngModel)]="pagination.currentPage" [boundaryLinks]="true" [itemsPerPage]="pagination.itemsPerPage"
+                    [maxSize]="pagination.maxSize" [totalItems]="pagination.totalItems"
+                    class="pagination-sm"></pagination>
       </div>
       <div class="col-xs-6">
         <div class="box-go-to">

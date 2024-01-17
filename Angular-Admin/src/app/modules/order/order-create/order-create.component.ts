@@ -1,20 +1,20 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BsModalRef } from 'ngx-bootstrap';
-import { OrderMeta } from '../order.meta';
-import { OrderService } from '../order.service';
-import { AbstractModalComponent, FieldForm, ObjectUtil } from '../../../core';
-import { VoucherService } from '../../voucher/voucher.service';
-import { ProductService } from '../../product/product.service';
-import { ProductMeta } from '../../product/product.meta';
-import { CartItemMeta } from '../cart-item.meta';
-import { VoucherMeta } from '../../voucher/voucher.meta';
-import { ProvinceMeta } from '../../province/province.meta';
-import { DistrictMeta } from '../../district/district.meta';
-import { ProvinceService } from '../../province/province.service';
-import { CustomerService } from '../../customer/customer.service';
-import { CustomerMeta } from '../../customer/customer.meta';
-import { PaymentMethodService } from '../../payment-method/payment-method.service';
+import {Component} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {BsModalRef} from 'ngx-bootstrap';
+import {OrderMeta} from '../order.meta';
+import {OrderService} from '../order.service';
+import {AbstractModalComponent, FieldForm, ObjectUtil} from '../../../core';
+import {VoucherService} from '../../voucher/voucher.service';
+import {ProductService} from '../../product/product.service';
+import {ProductMeta} from '../../product/product.meta';
+import {CartItemMeta} from '../cart-item.meta';
+import {VoucherMeta} from '../../voucher/voucher.meta';
+import {ProvinceMeta} from '../../province/province.meta';
+import {DistrictMeta} from '../../district/district.meta';
+import {ProvinceService} from '../../province/province.service';
+import {CustomerService} from '../../customer/customer.service';
+import {CustomerMeta} from '../../customer/customer.meta';
+import {PaymentMethodService} from '../../payment-method/payment-method.service';
 
 @Component({
   selector: 'app-order-create',
@@ -53,11 +53,11 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
   }
 
   loadVouchers() {
-    return this.voucherService.loadByParams({ status: 1 });
+    return this.voucherService.loadByParams({status: 1});
   }
 
   loadPayments() {
-    return this.paymentervice.loadByParams({ status: 1 });
+    return this.paymentervice.loadByParams({status: 1});
   }
 
   loadAllProvinces() {
@@ -65,7 +65,7 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
   }
 
   loadAllProducts() {
-    return this.productService.loadByParams({ status: 1, order: 1 });
+    return this.productService.loadByParams({status: 1, order: 1});
   }
 
   buildForm(): FormGroup {
@@ -110,7 +110,7 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
     super.onFormChanged();
     this.formGroup.controls['customer_phone'].valueChanges.debounceTime(1000).subscribe((value: string) => {
       if (value && value.length == 10) {
-        this.customerService.loadByParams({ phoneOrder: value }).subscribe((customers: CustomerMeta[]) => {
+        this.customerService.loadByParams({phoneOrder: value}).subscribe((customers: CustomerMeta[]) => {
           if (customers.length > 0) {
             let c: CustomerMeta = customers[0];
             let provinceObj = this.fields[3].data.filter(v => v.name == c.province);
@@ -130,7 +130,7 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
               district: districtObj,
               ward: wardObj
             };
-            Object.keys(dataForm).forEach(v => this.setFormValueByKey(v, dataForm[v], { emitEvent: false }));
+            Object.keys(dataForm).forEach(v => this.setFormValueByKey(v, dataForm[v], {emitEvent: false}));
           }
         });
       }
@@ -190,7 +190,7 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
     if (amountT < 0) {
       amountT = 0;
     }
-    this.totalAmount = amountT + this.shipFee
+    this.totalAmount = amountT + this.shipFee;
     this.formGroup.controls['amount'].setValue(this.amount);
     this.formGroup.controls['shipping_fee'].setValue(this.shipFee);
     this.formGroup.controls['discount'].setValue(this.discount);
@@ -210,15 +210,15 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
     for (let i of this.arrProduct) {
       const list: any = i.product.warehouses;
       if (i.quantity == 0 || i.warehouse_id == 0) {
-        this.service.toastError("Cần nhập đủ thông tin sản phẩm");
+        this.service.toastError('Cần nhập đủ thông tin sản phẩm');
         status = 1;
-        break
+        break;
       } else {
         const t = list.filter(w => w.id == i.warehouse_id);
         if (t[0].quantity < i.quantity) {
-          this.service.toastError("Sản phẩm " + i.product.code + " không đủ hàng");
+          this.service.toastError('Sản phẩm ' + i.product.code + ' không đủ hàng');
           status = 1;
-          break
+          break;
         }
       }
     }
@@ -228,7 +228,7 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
       item.district = this.getFormValue('district')[0].name;
       item.ward = this.getFormValue('ward')[0].name;
       item.payment_status = 1;
-      item.type = 1
+      item.type = 1;
       item.product = JSON.stringify(this.arrProduct);
       this.service.store(item).subscribe(res => {
         this.service.toastSuccessfullyCreated();

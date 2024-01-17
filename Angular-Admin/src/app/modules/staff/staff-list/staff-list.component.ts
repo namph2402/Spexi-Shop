@@ -65,21 +65,21 @@ export class StaffListComponent extends AbstractCRUDComponent<StaffMeta> {
       FieldForm.createTextInput('Tìm kiếm theo tên', 'search', 'Nhập từ khóa'),
       FieldForm.createSelect('Tìm kiếm chức vụ', 'position', 'Chọn một', [
         {
-          name:'Nhân viên',
+          name: 'Nhân viên',
           value: 'Nhân viên'
         },
         {
-          name:'Nhân viên thời vụ',
+          name: 'Nhân viên thời vụ',
           value: 'Nhân viên thời vụ'
         },
       ]),
       FieldForm.createSelect('Tìm kiếm trạng thái', 'status', 'Chọn một', [
         {
-          name:'Hoạt động',
+          name: 'Hoạt động',
           value: '1'
         },
         {
-          name:'Không hoạt động',
+          name: 'Không hoạt động',
           value: '0'
         },
       ]),

@@ -9,9 +9,9 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {UiSwitchModule} from 'ngx-toggle-switch';
 import {OrderShipCreateComponent} from './order-ship-create/order-ship-create.component';
 import {OrderShipCreateResultComponent} from './order-ship-create-result/order-ship-create-result.component';
-import { OrderShipItemComponent } from './order-ship-item/order-ship-item.component';
-import { OrderShipInfoComponent } from './order-ship-info/order-ship-info.component';
-import { OrderShipNoteComponent } from './order-ship-note/order-ship-note.component';
+import {OrderShipItemComponent} from './order-ship-item/order-ship-item.component';
+import {OrderShipInfoComponent} from './order-ship-info/order-ship-info.component';
+import {OrderShipNoteComponent} from './order-ship-note/order-ship-note.component';
 
 @NgModule({
   imports: [

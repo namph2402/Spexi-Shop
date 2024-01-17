@@ -3,7 +3,7 @@
     Tìm kiếm bài viết
 @endsection
 @section('url')
-    {{ $url = config('app.url').'/posts'}}
+    {{ $url = config('app.url') . '/posts' }}
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -55,7 +55,8 @@
                 <div class="bg-light mb-30" style="padding: 1rem">
                     <form>
                         @foreach ($tagPosts as $t)
-                            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <div
+                                class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <a href="{{ $t->full_path }}" class="custom-control-label-search"
                                     for="price-all">{{ $t->name }}</a>
                             </div>
@@ -69,7 +70,8 @@
                         <div class="col-lg-12 col-md-6 col-sm-6 pb-1 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="post-item bg-light mb-4">
                                 <div class="post-img">
-                                    <img class="img-fluid w-100 h-100" data-src="{{ $p->image }}" src="{{ $p->image }}" alt="{{ $p->name }}" style="object-fit: cover;">
+                                    <img class="img-fluid w-100 h-100" data-src="{{ $p->image }}"
+                                        src="{{ $p->image }}" alt="{{ $p->name }}" style="object-fit: cover;">
                                 </div>
                                 <div class="post-title">
                                     <div class="post-content">
@@ -80,7 +82,8 @@
                                     </div>
                                     <div class="post-author ml-2">
                                         <i class="fas fa-user" style="margin-right: 5px"></i>{{ $p->article->author_name }}
-                                        <i class="fa fa-calendar" style="margin: 0 5px 0 30px"></i>{{ date_format($p->article->created_at, 'Y-m-d') }}
+                                        <i class="fa fa-calendar"
+                                            style="margin: 0 5px 0 30px"></i>{{ date_format($p->article->created_at, 'Y-m-d') }}
                                     </div>
                                 </div>
                             </div>
@@ -92,10 +95,12 @@
                                 @if ($posts->previousPageUrl())
                                     <li class="page-item">
                                         <a class="page-link" style="cursor:pointer"
-                                            onclick="setParamsPage('page','{{ (int) Request::get('page') - 1 }}')"><i class="fas fa-chevron-circle-left"></i></a>
+                                            onclick="setParamsPage('page','{{ (int) Request::get('page') - 1 }}')"><i
+                                                class="fas fa-chevron-circle-left"></i></a>
                                     </li>
                                 @else
-                                    <li class="page-item disabled"><a class="page-link"><i class="fas fa-chevron-circle-left"></i></a></li>
+                                    <li class="page-item disabled"><a class="page-link"><i
+                                                class="fas fa-chevron-circle-left"></i></a></li>
                                 @endif
                                 @for ($i = 1; $i <= $posts->lastPage(); $i++)
                                     @if ($posts->currentPage() == $i)
@@ -105,7 +110,8 @@
                                     @else
                                         @if ($posts->currentPage() + 3 >= $i && $posts->currentPage() - 3 <= $i)
                                             <li class="page-item">
-                                                <a class="page-link" style="cursor:pointer" onclick="setParamsPage('page','{{ $i }}')">{{ $i }}</a>
+                                                <a class="page-link" style="cursor:pointer"
+                                                    onclick="setParamsPage('page','{{ $i }}')">{{ $i }}</a>
                                             </li>
                                         @endif
                                     @endif
@@ -114,14 +120,17 @@
                                     <li class="page-item">
                                         @if ((int) Request::get('page') == 0)
                                             <a class="page-link" style="cursor:pointer"
-                                                onclick="setParamsPage('page','{{ (int) Request::get('page') + 2 }}')"><i class="fas fa-chevron-circle-right"></i></a>
+                                                onclick="setParamsPage('page','{{ (int) Request::get('page') + 2 }}')"><i
+                                                    class="fas fa-chevron-circle-right"></i></a>
                                         @else
                                             <a class="page-link" style="cursor:pointer"
-                                                onclick="setParamsPage('page','{{ (int) Request::get('page') + 1 }}')"><i class="fas fa-chevron-circle-right"></i></a>
+                                                onclick="setParamsPage('page','{{ (int) Request::get('page') + 1 }}')"><i
+                                                    class="fas fa-chevron-circle-right"></i></a>
                                         @endif
                                     </li>
                                 @else
-                                    <li class="page-item disabled"><a class="page-link"><i class="fas fa-chevron-circle-right"></i></a></li>
+                                    <li class="page-item disabled"><a class="page-link"><i
+                                                class="fas fa-chevron-circle-right"></i></a></li>
                                 @endif
                             </ul>
                         </nav>

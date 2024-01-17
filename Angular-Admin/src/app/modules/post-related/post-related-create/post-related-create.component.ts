@@ -6,8 +6,8 @@ import {FieldForm} from '../../../core/common';
 import {PostRelatedMeta} from '../post-related.meta';
 import {PostRelatedService} from '../post-related.service';
 import {PostMeta} from '../../post/post.meta';
-import { ObjectUtil } from '../../../core';
-import { PostCategoryService } from '../../post-category/post-category.service';
+import {ObjectUtil} from '../../../core';
+import {PostCategoryService} from '../../post-category/post-category.service';
 
 @Component({
   selector: 'app-post-related-create',

@@ -38,60 +38,60 @@
                         </thead>
                         <tbody class="align-middle">
                             @foreach ($cart->items as $item)
-                                    <tr>
-                                        <td class="text-center">
-                                            <div class="custom-control custom-radio custom-control-inline m-0"
-                                                style="margin-left: 10px !important">
-                                                <input type="checkbox" class="cart-item custom-control-input"
-                                                    id="{{ $item->id }}" value="{{ $item->id }}">
-                                                <label class="custom-control-label" for="{{ $item->id }}"></label>
+                                <tr>
+                                    <td class="text-center">
+                                        <div class="custom-control custom-radio custom-control-inline m-0"
+                                            style="margin-left: 10px !important">
+                                            <input type="checkbox" class="cart-item custom-control-input"
+                                                id="{{ $item->id }}" value="{{ $item->id }}">
+                                            <label class="custom-control-label" for="{{ $item->id }}"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <img src="{{ $item->product->image }}" style="width: 50px;">
+                                    </td>
+                                    <td class="text-left">
+                                        <a href="{{ $item->product->full_path }}"
+                                            class="text-truncate">{{ $item->product->name }}</a>
+                                    </td>
+                                    <td class="align-middle">
+                                        {{ $item->warehouse->size->name }}, {{ $item->warehouse->color->name }}
+                                    </td>
+                                    <td class="unit_price align-middle">
+                                        {{ number_format($item->product->sale_price, 0, '.', '.') }} đ
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="input-group quantity mx-auto" style="width: 100px;">
+                                            <div class="input-group-btn">
+                                                <a class="btn btn-sm btn-primary btn-minus">
+                                                    <i class="fa fa-minus"></i>
+                                                </a>
                                             </div>
-                                        </td>
-                                        <td>
-                                            <img src="{{ $item->product->image }}" style="width: 50px;">
-                                        </td>
-                                        <td class="text-left">
-                                            <a href="{{ $item->product->full_path }}"
-                                                class="text-truncate">{{ $item->product->name }}</a>
-                                        </td>
-                                        <td class="align-middle">
-                                            {{ $item->warehouse->size->name }}, {{ $item->warehouse->color->name }}
-                                        </td>
-                                        <td class="unit_price align-middle">
-                                            {{ number_format($item->product->sale_price, 0, '.', '.') }} đ
-                                        </td>
-                                        <td class="align-middle">
-                                            <div class="input-group quantity mx-auto" style="width: 100px;">
-                                                <div class="input-group-btn">
-                                                    <a class="btn btn-sm btn-primary btn-minus">
-                                                        <i class="fa fa-minus"></i>
-                                                    </a>
-                                                </div>
-                                                <input type="number" name="quantity" value="{{ $item->quantity }}" disabled
-                                                    class="form-control form-control-sm bg-secondary border-0 text-center">
-                                                <div class="input-group-btn">
-                                                    <a class="btn btn-sm btn-primary btn-plus">
-                                                        <i class="fa fa-plus"></i>
-                                                    </a>
-                                                </div>
+                                            <input type="number" name="quantity" value="{{ $item->quantity }}" disabled
+                                                class="form-control form-control-sm bg-secondary border-0 text-center">
+                                            <div class="input-group-btn">
+                                                <a class="btn btn-sm btn-primary btn-plus">
+                                                    <i class="fa fa-plus"></i>
+                                                </a>
                                             </div>
-                                        </td>
-                                        <td class="align-middle" id="amountItem{{ $item->id }}">
-                                            {{ number_format($item->product->sale_price * $item->quantity, 0, '.', '.') }}
-                                            đ
-                                        </td>
-                                        <td class="align-middle">
-                                            <a class="btn btn-sm btn-danger" style="width:30px;height:30px"
-                                                href="/cart/deleteItem/{{ $item->id }}">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle" id="amountItem{{ $item->id }}">
+                                        {{ number_format($item->product->sale_price * $item->quantity, 0, '.', '.') }}
+                                        đ
+                                    </td>
+                                    <td class="align-middle">
+                                        <a class="btn btn-sm btn-danger" style="width:30px;height:30px"
+                                            href="/cart/deleteItem/{{ $item->id }}">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                             @endforeach
                             @php
                                 $total_amount = 0;
                                 foreach ($cart->items as $item) {
-                                        $total_amount += $item->product->sale_price * $item->quantity;
+                                    $total_amount += $item->product->sale_price * $item->quantity;
                                 }
                             @endphp
                             <tr>
@@ -211,7 +211,8 @@
                             const totalAmount = VND.format(data['data'].totalAmount);
                             const name = 'amountItem' + `${cartId}`;
                             document.getElementById(name).innerHTML = `${amount} đ`;
-                            document.getElementById("totalAmount").innerHTML = `${totalAmount} đ`;
+                            document.getElementById("totalAmount").innerHTML =
+                                `${totalAmount} đ`;
                         }
                     }
                 });

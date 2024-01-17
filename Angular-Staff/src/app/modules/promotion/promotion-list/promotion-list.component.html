@@ -83,7 +83,8 @@
         </td>
         <td>
           <a [href]="item.full_path" target="_blank" style="font-size: 15px; color: black">{{ item.name }}
-            <button class="btn btn-default btn-xs" type="button" style="width: 15px; height: 15px; padding: 1px; margin-left: 3px;">
+            <button class="btn btn-default btn-xs" type="button"
+              style="width: 15px; height: 15px; padding: 1px; margin-left: 3px;">
               <i class="fa fa-external-link" style="display: block;"></i>
             </button>
           </a>
@@ -128,10 +129,12 @@
             type="button" style="width: 30px; height: 30px; padding: 0;">
             <i aria-hidden="true" class="fa fa-check"></i>
           </button>
-          <button *ngIf="item.type == 3 || item.type == 4" class="btn btn-default btn-sm" disabled type="button" style="width: 30px; height: 30px; padding: 0;">
+          <button *ngIf="item.type == 3 || item.type == 4" class="btn btn-default btn-sm" disabled type="button"
+            style="width: 30px; height: 30px; padding: 0;">
             <i aria-hidden="true" class="fa fa-ban"></i>
           </button>
-          <button (click)="editPromotion(item)" class="btn btn-default btn-sm" type="button" style="width: 30px; height: 30px; padding: 0;">
+          <button (click)="editPromotion(item)" class="btn btn-default btn-sm" type="button"
+            style="width: 30px; height: 30px; padding: 0;">
             <i class="fa fa-pencil-square-o"></i>
           </button>
           <button (confirm)="remove(item, i)" cancelText="No <i class='fa fa-remove'></i>" class="btn btn-danger btn-sm"

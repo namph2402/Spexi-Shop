@@ -4,8 +4,8 @@ import {AbstractCRUDService} from '../../core/crud';
 import {ToasterService} from 'angular2-toaster';
 import {TitleService} from '../../core/services';
 import {ShippingFeeMeta} from './shipping-fee.meta';
-import { DataResponse } from '../../core';
-import { catchError, map } from 'rxjs/operators';
+import {DataResponse} from '../../core';
+import {catchError, map} from 'rxjs/operators';
 
 @Injectable()
 export class ShippingFeeService extends AbstractCRUDService<ShippingFeeMeta> {

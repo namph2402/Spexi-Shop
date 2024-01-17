@@ -10,12 +10,14 @@
             </div>
             <div class="account-group">
                 <i class="fas fa-user"></i>
-                <input type="text" id="username" name="username" class="account-input" placeholder="Email/Tên đăng nhập" value="{{ old('username') }}">
+                <input type="text" id="username" name="username" class="account-input" placeholder="Email/Tên đăng nhập"
+                    value="{{ old('username') }}">
                 <small class="error-message"></small>
             </div>
             <div class="account-group">
                 <i class="fas fa-key"></i>
-                <input type="password" id="password" name="password" class="account-input" placeholder="Mật khẩu" value="{{ old('password') }}">
+                <input type="password" id="password" name="password" class="account-input" placeholder="Mật khẩu"
+                    value="{{ old('password') }}">
                 <div id="eye">
                     <i class="far fa-eye"></i>
                 </div>

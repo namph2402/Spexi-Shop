@@ -14,6 +14,14 @@ import {FieldForm} from '../../../core/common';
 })
 export class ShippingUnitCreateComponent extends AbstractModalComponent<ShippingUnitMeta> {
 
+  constructor(
+    service: ShippingUnitService,
+    modal: BsModalRef,
+    builder: FormBuilder,
+  ) {
+    super(service, modal, builder);
+  }
+
   onInit(): void {
   }
 
@@ -25,8 +33,8 @@ export class ShippingUnitCreateComponent extends AbstractModalComponent<Shipping
       name: new FormControl(null, [Validators.required, Validators.pattern('[^ ].*$')]),
       username: new FormControl(null, [Validators.required, Validators.pattern('[^ ].*$')]),
       password: new FormControl(null, [Validators.required, Validators.pattern('[^ ].*$')]),
-      token: new FormControl(null,[Validators.required, Validators.pattern('[^ ].*$')]),
-      endpoint: new FormControl(null,[Validators.required, Validators.pattern('[^ ].*$')]),
+      token: new FormControl(null, [Validators.required, Validators.pattern('[^ ].*$')]),
+      endpoint: new FormControl(null, [Validators.required, Validators.pattern('[^ ].*$')]),
     });
   }
 
@@ -41,14 +49,6 @@ export class ShippingUnitCreateComponent extends AbstractModalComponent<Shipping
   }
 
   loaded(): void {
-  }
-
-  constructor(
-    service: ShippingUnitService,
-    modal: BsModalRef,
-    builder: FormBuilder,
-  ) {
-    super(service, modal, builder);
   }
 
 }
