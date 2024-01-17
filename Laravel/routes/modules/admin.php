@@ -148,10 +148,6 @@ Route::group(['middleware' => ['auth.admin']], function () {
         Route::get('loadProduct', 'PromotionController@loadProduct');
         Route::post('updateSalePrice', 'PromotionController@updateSalePrice');
     });
-    Route::group(['prefix' => 'promotion_product_mappings'], function () {
-        Route::get('', 'PromotionProductMappingController@index');
-        Route::get('loadProduct', 'PromotionProductMappingController@loadProduct');
-    });
 
     // RelatedProduct
     Route::group(['prefix' => 'related_products'], function () {

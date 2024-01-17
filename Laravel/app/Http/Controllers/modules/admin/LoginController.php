@@ -7,7 +7,6 @@ use App\Http\Controllers\RestController;
 use App\Repository\SystemUserRepositoryInterface;
 use App\Utils\AuthUtil;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
@@ -40,21 +39,18 @@ class LoginController extends RestController
 
     public function password(Request $request) {
         $user = AuthUtil::getInstance()->getModel();
-        
+
         if (!Hash::check($request->password, $user->password)) {
             return $this->errorClient('Mật khẩu không đúng');
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($user->id, [
                 'password' => Hash::make($request->newPassword)
             ]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -64,15 +60,12 @@ class LoginController extends RestController
         $user = AuthUtil::getInstance()->getModel();
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($user->id,[
                 'password' => Hash::make('123456a@')
             ]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

@@ -8,7 +8,6 @@ use App\Repository\BannerGroupRepositoryInterface;
 use App\Repository\BannerRepositoryInterface;
 use App\Utils\FileStorageUtil;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class BannerGroupController extends RestController
@@ -54,13 +53,10 @@ class BannerGroupController extends RestController
         $attributes['name'] = $request->name;
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->create($attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -78,13 +74,10 @@ class BannerGroupController extends RestController
         $attributes['name'] = $request->name;
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -97,13 +90,10 @@ class BannerGroupController extends RestController
             foreach ($model->banners as $banner) {
                 FileStorageUtil::deleteFiles($banner->image);
             }
-            DB::beginTransaction();
             $this->repository->delete($model, ['banners']);
-            DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

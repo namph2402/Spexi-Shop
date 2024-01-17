@@ -15,13 +15,13 @@ export class ProductTagService extends AbstractCRUDService<ProductTagMeta> {
     super(http, title, toaster, 'tag sản phẩm', 'product_tags');
   }
 
-  attachTags(id: number, post_ids: number[]): Observable<ProductTagMeta> {
-    return this.http.post<DataResponse<ProductTagMeta>>(`${this.urlRestAPI}/${id}/attach_tags`, {post_ids})
+  attachTags(id: number, product_ids: number[]): Observable<ProductTagMeta> {
+    return this.http.post<DataResponse<ProductTagMeta>>(`${this.urlRestAPI}/${id}/attach_tags`, {product_ids})
       .pipe(catchError(this.handleErrorRequest.bind(this)), map(res => res['data']));
   }
 
-  detachTags(id: number, post_ids: number[]): Observable<ProductTagMeta> {
-    return this.http.post<DataResponse<ProductTagMeta>>(`${this.urlRestAPI}/${id}/detach_tags`, {post_ids})
+  detachTags(id: number, product_ids: number[]): Observable<ProductTagMeta> {
+    return this.http.post<DataResponse<ProductTagMeta>>(`${this.urlRestAPI}/${id}/detach_tags`, {product_ids})
       .pipe(catchError(this.handleErrorRequest.bind(this)), map(res => res['data']));
   }
 }

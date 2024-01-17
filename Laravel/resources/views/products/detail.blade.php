@@ -218,8 +218,8 @@
                                             }
                                             $medium = round($total / count($r->product->comments), 1);
                                         }
-                                        if(count($r->product->warehouseViews) > 0) {
-                                            foreach ($r->product->warehouseViews as $w) {
+                                        if(count($r->product->warehouses) > 0) {
+                                            foreach ($r->product->warehouses as $w) {
                                                 $value += $w->use_quantity;
                                             }
                                             if($value < 1000) {
@@ -315,7 +315,7 @@
                                             $medium = round($total / count($c->comments), 1);
                                         }
                                         if(count($c->comments) < 0) {
-                                            foreach ($c->warehouseViews as $w) {
+                                            foreach ($c->warehouses as $w) {
                                                 $value += $w->use_quantity;
                                             }
                                             if($value < 1000) {

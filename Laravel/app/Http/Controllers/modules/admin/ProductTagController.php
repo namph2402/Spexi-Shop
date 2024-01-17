@@ -24,9 +24,8 @@ class ProductTagController extends RestController
     {
         $limit = $request->input('limit', null);
         $clauses = [];
-        $with = ['products'];
+        $with = [];
         $withCount = [];
-        $tagClauses = [];
         $orderBy = $request->input('orderBy', 'order:asc');
 
         if ($request->has('search')) {
@@ -34,22 +33,20 @@ class ProductTagController extends RestController
         }
 
         if ($request->has('product_id')) {
-            $productId = $request->product_id;
-            array_push($clauses, WhereClause::queryRelationHas('products', function ($q) use ($productId) {
-                $q->where('id', $productId);
+            $id = $request->product_id;
+            array_push($clauses, WhereClause::queryRelationHas('products', function ($q) use ($id) {
+                $q->where('id', $id);
             }));
         }
 
         if ($request->has('product_id_add')) {
-            $productIdAdd = $request->product_id_add;
-            $tags = $this->repository->get([WhereClause::queryRelationHas('products', function ($q) use ($productIdAdd) {
-                $q->where('id', $productIdAdd);
-            })]);
+            $idAdd = $request->product_id_add;
+            $tags = $this->repository->pluck([WhereClause::queryRelationHas('products', function ($q) use ($idAdd) {
+                $q->where('id', $idAdd);
+            })], 'id');
+
             if (count($tags) > 0) {
-                foreach ($tags as $tag) {
-                    array_push($tagClauses, $tag->id);
-                }
-                array_push($clauses, WhereClause::queryNotIn('id', $tagClauses));
+                array_push($clauses, WhereClause::queryNotIn('id', $tags));
             }
         }
 
@@ -79,13 +76,10 @@ class ProductTagController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->create($attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -103,13 +97,10 @@ class ProductTagController extends RestController
         $attributes['slug'] = Str::slug($attributes['name']);
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -119,14 +110,11 @@ class ProductTagController extends RestController
         $model = $this->repository->findById($id);
 
         try {
-            DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($id);
-            DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -135,13 +123,10 @@ class ProductTagController extends RestController
     public function enable($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -149,13 +134,10 @@ class ProductTagController extends RestController
     public function disable($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -170,7 +152,6 @@ class ProductTagController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $order = $model->order;
             $model = $this->repository->update($id,[
                 'order' => $swapModel->order
@@ -178,11 +159,9 @@ class ProductTagController extends RestController
             $swapModel = $this->repository->update($swapModel->id,[
                 'order' => $order
             ]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -197,7 +176,6 @@ class ProductTagController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $order = $model->order;
             $model = $this->repository->update($id,[
                 'order' => $swapModel->order
@@ -205,11 +183,9 @@ class ProductTagController extends RestController
             $swapModel = $this->repository->update($swapModel->id,[
                 'order' => $order
             ]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -220,15 +196,12 @@ class ProductTagController extends RestController
         $model = $this->repository->findById($id);
 
         try {
-            DB::beginTransaction();
-            foreach ($request->post_ids as $postId) {
-                $this->repository->attach($model, $postId);
+            foreach ($request->product_ids as $id) {
+                $this->repository->attach($model, $id);
             };
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->errorClient($e->getMessage());
         }
     }
@@ -238,13 +211,10 @@ class ProductTagController extends RestController
         $model = $this->repository->findById($id);
 
         try {
-            DB::beginTransaction();
-            $this->repository->detach($model, $request->post_ids);
-            DB::commit();
+            $this->repository->detach($model, $request->product_ids);
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->errorClient($e->getMessage());
         }
     }

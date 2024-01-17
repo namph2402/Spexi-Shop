@@ -140,13 +140,10 @@ class WarehouseController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -154,13 +151,10 @@ class WarehouseController extends RestController
     public function destroy($id)
     {
         try {
-            DB::beginTransaction();
             $this->repository->delete($id, ['cartItem']);
-            DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -174,13 +168,10 @@ class WarehouseController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -188,14 +179,11 @@ class WarehouseController extends RestController
     public function disable($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
             CartItem::whereWarehouseId($id)->delete();
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

@@ -6,7 +6,6 @@ use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
 use App\Repository\StorePostRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class StorePostController extends RestController
@@ -52,13 +51,10 @@ class StorePostController extends RestController
         ]);
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->create($attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -79,13 +75,10 @@ class StorePostController extends RestController
         ]);
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -93,13 +86,10 @@ class StorePostController extends RestController
     public function destroy($id)
     {
         try {
-            DB::beginTransaction();
             $this->repository->delete($id);
-            DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

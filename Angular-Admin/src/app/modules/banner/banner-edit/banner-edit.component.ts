@@ -43,7 +43,7 @@ export class BannerEditComponent extends AbstractModalComponent<BannerMeta> {
       FieldForm.createTextInput('Tên', 'name', 'Nhập tên'),
       FieldForm.createTextArea('Mô tả', 'summary', 'Nhập mô tả'),
       FieldForm.createTextInput('Đường dẫn', 'href', 'Nhập đường dẫn'),
-      FieldForm.createFileInput('Chọn ảnh banner', 'image', 'Chọn ảnh', this.onFileUploadChange),
+      FieldForm.createFileInput('Chọn ảnh banner', 'image', 'Chọn ảnh', this.onFileUploadChange, 'image/*'),
     ];
   }
 

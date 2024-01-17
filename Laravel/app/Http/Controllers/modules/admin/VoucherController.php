@@ -6,7 +6,6 @@ use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
 use App\Repository\VoucherRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class VoucherController extends RestController
@@ -79,13 +78,10 @@ class VoucherController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->create($attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -134,13 +130,10 @@ class VoucherController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -148,13 +141,10 @@ class VoucherController extends RestController
     public function destroy($id)
     {
         try {
-            DB::beginTransaction();
             $this->repository->delete($id);
-            DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -168,13 +158,10 @@ class VoucherController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -182,13 +169,10 @@ class VoucherController extends RestController
     public function disable($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

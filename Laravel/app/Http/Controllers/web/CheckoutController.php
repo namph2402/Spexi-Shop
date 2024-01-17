@@ -247,7 +247,6 @@ class CheckoutController extends RestController
 
         if ($payment['status'] == OrderPaymentStatusEnum::COMPLETED) {
             try {
-                DB::beginTransaction();
                 $this->repository->update($order, [
                     'cod_fee' => 0,
                     'payment_status' => 1,
@@ -264,11 +263,9 @@ class CheckoutController extends RestController
                     'dump_data' => json_encode($inputData),
                     'type' => 0
                 ]);
-                DB::commit();
                 return $this->successView('cart', 'Đã thanh toán đơn hàng thành công');
             } catch (\Exception $e) {
                 Log::error($e);
-                DB::rollBack();
                 return redirect('cart')->with('Thanh toán đơn hàng thất bại');
             }
         } else {
@@ -285,7 +282,6 @@ class CheckoutController extends RestController
         $payment = MomoUtil::getInstance()->updateIPN($inputData, $order);
         if ($payment['status'] == OrderPaymentStatusEnum::COMPLETED) {
             try {
-                DB::beginTransaction();
                 $this->repository->update($order, [
                     'cod_fee' => 0,
                     'payment_status' => 1,
@@ -302,11 +298,9 @@ class CheckoutController extends RestController
                     'dump_data' => json_encode($inputData),
                     'type' => 0
                 ]);
-                DB::commit();
                 return $this->successView('cart', 'Đã thanh toán đơn hàng thành công');
             } catch (\Exception $e) {
                 Log::error($e);
-                DB::rollBack();
                 return redirect('cart')->with('Thanh toán đơn hàng thất bại');
             }
         } else {

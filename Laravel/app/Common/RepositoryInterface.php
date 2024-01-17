@@ -20,6 +20,17 @@ interface RepositoryInterface
      */
     public function get($whereClauses, $orderBy = 'id:desc', $with = [], $withCount = []);
 
+
+    /**
+     * get
+     * @param \App\Common\WhereClause[] $whereClauses
+     * @param string $orderBy
+     * @param array $with
+     * @param array $withCount
+     * @return \Illuminate\Support\Collection
+     */
+    public function pluck($whereClauses, $value);
+
     /**
      * paginate
      * @param int $limit

@@ -30,7 +30,7 @@ class BannerController extends RestController
         $validator = $this->validateRequest($request, [
             'group_id' => 'required|numeric',
             'name' => 'required|max:255',
-            'image' => 'required'
+            'image' => 'required|mimes:jpeg,png,jpg,gif'
         ]);
         if ($validator) {
             return $this->errorClient($validator);
@@ -54,13 +54,10 @@ class BannerController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->create($attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             FileStorageUtil::deleteFiles($createdImages);
             return $this->error($e->getMessage());
         }
@@ -95,13 +92,10 @@ class BannerController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             if ($request->file('image') != '') {
                 FileStorageUtil::deleteFiles($image);
             }
@@ -115,15 +109,12 @@ class BannerController extends RestController
         $image = $model->image;
 
         try {
-            DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>'), WhereClause::query('group_id', $model->group_id)], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($model);
-            DB::commit();
             FileStorageUtil::deleteFiles($image);
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -131,13 +122,10 @@ class BannerController extends RestController
     public function enable($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -145,13 +133,10 @@ class BannerController extends RestController
     public function disable($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -166,7 +151,6 @@ class BannerController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $order = $model->order;
             $model = $this->repository->update($id, [
                 'order' => $swapModel->order
@@ -174,11 +158,9 @@ class BannerController extends RestController
             $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -193,7 +175,6 @@ class BannerController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $order = $model->order;
             $model = $this->repository->update($id, [
                 'order' => $swapModel->order
@@ -201,11 +182,9 @@ class BannerController extends RestController
             $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

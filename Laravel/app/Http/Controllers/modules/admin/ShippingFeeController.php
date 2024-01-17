@@ -119,7 +119,7 @@ class ShippingFeeController extends RestController
                             'province_id' => $province->id,
                             'district_id' => $district->id,
                             'ward_id' => $ward->id,
-                            'fee' => 30000
+                            'fee' => 25000
                         ]);
                     }
                 }
@@ -136,27 +136,19 @@ class ShippingFeeController extends RestController
 
     public function truncate() {
         try {
-            DB::beginTransaction();
             $this->provinceRepository->truncate();
             $this->districtRepository->truncate();
             $this->wardRepository->truncate();
             $this->repository->truncate();
-            DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
 
     public function update(Request $request, $id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $validator = $this->validateRequest($request, [
             'fee' => 'required|numeric',
         ]);
@@ -165,13 +157,10 @@ class ShippingFeeController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $request->only(['fee']));
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

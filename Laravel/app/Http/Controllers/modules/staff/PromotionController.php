@@ -90,13 +90,10 @@ class PromotionController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->create($attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             if (isset($attributes['banner'])) {
                 FileStorageUtil::deleteFiles($attributes['banner']);
             }
@@ -138,7 +135,6 @@ class PromotionController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $promotion = $this->repository->update($id, $attributes);
             if ($promotion) {
                 if ($promotion->type == Promotion::$DONG_GIA && $promotion->status == 1) {
@@ -161,14 +157,12 @@ class PromotionController extends RestController
                         ]);
                 }
             }
-            DB::commit();
             if ($request->file('image') != '') {
                 FileStorageUtil::deleteFiles($image_old);
             }
             return $this->success($promotion);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             if (isset($attributes['banner'])) {
                 FileStorageUtil::deleteFiles($attributes['banner']);
             }
@@ -179,17 +173,14 @@ class PromotionController extends RestController
     public function destroy($id)
     {
         try {
-            DB::beginTransaction();
             $this->productRepository->bulkUpdate([
                 WhereClause::queryRelationHas('promotions', function ($q) use ($id) {
                 $q->where('id', $id);
             })],['sale_price' => DB::raw('`price`')]);
             $this->repository->delete($id,['mapping']);
-            DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -220,13 +211,10 @@ class PromotionController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -245,13 +233,10 @@ class PromotionController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -296,7 +281,6 @@ class PromotionController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             foreach ($request->items as $item) {
                 if (count($item['promotions']) > 0) {
                     $promotion = $this->repository->findById($item['promotions']['0']['id']);
@@ -317,11 +301,9 @@ class PromotionController extends RestController
                     $this->productRepository->update($item['id'], ['sale_price' => $item['price']]);
                 }
             }
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->errorClient($e->getMessage());
         }
     }
@@ -333,14 +315,11 @@ class PromotionController extends RestController
         $product = $this->productRepository->findById($request->product_id);
 
         try {
-            DB::beginTransaction();
             $this->repository->detach($model, $request->product_id);
             $this->productRepository->update($request->product_id, ['sale_price' => $product->price]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->errorClient($e->getMessage());
         }
     }
@@ -361,15 +340,12 @@ class PromotionController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             if ($model->status == 1) {
                 $this->productRepository->update($request->id, ['sale_price' => $request->sale_price_value]);
             }
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->errorClient($e->getMessage());
         }
     }

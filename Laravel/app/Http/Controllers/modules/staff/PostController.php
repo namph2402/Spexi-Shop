@@ -46,9 +46,9 @@ class PostController extends RestController
         }
 
         if ($request->has('tag_id')) {
-            $tag_id = $request->tag_id;
-            array_push($clauses, WhereClause::queryRelationHas('tags', function ($q) use ($tag_id) {
-                $q->where('id', $tag_id);
+            $tagId = $request->tag_id;
+            array_push($clauses, WhereClause::queryRelationHas('tags', function ($q) use ($tagId) {
+                $q->where('id', $tagId);
             }));
         }
 
@@ -69,7 +69,7 @@ class PostController extends RestController
             'category_id' => 'required|numeric',
             'category_slug' => 'required|max:255',
             'name' => 'required|max:255|unique:posts',
-            'image' => 'required',
+            'image' => 'required|mimes:jpeg,png,jpg,gif',
             'content' => 'required',
         ]);
         if ($validator) {
@@ -85,6 +85,7 @@ class PostController extends RestController
 
         $image = FileStorageUtil::putFile('post_image', $request->file('image'));
         array_push($createdImages, $image);
+
         $attributes['image'] = $image;
         $attributes['slug'] = Str::slug($attributes['name']);
 
@@ -94,7 +95,6 @@ class PostController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->create($attributes);
             if ($model) {
                 $this->articleRepository->create([
@@ -104,11 +104,9 @@ class PostController extends RestController
                     'articleable_id' => $model->id
                 ]);
             }
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             FileStorageUtil::deleteFiles($image);
             return $this->error($e->getMessage());
         }
@@ -149,19 +147,16 @@ class PostController extends RestController
         $attributes['slug'] = Str::slug($attributes['name']);
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes, ['article']);
             $this->articleRepository->update($model->article->id, [
                 'content' => $request->input('content')
             ]);
-            DB::commit();
             if ($request->file('image') != '') {
                 FileStorageUtil::deleteFiles($image_old);
             }
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             if ($request->file('image') != '') {
                 FileStorageUtil::deleteFiles($image);
             }
@@ -175,15 +170,12 @@ class PostController extends RestController
         $image = $model->image;
 
         try {
-            DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($id, ['article', 'relateds']);
-            DB::commit();
             FileStorageUtil::deleteFiles($image);
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -191,13 +183,10 @@ class PostController extends RestController
     public function enable($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -205,13 +194,10 @@ class PostController extends RestController
     public function disable($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -226,7 +212,6 @@ class PostController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $order = $model->order;
             $model = $this->repository->update($id, [
                 'order' => $swapModel->order
@@ -234,11 +219,9 @@ class PostController extends RestController
             $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -253,7 +236,6 @@ class PostController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $order = $model->order;
             $model = $this->repository->update($id, [
                 'order' => $swapModel->order
@@ -261,11 +243,9 @@ class PostController extends RestController
             $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -273,10 +253,9 @@ class PostController extends RestController
     public function loadTag(Request $request)
     {
         $limit = $request->input('limit', null);
-        $clauses = [];
+        $clauses = [WhereClause::query('status', 1)];
         $with = [];
         $withCount = [];
-        $postClauses = [];
         $orderBy = $request->input('orderBy', 'order:asc');
 
         if ($request->has('search')) {
@@ -288,23 +267,19 @@ class PostController extends RestController
         }
 
         if ($request->has('tag_id')) {
-            $tag_id = $request->tag_id;
-            array_push($clauses, WhereClause::queryRelationHas('tags', function ($q) use ($tag_id) {
-                $q->where('id', $tag_id);
+            $id = $request->tag_id;
+            array_push($clauses, WhereClause::queryRelationHas('tags', function ($q) use ($id) {
+                $q->where('id', $id);
             }));
         }
 
         if ($request->has('tag_id_add')) {
-            $tagId = $request->tag_id_add;
-            $posts = $this->repository->get([WhereClause::queryRelationHas('tags', function ($q) use ($tagId) {
-                $q->where('id', $tagId);
-            })]);
-
+            $idAdd = $request->tag_id_add;
+            $posts = $this->repository->pluck([WhereClause::queryRelationHas('tags', function ($q) use ($idAdd) {
+                $q->where('id', $idAdd);
+            })], 'id');
             if (count($posts) > 0) {
-                foreach ($posts as $post) {
-                    array_push($postClauses, $post->id);
-                }
-                array_push($clauses, WhereClause::queryNotIn('id', $postClauses));
+                array_push($clauses, WhereClause::queryNotIn('id', $posts));
             }
         }
 
@@ -321,15 +296,12 @@ class PostController extends RestController
         $model = $this->repository->findById($id);
 
         try {
-            DB::beginTransaction();
             foreach ($request->tag_ids as $tagId) {
                 $this->repository->attach($model, $tagId);
             };
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->errorClient($e->getMessage());
         }
     }
@@ -339,13 +311,10 @@ class PostController extends RestController
         $model = $this->repository->findById($id);
 
         try {
-            DB::beginTransaction();
             $this->repository->detach($model, $request->tag_ids);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->errorClient($e->getMessage());
         }
     }

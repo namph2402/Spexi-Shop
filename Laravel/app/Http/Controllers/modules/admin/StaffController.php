@@ -6,7 +6,6 @@ use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
 use App\Repository\StaffRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -89,13 +88,10 @@ class StaffController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->create($attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -135,13 +131,10 @@ class StaffController extends RestController
         $attributes['avatar'] = $request->gender ? 'http://localhost:8000/assets/img/private/woman.webp' : 'http://localhost:8000/assets/img/private/man.webp';
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -149,13 +142,10 @@ class StaffController extends RestController
     public function destroy($id)
     {
         try {
-            DB::beginTransaction();
             $this->repository->delete($id);
-            DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -163,13 +153,10 @@ class StaffController extends RestController
     public function enable($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -177,13 +164,10 @@ class StaffController extends RestController
     public function disable($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -191,16 +175,13 @@ class StaffController extends RestController
     public function repassword($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, [
                 'password' => Hash::make('123456a@'),
                 'remember_token' => Str::random(100),
             ]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

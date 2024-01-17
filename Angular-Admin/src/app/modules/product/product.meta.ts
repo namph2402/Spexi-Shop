@@ -20,5 +20,4 @@ export class ProductMeta {
   article: ArticleMeta;
   promotions: PromotionMeta;
   warehouses: ProductWarehouseMeta;
-  warehouse_views: ProductWarehouseMeta;
 }

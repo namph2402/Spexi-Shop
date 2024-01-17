@@ -11,7 +11,6 @@ use App\Repository\ShippingUnitRepositoryInterface;
 use App\Utils\Logistics\GiaoHangNhanhUtil;
 use App\Utils\Logistics\GiaoHangTietKiemUtil;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ShippingUnitController extends RestController
@@ -82,13 +81,10 @@ class ShippingUnitController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->create($attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -113,13 +109,10 @@ class ShippingUnitController extends RestController
         ]);
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -127,13 +120,10 @@ class ShippingUnitController extends RestController
     public function destroy($id)
     {
         try {
-            DB::beginTransaction();
             $this->repository->delete($id, ['shipping_strores', 'shipping_services']);
-            DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -163,18 +153,15 @@ class ShippingUnitController extends RestController
         $attributesService['is_often'] = 1;
 
         try {
-            DB::beginTransaction();
             if($request->store != null) {
                 $this->shippingStore->create($attributesStore);
             }
             if($request->service != null) {
                 $this->shippingService->create($attributesService);
             }
-            DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -242,7 +229,6 @@ class ShippingUnitController extends RestController
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->errorClient('Đồng bộ không thành công');
         }
     }

@@ -7,7 +7,6 @@ use App\Http\Controllers\RestController;
 use App\Repository\UserProfileRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends RestController
@@ -64,13 +63,10 @@ class UserController extends RestController
     public function destroy($id)
     {
         try {
-            DB::beginTransaction();
             $this->repository->delete($id, ['account']);
-            DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -80,13 +76,10 @@ class UserController extends RestController
         $model = $this->repository->findById($id);
 
         try {
-            DB::beginTransaction();
             $model = $this->userRepository->update($model->user_id, ['status' => true]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -96,13 +89,10 @@ class UserController extends RestController
         $model = $this->repository->findById($id);
 
         try {
-            DB::beginTransaction();
             $model = $this->userRepository->update($model->user_id, ['status' => false]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

@@ -112,7 +112,7 @@ class ProductController extends RestController
     {
         $arrColor = [];
         $arrSize = [];
-        $with = ['category', 'images', 'warehouseViews', 'article', 'comments.author.profile', 'relateds.product.comments'];
+        $with = ['category', 'images', 'warehouses', 'article', 'comments.author.profile', 'relateds.product.comments'];
 
         $category = $this->repository->get([WhereClause::query('category_slug', $category_slug), WhereClause::queryDiff('slug', $slug), WhereClause::query('status', 1)], null, ['comments']);
 
@@ -122,11 +122,11 @@ class ProductController extends RestController
             WhereClause::query('status', 1)
         ], null, $with);
 
-        if (empty($product) || count($product->warehouseViews) == 0) {
+        if (empty($product) || count($product->warehouses) == 0) {
             return $this->errorNotFoundView();
         }
 
-        foreach ($product->warehouseViews as $item) {
+        foreach ($product->warehouses as $item) {
             $arrSize[$item->size_id] = $item->size_id;
             $arrColor[$item->color_id] = $item->color_id;
         }

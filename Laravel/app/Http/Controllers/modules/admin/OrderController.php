@@ -52,7 +52,7 @@ class OrderController extends RestController
         $limit = $request->input('limit', null);
         $clauses = [];
         $orderBy = $request->input('orderBy', 'updated_at:desc');
-        $with = ['details.product.warehouseViews.size', 'details.product.warehouseViews.color', 'voucher', 'shipping'];
+        $with = ['details.product.warehouses.size', 'details.product.warehouses.color', 'voucher', 'shipping'];
         $withCount = [];
 
         if ($request->has('search')) {
@@ -317,23 +317,15 @@ class OrderController extends RestController
 
     public function confirm($id, Request $request)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $attributes['note'] = $request->note;
         $attributes['order_status'] = Order::$XAC_NHAN;
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             ChangeStatusOrder::dispatch($model->id);
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -348,13 +340,10 @@ class OrderController extends RestController
         $attributes['order_status'] = Order::$CHUAN_BI_HANG;
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -428,21 +417,13 @@ class OrderController extends RestController
 
     public function return($id)
     {
-        $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
-
         $attributes['order_status'] = Order::$HOAN_HANG;
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

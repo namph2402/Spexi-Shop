@@ -11,5 +11,4 @@ export class PaymentTransactionMeta {
   status: string;
   massage: string;
   dump_data: string;
-  order: OrderMeta;
 }

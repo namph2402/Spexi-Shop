@@ -20,7 +20,7 @@ class PaymentTransactionController extends RestController
     {
         $limit = $request->input('limit', null);
         $clauses = [];
-        $with = ['order'];
+        $with = [];
         $withCount = [];
         $orderBy = $request->input('orderBy','id:desc');
 
@@ -30,9 +30,6 @@ class PaymentTransactionController extends RestController
                 WhereClause::queryLike('name', $search),
                 WhereClause::queryLike('order_code', $search),
                 WhereClause::queryLike('creator_name', $search),
-                WhereClause::queryRelationHas('order', function ($q) use ($search) {
-                    $q->where('customer_phone', 'like', '%'.$search.'%');
-                })
             ]));
         }
 

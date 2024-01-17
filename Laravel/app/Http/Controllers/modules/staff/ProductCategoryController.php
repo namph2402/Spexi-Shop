@@ -93,13 +93,11 @@ class ProductCategoryController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->create($attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
+
             if (isset($attributes['image'])) {
                 FileStorageUtil::deleteFiles($image);
             }
@@ -139,19 +137,16 @@ class ProductCategoryController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
             $this->productRepository->bulkUpdate([WhereClause::query('category_id', $id)], [
                 'category_slug' => $attributes['slug']
             ]);
-            DB::commit();
             if ($request->file('image') != '') {
                 FileStorageUtil::deleteFiles($image_old);
             }
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             if ($request->file('image') != '') {
                 FileStorageUtil::deleteFiles($image);
             }
@@ -164,14 +159,11 @@ class ProductCategoryController extends RestController
         $model = $this->repository->findById($id);
 
         try {
-            DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>'), WhereClause::query('parent_id', 0)], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($id);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -186,7 +178,6 @@ class ProductCategoryController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $order = $model->order;
             $model = $this->repository->update($id,[
                 'order' => $swapModel->order
@@ -194,11 +185,9 @@ class ProductCategoryController extends RestController
             $swapModel = $this->repository->update($swapModel->id,[
                 'order' => $order
             ]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -213,7 +202,6 @@ class ProductCategoryController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $order = $model->order;
             $model = $this->repository->update($id,[
                 'order' => $swapModel->order
@@ -221,11 +209,9 @@ class ProductCategoryController extends RestController
             $swapModel = $this->repository->update($swapModel->id,[
                 'order' => $order
             ]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

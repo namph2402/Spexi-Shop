@@ -6,7 +6,6 @@ use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
 use App\Repository\ShippingStoreRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ShippingStoreController extends RestController
@@ -39,13 +38,10 @@ class ShippingStoreController extends RestController
     public function destroy($id)
     {
         try {
-            DB::beginTransaction();
             $this->repository->delete($id);
-            DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

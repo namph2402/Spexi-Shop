@@ -65,7 +65,7 @@ export class OrderCreateComponent extends AbstractModalComponent<OrderMeta> {
   }
 
   loadAllProducts() {
-    return this.productService.loadByParams({ status: 1 });
+    return this.productService.loadByParams({ status: 1, order: 1 });
   }
 
   buildForm(): FormGroup {

@@ -7,7 +7,6 @@ use App\Http\Controllers\RestController;
 use App\Repository\ProductColorRepositoryInterface;
 use App\Repository\ProductRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ProductColorController extends RestController
@@ -52,13 +51,10 @@ class ProductColorController extends RestController
         $attributes['name'] = $request->name;
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->create($attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -75,13 +71,10 @@ class ProductColorController extends RestController
         $attributes['name'] = $request->name;
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -89,13 +82,10 @@ class ProductColorController extends RestController
     public function destroy($id)
     {
         try {
-            DB::beginTransaction();
             $this->repository->delete($id,['warehouse']);
-            DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

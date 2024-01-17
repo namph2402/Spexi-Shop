@@ -191,7 +191,6 @@ class OrderShipController extends RestController
     public function shipping($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, [
                 'status' => 'Đang giao',
                 'status_id' => 4,
@@ -201,11 +200,9 @@ class OrderShipController extends RestController
                     'order_status' => 'Đang giao'
                 ]);
             }
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -213,7 +210,6 @@ class OrderShipController extends RestController
     public function complete($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, [
                 'status' => 'Hoàn thành',
                 'status_id' => 7,
@@ -225,11 +221,9 @@ class OrderShipController extends RestController
                     'is_completed' => 1
                 ]);
             }
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -240,7 +234,7 @@ class OrderShipController extends RestController
         if (empty($orderIdsStr)) {
             return $this->error('Không có đơn hàng nào');
         }
-        
+
         $orderIds = preg_split('/,/', $orderIdsStr);
 
         $models = $this->orderRepository->get([WhereClause::queryIn('id',$orderIds)], null, ['shipping']);
@@ -249,14 +243,11 @@ class OrderShipController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $ghu = new GiaoHangUtil($models[0]);
             $link = $ghu->printOrders($models);
             $this->repository->bulkUpdate([WhereClause::queryIn('id',$orderIds)],['is_printed' => 1]);
-            DB::commit();
             return $this->success(compact('link'));
         } catch (\Exception $e) {
-            DB::rollBack();
             return $this->error($e->getMessage(), $models);
         }
     }
@@ -284,14 +275,11 @@ class OrderShipController extends RestController
         $attributes['status_id'] = 5;
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
             $this->orderRepository->update($model->order_id, ['order_status' => Order::$DANG_GIAO]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }

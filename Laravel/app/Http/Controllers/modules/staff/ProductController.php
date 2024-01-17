@@ -63,9 +63,13 @@ class ProductController extends RestController
     {
         $limit = $request->input('limit', null);
         $clauses = [];
-        $with = ['category', 'article', 'tags', 'warehouses.size', 'warehouses.color', 'warehouseViews.size', 'warehouseViews.color'];
+        $with = ['category', 'article'];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'order:asc');
+
+        if($request->has('order')) {
+            array_push($with, 'warehouses.size', 'warehouses.color');
+        }
 
         if ($request->has('search')) {
             array_push($clauses, WhereClause::orQuery([WhereClause::queryLike('code', $request->search), WhereClause::queryLike('name', $request->search)]));
@@ -103,7 +107,7 @@ class ProductController extends RestController
             'category_slug' => 'required|max:255',
             'name' => 'required|max:255|unique:products',
             'code' => 'required|max:255',
-            'image' => 'required',
+            'image' => 'required|mimes:jpeg,png,jpg,gif',
             'price' => 'required|numeric',
         ]);
         if ($validator) {
@@ -132,13 +136,10 @@ class ProductController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->create($attributes);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             FileStorageUtil::deleteFiles($image);
             return $this->error($e->getMessage());
         }
@@ -184,16 +185,13 @@ class ProductController extends RestController
         $attributes['slug'] = Str::slug($attributes['name']);
 
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, $attributes);
-            DB::commit();
             if ($request->file('image') != '') {
                 FileStorageUtil::deleteFiles($image_old);
             }
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             if ($request->file('image') != '') {
                 FileStorageUtil::deleteFiles($image);
             }
@@ -207,15 +205,12 @@ class ProductController extends RestController
         $image = $model->image;
 
         try {
-            DB::beginTransaction();
             $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($id, ['article', 'images', 'warehouses', 'cartItem', 'relateds']);
-            DB::commit();
             FileStorageUtil::deleteFiles($image);
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -223,13 +218,10 @@ class ProductController extends RestController
     public function enable($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => true]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -237,14 +229,11 @@ class ProductController extends RestController
     public function disable($id)
     {
         try {
-            DB::beginTransaction();
             $model = $this->repository->update($id, ['status' => false]);
             CartItem::whereProductId($id)->delete();
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -259,7 +248,6 @@ class ProductController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $order = $model->order;
             $model = $this->repository->update($id, [
                 'order' => $swapModel->order
@@ -267,11 +255,9 @@ class ProductController extends RestController
             $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -286,7 +272,6 @@ class ProductController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             $order = $model->order;
             $model = $this->repository->update($id, [
                 'order' => $swapModel->order
@@ -294,11 +279,9 @@ class ProductController extends RestController
             $swapModel = $this->repository->update($swapModel->id, [
                 'order' => $order
             ]);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
@@ -306,10 +289,9 @@ class ProductController extends RestController
     public function loadTag(Request $request)
     {
         $limit = $request->input('limit', null);
-        $clauses = [];
+        $clauses = [WhereClause::query('status', 1)];
         $with = [];
         $withCount = [];
-        $postClauses = [];
         $orderBy = $request->input('orderBy', 'order:asc');
 
         if ($request->has('search')) {
@@ -321,23 +303,19 @@ class ProductController extends RestController
         }
 
         if ($request->has('tag_id')) {
-            $tag_id = $request->tag_id;
-            array_push($clauses, WhereClause::queryRelationHas('tags', function ($q) use ($tag_id) {
-                $q->where('id', $tag_id);
+            $id = $request->tag_id;
+            array_push($clauses, WhereClause::queryRelationHas('tags', function ($q) use ($id) {
+                $q->where('id', $id);
             }));
         }
 
         if ($request->has('tag_id_add')) {
-
-            $tagId = $request->tag_id_add;
-            $posts = $this->repository->get([WhereClause::queryRelationHas('tags', function ($q) use ($tagId) {
-                $q->where('id', $tagId);
-            })]);
-            if (count($posts) > 0) {
-                foreach ($posts as $post) {
-                    array_push($postClauses, $post->id);
-                }
-                array_push($clauses, WhereClause::queryNotIn('id', $postClauses));
+            $idAdd = $request->tag_id_add;
+            $products = $this->repository->pluck([WhereClause::queryRelationHas('tags', function ($q) use ($idAdd) {
+                $q->where('id', $idAdd);
+            })], 'id');
+            if (count($products) > 0) {
+                array_push($clauses, WhereClause::queryNotIn('id', $products));
             }
         }
 
@@ -357,15 +335,12 @@ class ProductController extends RestController
         }
 
         try {
-            DB::beginTransaction();
             foreach ($request->tag_ids as $tagId) {
                 $this->repository->attach($model, $tagId);
             };
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->errorClient($e->getMessage());
         }
     }
@@ -375,13 +350,10 @@ class ProductController extends RestController
         $model = $this->repository->findById($id);
 
         try {
-            DB::beginTransaction();
             $this->repository->detach($model, $request->tag_ids);
-            DB::commit();
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->errorClient($e->getMessage());
         }
     }

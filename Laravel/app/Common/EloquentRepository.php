@@ -77,6 +77,13 @@ abstract class EloquentRepository implements RepositoryInterface
         return $query->get();
     }
 
+    public function pluck($whereClauses, $value)
+    {
+        $query = $this->_model->newQuery();
+        $this->createQuery($query, $whereClauses);
+        return $query->pluck($value);
+    }
+
     /**
      * @param Builder $query
      * @param WhereClause[] $whereClauses

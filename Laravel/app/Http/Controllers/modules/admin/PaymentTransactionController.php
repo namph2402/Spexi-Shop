@@ -6,7 +6,6 @@ use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
 use App\Repository\PaymentTransactionRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PaymentTransactionController extends RestController
@@ -22,7 +21,7 @@ class PaymentTransactionController extends RestController
     {
         $limit = $request->input('limit', null);
         $clauses = [];
-        $with = ['order'];
+        $with = [];
         $withCount = [];
         $orderBy = $request->input('orderBy','id:desc');
 
@@ -32,9 +31,6 @@ class PaymentTransactionController extends RestController
                 WhereClause::queryLike('name', $search),
                 WhereClause::queryLike('order_code', $search),
                 WhereClause::queryLike('creator_name', $search),
-                WhereClause::queryRelationHas('order', function ($q) use ($search) {
-                    $q->where('customer_phone', 'like', '%'.$search.'%');
-                })
             ]));
         }
 
@@ -57,13 +53,10 @@ class PaymentTransactionController extends RestController
     public function destroy($id)
     {
         try {
-            DB::beginTransaction();
             $this->repository->delete($id);
-            DB::commit();
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
-            DB::rollBack();
             return $this->error($e->getMessage());
         }
     }
