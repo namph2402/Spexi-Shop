@@ -8,7 +8,7 @@
         $countCart = $carts->items_count;
     }
 @endphp
-<header>
+<header class="bg-info">
     <div class="container-fluid">
         <div class="d-inline-flex align-items-center d-block d-lg-none w-100" style="justify-content: center">
             <a href="/notification" class="btn px-0 mr-1">
@@ -23,7 +23,7 @@
                 <i class="fas fa-user text-dark"></i>
             </a>
         </div>
-        <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
+        <div class="row align-items-center py-3 px-xl-5 d-none d-lg-flex">
             <div class="col-lg-4">
                 <a href="/" class="text-decoration-none">
                     <span class="h1 text-uppercase text-primary bg-dark px-2" style="border-radius: 20px 0px 0px 0px; font-family: 'Pacifico', cursive; font-size: 2.1rem;">{{ $data['Name'] }}</span>
@@ -33,7 +33,7 @@
             <div class="col-lg-4 col-6 text-left">
                 <form action="/product_searchs" id="formSearch">
                     <div class="input-group">
-                        <input type="search" value="{{ request()->search }}" name="search" class="form-control border-none"
+                        <input type="search" value="{{ request()->search }}" name="search" class="form-control border-none" style="border-radius: 0px"
                             placeholder="Tìm kiếm sản phẩm">
                         <div class="input-group-append">
                             <button type="submit" class="input-group-text bg-transparent text-primary border-none">
@@ -44,12 +44,12 @@
                 </form>
             </div>
             <div class="col-lg-4 col-6 text-right">
-                <p class="m-0">Dịch vụ khách hàng</p>
+                <p class="m-0 text-white">Dịch vụ khách hàng</p>
                 <a class="m-0" href="tel:{{ $data['Phone'] }}">{{ $data['PhoneView'] }}</a>
             </div>
         </div>
     </div>
-    <div class="container-fluid bg-dark mb-30">
+    <div class="container-fluid mb-30">
         <div class="row px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
                 <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse"
@@ -80,7 +80,7 @@
                 </nav>
             </div>
             <div class="col-lg-9">
-                <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
+                <nav class="navbar navbar-expand-lg navbar-dark py-3 py-lg-0 px-0">
                     <a href="/" class="text-decoration-none d-block d-lg-none">
                         <span class="h1 text-uppercase text-dark bg-light px-2" style="border-radius: 20px 0px 0px 0px; font-family: 'Pacifico', cursive; font-size: 2rem;">{{ $data['Name'] }}</span>
                         <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1" style="border-radius: 0px 0px 20px 0px; font-family: 'Pacifico', cursive; font-size: 2rem;">Shop</span>

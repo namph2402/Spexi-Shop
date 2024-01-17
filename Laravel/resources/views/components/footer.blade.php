@@ -1,5 +1,5 @@
-<footer>
-    <div class="container-fluid bg-dark text-secondary mt-3 pt-3 wow fadeIn" data-wow-delay="0.1s">
+<footer class="bg-info">
+    <div class="container-fluid text-secondary mt-3 pt-3 wow fadeIn" data-wow-delay="0.1s">
         <div class="row px-xl-5 pt-4">
             <div class="col-lg-4 col-md-12 mb-4 pr-3 pr-xl-5">
                 <h5 class="text-primary text-uppercase mb-4">{{ $data['Name'] }} shop</h5>
