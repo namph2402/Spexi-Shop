@@ -4,6 +4,8 @@ namespace App\Http\Controllers\modules\admin;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
+use App\Models\Comment;
+use App\Models\Post;
 use App\Repository\ArticleRepositoryInterface;
 use App\Repository\PostRepositoryInterface;
 use App\Utils\AuthUtil;
@@ -170,10 +172,13 @@ class PostController extends RestController
         $model = $this->repository->findById($id);
         $image = $model->image;
         $order = $model->order;
+        $article = $model->article->id;
 
         try {
+            Post::find($id)->tags()->detach();
             $this->repository->delete($id, ['article', 'relateds']);
             $this->repository->bulkUpdate([WhereClause::query('order', $order, '>')], ['order' => DB::raw('`order` - 1')]);
+            Comment::whereArticleId($article)->delete();
             FileStorageUtil::deleteFiles($image);
             return $this->success($model);
         } catch (\Exception $e) {

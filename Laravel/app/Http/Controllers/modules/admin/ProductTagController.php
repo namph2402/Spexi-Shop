@@ -4,6 +4,7 @@ namespace App\Http\Controllers\modules\admin;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
+use App\Models\ProductTag;
 use App\Repository\ProductTagRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -111,6 +112,7 @@ class ProductTagController extends RestController
         $order = $model->order;
 
         try {
+            ProductTag::find($id)->products()->detach();
             $this->repository->delete($id);
             $this->repository->bulkUpdate([WhereClause::query('order', $order, '>')], ['order' => DB::raw('`order` - 1')]);
             return $this->success([]);

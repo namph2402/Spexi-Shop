@@ -5,6 +5,7 @@ namespace App\Http\Controllers\modules\staff;
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
 use App\Models\CartItem;
+use App\Models\Comment;
 use App\Models\Product;
 use App\Repository\ImportNoteDetailRepositoryInterface;
 use App\Repository\ImportNoteRepositoryInterface;
@@ -204,10 +205,13 @@ class ProductController extends RestController
         $model = $this->repository->findById($id);
         $image = $model->image;
         $order = $model->order;
+        $article = $model->article ? $model->article->id : 0;
 
         try {
+            Product::find($id)->tags()->detach();
             $this->repository->delete($id, ['article', 'images', 'warehouses', 'cartItem', 'relateds']);
             $this->repository->bulkUpdate([WhereClause::query('order', $order, '>')], ['order' => DB::raw('`order` - 1')]);
+            Comment::whereArticleId($article)->delete();
             FileStorageUtil::deleteFiles($image);
             return $this->success($model);
         } catch (\Exception $e) {

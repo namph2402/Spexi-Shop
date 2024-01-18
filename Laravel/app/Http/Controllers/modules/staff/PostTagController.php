@@ -4,6 +4,7 @@ namespace App\Http\Controllers\modules\staff;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
+use App\Models\PostTag;
 use App\Repository\PostTagRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -115,6 +116,7 @@ class PostTagController extends RestController
         $order = $model->order;
 
         try {
+            PostTag::find($id)->posts()->detach();
             $this->repository->delete($id);
             $this->repository->bulkUpdate([WhereClause::query('order', $order, '>')], ['order' => DB::raw('`order` - 1')]);
             return $this->success([]);
