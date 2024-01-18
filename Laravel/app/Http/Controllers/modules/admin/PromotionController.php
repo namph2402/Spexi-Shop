@@ -172,12 +172,16 @@ class PromotionController extends RestController
 
     public function destroy($id)
     {
+        $model = $this->repository->findById($id);
+        $image = $model->image;
+
         try {
             $this->productRepository->bulkUpdate([
                 WhereClause::queryRelationHas('promotions', function ($q) use ($id) {
                 $q->where('id', $id);
             })],['sale_price' => DB::raw('`price`')]);
             $this->repository->delete($id,['mapping']);
+            FileStorageUtil::deleteFiles($image);
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
@@ -199,13 +203,13 @@ class PromotionController extends RestController
                 array_push($arrProduct, $item->id);
             }
 
-            if ($model->type == Promotion::$DONG_GIA && $item->price > $model->discount_same) {
-                $this->productRepository->bulkUpdate([WhereClause::queryIn('id', $arrProduct)],
+            if ($model->type == Promotion::$DONG_GIA) {
+                $this->productRepository->bulkUpdate([WhereClause::queryIn('id', $arrProduct), WhereClause::query('price', $model->discount_same, '>')],
                     ['sale_price' => $model->discount_same]);
             }
 
-            if ($model->type == Promotion::$GIAM_SAN_PHAM && $item->price > $model->discount_value) {
-                $this->productRepository->bulkUpdate([WhereClause::queryIn('id', $arrProduct)],
+            if ($model->type == Promotion::$GIAM_SAN_PHAM) {
+                $this->productRepository->bulkUpdate([WhereClause::queryIn('id', $arrProduct), WhereClause::query('price', $model->discount_value, '>')],
                     ['sale_price' => DB::raw('`price` - '.$model->discount_value.' - `price` / 100 * '.$model->discount_percent)]);
             }
         }

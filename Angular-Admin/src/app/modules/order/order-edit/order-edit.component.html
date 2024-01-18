@@ -77,9 +77,9 @@
         <h3>Thông tin sản phẩm</h3>
         <div class="form-group" style="margin-bottom: 20px">
           <label>Chọn sản phẩm</label>
-          <angular2-multiselect (ngModelChange)="addProduct(productList)" [(ngModel)]="productList"
-            [data]="fields[7].data" [formControlName]="fields[7].formControl" [id]="fields[7].formControl"
-            [settings]="fields[7].config">
+          <angular2-multiselect [(ngModel)]="productList" [data]="fields[7].data"
+            [formControlName]="fields[7].formControl" [id]="fields[7].formControl" [settings]="fields[7].config"
+            (ngModelChange)="addProduct(productList)">
           </angular2-multiselect>
         </div>
 
@@ -105,7 +105,7 @@
                 <label>{{ item.product.code }}</label> - {{ item.product.name }}
               </td>
               <td>
-                <select (ngModelChange)="checkArr(item.warehouse_id, i)" [(ngModel)]="item.warehouse_id"
+                <select [(ngModel)]="item.warehouse_id" (ngModelChange)="checkArr(item.warehouse_id, i)"
                   [ngModelOptions]="{ standalone: true }" class="form-control">
                   <option disabled hidden selected value="0">Chọn loại</option>
                   <option *ngFor="let w of item.product.warehouses" [value]="w.id">
@@ -117,7 +117,7 @@
                 {{ item.unit_price | number : "1.0-0" }}
               </td>
               <td>
-                <input (ngModelChange)="updateCart()" [(ngModel)]="item.quantity"
+                <input [(ngModel)]="item.quantity" (ngModelChange)="updateCart()"
                   [ngModelOptions]="{ standalone: true }" oninput="this.value = Math.abs(this.value)"
                   style="width: 100%; text-align: center" type="number" value="1" />
               </td>

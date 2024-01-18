@@ -9,7 +9,7 @@ import {MenuPositionMeta} from './menu-position.meta';
 export class MenuPositionService extends AbstractCRUDService<MenuPositionMeta> {
 
   constructor(http: HttpClient, toaster: ToasterService, title: TitleService) {
-    super(http, title, toaster, 'Nhóm menu', 'menu_groups');
+    super(http, title, toaster, 'nhóm menu', 'menu_groups');
   }
 
 }

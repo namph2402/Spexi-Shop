@@ -112,10 +112,11 @@ class PostTagController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
+        $order = $model->order;
 
         try {
-            $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($id);
+            $this->repository->bulkUpdate([WhereClause::query('order', $order, '>')], ['order' => DB::raw('`order` - 1')]);
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);

@@ -29,6 +29,13 @@ class MenuController extends RestController
             array_push($clauses, WhereClause::query('group_id', $request->group_id));
         }
 
+        if ($request->has('parent')) {
+            $menu = $this->repository->pluck([WhereClause::query('parent_id', 0), WhereClause::queryDiff('id', $request->parent)], 'id');
+            if (count($menu) > 0) {
+                array_push($clauses, WhereClause::queryIn('id', $menu));
+            }
+        }
+
         if ($limit) {
             $data = $this->repository->paginate($limit, $clauses, $orderBy, $with, $withCount);
         } else {
@@ -41,7 +48,7 @@ class MenuController extends RestController
     {
         $validator = $this->validateRequest($request, [
             'group_id' => 'required|numeric',
-            'name' => 'required|max:255|unique:menus',
+            'name' => 'required|max:255',
             'url' => 'required|max:255',
         ]);
         if ($validator) {
@@ -77,7 +84,7 @@ class MenuController extends RestController
     {
         $validator = $this->validateRequest($request, [
             'group_id' => 'nullable|numeric',
-            'name' => 'nullable|max:255|unique:menus,name,' . $id,
+            'name' => 'nullable|max:255',
             'url' => 'nullable|max:255',
         ]);
         if ($validator) {
@@ -107,10 +114,12 @@ class MenuController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
+        $order = $model->order;
+        $group = $model->group_id;
 
         try {
-            $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>'), WhereClause::query('group_id', $model->group_id)], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($model);
+            $this->repository->bulkUpdate([WhereClause::query('order', $order, '>'), WhereClause::query('group_id', $group)], ['order' => DB::raw('`order` - 1')]);
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);

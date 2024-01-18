@@ -71,16 +71,16 @@ export class ProductTagItemCreateComponent extends AbstractModalComponent<Produc
   assignAll() {
     let ids: number[] = this.list.map(v => v.id);
     (<ProductTagService>this.service).attachTags(this.model.id, ids).subscribe((res: ProductMeta) => {
-      this.service.toastSuccessfully('Thêm tag');
+      this.service.toastSuccessfully('Thêm');
       this.close(ObjectUtil.mergeValue(this.model, res));
-    }, () => this.service.toastFailed('Thêm tag'));
+    }, () => this.service.toastFailed('Thêm'));
   }
 
   assign(item: ProductMeta) {
     (<ProductTagService>this.service).attachTags(this.model.id, [item.id]).subscribe((res: ProductMeta) => {
-      this.service.toastSuccessfully('Thêm tag');
+      this.service.toastSuccessfully('Thêm');
       this.loaded();
-    }, () => this.service.toastFailed('Thêm tag'));
+    }, () => this.service.toastFailed('Thêm'));
   }
 
   dismiss() {

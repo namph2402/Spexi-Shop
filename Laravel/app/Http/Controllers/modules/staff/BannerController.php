@@ -108,11 +108,12 @@ class BannerController extends RestController
     {
         $model = $this->repository->findById($id);
         $image = $model->image;
+        $order = $model->order;
+        $group = $model->group_id;
 
         try {
-            $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>'), WhereClause::query('group_id', $model->group_id)], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($model);
-
+            $this->repository->bulkUpdate([WhereClause::query('order', $order, '>'), WhereClause::query('group_id', $group)], ['order' => DB::raw('`order` - 1')]);
             FileStorageUtil::deleteFiles($image);
             return $this->success([]);
         } catch (\Exception $e) {

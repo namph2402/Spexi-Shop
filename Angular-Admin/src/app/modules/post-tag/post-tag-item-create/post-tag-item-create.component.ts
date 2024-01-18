@@ -71,16 +71,16 @@ export class PostTagItemCreateComponent extends AbstractModalComponent<PostTagMe
   assignAll() {
     let ids: number[] = this.list.map(v => v.id);
     (<PostTagService>this.service).attachTags(this.model.id, ids).subscribe((res: PostMeta) => {
-      this.service.toastSuccessfully('Thêm tag');
+      this.service.toastSuccessfully('Thêm');
       this.close(ObjectUtil.mergeValue(this.model, res));
-    }, () => this.service.toastFailed('Thêm tag'));
+    }, () => this.service.toastFailed('Thêm'));
   }
 
   assign(item: PostMeta) {
     (<PostTagService>this.service).attachTags(this.model.id, [item.id]).subscribe((res: PostMeta) => {
-      this.service.toastSuccessfully('Thêm tag');
+      this.service.toastSuccessfully('Thêm');
       this.loaded();
-    }, () => this.service.toastFailed('Thêm tag'));
+    }, () => this.service.toastFailed('Thêm'));
   }
 
   dismiss() {

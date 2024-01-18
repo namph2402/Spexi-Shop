@@ -65,7 +65,7 @@ class RelatedProductController extends RestController
             'related_id'
         ]);
 
-        $lastItem = $this->repository->find([], 'order:desc');
+        $lastItem = $this->repository->find([WhereClause::query('product_id', $request->product_id)], 'order:desc');
         if ($lastItem) {
             $attributes['order'] = $lastItem->order + 1;
         }
@@ -82,13 +82,12 @@ class RelatedProductController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
+        $order = $model->order;
+        $group = $model->product_id;
 
         try {
-            $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($id);
+            $this->repository->bulkUpdate([WhereClause::query('product_id', $group), WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
@@ -100,7 +99,7 @@ class RelatedProductController extends RestController
     {
         $model = $this->repository->findById($id);
 
-        $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
+        $swapModel = $this->repository->find([WhereClause::query('product_id', $model->product_id), WhereClause::query('order', $model->order, '<')], 'order:desc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
         }
@@ -124,7 +123,7 @@ class RelatedProductController extends RestController
     {
         $model = $this->repository->findById($id);
 
-        $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
+        $swapModel = $this->repository->find([WhereClause::query('product_id', $model->product_id), WhereClause::query('order', $model->order, '>')], 'order:asc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');
         }

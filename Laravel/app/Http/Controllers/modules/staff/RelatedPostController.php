@@ -65,7 +65,7 @@ class RelatedPostController extends RestController
             'related_id'
         ]);
 
-        $lastItem = $this->repository->find([], 'order:desc');
+        $lastItem = $this->repository->find([WhereClause::query('post_id', $request->post_id)], 'order:desc');
         if ($lastItem) {
             $attributes['order'] = $lastItem->order + 1;
         }
@@ -82,10 +82,12 @@ class RelatedPostController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
+        $order = $model->order;
+        $group = $model->post_id;
 
         try {
-            $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($id);
+            $this->repository->bulkUpdate([WhereClause::query('post_id', $group), WhereClause::query('order', $order, '>')], ['order' => DB::raw('`order` - 1')]);
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);
@@ -97,7 +99,7 @@ class RelatedPostController extends RestController
     {
         $model = $this->repository->findById($id);
 
-        $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
+        $swapModel = $this->repository->find([WhereClause::query('post_id', $model->post_id), WhereClause::query('order', $model->order, '<')], 'order:desc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
         }
@@ -121,7 +123,7 @@ class RelatedPostController extends RestController
     {
         $model = $this->repository->findById($id);
 
-        $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
+        $swapModel = $this->repository->find([WhereClause::query('post_id', $model->post_id), WhereClause::query('order', $model->order, '>')], 'order:asc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');
         }

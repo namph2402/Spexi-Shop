@@ -28,8 +28,13 @@ export class ProductCategoryEditComponent extends AbstractModalComponent<Product
   onDestroy(): void {
   }
 
+  loadAllCategories() {
+    return this.service.loadByParams({parent: 0});
+  }
+
   buildForm(): FormGroup {
     return this.formBuilder.group({
+      parent_id: new FormControl({value: null, disabled: true}),
       name: new FormControl(null, [Validators.required, Validators.maxLength(255), Validators.pattern('[^ ].*$')]),
       image: new FormControl(null),
     });
@@ -37,6 +42,7 @@ export class ProductCategoryEditComponent extends AbstractModalComponent<Product
 
   initFieldForm(): FieldForm[] {
     return [
+      FieldForm.createSelect('Danh mục cha', 'parent_id', 'Danh mục', 'loadAllCategories'),
       FieldForm.createTextInput('Tên danh mục', 'name', 'Nhập tên'),
       FieldForm.createFileInput('Ảnh đại diện', 'image', 'Chọn ảnh', this.onFileUploadChange, 'image/*'),
     ];

@@ -46,7 +46,7 @@ class VoucherController extends RestController
     public function store(Request $request)
     {
         $validator = $this->validateRequest($request, [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:vouchers',
             'code' => 'required|max:20|unique:vouchers',
             'type' => 'required|numeric',
             'quantity' => 'required|numeric',
@@ -94,7 +94,7 @@ class VoucherController extends RestController
         }
 
         $validator = $this->validateRequest($request, [
-            'name' => 'nullable|max:255',
+            'name' => 'nullable|max:255|unique:vouchers,name,' . $id,
             'code' => 'nullable|max:20|unique:vouchers,code,' . $id,
             'quantity' => 'nullable|numeric',
             'expired_date' => 'nullable|date',

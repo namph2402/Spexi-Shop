@@ -76,13 +76,12 @@ class ProductImageController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
-        if (empty($model)) {
-            return $this->errorNotFound();
-        }
+        $order = $model->order;
+        $group = $model->product_id;
 
         try {
-            $this->repository->bulkUpdate([WhereClause::query('product_id', $model->product_id), WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($id);
+            $this->repository->bulkUpdate([WhereClause::query('product_id', $group), WhereClause::query('order', $order, '>')], ['order' => DB::raw('`order` - 1')]);
             FileStorageUtil::deleteFiles($model->image);
             return $this->success([]);
         } catch (\Exception $e) {

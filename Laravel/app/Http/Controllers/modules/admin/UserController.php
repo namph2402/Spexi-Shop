@@ -4,6 +4,7 @@ namespace App\Http\Controllers\modules\admin;
 
 use App\Common\WhereClause;
 use App\Http\Controllers\RestController;
+use App\Repository\CartRepositoryInterface;
 use App\Repository\UserProfileRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
 use Illuminate\Http\Request;
@@ -12,11 +13,13 @@ use Illuminate\Support\Facades\Log;
 class UserController extends RestController
 {
     protected $userRepository;
+    protected $cartRepository;
 
-    public function __construct(UserProfileRepositoryInterface $repository, UserRepositoryInterface $userRepository)
+    public function __construct(UserProfileRepositoryInterface $repository, UserRepositoryInterface $userRepository, CartRepositoryInterface $cartRepository)
     {
         parent::__construct($repository);
         $this->userRepository = $userRepository;
+        $this->cartRepository = $cartRepository;
     }
 
     public function index(Request $request)
@@ -62,8 +65,14 @@ class UserController extends RestController
 
     public function destroy($id)
     {
+        $model = $this->repository->findById($id);
+
+        $cart = $this->cartRepository->find([WhereClause::query('user_id', $model->user_id)]);
         try {
             $this->repository->delete($id, ['account']);
+            if($cart) {
+                $this->cartRepository->delete($cart->id, ['items']);
+            }
             return $this->success([]);
         } catch (\Exception $e) {
             Log::error($e);

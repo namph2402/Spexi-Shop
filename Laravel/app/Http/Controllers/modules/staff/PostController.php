@@ -168,10 +168,11 @@ class PostController extends RestController
     {
         $model = $this->repository->findById($id);
         $image = $model->image;
+        $order = $model->order;
 
         try {
-            $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($id, ['article', 'relateds']);
+            $this->repository->bulkUpdate([WhereClause::query('order', $order, '>')], ['order' => DB::raw('`order` - 1')]);
             FileStorageUtil::deleteFiles($image);
             return $this->success($model);
         } catch (\Exception $e) {

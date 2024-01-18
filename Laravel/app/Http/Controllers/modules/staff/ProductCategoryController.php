@@ -29,21 +29,16 @@ class ProductCategoryController extends RestController
         $with = ['parent'];
         $withCount = [];
         $categoryArr = [];
-        $orderBy = $request->input('orderBy', 'order:asc');
+        $orderBy = $request->input('orderBy', 'parent_id:asc,order:asc');
 
         if ($request->has('search')) {
             array_push($clauses, WhereClause::queryLike('name', $request->search));
         }
 
         if ($request->has('parent')) {
-            $category = $this->repository->get([WhereClause::query('parent_id', 0), WhereClause::queryDiff('id', $request->parent)]);
-            if ($category) {
-                foreach ($category as $c) {
-                    array_push($categoryArr, $c->id);
-                }
-                if (count($categoryArr) > 0) {
-                    array_push($clauses, WhereClause::queryIn('id', $categoryArr));
-                }
+            $category = $this->repository->pluck([WhereClause::query('parent_id', 0), WhereClause::queryDiff('id', $request->parent)], 'id');
+            if (count($category) > 0) {
+                array_push($clauses, WhereClause::queryIn('id', $category));
             }
         }
 
@@ -87,7 +82,7 @@ class ProductCategoryController extends RestController
             $attributes['image'] = $image;
         }
 
-        $lastItem = $this->repository->find([], 'order:desc');
+        $lastItem = $this->repository->find([WhereClause::query('parent_id', $request->parent_id)], 'order:desc');
         if ($lastItem) {
             $attributes['order'] = $lastItem->order + 1;
         }
@@ -97,7 +92,6 @@ class ProductCategoryController extends RestController
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
-
             if (isset($attributes['image'])) {
                 FileStorageUtil::deleteFiles($image);
             }
@@ -123,13 +117,8 @@ class ProductCategoryController extends RestController
 
         $attributes = $request->only([
             'name',
-            'parent_id'
         ]);
         $attributes['slug'] = Str::slug($attributes['name']);
-
-        if (count($model->childrens) > 0 && $request->parent_id > 0) {
-            return $this->errorClient('Danh mục này đang là danh mục cha');
-        }
 
         if ($request->file('image') != '') {
             $image = FileStorageUtil::putFile('product_category_image', $request->file('image'));
@@ -157,10 +146,14 @@ class ProductCategoryController extends RestController
     public function destroy($id)
     {
         $model = $this->repository->findById($id);
+        $image = $model->image;
+        $order = $model->order;
+        $group = $model->parent_id;
 
         try {
-            $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>'), WhereClause::query('parent_id', 0)], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($id);
+            $this->repository->bulkUpdate([WhereClause::query('order', $order, '>'), WhereClause::query('parent_id', $group)], ['order' => DB::raw('`order` - 1')]);
+            FileStorageUtil::deleteFiles($image);
             return $this->success($model);
         } catch (\Exception $e) {
             Log::error($e);
@@ -172,7 +165,7 @@ class ProductCategoryController extends RestController
     {
         $model = $this->repository->findById($id);
 
-        $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<')], 'order:desc');
+        $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '<'), WhereClause::query('parent_id', $model->parent_id)], 'order:desc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể tăng thứ hạng');
         }
@@ -196,7 +189,7 @@ class ProductCategoryController extends RestController
     {
         $model = $this->repository->findById($id);
 
-        $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>')], 'order:asc');
+        $swapModel = $this->repository->find([WhereClause::query('order', $model->order, '>'), WhereClause::query('parent_id', $model->parent_id)], 'order:asc');
         if (empty($swapModel)) {
             return $this->errorClient('Không thể giảm thứ hạng');
         }
@@ -214,5 +207,5 @@ class ProductCategoryController extends RestController
             Log::error($e);
             return $this->error($e->getMessage());
         }
-    }
+   }
 }

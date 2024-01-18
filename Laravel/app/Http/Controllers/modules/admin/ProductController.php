@@ -106,7 +106,7 @@ class ProductController extends RestController
             'category_id' => 'required|numeric',
             'category_slug' => 'required|max:255',
             'name' => 'required|max:255|unique:products',
-            'code' => 'required|max:255',
+            'code' => 'required|max:255|unique:products',
             'image' => 'required|mimes:jpeg,png,jpg,gif',
             'price' => 'required|numeric',
         ]);
@@ -159,7 +159,7 @@ class ProductController extends RestController
         $validator = $this->validateRequest($request, [
             'category_id' => 'nullable|numeric',
             'name' => 'nullable|max:255|unique:products,name,' . $id,
-            'code' => 'nullable|max:255',
+            'code' => 'nullable|max:255|unique:products,code,' . $id,
             'price' => 'nullable|numeric',
         ]);
         if ($validator) {
@@ -203,10 +203,11 @@ class ProductController extends RestController
     {
         $model = $this->repository->findById($id);
         $image = $model->image;
+        $order = $model->order;
 
         try {
-            $this->repository->bulkUpdate([WhereClause::query('order', $model->order, '>')], ['order' => DB::raw('`order` - 1')]);
             $this->repository->delete($id, ['article', 'images', 'warehouses', 'cartItem', 'relateds']);
+            $this->repository->bulkUpdate([WhereClause::query('order', $order, '>')], ['order' => DB::raw('`order` - 1')]);
             FileStorageUtil::deleteFiles($image);
             return $this->success($model);
         } catch (\Exception $e) {
