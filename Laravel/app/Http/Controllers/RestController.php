@@ -11,6 +11,12 @@ class RestController extends Controller implements RestApiController
 {
     protected $repository;
 
+    protected $validatorAttribute = [
+        'name' => 'Tên',
+        'image' => 'Ảnh',
+        'code' => 'Code'
+    ];
+
     protected $validatorMessages = [
         'required' => ':attribute không được để trống',
         'max' => ':attribute không được vượt quá 255 ký tự',
@@ -106,7 +112,7 @@ class RestController extends Controller implements RestApiController
 
     public function validateRequest(Request $request, $validatorRules)
     {
-        $validator = Validator::make($request->all(), $validatorRules, $this->validatorMessages);
+        $validator = Validator::make($request->all(), $validatorRules, $this->validatorMessages, $this->validatorAttribute);
         if ($validator->fails()) {
             $errors = array_merge(...array_values($validator->errors()->getMessages()));
             return implode(', ', $errors);
