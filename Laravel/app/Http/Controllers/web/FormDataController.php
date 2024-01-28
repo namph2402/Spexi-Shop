@@ -25,7 +25,7 @@ class FormDataController extends RestController
 
         try {
             $this->repository->create([
-                'email' => $request->email
+                'value' => $request->email
             ]);
             return $this->successViewBack('Đăng ký thông tin thành công');
         } catch (\Exception $e) {
