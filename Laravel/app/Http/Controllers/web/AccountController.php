@@ -192,7 +192,7 @@ class AccountController extends RestController
 
     public function logout(Request $request): RedirectResponse
     {
-        if(Auth::user()) {
+        if(!Auth::user()) {
             return redirect()->route('home.index');
         }
         Auth::logout();
