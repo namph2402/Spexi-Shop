@@ -228,7 +228,7 @@ export class OrderEditComponent extends AbstractModalComponent<OrderMeta> {
   }
 
   checkVoucher() {
-    this.discount = 0;
+    this.discount = this.model.discount;
     this.shipFee = this.shipFeeOld;
     this.voucherId = null;
     if (this.voucherI.length > 0) {
