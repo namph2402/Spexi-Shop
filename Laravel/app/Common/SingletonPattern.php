@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: BaoHoang
- * Date: 7/5/2022
- * Time: 21:56
- */
 
 namespace App\Common;
 
