@@ -6,6 +6,7 @@ use App\Common\Exceptions\ObjectNotFoundException;
 use App\Common\Exceptions\RelationNotFoundException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 abstract class EloquentRepository implements RepositoryInterface
@@ -92,32 +93,18 @@ abstract class EloquentRepository implements RepositoryInterface
     {
         if (isset($whereClauses)) {
             foreach ($whereClauses as $clause) {
-                if ($clause->getOperator() == 'raw') {
-                    $query = $query->whereRaw($clause->getColumn());
-                } else if ($clause->getOperator() == 'has') {
-                    if ($clause->getFunction()) {
-                        $query = $query->whereHas($clause->getRelation(), $clause->getFunction(), $clause->getRelationOperator(), $clause->getRelationCount());
-                    } else {
-                        $query = $query->has($clause->getRelation(), $clause->getRelationOperator(), $clause->getRelationCount());
-                    }
-                } else if ($clause->getOperator() == 'function') {
-                    $query = $query->where($clause->getFunction());
+                if ($clause->getOperator() == 'has') {
+                    $query = $query->whereHas($clause->getRelation(), $clause->getFunction(), $clause->getRelationOperator(), $clause->getRelationCount());
                 } else if ($clause->getOperator() == 'or') {
                     $orClauses = $clause->getValue();
                     $query = $query->where(function (Builder $q) use ($orClauses) {
                         $q->where($this->createQueryOr($q, $orClauses));
                     });
-                } else if ($clause->getOperator() == 'whereHas') {
-                    $orClauses = $clause->getValue();
-                    $query = $query->whereHas($clause->getRelation(), function (Builder $q) use ($orClauses) {
-                        $q->where($this->createQueryOr($q, $orClauses));
-                    }, $clause->getRelationOperator(), $clause->getRelationCount());
                 } else if (Str::startsWith($clause->getOperator(), 'fn_')) {
                     $this->whereByName($query, $clause);
                 } else {
                     $query = $query->where($clause->getColumn(), $clause->getOperator(), $clause->getValue());
                 }
-
             }
         }
     }
@@ -130,32 +117,15 @@ abstract class EloquentRepository implements RepositoryInterface
     {
         if (isset($whereClauses)) {
             foreach ($whereClauses as $clause) {
-                if ($clause->getOperator() == 'raw') {
-                    $query = $query->orWhereRaw($clause->getColumn());
-                } else if ($clause->getOperator() == 'has') {
-                    if ($clause->getFunction()) {
-                        $query = $query->orWhereHas($clause->getRelation(), $clause->getFunction(), $clause->getRelationOperator(), $clause->getRelationCount());
-                    } else {
-                        $query = $query->orHas($clause->getRelation(), $clause->getRelationOperator(), $clause->getRelationCount());
-                    }
-                } else if ($clause->getOperator() == 'function') {
-                    $query = $query->orWhere($clause->getFunction());
+                if ($clause->getOperator() == 'has') {
+                    $query = $query->orWhereHas($clause->getRelation(), $clause->getFunction(), $clause->getRelationOperator(), $clause->getRelationCount());
                 } else if ($clause->getOperator() == 'or') {
                     $orClauses = $clause->getValue();
                     $query = $query->orWhere(function (Builder $q) use ($orClauses) {
                         $q->where($this->createQuery($q, $orClauses));
                     });
-                } else if ($clause->getOperator() == 'whereHas') {
-                    $orClauses = $clause->getValue();
-                    $query = $query->orWhereHas($clause->getRelation(), function (Builder $q) use ($orClauses) {
-                        $q->where($this->createQueryOr($q, $orClauses));
-                    }, $clause->getRelationOperator(), $clause->getRelationCount());
                 } else if (Str::startsWith($clause->getOperator(), 'fn_')) {
-                    $query = $this->whereByName($query, $clause);
-                } else if ($clause->getOperator() == 'in') {
-                    $query = $query->whereIn($clause->getColumn(), $clause->getValue());
-                } else if ($clause->getOperator() == 'notin') {
-                    $query = $query->whereNotIn($clause->getColumn(), $clause->getValue());
+                    $this->whereByName($query, $clause);
                 } else {
                     $query = $query->orWhere($clause->getColumn(), $clause->getOperator(), $clause->getValue());
                 }
@@ -416,6 +386,4 @@ abstract class EloquentRepository implements RepositoryInterface
     {
         $this->_model->newQuery()->truncate();
     }
-
-
 }

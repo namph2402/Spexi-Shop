@@ -31,14 +31,6 @@ class WhereClause
             if (strtolower($operator) == 'like') {
                 $this->value = "%$value%";
             }
-            if (strtolower($operator) == 'startwith') {
-                $this->operator = 'like';
-                $this->value = "%$value";
-            }
-            if (strtolower($operator) == 'endwith') {
-                $this->operator = 'like';
-                $this->value = "$value%";
-            }
         } else {
             if ($column instanceof \Closure) {
                 $this->function = $column;
@@ -66,24 +58,9 @@ class WhereClause
         return new WhereClause($column, $value, 'fn_year_' . $operator);
     }
 
-    public static function queryByName($name, $column, $value = null, $operator = null)
-    {
-        return new WhereClause($column, $value, 'fn_' . $name . '_' . $operator);
-    }
-
     public static function orQuery(array $clauses)
     {
         return new WhereClause('id', $clauses, 'or');
-    }
-
-    public static function queryNull($column)
-    {
-        return new WhereClause($column, null, 'fn_null');
-    }
-
-    public static function queryNotNull($column)
-    {
-        return new WhereClause($column, null, 'fn_notNull');
     }
 
     public static function queryDiff($column, $value = null)
@@ -94,21 +71,6 @@ class WhereClause
     public static function queryLike($column, $value = null)
     {
         return new WhereClause($column, $value, 'like');
-    }
-
-    public static function queryStartWith($column, $value = null)
-    {
-        return new WhereClause($column, $value, 'startwith');
-    }
-
-    public static function queryEndWith($column, $value = null)
-    {
-        return new WhereClause($column, $value, 'endwith');
-    }
-
-    public static function queryRaw(string $raw)
-    {
-        return new WhereClause($raw, null, 'raw');
     }
 
     public static function queryIn($column, $value = [])
@@ -141,25 +103,6 @@ class WhereClause
         $clause->setFunction($closure);
         $clause->setRelationOperator($operator);
         $clause->setRelationCount($count);
-        return $clause;
-    }
-
-    public static function queryWhereHas($relation, array $clauses, $operator = '>=', $count = 1)
-    {
-        $clause = new WhereClause(null);
-        $clause->setOperator('whereHas');
-        $clause->setRelation($relation);
-        $clause->setValue($clauses);
-        $clause->setRelationOperator($operator);
-        $clause->setRelationCount($count);
-        return $clause;
-    }
-
-    public static function queryClosure(\Closure $closure)
-    {
-        $clause = new WhereClause(null);
-        $clause->setOperator('function');
-        $clause->setFunction($closure);
         return $clause;
     }
 
