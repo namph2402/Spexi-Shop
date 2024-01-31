@@ -46,7 +46,7 @@ class OrderShipController extends RestController
     public function index(Request $request)
     {
         $limit = $request->input('limit', null);
-        $clauses = [WhereClause::queryDiff('order_status', Order::$LEN_DON), WhereClause::queryDiff('order_status', Order::$XAC_NHAN)];
+        $clauses = [WhereClause::queryDiff('order_status', Order::$LEN_DON), WhereClause::queryDiff('order_status', Order::$XAC_NHAN), WhereClause::query('type', 0)];
         $with = ['details','shipping.unit'];
         $withCount = [];
         $orderBy = $request->input('orderBy', 'updated_at:desc');
