@@ -626,7 +626,7 @@ function applyVoucher() {
 
     if (code.trim().length > 0 && !voucherId.value) {
         Checkout.getInstance().getVoucher(code, (data) => {
-            if (data && amount > data['min_order_value']) {
+            if (data && amount >= data['min_order_value']) {
                 if (data['type'] == 2) {
                     this.getFee(1);
                 } else {
