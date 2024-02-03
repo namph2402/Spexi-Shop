@@ -120,6 +120,7 @@ class PromotionController extends RestController
             'type',
         ]);
 
+        $attributes['slug'] = Str::slug($attributes['name']);
         $attributes['status'] = $request->status ? 1 : 0;
         $attributes['discount_same'] = $request->input('discount_same', 0);
         $attributes['min_order_value'] = $request->input('min_order_value', 0);
