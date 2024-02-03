@@ -137,7 +137,7 @@ export const APP_FEATURES = [
         link: '/orders'
       },
       {
-        name: 'Đơn vận',
+        name: 'Vận đơn',
         icon: 'fa fa-truck',
         link: '/order-ships'
       },

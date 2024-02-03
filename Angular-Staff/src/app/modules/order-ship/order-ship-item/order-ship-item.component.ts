@@ -35,7 +35,7 @@ export class OrderShipItemComponent extends AbstractCRUDModalComponent<OrderShip
   }
 
   getTitle(): string {
-    return 'Danh sách đơn giao';
+    return 'Vận đơn';
   }
 
   getCreateModalComponent(): any {

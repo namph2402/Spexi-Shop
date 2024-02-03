@@ -33,7 +33,7 @@ export class OrderShipListComponent extends AbstractCRUDComponent<OrderShipMeta>
   }
 
   getTitle(): string {
-    return 'Danh sách đơn giao';
+    return 'Vận đơn';
   }
 
   getCreateModalComponent(): any {
@@ -65,7 +65,7 @@ export class OrderShipListComponent extends AbstractCRUDComponent<OrderShipMeta>
     return [
       FieldForm.createTextInput('Tìm kiếm theo mã đơn hàng', 'code', 'Nhập từ khóa'),
       FieldForm.createTextInput('Tìm kiếm theo khách hàng', 'search', 'Nhập từ khóa'),
-      FieldForm.createSelect('Trạng thái đơn vận', 'ship_status', 'Chọn một', [
+      FieldForm.createSelect('Trạng thái vận đơn', 'ship_status', 'Chọn một', [
         {
           name: 'Điều phối giao hàng',
           value: 'Điều phối giao hàng'
